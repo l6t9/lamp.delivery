@@ -17,6 +17,7 @@ interface Track {
   artist: string;
   duration: string;
   previewUrl?: string;
+  spotifyUrl?: string;
   loaded?: boolean;
 }
 
@@ -101,6 +102,7 @@ export default function Music() {
                 return {
                   ...track,
                   previewUrl: data.previewUrl,
+                  spotifyUrl: data.spotifyUrl,
                   loaded: true,
                 };
               }
@@ -137,8 +139,12 @@ export default function Music() {
 
   const handlePlayTrack = (index: number) => {
     const track = playlistTracks[index];
+    
     if (!track.previewUrl) {
-      alert("Preview not available for this track");
+      // If no preview, open Spotify
+      if (track.spotifyUrl) {
+        window.open(track.spotifyUrl, '_blank');
+      }
       return;
     }
 
@@ -266,9 +272,8 @@ export default function Music() {
                   >
                     <button
                       onClick={() => handlePlayTrack(index)}
-                      disabled={!track.previewUrl}
-                      className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 hover:bg-primary/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors duration-200"
-                      title={track.previewUrl ? "Play preview" : "Preview not available"}
+                      className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors duration-200"
+                      title={track.previewUrl ? "Play preview" : "Listen on Spotify"}
                     >
                       {currentTrackIndex === index && isPlaying ? (
                         <Pause className="w-5 h-5 text-primary fill-primary" />
@@ -278,7 +283,12 @@ export default function Music() {
                     </button>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold truncate">{track.title}</p>
-                      <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
+                        {!track.previewUrl && track.spotifyUrl && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary whitespace-nowrap">Spotify</span>
+                        )}
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
                       {track.previewUrl && currentTrackIndex === index && isPlaying && (
