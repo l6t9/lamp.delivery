@@ -140,26 +140,9 @@ export default function Music() {
   const handlePlayTrack = (index: number) => {
     const track = playlistTracks[index];
     
-    if (!track.previewUrl) {
-      // If no preview, open YouTube Music
-      if (track.youtubeUrl) {
-        window.open(track.youtubeUrl, '_blank');
-      }
-      return;
-    }
-
-    if (currentTrackIndex === index && isPlaying) {
-      // Pause if already playing
-      audioRef.current?.pause();
-      setIsPlaying(false);
-    } else {
-      // Play the track
-      if (audioRef.current) {
-        audioRef.current.src = track.previewUrl;
-        audioRef.current.play();
-        setIsPlaying(true);
-        setCurrentTrackIndex(index);
-      }
+    // Open YouTube Music for the track
+    if (track.youtubeUrl) {
+      window.open(track.youtubeUrl, '_blank');
     }
   };
 
@@ -273,33 +256,15 @@ export default function Music() {
                     <button
                       onClick={() => handlePlayTrack(index)}
                       className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors duration-200"
-                      title={track.previewUrl ? "Play preview" : "Listen on YouTube Music"}
+                      title="Listen on YouTube Music"
                     >
-                      {currentTrackIndex === index && isPlaying ? (
-                        <Pause className="w-5 h-5 text-primary fill-primary" />
-                      ) : (
-                        <Play className="w-5 h-5 text-primary fill-primary" />
-                      )}
+                      <Play className="w-5 h-5 text-primary fill-primary" />
                     </button>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold truncate">{track.title}</p>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
-                        {!track.previewUrl && track.youtubeUrl && (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary whitespace-nowrap">YouTube Music</span>
-                        )}
-                      </div>
+                      <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {track.previewUrl && currentTrackIndex === index && isPlaying && (
-                        <div className="flex gap-1">
-                          <div className="w-1 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
-                          <div className="w-1 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: "100ms" }}></div>
-                          <div className="w-1 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: "200ms" }}></div>
-                        </div>
-                      )}
-                      <p className="text-sm text-muted-foreground flex-shrink-0">{track.duration}</p>
-                    </div>
+                    <p className="text-sm text-muted-foreground flex-shrink-0">{track.duration}</p>
                   </motion.div>
                 ))}
               </div>
