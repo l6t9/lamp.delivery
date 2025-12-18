@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Music as MusicIcon, Disc3, Play } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
 import { VertexBackground } from "@/components/vertex-background";
 
@@ -46,6 +46,40 @@ const playlistTracks: Track[] = [
 
 export default function Music() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [artists, setArtists] = useState(favoriteArtists);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchArtists = async () => {
+      try {
+        const artistNames = ["Blood Cultures", "Ado"];
+        const fetchedArtists = await Promise.all(
+          artistNames.map(async (name) => {
+            try {
+              const response = await fetch(`/api/artists/${encodeURIComponent(name)}`);
+              if (response.ok) {
+                const data = await response.json();
+                return {
+                  ...favoriteArtists.find(a => a.name === name) || { name, genre: "", description: "", color: "" },
+                  imageUrl: data.imageUrl || favoriteArtists.find(a => a.name === name)?.imageUrl,
+                };
+              }
+            } catch (error) {
+              console.error(`Error fetching ${name}:`, error);
+            }
+            return favoriteArtists.find(a => a.name === name);
+          })
+        );
+        setArtists(fetchedArtists.filter(Boolean) as Artist[]);
+      } catch (error) {
+        console.error("Error fetching artists:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArtists();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background font-sans relative">
@@ -96,7 +130,7 @@ export default function Music() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {favoriteArtists.map((artist, index) => (
+              {artists.map((artist, index) => (
                 <motion.div
                   key={artist.name}
                   initial={{ opacity: 0, y: 20 }}
