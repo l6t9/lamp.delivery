@@ -8,7 +8,7 @@ const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 let spotifyAccessToken: string | null = null;
 let tokenExpiration: number = 0;
 
-async function getSpotifyAccessToken(): Promise<string> {
+async function getSpotifyAccessToken(): Promise<string | null> {
   // Check if we have a valid token
   if (spotifyAccessToken && tokenExpiration > Date.now()) {
     return spotifyAccessToken;
@@ -18,7 +18,8 @@ async function getSpotifyAccessToken(): Promise<string> {
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
-    throw new Error("Spotify credentials not configured");
+    console.warn("Spotify credentials not configured - image fetching will be disabled");
+    return null;
   }
 
   const auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
@@ -41,13 +42,24 @@ async function getSpotifyAccessToken(): Promise<string> {
     return spotifyAccessToken;
   } catch (error) {
     console.error("Error fetching Spotify access token:", error);
-    throw new Error("Failed to authenticate with Spotify");
+    return null;
   }
 }
 
 async function getArtistFromSpotify(artistName: string) {
   try {
     const token = await getSpotifyAccessToken();
+
+    // If no token available, return basic data without images
+    if (!token) {
+      return {
+        name: artistName,
+        imageUrl: null,
+        spotifyUrl: null,
+        followers: 0,
+        genres: [],
+      };
+    }
 
     const searchResponse = await axios.get(`${SPOTIFY_API_BASE}/search`, {
       params: {
@@ -62,7 +74,13 @@ async function getArtistFromSpotify(artistName: string) {
 
     const artists = searchResponse.data.artists?.items;
     if (!artists || artists.length === 0) {
-      return null;
+      return {
+        name: artistName,
+        imageUrl: null,
+        spotifyUrl: null,
+        followers: 0,
+        genres: [],
+      };
     }
 
     const artist = artists[0];
@@ -75,7 +93,13 @@ async function getArtistFromSpotify(artistName: string) {
     };
   } catch (error) {
     console.error(`Error fetching Spotify data for ${artistName}:`, error);
-    return null;
+    return {
+      name: artistName,
+      imageUrl: null,
+      spotifyUrl: null,
+      followers: 0,
+      genres: [],
+    };
   }
 }
 
@@ -114,6 +138,21 @@ export async function registerRoutes(
       }
 
       const token = await getSpotifyAccessToken();
+
+      // If no token available, return basic track data without Spotify details
+      if (!token) {
+        const youtubeSearchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(`${title} ${artist}`)}`;
+        return res.json({
+          name: title,
+          artist: artist,
+          previewUrl: null,
+          spotifyUrl: null,
+          youtubeUrl: youtubeSearchUrl,
+          albumArt: null,
+          duration: 0,
+        });
+      }
+
       const searchQuery = `track:${title} artist:${artist}`;
 
       const searchResponse = await axios.get(`${SPOTIFY_API_BASE}/search`, {
@@ -129,7 +168,16 @@ export async function registerRoutes(
 
       const tracks = searchResponse.data.tracks?.items;
       if (!tracks || tracks.length === 0) {
-        return res.status(404).json({ error: "Track not found" });
+        const youtubeSearchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(`${title} ${artist}`)}`;
+        return res.json({
+          name: title,
+          artist: artist,
+          previewUrl: null,
+          spotifyUrl: null,
+          youtubeUrl: youtubeSearchUrl,
+          albumArt: null,
+          duration: 0,
+        });
       }
 
       const track = tracks[0];
