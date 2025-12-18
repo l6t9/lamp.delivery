@@ -8,6 +8,19 @@ const artistImages: Record<string, string> = {
   "Ado": "/images/ado.jpg",
 };
 
+const songAlbumArt: Record<string, Record<string, string>> = {
+  "Blood Cultures": {
+    "Overlord": "/images/blood-cultures-1.png",
+    "Where The City Can't See": "/images/blood-cultures-1.png",
+    "Coastal": "/images/blood-cultures-2.png",
+  },
+  "Ado": {
+    "All Night Radio": "/images/ado-1.jpg",
+    "Gira Gira": "/images/ado-2.png",
+    "God-ish": "/images/ado-3.png",
+  },
+};
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -44,6 +57,7 @@ export async function registerRoutes(
       }
 
       const youtubeSearchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(`${title} ${artist}`)}`;
+      const albumArt = songAlbumArt[artist as string]?.[title as string] || null;
       
       res.json({
         name: title,
@@ -51,7 +65,7 @@ export async function registerRoutes(
         previewUrl: null,
         spotifyUrl: null,
         youtubeUrl: youtubeSearchUrl,
-        albumArt: null,
+        albumArt: albumArt,
         duration: 0,
       });
     } catch (error) {
