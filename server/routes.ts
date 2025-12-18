@@ -3,55 +3,22 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import axios from "axios";
 
-const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
+const LASTFM_API_BASE = "https://ws.audioscrobbler.com/2.0";
 
-let spotifyAccessToken: string | null = null;
-let tokenExpiration: number = 0;
-
-async function getSpotifyAccessToken(): Promise<string | null> {
-  // Check if we have a valid token
-  if (spotifyAccessToken && tokenExpiration > Date.now()) {
-    return spotifyAccessToken;
+function getLastfmApiKey(): string | null {
+  const apiKey = process.env.LASTFM_API_KEY;
+  if (!apiKey) {
+    console.warn("Last.fm API key not configured - image fetching will be disabled");
   }
-
-  const clientId = process.env.SPOTIFY_CLIENT_ID;
-  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-
-  if (!clientId || !clientSecret) {
-    console.warn("Spotify credentials not configured - image fetching will be disabled");
-    return null;
-  }
-
-  const auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
-
-  try {
-    const response = await axios.post(
-      "https://accounts.spotify.com/api/token",
-      "grant_type=client_credentials",
-      {
-        headers: {
-          Authorization: `Basic ${auth}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-
-    spotifyAccessToken = response.data.access_token;
-    tokenExpiration = Date.now() + response.data.expires_in * 1000 - 60000; // Refresh 1 minute before expiry
-
-    return spotifyAccessToken;
-  } catch (error) {
-    console.error("Error fetching Spotify access token:", error);
-    return null;
-  }
+  return apiKey || null;
 }
 
-async function getArtistFromSpotify(artistName: string) {
+async function getArtistFromLastfm(artistName: string) {
   try {
-    const token = await getSpotifyAccessToken();
+    const apiKey = getLastfmApiKey();
 
-    // If no token available, return basic data without images
-    if (!token) {
+    // If no API key available, return basic data without images
+    if (!apiKey) {
       return {
         name: artistName,
         imageUrl: null,
@@ -61,19 +28,16 @@ async function getArtistFromSpotify(artistName: string) {
       };
     }
 
-    const searchResponse = await axios.get(`${SPOTIFY_API_BASE}/search`, {
+    const response = await axios.get(LASTFM_API_BASE, {
       params: {
-        q: artistName,
-        type: "artist",
-        limit: 1,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
+        method: "artist.getinfo",
+        artist: artistName,
+        api_key: apiKey,
+        format: "json",
       },
     });
 
-    const artists = searchResponse.data.artists?.items;
-    if (!artists || artists.length === 0) {
+    if (response.data.error || !response.data.artist) {
       return {
         name: artistName,
         imageUrl: null,
@@ -83,16 +47,21 @@ async function getArtistFromSpotify(artistName: string) {
       };
     }
 
-    const artist = artists[0];
+    const artist = response.data.artist;
+    const imageUrl =
+      artist.image?.find((img: any) => img.size === "large")?.["#text"] ||
+      artist.image?.[artist.image.length - 1]?.["#text"] ||
+      null;
+
     return {
       name: artist.name,
-      imageUrl: artist.images[0]?.url || null,
-      spotifyUrl: artist.external_urls?.spotify || null,
-      followers: artist.followers?.total || 0,
-      genres: artist.genres || [],
+      imageUrl: imageUrl,
+      spotifyUrl: artist.url || null,
+      followers: parseInt(artist.stats?.listeners || "0", 10),
+      genres: artist.tags?.tag?.slice(0, 5).map((t: any) => t.name) || [],
     };
   } catch (error) {
-    console.error(`Error fetching Spotify data for ${artistName}:`, error);
+    console.error(`Error fetching Last.fm data for ${artistName}:`, error);
     return {
       name: artistName,
       imageUrl: null,
@@ -116,7 +85,7 @@ export async function registerRoutes(
   app.get("/api/artists/:name", async (req, res) => {
     try {
       const artistName = decodeURIComponent(req.params.name);
-      const artistData = await getArtistFromSpotify(artistName);
+      const artistData = await getArtistFromLastfm(artistName);
 
       if (!artistData) {
         return res.status(404).json({ error: "Artist not found" });
@@ -137,10 +106,10 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Title and artist are required" });
       }
 
-      const token = await getSpotifyAccessToken();
+      const apiKey = getLastfmApiKey();
 
-      // If no token available, return basic track data without Spotify details
-      if (!token) {
+      // If no API key available, return basic track data
+      if (!apiKey) {
         const youtubeSearchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(`${title} ${artist}`)}`;
         return res.json({
           name: title,
@@ -153,21 +122,17 @@ export async function registerRoutes(
         });
       }
 
-      const searchQuery = `track:${title} artist:${artist}`;
-
-      const searchResponse = await axios.get(`${SPOTIFY_API_BASE}/search`, {
+      const searchResponse = await axios.get(LASTFM_API_BASE, {
         params: {
-          q: searchQuery,
-          type: "track",
-          limit: 1,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
+          method: "track.getinfo",
+          artist: artist,
+          track: title,
+          api_key: apiKey,
+          format: "json",
         },
       });
 
-      const tracks = searchResponse.data.tracks?.items;
-      if (!tracks || tracks.length === 0) {
+      if (searchResponse.data.error || !searchResponse.data.track) {
         const youtubeSearchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(`${title} ${artist}`)}`;
         return res.json({
           name: title,
@@ -180,16 +145,21 @@ export async function registerRoutes(
         });
       }
 
-      const track = tracks[0];
-      const youtubeSearchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(`${track.name} ${track.artists[0]?.name || ""}`)}`;
+      const track = searchResponse.data.track;
+      const imageUrl =
+        track.album?.image?.find((img: any) => img.size === "large")?.["#text"] ||
+        track.album?.image?.[track.album.image.length - 1]?.["#text"] ||
+        null;
+      const youtubeSearchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(`${track.name} ${track.artist?.name || artist}`)}`;
+
       res.json({
         name: track.name,
-        artist: track.artists[0]?.name || "Unknown",
-        previewUrl: track.preview_url,
-        spotifyUrl: track.external_urls?.spotify || null,
+        artist: track.artist?.name || artist,
+        previewUrl: null,
+        spotifyUrl: track.url || null,
         youtubeUrl: youtubeSearchUrl,
-        albumArt: track.album?.images[0]?.url || null,
-        duration: Math.floor(track.duration_ms / 1000),
+        albumArt: imageUrl,
+        duration: parseInt(track.duration || "0", 10) / 1000,
       });
     } catch (error) {
       console.error("Error searching track:", error);
