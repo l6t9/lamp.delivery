@@ -3,6 +3,11 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import axios from "axios";
 
+const artistImages: Record<string, string> = {
+  "Blood Cultures": "/images/blood-cultures.jpg",
+  "Ado": "/images/ado.jpg",
+};
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -19,7 +24,7 @@ export async function registerRoutes(
       
       res.json({
         name: artistName,
-        imageUrl: null,
+        imageUrl: artistImages[artistName] || null,
         spotifyUrl: null,
         followers: 0,
         genres: [],
