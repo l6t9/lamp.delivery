@@ -15,9 +15,9 @@ const songAlbumArt: Record<string, Record<string, string>> = {
     "Coastal": "/images/blood-cultures-2.png",
   },
   "Ado": {
-    "All Night Radio": "/images/ado-1.jpg",
+    "All Night Radio": "/images/ado-3.png",
     "Gira Gira": "/images/ado-2.png",
-    "God-ish": "/images/ado-3.png",
+    "God-ish": "/images/ado-1.jpg",
   },
 };
 
