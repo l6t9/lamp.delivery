@@ -97,7 +97,6 @@ export default function Music() {
               className="flex justify-center"
             >
               <div className="relative w-24 h-24 sm:w-32 sm:h-32">
-                <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl animate-pulse"></div>
                 <div className="relative w-full h-full rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-xl">
                   <MusicIcon className="w-12 h-12 sm:w-16 sm:h-16" />
                 </div>
@@ -139,7 +138,6 @@ export default function Music() {
                   viewport={{ once: true }}
                   className="group"
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-r ${artist.color} rounded-2xl blur-xl -z-10 group-hover:blur-2xl transition-all duration-500`}></div>
                   <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8 h-full space-y-4 hover:border-primary/50 transition-colors duration-300">
                     <div className="flex items-center gap-3">
                       <img
@@ -171,7 +169,6 @@ export default function Music() {
             viewport={{ once: true }}
             className="relative group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl blur-xl -z-10 group-hover:blur-2xl transition-all duration-500"></div>
             <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-8 sm:p-12 space-y-6">
               <div className="space-y-2">
                 <h3 className="text-2xl font-bold">Playlist Preview</h3>
