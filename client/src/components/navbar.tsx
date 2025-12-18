@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Moon, Sun, Palette } from "lucide-react";
+import { Moon, Sun, Palette, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ export default function Navbar() {
   const { theme, setTheme, colorScheme, setColorScheme } = useTheme();
   const [location] = useLocation();
   const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleScrollToProjects = (e: React.MouseEvent) => {
     if (location === "/") {
@@ -57,6 +58,64 @@ export default function Navbar() {
             Music
           </Link>
         </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden absolute left-20">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="hover:bg-primary/10 hover:text-primary"
+          >
+            {showMobileMenu ? (
+              <X className="h-[1.2rem] w-[1.2rem]" />
+            ) : (
+              <Menu className="h-[1.2rem] w-[1.2rem]" />
+            )}
+          </Button>
+        </div>
+
+        {/* Mobile Menu Dropdown */}
+        {showMobileMenu && (
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-card border-b border-border/50 shadow-lg z-40">
+            <div className="flex flex-col p-4 space-y-2">
+              <Link
+                href="/"
+                onClick={() => setShowMobileMenu(false)}
+                className={cn(
+                  "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                  location === "/" 
+                    ? "bg-primary/20 text-foreground" 
+                    : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                )}
+              >
+                Home
+              </Link>
+              <a
+                href="#projects"
+                onClick={(e) => {
+                  handleScrollToProjects(e);
+                  setShowMobileMenu(false);
+                }}
+                className="px-4 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
+              >
+                Projects
+              </a>
+              <Link
+                href="/music"
+                onClick={() => setShowMobileMenu(false)}
+                className={cn(
+                  "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                  location === "/music" 
+                    ? "bg-primary/20 text-foreground" 
+                    : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                )}
+              >
+                Music
+              </Link>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center gap-4 absolute right-6">
           <div className="relative">
