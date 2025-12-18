@@ -13,12 +13,15 @@ export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleScrollToProjects = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (location === "/") {
-      e.preventDefault();
       const element = document.getElementById("projects");
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
+    } else {
+      // Navigate to home first, then scroll to projects
+      window.location.href = "/#projects";
     }
   };
 
