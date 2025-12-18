@@ -8,6 +8,8 @@ interface Track {
   title: string;
   duration: string;
   youtubeUrl: string;
+  artist?: string;
+  albumArt?: string;
 }
 
 interface Artist {
@@ -30,17 +32,20 @@ const favoriteArtists: Artist[] = [
       {
         title: "Where The City Can't See",
         duration: "3:42",
-        youtubeUrl: "https://music.youtube.com/watch?v=ZePJiplAjok&si=t83G0Tt0P9O9Mtxa"
+        youtubeUrl: "https://music.youtube.com/watch?v=ZePJiplAjok&si=t83G0Tt0P9O9Mtxa",
+        artist: "Blood Cultures"
       },
       {
         title: "Overlord",
         duration: "3:58",
-        youtubeUrl: "https://music.youtube.com/watch?v=93wOPJ6eTR4&si=gRuXv6Ml1bsjKKQx"
+        youtubeUrl: "https://music.youtube.com/watch?v=93wOPJ6eTR4&si=gRuXv6Ml1bsjKKQx",
+        artist: "Blood Cultures"
       },
       {
         title: "Coastal",
         duration: "4:05",
-        youtubeUrl: "https://music.youtube.com/watch?v=dbaCZuXb-FQ&si=TH9jvW8jOFTGtZEh"
+        youtubeUrl: "https://music.youtube.com/watch?v=dbaCZuXb-FQ&si=TH9jvW8jOFTGtZEh",
+        artist: "Blood Cultures"
       }
     ]
   },
@@ -54,17 +59,20 @@ const favoriteArtists: Artist[] = [
       {
         title: "God-ish",
         duration: "4:21",
-        youtubeUrl: "https://music.youtube.com/watch?v=eVpDNd7Ckzo&si=X3a5awGpWgXg82Dg"
+        youtubeUrl: "https://music.youtube.com/watch?v=eVpDNd7Ckzo&si=X3a5awGpWgXg82Dg",
+        artist: "Ado"
       },
       {
         title: "All Night Radio",
         duration: "3:15",
-        youtubeUrl: "https://music.youtube.com/watch?v=1BDOJCKKiEE&si=xstmc30Py9laEDSa"
+        youtubeUrl: "https://music.youtube.com/watch?v=1BDOJCKKiEE&si=xstmc30Py9laEDSa",
+        artist: "Ado"
       },
       {
         title: "Gira Gira",
         duration: "3:33",
-        youtubeUrl: "https://music.youtube.com/watch?v=Dt0CYNAYfNY&si=qBsNW4Kx9P4qAgSJ"
+        youtubeUrl: "https://music.youtube.com/watch?v=Dt0CYNAYfNY&si=qBsNW4Kx9P4qAgSJ",
+        artist: "Ado"
       }
     ]
   }
@@ -75,7 +83,7 @@ export default function Music() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchArtists = async () => {
+    const fetchArtistsAndAlbumArt = async () => {
       try {
         const artistNames = ["Blood Cultures", "Ado"];
         const fetchedArtists = await Promise.all(
@@ -85,9 +93,32 @@ export default function Music() {
               if (response.ok) {
                 const data = await response.json();
                 const artist = favoriteArtists.find(a => a.name === name);
+                
+                // Fetch album art for each song
+                const songsWithArt = await Promise.all(
+                  artist?.songs.map(async (song) => {
+                    try {
+                      const trackResponse = await fetch(
+                        `/api/search-track?title=${encodeURIComponent(song.title)}&artist=${encodeURIComponent(name)}`
+                      );
+                      if (trackResponse.ok) {
+                        const trackData = await trackResponse.json();
+                        return {
+                          ...song,
+                          albumArt: trackData.albumArt,
+                        };
+                      }
+                    } catch (error) {
+                      console.error(`Error fetching album art for ${song.title}:`, error);
+                    }
+                    return song;
+                  }) || []
+                );
+
                 return {
                   ...artist,
                   imageUrl: data.imageUrl || artist?.imageUrl,
+                  songs: songsWithArt,
                 };
               }
             } catch (error) {
@@ -104,7 +135,7 @@ export default function Music() {
       }
     };
 
-    fetchArtists();
+    fetchArtistsAndAlbumArt();
   }, []);
 
   const handlePlayTrack = (youtubeUrl: string) => {
@@ -184,8 +215,15 @@ export default function Music() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.3, delay: songIndex * 0.05 }}
                             viewport={{ once: true }}
-                            className="group/track flex items-center gap-4 p-3 rounded-lg hover:bg-primary/5 transition-colors duration-200"
+                            className="group/track flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-colors duration-200"
                           >
+                            {song.albumArt && (
+                              <img
+                                src={song.albumArt}
+                                alt={song.title}
+                                className="flex-shrink-0 w-10 h-10 rounded object-cover"
+                              />
+                            )}
                             <button
                               onClick={() => handlePlayTrack(song.youtubeUrl)}
                               className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors duration-200"
