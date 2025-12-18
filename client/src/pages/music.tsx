@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Music as MusicIcon, Disc3, Play } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Music as MusicIcon, Disc3, Play, Pause, Volume2 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/navbar";
 import { VertexBackground } from "@/components/vertex-background";
 
@@ -16,6 +16,8 @@ interface Track {
   title: string;
   artist: string;
   duration: string;
+  previewUrl?: string;
+  loaded?: boolean;
 }
 
 const favoriteArtists: Artist[] = [
@@ -35,7 +37,7 @@ const favoriteArtists: Artist[] = [
   }
 ];
 
-const playlistTracks: Track[] = [
+const initialPlaylistTracks: Track[] = [
   { title: "Kissing in the Rain", artist: "Blood Cultures", duration: "3:42" },
   { title: "Readymade", artist: "Ado", duration: "4:21" },
   { title: "Heaven", artist: "Blood Cultures", duration: "3:58" },
@@ -45,9 +47,13 @@ const playlistTracks: Track[] = [
 ];
 
 export default function Music() {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [artists, setArtists] = useState(favoriteArtists);
   const [loading, setLoading] = useState(true);
+  const [playlistTracks, setPlaylistTracks] = useState(initialPlaylistTracks);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [tracksLoaded, setTracksLoaded] = useState(false);
 
   useEffect(() => {
     const fetchArtists = async () => {
@@ -81,11 +87,84 @@ export default function Music() {
     fetchArtists();
   }, []);
 
+  useEffect(() => {
+    const fetchTracks = async () => {
+      try {
+        const tracksWithUrls = await Promise.all(
+          initialPlaylistTracks.map(async (track) => {
+            try {
+              const response = await fetch(
+                `/api/search-track?title=${encodeURIComponent(track.title)}&artist=${encodeURIComponent(track.artist)}`
+              );
+              if (response.ok) {
+                const data = await response.json();
+                return {
+                  ...track,
+                  previewUrl: data.previewUrl,
+                  loaded: true,
+                };
+              }
+            } catch (error) {
+              console.error(`Error fetching preview for ${track.title}:`, error);
+            }
+            return { ...track, loaded: true };
+          })
+        );
+        setPlaylistTracks(tracksWithUrls);
+        setTracksLoaded(true);
+      } catch (error) {
+        console.error("Error fetching tracks:", error);
+      }
+    };
+
+    fetchTracks();
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => {
+      setIsPlaying(false);
+      if (currentTrackIndex !== null && currentTrackIndex < playlistTracks.length - 1) {
+        setCurrentTrackIndex(currentTrackIndex + 1);
+      }
+    };
+
+    audio.addEventListener("ended", handleEnded);
+    return () => audio.removeEventListener("ended", handleEnded);
+  }, [currentTrackIndex, playlistTracks.length]);
+
+  const handlePlayTrack = (index: number) => {
+    const track = playlistTracks[index];
+    if (!track.previewUrl) {
+      alert("Preview not available for this track");
+      return;
+    }
+
+    if (currentTrackIndex === index && isPlaying) {
+      // Pause if already playing
+      audioRef.current?.pause();
+      setIsPlaying(false);
+    } else {
+      // Play the track
+      if (audioRef.current) {
+        audioRef.current.src = track.previewUrl;
+        audioRef.current.play();
+        setIsPlaying(true);
+        setCurrentTrackIndex(index);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background font-sans relative">
       <VertexBackground />
       <div className="relative z-10">
         <Navbar />
+
+        {/* Hidden Audio Player */}
+        <audio ref={audioRef} crossOrigin="anonymous" />
 
         <main className="container mx-auto px-4 sm:px-6 pt-32 pb-16 max-w-4xl space-y-16">
           {/* Hero Section */}
@@ -186,19 +265,38 @@ export default function Music() {
                     className="group/track flex items-center gap-4 p-4 rounded-lg hover:bg-primary/5 transition-colors duration-200"
                   >
                     <button
-                      onClick={() => setIsPlaying(!isPlaying)}
-                      className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors duration-200"
+                      onClick={() => handlePlayTrack(index)}
+                      disabled={!track.previewUrl}
+                      className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 hover:bg-primary/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors duration-200"
+                      title={track.previewUrl ? "Play preview" : "Preview not available"}
                     >
-                      <Play className="w-5 h-5 text-primary fill-primary" />
+                      {currentTrackIndex === index && isPlaying ? (
+                        <Pause className="w-5 h-5 text-primary fill-primary" />
+                      ) : (
+                        <Play className="w-5 h-5 text-primary fill-primary" />
+                      )}
                     </button>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold truncate">{track.title}</p>
                       <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground flex-shrink-0">{track.duration}</p>
+                    <div className="flex items-center gap-2">
+                      {track.previewUrl && currentTrackIndex === index && isPlaying && (
+                        <div className="flex gap-1">
+                          <div className="w-1 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                          <div className="w-1 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: "100ms" }}></div>
+                          <div className="w-1 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: "200ms" }}></div>
+                        </div>
+                      )}
+                      <p className="text-sm text-muted-foreground flex-shrink-0">{track.duration}</p>
+                    </div>
                   </motion.div>
                 ))}
               </div>
+              
+              {!tracksLoaded && (
+                <p className="text-sm text-muted-foreground text-center">Loading track previews...</p>
+              )}
             </div>
           </motion.section>
         </main>

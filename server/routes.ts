@@ -105,5 +105,47 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/search-track", async (req, res) => {
+    try {
+      const { title, artist } = req.query;
+
+      if (!title || !artist) {
+        return res.status(400).json({ error: "Title and artist are required" });
+      }
+
+      const token = await getSpotifyAccessToken();
+      const searchQuery = `track:${title} artist:${artist}`;
+
+      const searchResponse = await axios.get(`${SPOTIFY_API_BASE}/search`, {
+        params: {
+          q: searchQuery,
+          type: "track",
+          limit: 1,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const tracks = searchResponse.data.tracks?.items;
+      if (!tracks || tracks.length === 0) {
+        return res.status(404).json({ error: "Track not found" });
+      }
+
+      const track = tracks[0];
+      res.json({
+        name: track.name,
+        artist: track.artists[0]?.name || "Unknown",
+        previewUrl: track.preview_url,
+        spotifyUrl: track.external_urls?.spotify || null,
+        albumArt: track.album?.images[0]?.url || null,
+        duration: Math.floor(track.duration_ms / 1000),
+      });
+    } catch (error) {
+      console.error("Error searching track:", error);
+      res.status(500).json({ error: "Failed to search for track" });
+    }
+  });
+
   return httpServer;
 }
