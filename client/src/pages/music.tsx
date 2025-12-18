@@ -4,21 +4,19 @@ import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/navbar";
 import { VertexBackground } from "@/components/vertex-background";
 
+interface Track {
+  title: string;
+  duration: string;
+  youtubeUrl: string;
+}
+
 interface Artist {
   name: string;
   genre: string;
   description: string;
   color: string;
   imageUrl: string;
-}
-
-interface Track {
-  title: string;
-  artist: string;
-  duration: string;
-  previewUrl?: string;
-  youtubeUrl?: string;
-  loaded?: boolean;
+  songs: Track[];
 }
 
 const favoriteArtists: Artist[] = [
@@ -27,34 +25,54 @@ const favoriteArtists: Artist[] = [
     genre: "Indie Pop / Alternative",
     description: "Dreamy and experimental indie pop with ethereal vocals and innovative production.",
     color: "from-pink-500/20 to-red-500/20",
-    imageUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop"
+    imageUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
+    songs: [
+      {
+        title: "Where the city can't see",
+        duration: "3:42",
+        youtubeUrl: "https://music.youtube.com/watch?v=ZePJiplAjok&si=t83G0Tt0P9O9Mtxa"
+      },
+      {
+        title: "Overlord",
+        duration: "3:58",
+        youtubeUrl: "https://music.youtube.com/watch?v=93wOPJ6eTR4&si=gRuXv6Ml1bsjKKQx"
+      },
+      {
+        title: "Coastal",
+        duration: "4:05",
+        youtubeUrl: "https://music.youtube.com/watch?v=dbaCZuXb-FQ&si=TH9jvW8jOFTGtZEh"
+      }
+    ]
   },
   {
     name: "Ado",
     genre: "Vocaloid / Pop",
     description: "Japanese music producer and vocalist known for powerful emotional performances and creative storytelling through music.",
     color: "from-purple-500/20 to-blue-500/20",
-    imageUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop"
+    imageUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop",
+    songs: [
+      {
+        title: "Readymade",
+        duration: "4:21",
+        youtubeUrl: "https://music.youtube.com/search?q=Readymade%20Ado"
+      },
+      {
+        title: "Ateya",
+        duration: "3:15",
+        youtubeUrl: "https://music.youtube.com/search?q=Ateya%20Ado"
+      },
+      {
+        title: "Gira Gira",
+        duration: "3:33",
+        youtubeUrl: "https://music.youtube.com/search?q=Gira%20Gira%20Ado"
+      }
+    ]
   }
-];
-
-const initialPlaylistTracks: Track[] = [
-  { title: "Set It on Fire", artist: "Blood Cultures", duration: "3:42" },
-  { title: "Readymade", artist: "Ado", duration: "4:21" },
-  { title: "Keeps Bringing Me Back", artist: "Blood Cultures", duration: "3:58" },
-  { title: "Ateya", artist: "Ado", duration: "3:15" },
-  { title: "When the Night Calls", artist: "Blood Cultures", duration: "4:05" },
-  { title: "Gira Gira", artist: "Ado", duration: "3:33" }
 ];
 
 export default function Music() {
   const [artists, setArtists] = useState(favoriteArtists);
   const [loading, setLoading] = useState(true);
-  const [playlistTracks, setPlaylistTracks] = useState(initialPlaylistTracks);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState<number | null>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [tracksLoaded, setTracksLoaded] = useState(false);
 
   useEffect(() => {
     const fetchArtists = async () => {
@@ -66,9 +84,10 @@ export default function Music() {
               const response = await fetch(`/api/artists/${encodeURIComponent(name)}`);
               if (response.ok) {
                 const data = await response.json();
+                const artist = favoriteArtists.find(a => a.name === name);
                 return {
-                  ...favoriteArtists.find(a => a.name === name) || { name, genre: "", description: "", color: "" },
-                  imageUrl: data.imageUrl || favoriteArtists.find(a => a.name === name)?.imageUrl,
+                  ...artist,
+                  imageUrl: data.imageUrl || artist?.imageUrl,
                 };
               }
             } catch (error) {
@@ -88,62 +107,8 @@ export default function Music() {
     fetchArtists();
   }, []);
 
-  useEffect(() => {
-    const fetchTracks = async () => {
-      try {
-        const tracksWithUrls = await Promise.all(
-          initialPlaylistTracks.map(async (track) => {
-            try {
-              const response = await fetch(
-                `/api/search-track?title=${encodeURIComponent(track.title)}&artist=${encodeURIComponent(track.artist)}`
-              );
-              if (response.ok) {
-                const data = await response.json();
-                return {
-                  ...track,
-                  previewUrl: data.previewUrl,
-                  youtubeUrl: data.youtubeUrl,
-                  loaded: true,
-                };
-              }
-            } catch (error) {
-              console.error(`Error fetching preview for ${track.title}:`, error);
-            }
-            return { ...track, loaded: true };
-          })
-        );
-        setPlaylistTracks(tracksWithUrls);
-        setTracksLoaded(true);
-      } catch (error) {
-        console.error("Error fetching tracks:", error);
-      }
-    };
-
-    fetchTracks();
-  }, []);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleEnded = () => {
-      setIsPlaying(false);
-      if (currentTrackIndex !== null && currentTrackIndex < playlistTracks.length - 1) {
-        setCurrentTrackIndex(currentTrackIndex + 1);
-      }
-    };
-
-    audio.addEventListener("ended", handleEnded);
-    return () => audio.removeEventListener("ended", handleEnded);
-  }, [currentTrackIndex, playlistTracks.length]);
-
-  const handlePlayTrack = (index: number) => {
-    const track = playlistTracks[index];
-    
-    // Open YouTube Music for the track
-    if (track.youtubeUrl) {
-      window.open(track.youtubeUrl, '_blank');
-    }
+  const handlePlayTrack = (youtubeUrl: string) => {
+    window.open(youtubeUrl, '_blank');
   };
 
   return (
@@ -151,9 +116,6 @@ export default function Music() {
       <VertexBackground />
       <div className="relative z-10">
         <Navbar />
-
-        {/* Hidden Audio Player */}
-        <audio ref={audioRef} crossOrigin="anonymous" />
 
         <main className="container mx-auto px-4 sm:px-6 pt-32 pb-16 max-w-4xl space-y-16">
           {/* Hero Section */}
@@ -196,17 +158,18 @@ export default function Music() {
               <h2 className="text-3xl font-bold">Artists I Love</h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {artists.map((artist, index) => (
+            <div className="space-y-8">
+              {artists.map((artist, artistIndex) => (
                 <motion.div
                   key={artist.name}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  transition={{ duration: 0.4, delay: artistIndex * 0.1 }}
                   viewport={{ once: true }}
                   className="group"
                 >
-                  <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8 h-full space-y-4 hover:border-primary/50 transition-colors duration-300">
+                  <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8 space-y-6 hover:border-primary/50 transition-colors duration-300">
+                    {/* Artist Header */}
                     <div className="flex items-center gap-3">
                       <img
                         src={artist.imageUrl}
@@ -221,59 +184,44 @@ export default function Music() {
                         <p className="text-sm text-primary font-mono">{artist.genre}</p>
                       </div>
                     </div>
+
                     <p className="text-muted-foreground leading-relaxed">
                       {artist.description}
                     </p>
+
+                    {/* Songs List */}
+                    <div className="space-y-3 pt-4 border-t border-border/30">
+                      <h4 className="text-sm font-semibold text-primary/70 uppercase tracking-wide">Favorite Songs</h4>
+                      <div className="space-y-2">
+                        {artist.songs.map((song, songIndex) => (
+                          <motion.div
+                            key={`${artist.name}-${songIndex}`}
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.3, delay: songIndex * 0.05 }}
+                            viewport={{ once: true }}
+                            className="group/track flex items-center gap-4 p-3 rounded-lg hover:bg-primary/5 transition-colors duration-200"
+                          >
+                            <button
+                              onClick={() => handlePlayTrack(song.youtubeUrl)}
+                              className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors duration-200"
+                              title="Listen on YouTube Music"
+                            >
+                              <Play className="w-4 h-4 text-primary fill-primary" />
+                            </button>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-semibold text-sm truncate">{song.title}</p>
+                            </div>
+                            <p className="text-xs text-muted-foreground flex-shrink-0">{song.duration}</p>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </div>
           </section>
-
-          {/* Playlist Preview */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative group"
-          >
-            <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-8 sm:p-12 space-y-6">
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold">Playlist Preview</h3>
-                <p className="text-muted-foreground">Favorite tracks from these amazing artists</p>
-              </div>
-              
-              <div className="space-y-3">
-                {playlistTracks.map((track, index) => (
-                  <motion.div
-                    key={`${track.artist}-${index}`}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    viewport={{ once: true }}
-                    className="group/track flex items-center gap-4 p-4 rounded-lg hover:bg-primary/5 transition-colors duration-200"
-                  >
-                    <button
-                      onClick={() => handlePlayTrack(index)}
-                      className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors duration-200"
-                      title="Listen on YouTube Music"
-                    >
-                      <Play className="w-5 h-5 text-primary fill-primary" />
-                    </button>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold truncate">{track.title}</p>
-                      <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
-                    </div>
-                    <p className="text-sm text-muted-foreground flex-shrink-0">{track.duration}</p>
-                  </motion.div>
-                ))}
-              </div>
-              
-              {!tracksLoaded && (
-                <p className="text-sm text-muted-foreground text-center">Loading track previews...</p>
-              )}
-            </div>
-          </motion.section>
         </main>
 
         <footer className="py-12 text-center text-sm text-muted-foreground">
