@@ -45,15 +45,6 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           <Badge variant="secondary" className="font-mono text-xs font-medium">
             {project.language}
           </Badge>
-          {project.id === 2 && (
-            <div className="flex justify-center pt-2">
-              <img
-                src="https://minky.materii.dev"
-                alt="Random minky"
-                className="rounded-lg shadow-md max-w-xs w-full hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-          )}
         </CardContent>
         <CardFooter>
           <Button
