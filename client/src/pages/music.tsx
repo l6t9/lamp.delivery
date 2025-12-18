@@ -27,7 +27,7 @@ const favoriteArtists: Artist[] = [
     genre: "Indie Pop / Alternative",
     description: "All-time favorite, extremely underrated",
     color: "from-pink-500/20 to-red-500/20",
-    imageUrl: "/images/blood-cultures.jpg",
+    imageUrl: "https://raw.githubusercontent.com/LampDelivery/lamp.delivery/refs/heads/main/public/images/blood-cultures.jpg",
     songs: [
       {
         title: "Where The City Can't See",
@@ -54,7 +54,7 @@ const favoriteArtists: Artist[] = [
     genre: "Vocaloid / Pop",
     description: "Amazing voice",
     color: "from-purple-500/20 to-blue-500/20",
-    imageUrl: "/images/ado.jpg",
+    imageUrl: "https://raw.githubusercontent.com/LampDelivery/lamp.delivery/refs/heads/main/public/images/ado.jpg",
     songs: [
       {
         title: "God-ish",
