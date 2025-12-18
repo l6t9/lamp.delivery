@@ -47,6 +47,15 @@ export default function Navbar() {
           >
             Projects
           </a>
+          <Link
+            href="/music"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              location === "/music" ? "text-foreground" : "text-muted-foreground"
+            )}
+          >
+            Music
+          </Link>
         </div>
 
         <div className="flex items-center gap-4 absolute right-6">
