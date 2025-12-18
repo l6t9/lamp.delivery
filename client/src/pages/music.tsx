@@ -17,7 +17,7 @@ interface Track {
   artist: string;
   duration: string;
   previewUrl?: string;
-  spotifyUrl?: string;
+  youtubeUrl?: string;
   loaded?: boolean;
 }
 
@@ -102,7 +102,7 @@ export default function Music() {
                 return {
                   ...track,
                   previewUrl: data.previewUrl,
-                  spotifyUrl: data.spotifyUrl,
+                  youtubeUrl: data.youtubeUrl,
                   loaded: true,
                 };
               }
@@ -141,9 +141,9 @@ export default function Music() {
     const track = playlistTracks[index];
     
     if (!track.previewUrl) {
-      // If no preview, open Spotify
-      if (track.spotifyUrl) {
-        window.open(track.spotifyUrl, '_blank');
+      // If no preview, open YouTube Music
+      if (track.youtubeUrl) {
+        window.open(track.youtubeUrl, '_blank');
       }
       return;
     }
@@ -273,7 +273,7 @@ export default function Music() {
                     <button
                       onClick={() => handlePlayTrack(index)}
                       className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors duration-200"
-                      title={track.previewUrl ? "Play preview" : "Listen on Spotify"}
+                      title={track.previewUrl ? "Play preview" : "Listen on YouTube Music"}
                     >
                       {currentTrackIndex === index && isPlaying ? (
                         <Pause className="w-5 h-5 text-primary fill-primary" />
@@ -285,8 +285,8 @@ export default function Music() {
                       <p className="font-semibold truncate">{track.title}</p>
                       <div className="flex items-center gap-2">
                         <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
-                        {!track.previewUrl && track.spotifyUrl && (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary whitespace-nowrap">Spotify</span>
+                        {!track.previewUrl && track.youtubeUrl && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary whitespace-nowrap">YouTube Music</span>
                         )}
                       </div>
                     </div>

@@ -133,11 +133,13 @@ export async function registerRoutes(
       }
 
       const track = tracks[0];
+      const youtubeSearchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(`${track.name} ${track.artists[0]?.name || ""}`)}`;
       res.json({
         name: track.name,
         artist: track.artists[0]?.name || "Unknown",
         previewUrl: track.preview_url,
         spotifyUrl: track.external_urls?.spotify || null,
+        youtubeUrl: youtubeSearchUrl,
         albumArt: track.album?.images[0]?.url || null,
         duration: Math.floor(track.duration_ms / 1000),
       });
