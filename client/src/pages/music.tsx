@@ -24,14 +24,14 @@ const favoriteArtists: Artist[] = [
     genre: "Indie Pop / Alternative",
     description: "Dreamy and experimental indie pop with ethereal vocals and innovative production.",
     color: "from-pink-500/20 to-red-500/20",
-    imageUrl: "https://lh3.googleusercontent.com/a/default-user=s226-c-no-rj"
+    imageUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop"
   },
   {
     name: "Ado",
     genre: "Vocaloid / Pop",
     description: "Japanese music producer and vocalist known for powerful emotional performances and creative storytelling through music.",
     color: "from-purple-500/20 to-blue-500/20",
-    imageUrl: "https://lh3.googleusercontent.com/a/default-user=s226-c-no-rj"
+    imageUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop"
   }
 ];
 
