@@ -52,19 +52,19 @@ const favoriteArtists: Artist[] = [
     imageUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop",
     songs: [
       {
-        title: "Readymade",
+        title: "God-ish",
         duration: "4:21",
-        youtubeUrl: "https://music.youtube.com/search?q=Readymade%20Ado"
+        youtubeUrl: "https://music.youtube.com/watch?v=eVpDNd7Ckzo&si=X3a5awGpWgXg82Dg"
       },
       {
-        title: "Ateya",
+        title: "All Night Radio",
         duration: "3:15",
-        youtubeUrl: "https://music.youtube.com/search?q=Ateya%20Ado"
+        youtubeUrl: "https://music.youtube.com/watch?v=1BDOJCKKiEE&si=xstmc30Py9laEDSa"
       },
       {
         title: "Gira Gira",
         duration: "3:33",
-        youtubeUrl: "https://music.youtube.com/search?q=Gira%20Gira%20Ado"
+        youtubeUrl: "https://music.youtube.com/watch?v=Dt0CYNAYfNY&si=qBsNW4Kx9P4qAgSJ"
       }
     ]
   }
