@@ -28,7 +28,7 @@ const favoriteArtists: Artist[] = [
     imageUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
     songs: [
       {
-        title: "Where the city can't see",
+        title: "Where The City Can't See",
         duration: "3:42",
         youtubeUrl: "https://music.youtube.com/watch?v=ZePJiplAjok&si=t83G0Tt0P9O9Mtxa"
       },
