@@ -27,7 +27,7 @@ const favoriteArtists: Artist[] = [
     genre: "Indie Pop / Alternative",
     description: "All-time favorite, extremely underrated",
     color: "from-pink-500/20 to-red-500/20",
-    imageUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
+    imageUrl: "/images/blood-cultures.jpg",
     songs: [
       {
         title: "Where The City Can't See",
@@ -54,7 +54,7 @@ const favoriteArtists: Artist[] = [
     genre: "Vocaloid / Pop",
     description: "Amazing voice",
     color: "from-purple-500/20 to-blue-500/20",
-    imageUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop",
+    imageUrl: "/images/ado.jpg",
     songs: [
       {
         title: "God-ish",

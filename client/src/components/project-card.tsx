@@ -21,7 +21,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
               <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors">
                 {project.name}
               </CardTitle>
-              <CardDescription className="line-clamp-2 mt-1">
+              <CardDescription className="mt-1">
                 {project.description}
               </CardDescription>
             </div>
