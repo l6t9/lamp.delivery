@@ -39,11 +39,11 @@ const favoriteArtists: Artist[] = [
 ];
 
 const initialPlaylistTracks: Track[] = [
-  { title: "Kissing in the Rain", artist: "Blood Cultures", duration: "3:42" },
+  { title: "Set It on Fire", artist: "Blood Cultures", duration: "3:42" },
   { title: "Readymade", artist: "Ado", duration: "4:21" },
-  { title: "Heaven", artist: "Blood Cultures", duration: "3:58" },
+  { title: "Keeps Bringing Me Back", artist: "Blood Cultures", duration: "3:58" },
   { title: "Ateya", artist: "Ado", duration: "3:15" },
-  { title: "Ultraviolet", artist: "Blood Cultures", duration: "4:05" },
+  { title: "When the Night Calls", artist: "Blood Cultures", duration: "4:05" },
   { title: "Gira Gira", artist: "Ado", duration: "3:33" }
 ];
 
