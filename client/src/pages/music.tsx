@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Music as MusicIcon, Disc3 } from "lucide-react";
+import { Music as MusicIcon, Disc3, Play } from "lucide-react";
+import { useState } from "react";
 import Navbar from "@/components/navbar";
 import { VertexBackground } from "@/components/vertex-background";
 
@@ -8,6 +9,13 @@ interface Artist {
   genre: string;
   description: string;
   color: string;
+  imageUrl: string;
+}
+
+interface Track {
+  title: string;
+  artist: string;
+  duration: string;
 }
 
 const favoriteArtists: Artist[] = [
@@ -15,17 +23,30 @@ const favoriteArtists: Artist[] = [
     name: "Blood Cultures",
     genre: "Indie Pop / Alternative",
     description: "Dreamy and experimental indie pop with ethereal vocals and innovative production.",
-    color: "from-pink-500/20 to-red-500/20"
+    color: "from-pink-500/20 to-red-500/20",
+    imageUrl: "https://lh3.googleusercontent.com/a/default-user=s226-c-no-rj"
   },
   {
     name: "Ado",
     genre: "Vocaloid / Pop",
     description: "Japanese music producer and vocalist known for powerful emotional performances and creative storytelling through music.",
-    color: "from-purple-500/20 to-blue-500/20"
+    color: "from-purple-500/20 to-blue-500/20",
+    imageUrl: "https://lh3.googleusercontent.com/a/default-user=s226-c-no-rj"
   }
 ];
 
+const playlistTracks: Track[] = [
+  { title: "Kissing in the Rain", artist: "Blood Cultures", duration: "3:42" },
+  { title: "Readymade", artist: "Ado", duration: "4:21" },
+  { title: "Heaven", artist: "Blood Cultures", duration: "3:58" },
+  { title: "Ateya", artist: "Ado", duration: "3:15" },
+  { title: "Ultraviolet", artist: "Blood Cultures", duration: "4:05" },
+  { title: "Gira Gira", artist: "Ado", duration: "3:33" }
+];
+
 export default function Music() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
     <div className="min-h-screen bg-background font-sans relative">
       <VertexBackground />
@@ -59,7 +80,7 @@ export default function Music() {
                 My Music
               </h1>
               <p className="text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed">
-                Music that moves me. Favorite artists and sounds that inspire my creative work.
+                Music
               </p>
             </motion.div>
           </section>
@@ -87,9 +108,14 @@ export default function Music() {
                   <div className={`absolute inset-0 bg-gradient-to-r ${artist.color} rounded-2xl blur-xl -z-10 group-hover:blur-2xl transition-all duration-500`}></div>
                   <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8 h-full space-y-4 hover:border-primary/50 transition-colors duration-300">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                        <MusicIcon className="w-6 h-6 text-white" />
-                      </div>
+                      <img
+                        src={artist.imageUrl}
+                        alt={artist.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-primary/30"
+                        onError={(e) => {
+                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23e5e7eb'/%3E%3Cpath d='M50 30c5.5 0 10 4.5 10 10s-4.5 10-10 10-10-4.5-10-10 4.5-10 10-10zM50 55c10 0 15 3 15 8v7H35v-7c0-5 5-8 15-8z' fill='%23999'/%3E%3C/svg%3E";
+                        }}
+                      />
                       <div>
                         <h3 className="text-xl font-bold">{artist.name}</h3>
                         <p className="text-sm text-primary font-mono">{artist.genre}</p>
@@ -104,7 +130,7 @@ export default function Music() {
             </div>
           </section>
 
-          {/* Listening Habits */}
+          {/* Playlist Preview */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -114,15 +140,33 @@ export default function Music() {
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl blur-xl -z-10 group-hover:blur-2xl transition-all duration-500"></div>
             <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-8 sm:p-12 space-y-6">
               <div className="space-y-2">
-                <h3 className="text-2xl font-bold">Why I Love Music</h3>
+                <h3 className="text-2xl font-bold">Playlist Preview</h3>
+                <p className="text-muted-foreground">Favorite tracks from these amazing artists</p>
               </div>
-              <div className="space-y-4 text-muted-foreground">
-                <p>
-                  Music is a big part of my creative process. Whether it's the experimental soundscapes of Blood Cultures or the emotional depth of Ado's work, I find inspiration in diverse genres and styles.
-                </p>
-                <p>
-                  These artists push boundaries and create unique sonic experiences that remind me why creativity matters. Their willingness to experiment influences how I approach my own projects.
-                </p>
+              
+              <div className="space-y-3">
+                {playlistTracks.map((track, index) => (
+                  <motion.div
+                    key={`${track.artist}-${index}`}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    viewport={{ once: true }}
+                    className="group/track flex items-center gap-4 p-4 rounded-lg hover:bg-primary/5 transition-colors duration-200"
+                  >
+                    <button
+                      onClick={() => setIsPlaying(!isPlaying)}
+                      className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 hover:bg-primary/40 flex items-center justify-center transition-colors duration-200"
+                    >
+                      <Play className="w-5 h-5 text-primary fill-primary" />
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold truncate">{track.title}</p>
+                      <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
+                    </div>
+                    <p className="text-sm text-muted-foreground flex-shrink-0">{track.duration}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </motion.section>
