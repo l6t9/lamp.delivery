@@ -23,7 +23,7 @@ const favoriteArtists: Artist[] = [
   {
     name: "Blood Cultures",
     genre: "Indie Pop / Alternative",
-    description: "Dreamy and experimental indie pop with ethereal vocals and innovative production.",
+    description: "All-time favorite, extremely underrated",
     color: "from-pink-500/20 to-red-500/20",
     imageUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
     songs: [
@@ -47,7 +47,7 @@ const favoriteArtists: Artist[] = [
   {
     name: "Ado",
     genre: "Vocaloid / Pop",
-    description: "Japanese music producer and vocalist known for powerful emotional performances and creative storytelling through music.",
+    description: "Amazing voice",
     color: "from-purple-500/20 to-blue-500/20",
     imageUrl: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop",
     songs: [
@@ -121,30 +121,14 @@ export default function Music() {
           {/* Hero Section */}
           <section className="relative text-center space-y-8">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="flex justify-center"
-            >
-              <div className="relative w-24 h-24 sm:w-32 sm:h-32">
-                <div className="relative w-full h-full rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-xl">
-                  <MusicIcon className="w-12 h-12 sm:w-16 sm:h-16" />
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.5 }}
               className="space-y-4"
             >
               <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-foreground">
                 My Music
               </h1>
-              <p className="text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed">
-                Music
-              </p>
             </motion.div>
           </section>
 
