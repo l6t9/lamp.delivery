@@ -16,8 +16,16 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
     >
       <Card className="h-full flex flex-col bg-card/40 backdrop-blur-sm border border-white/10 dark:border-white/5 hover:border-primary/50 hover:bg-card/60 transition-all duration-300 group">
         <CardHeader className="space-y-3">
-          <div className="flex justify-between items-start">
-            <div className="flex gap-3 text-muted-foreground">
+          <div className="flex justify-between items-start gap-4">
+            <div className="flex-1">
+              <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors">
+                {project.name}
+              </CardTitle>
+              <CardDescription className="line-clamp-2 mt-1">
+                {project.description}
+              </CardDescription>
+            </div>
+            <div className="flex gap-3 text-muted-foreground flex-shrink-0">
               <div className="flex items-center gap-1 text-xs font-medium">
                 <Star className="w-3 h-3" />
                 {project.stars}
@@ -27,14 +35,6 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
                 {project.forks}
               </div>
             </div>
-          </div>
-          <div>
-            <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors">
-              {project.name}
-            </CardTitle>
-            <CardDescription className="line-clamp-2 mt-1">
-              {project.description}
-            </CardDescription>
           </div>
         </CardHeader>
         <CardContent className="grow space-y-4">
