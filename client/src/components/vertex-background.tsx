@@ -74,6 +74,7 @@ export function VertexBackground() {
   const mouseRef = useRef({ x: 0, y: 0, pressed: false });
   const animationRef = useRef<number | undefined>(undefined);
   const startTimeRef = useRef<number>(Date.now());
+  const colorCacheRef = useRef<{ lineColor: string; bgColor1: string; bgColor2: string; bgColor3: string; nebulaColor1: string; nebulaColor2: string; starColor: string; theme: string; colorScheme: string } | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -115,70 +116,36 @@ export function VertexBackground() {
       }
     }
 
-    // Get line color based on theme
-    let lineColor = "rgba(100, 100, 100, 0.5)";
-    if (theme === "dark") {
-      if (colorScheme === "pyon") {
-        lineColor = "rgba(255, 100, 180, 0.6)";
-      } else if (colorScheme === "rain") {
-        lineColor = "rgba(100, 200, 255, 0.6)";
+    // Get cached colors or compute them
+    const getColors = () => {
+      const cache = colorCacheRef.current;
+      if (cache && cache.theme === theme && cache.colorScheme === colorScheme) {
+        return cache;
+      }
+
+      let lineColor = "rgba(100, 100, 100, 0.5)";
+      if (theme === "dark") {
+        if (colorScheme === "pyon") {
+          lineColor = "rgba(255, 100, 180, 0.6)";
+        } else if (colorScheme === "rain") {
+          lineColor = "rgba(100, 200, 255, 0.6)";
+        } else {
+          lineColor = "rgba(150, 150, 255, 0.6)";
+        }
       } else {
-        lineColor = "rgba(150, 150, 255, 0.6)";
-      }
-    } else {
-      if (colorScheme === "pyon") {
-        lineColor = "rgba(220, 80, 150, 0.5)";
-      } else if (colorScheme === "rain") {
-        lineColor = "rgba(50, 120, 200, 0.5)";
-      } else {
-        lineColor = "rgba(80, 80, 180, 0.5)";
-      }
-    }
-
-    const drawParticle = (
-      p: Particle,
-      isMouse: boolean,
-      maxDistance: number,
-      particles: Particle[]
-    ) => {
-      let connectingLines = 0;
-
-      // Connect vertices
-      for (const p2 of particles) {
-        if (p.x > p2.x && !isMouse) continue;
-
-        const distance = Math.hypot(p2.x - p.x, p2.y - p.y);
-        if (!distance || distance > maxDistance) continue;
-
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        connectingLines++;
+        if (colorScheme === "pyon") {
+          lineColor = "rgba(220, 80, 150, 0.5)";
+        } else if (colorScheme === "rain") {
+          lineColor = "rgba(50, 120, 200, 0.5)";
+        } else {
+          lineColor = "rgba(80, 80, 180, 0.5)";
+        }
       }
 
-      // Move particle
-      const nearParticlesBoost = connectingLines * 0.2 + 1;
-      p.x += p.speed * Math.sin(p.angle) * nearParticlesBoost;
-      p.y += p.speed * Math.cos(p.angle) * nearParticlesBoost;
-
-      if (p.y > canvas.height) p.y = 1;
-      if (p.x > canvas.width) p.x = 1;
-      if (p.x < 1) p.x = canvas.width;
-      if (p.y < 1) p.y = canvas.height;
-    };
-
-    const animate = () => {
-      const currentTime = Date.now() - startTimeRef.current;
-
-      // Theme-based colors
       let bgColor1, bgColor2, bgColor3, nebulaColor1, nebulaColor2, starColor;
       const isDark = theme === 'dark';
 
       if (!isDark) {
-        // Light theme colors based on colorScheme
         if (colorScheme === 'pyon') {
           bgColor1 = 'rgba(240, 220, 235, 1)';
           bgColor2 = 'rgba(230, 200, 220, 1)';
@@ -194,7 +161,6 @@ export function VertexBackground() {
           nebulaColor2 = 'rgba(160, 200, 220, 0.06)';
           starColor = 'rgba(80, 120, 180, 1)';
         } else {
-          // Avatar light theme
           bgColor1 = 'rgba(220, 200, 240, 1)';
           bgColor2 = 'rgba(200, 170, 230, 1)';
           bgColor3 = 'rgba(180, 150, 210, 1)';
@@ -217,7 +183,6 @@ export function VertexBackground() {
         nebulaColor2 = 'rgba(80, 140, 200, 0.12)';
         starColor = 'rgba(150, 200, 255, 1)';
       } else {
-        // Default avatar theme - dark purple
         bgColor1 = 'rgba(20, 10, 40, 1)';
         bgColor2 = 'rgba(10, 5, 30, 1)';
         bgColor3 = 'rgba(5, 2, 15, 1)';
@@ -225,6 +190,56 @@ export function VertexBackground() {
         nebulaColor2 = 'rgba(80, 100, 180, 0.12)';
         starColor = 'rgba(200, 180, 255, 1)';
       }
+
+      const newColors = { lineColor, bgColor1, bgColor2, bgColor3, nebulaColor1, nebulaColor2, starColor, theme, colorScheme };
+      colorCacheRef.current = newColors;
+      return newColors;
+    };
+
+    const colors = getColors();
+
+    const drawParticle = (
+      p: Particle,
+      isMouse: boolean,
+      maxDistance: number,
+      particles: Particle[]
+    ) => {
+      let connectingLines = 0;
+      const maxConnections = 6; // Limit connections per particle
+
+      // Connect vertices - optimize by breaking early
+      for (let i = 0; i < particles.length && connectingLines < maxConnections; i++) {
+        const p2 = particles[i];
+        if (p.x > p2.x && !isMouse) continue;
+
+        const dx = p2.x - p.x;
+        const dy = p2.y - p.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (!distance || distance > maxDistance) continue;
+
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = colors.lineColor;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        connectingLines++;
+      }
+
+      // Move particle
+      const nearParticlesBoost = connectingLines * 0.2 + 1;
+      p.x += p.speed * Math.sin(p.angle) * nearParticlesBoost;
+      p.y += p.speed * Math.cos(p.angle) * nearParticlesBoost;
+
+      if (p.y > canvas.height) p.y = 1;
+      if (p.x > canvas.width) p.x = 1;
+      if (p.x < 1) p.x = canvas.width;
+      if (p.y < 1) p.y = canvas.height;
+    };
+
+    const animate = () => {
+      const currentTime = Date.now() - startTimeRef.current;
+      const { bgColor1, bgColor2, bgColor3, nebulaColor1, nebulaColor2, starColor } = colors;
 
       // Draw galaxy background gradient
       const gradientBg = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height));
@@ -234,20 +249,16 @@ export function VertexBackground() {
       ctx.fillStyle = gradientBg;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Add nebula clouds
-      const nebula1 = ctx.createRadialGradient(canvas.width * 0.3, canvas.height * 0.3, 50, canvas.width * 0.3, canvas.height * 0.3, 300);
-      nebula1.addColorStop(0, nebulaColor1);
-      nebula1.addColorStop(0.5, nebulaColor1.replace('0.15', '0.05').replace('0.08', '0.02'));
-      nebula1.addColorStop(1, nebulaColor1.replace('0.15', '0').replace('0.08', '0'));
-      ctx.fillStyle = nebula1;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Add nebula clouds - simplified
+      ctx.fillStyle = nebulaColor1;
+      ctx.beginPath();
+      ctx.ellipse(canvas.width * 0.3, canvas.height * 0.3, 300, 250, 0, 0, Math.PI * 2);
+      ctx.fill();
 
-      const nebula2 = ctx.createRadialGradient(canvas.width * 0.8, canvas.height * 0.6, 50, canvas.width * 0.8, canvas.height * 0.6, 350);
-      nebula2.addColorStop(0, nebulaColor2);
-      nebula2.addColorStop(0.5, nebulaColor2.replace('0.12', '0.04').replace('0.06', '0.02'));
-      nebula2.addColorStop(1, nebulaColor2.replace('0.12', '0').replace('0.06', '0'));
-      ctx.fillStyle = nebula2;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = nebulaColor2;
+      ctx.beginPath();
+      ctx.ellipse(canvas.width * 0.8, canvas.height * 0.6, 350, 300, 0, 0, Math.PI * 2);
+      ctx.fill();
 
       // Draw stars with twinkling
       for (const star of starsRef.current) {
