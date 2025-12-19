@@ -14,6 +14,7 @@ export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [openTabs, setOpenTabs] = useState<string[]>(["Home"]);
   const [isLoading, setIsLoading] = useState(true);
+  const [dragSource, setDragSource] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
@@ -104,6 +105,34 @@ export default function Navbar() {
     setTimeout(() => setLocation(tabHref), 0);
   };
 
+  const handleDragStart = (e: React.DragEvent, tabLabel: string) => {
+    setDragSource(tabLabel);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (e: React.DragEvent, targetLabel: string) => {
+    e.preventDefault();
+    if (!dragSource || dragSource === targetLabel) {
+      setDragSource(null);
+      return;
+    }
+
+    const sourceIndex = openTabs.indexOf(dragSource);
+    const targetIndex = openTabs.indexOf(targetLabel);
+    
+    const newTabs = [...openTabs];
+    newTabs.splice(sourceIndex, 1);
+    newTabs.splice(targetIndex, 0, dragSource);
+    
+    setOpenTabs(newTabs);
+    setDragSource(null);
+  };
+
   const tabs = allPages.map(page => ({
     label: page.label,
     href: page.href,
@@ -129,8 +158,13 @@ export default function Navbar() {
             {displayTabs.map((tab) => (
               <div
                 key={tab.label}
+                draggable
+                onDragStart={(e) => handleDragStart(e, tab.label)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, tab.label)}
                 className={cn(
-                  "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-pointer flex-shrink-0",
+                  "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-move flex-shrink-0",
+                  dragSource === tab.label && "opacity-50",
                   tab.active
                     ? "bg-primary/10 text-foreground"
                     : "bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground"
