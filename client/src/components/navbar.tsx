@@ -103,7 +103,7 @@ export default function Navbar() {
 
   return (
     <nav className={cn("fixed top-0 left-0 right-0 z-50 glass border-b border-white/10 dark:border-white/5 group relative md:left-1/2 md:-translate-x-1/2 md:top-4 md:w-fit md:rounded-2xl transition-all duration-500", isLoading && "navbar-loading")}>
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 blur-lg -z-10 group-hover:blur-xl transition-all duration-500 pointer-events-none md:rounded-2xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 blur-xl -z-10 group-hover:blur-2xl transition-all duration-500 pointer-events-none md:rounded-2xl"></div>
       <div className="flex items-center gap-4 md:gap-6 h-16 md:h-20 px-4 sm:px-6 md:px-8">
         {/* Logo */}
         <Link href="/" className="text-lg md:text-xl font-bold font-mono tracking-tight hover:text-primary transition-colors flex-shrink-0">

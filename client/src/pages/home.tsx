@@ -56,16 +56,16 @@ export default function Home() {
               </p>
 
               <div className="flex flex-wrap justify-center gap-4 pt-4">
-                <Button asChild size="lg" className="rounded-full px-8 font-bold shadow-lg shadow-primary/20">
-                  <a href="#projects">View Projects</a>
+                <Button onClick={() => window.location.href = "/projects"} size="lg" className="rounded-full px-8 font-bold shadow-lg shadow-primary/20">
+                  View Projects
                 </Button>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" className="rounded-full" asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full" asChild>
                     <a href="https://github.com/LampDelivery" target="_blank" rel="noreferrer">
                       <Github className="w-5 h-5" />
                     </a>
                   </Button>
-                  <Button variant="outline" size="icon" className="rounded-full" asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full" asChild>
                     <a href="https://youtube.com/@LampDelivery" target="_blank" rel="noreferrer">
                       <Youtube className="w-5 h-5" />
                     </a>
