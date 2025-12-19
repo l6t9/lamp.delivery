@@ -3,7 +3,7 @@ import { Moon, Sun, Palette, X, Plus, Menu } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { themes } from "@/lib/themes";
 
 export default function Navbar() {
@@ -14,7 +14,9 @@ export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [openTabs, setOpenTabs] = useState<string[]>(["Home"]);
   const [isLoading, setIsLoading] = useState(true);
-  const [dragSource, setDragSource] = useState<string | null>(null);
+  const [draggingTab, setDraggingTab] = useState<string | null>(null);
+  const dragStartX = useRef(0);
+  const draggedTab = useRef<string | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
@@ -105,32 +107,68 @@ export default function Navbar() {
     setTimeout(() => setLocation(tabHref), 0);
   };
 
-  const handleDragStart = (e: React.DragEvent, tabLabel: string) => {
-    setDragSource(tabLabel);
-    e.dataTransfer.effectAllowed = "move";
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-  };
-
-  const handleDrop = (e: React.DragEvent, targetLabel: string) => {
-    e.preventDefault();
-    if (!dragSource || dragSource === targetLabel) {
-      setDragSource(null);
-      return;
-    }
-
-    const sourceIndex = openTabs.indexOf(dragSource);
-    const targetIndex = openTabs.indexOf(targetLabel);
+  const handleMouseDown = (e: React.MouseEvent, tabLabel: string) => {
+    // Only drag with left mouse button
+    if (e.button !== 0) return;
     
-    const newTabs = [...openTabs];
-    newTabs.splice(sourceIndex, 1);
-    newTabs.splice(targetIndex, 0, dragSource);
+    draggedTab.current = tabLabel;
+    dragStartX.current = e.clientX;
+    setDraggingTab(tabLabel);
     
-    setOpenTabs(newTabs);
-    setDragSource(null);
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      if (!draggedTab.current) return;
+      
+      const diff = Math.abs(moveEvent.clientX - dragStartX.current);
+      // Only start reordering after 5px movement
+      if (diff > 5) {
+        const tabElements = Array.from(document.querySelectorAll('[data-tab-id]'));
+        
+        for (const element of tabElements) {
+          const rect = element.getBoundingClientRect();
+          const elementLabel = element.getAttribute('data-tab-id');
+          
+          if (elementLabel && elementLabel !== draggedTab.current) {
+            const midpoint = rect.left + rect.width / 2;
+            
+            if (moveEvent.clientX < midpoint) {
+              // Hovering over left half
+              if (moveEvent.clientX > rect.left - 10) {
+                const sourceIndex = openTabs.indexOf(draggedTab.current);
+                const targetIndex = openTabs.indexOf(elementLabel);
+                
+                if (Math.abs(sourceIndex - targetIndex) === 1) {
+                  const newTabs = [...openTabs];
+                  [newTabs[sourceIndex], newTabs[targetIndex]] = [newTabs[targetIndex], newTabs[sourceIndex]];
+                  setOpenTabs(newTabs);
+                }
+              }
+            } else {
+              // Hovering over right half
+              if (moveEvent.clientX < rect.right + 10) {
+                const sourceIndex = openTabs.indexOf(draggedTab.current);
+                const targetIndex = openTabs.indexOf(elementLabel);
+                
+                if (Math.abs(sourceIndex - targetIndex) === 1) {
+                  const newTabs = [...openTabs];
+                  [newTabs[sourceIndex], newTabs[targetIndex]] = [newTabs[targetIndex], newTabs[sourceIndex]];
+                  setOpenTabs(newTabs);
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+    
+    const handleMouseUp = () => {
+      draggedTab.current = null;
+      setDraggingTab(null);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
   };
 
   const tabs = allPages.map(page => ({
@@ -158,13 +196,11 @@ export default function Navbar() {
             {displayTabs.map((tab) => (
               <div
                 key={tab.label}
-                draggable
-                onDragStart={(e) => handleDragStart(e, tab.label)}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, tab.label)}
+                data-tab-id={tab.label}
+                onMouseDown={(e) => handleMouseDown(e, tab.label)}
                 className={cn(
-                  "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-move flex-shrink-0",
-                  dragSource === tab.label && "opacity-50",
+                  "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-grab active:cursor-grabbing flex-shrink-0",
+                  draggingTab === tab.label && "opacity-50",
                   tab.active
                     ? "bg-primary/10 text-foreground"
                     : "bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground"
