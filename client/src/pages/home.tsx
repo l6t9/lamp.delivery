@@ -13,7 +13,7 @@ export default function Home() {
       <div className="relative z-10 min-h-screen flex flex-col justify-center pt-20 sm:pt-24">
       <main className="container mx-auto px-4 sm:px-6 pb-16 max-w-4xl space-y-24">
         {/* Hero Section */}
-        <section className="relative text-center">
+        <section className="relative text-center group">
           {/* Text Content with integrated Avatar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -21,8 +21,8 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="relative"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-secondary/15 to-primary/15 rounded-3xl blur-2xl -z-10"></div>
-            <div className="bg-gradient-to-br from-primary/8 to-secondary/8 backdrop-blur-md border border-border/30 rounded-3xl p-8 sm:p-12 space-y-6 flex flex-col items-center">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl blur-xl -z-10 group-hover:blur-2xl transition-all duration-500"></div>
+            <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-3xl p-8 sm:p-12 space-y-6 flex flex-col items-center">
               {/* Avatar integrated into card */}
               {!loading && user && (
                 <motion.div
