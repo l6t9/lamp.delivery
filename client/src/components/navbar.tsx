@@ -163,8 +163,8 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="relative md:hidden flex-shrink-0">
+        {/* Mobile Menu Button - Only show when space is constrained */}
+        <div className="relative sm:hidden flex-shrink-0">
           <Button
             variant="ghost"
             size="icon"
@@ -221,8 +221,8 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Desktop Theme Controls */}
-        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+        {/* Theme Controls - Show on sm and above, hide only when space is constrained */}
+        <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
           <div className="relative">
             <Button
               variant="ghost"
