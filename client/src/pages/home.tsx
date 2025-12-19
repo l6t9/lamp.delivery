@@ -29,7 +29,7 @@ export default function Home() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
-                  className="-mt-16 sm:-mt-24 mb-2 sm:mb-4"
+                  className="-mt-4 sm:-mt-24 mb-2 sm:mb-4"
                 >
                   <div className="relative w-32 h-32 sm:w-40 sm:h-40">
                     <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl animate-pulse"></div>
