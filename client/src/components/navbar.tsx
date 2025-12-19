@@ -62,7 +62,8 @@ export default function Navbar() {
       const tabRoutes: { [key: string]: string } = {
         "Home": "/",
         "Music": "/music",
-        "Projects": "/projects"
+        "Projects": "/projects",
+        "Anime": "/anime"
       };
       
       if (location === tabRoutes[tabLabel]) {
@@ -76,7 +77,8 @@ export default function Navbar() {
     const routes: { [key: string]: string } = {
       "Home": "/",
       "Music": "/music",
-      "Projects": "/projects"
+      "Projects": "/projects",
+      "Anime": "/anime"
     };
     return routes[label] || "/";
   };
