@@ -97,7 +97,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full z-50 glass border-b border-white/10 dark:border-white/5 group relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-b-3xl blur-lg -z-10 group-hover:blur-xl transition-all duration-500 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 blur-lg -z-10 group-hover:blur-xl transition-all duration-500 pointer-events-none"></div>
       <div className="container mx-auto px-4 sm:px-6 flex items-center gap-4 h-16">
         {/* Logo */}
         <Link href="/" className="text-lg font-bold font-mono tracking-tight hover:text-primary transition-colors flex-shrink-0">
