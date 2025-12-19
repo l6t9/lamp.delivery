@@ -133,7 +133,7 @@
   html::-webkit-scrollbar-thumb {
     background: hsl(var(--muted));
     border-radius: 10px;
-    min-height: 20px;
+    min-height: 5px;
   }
   
   html::-webkit-scrollbar-thumb:hover {
