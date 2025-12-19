@@ -22,8 +22,8 @@ export default function Navbar() {
 
   const allPages = [
     { label: "Home", href: "/" },
-    { label: "Music", href: "/music" },
     { label: "Projects", href: "/projects" },
+    { label: "Music", href: "/music" },
     { label: "Anime", href: "/anime" },
   ];
 
