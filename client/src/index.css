@@ -115,6 +115,29 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary)) transparent;
+  }
+  
+  html::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  html::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  html::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border-radius: 3px;
+  }
+  
+  html::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--secondary));
+  }
+  
   body {
     @apply font-sans antialiased bg-background text-foreground selection:bg-primary/25 selection:text-primary;
   }
@@ -251,11 +274,11 @@
   .scrollbar-styled {
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--muted)) transparent;
-    padding-bottom: 2px;
+    padding-bottom: 1px;
   }
 
   .scrollbar-styled::-webkit-scrollbar {
-    height: 2px;
+    height: 1px;
   }
 
   .scrollbar-styled::-webkit-scrollbar-track {
