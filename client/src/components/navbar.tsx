@@ -96,7 +96,7 @@ export default function Navbar() {
   const availablePagesToAdd = allPages.filter(page => !openTabs.includes(page.label));
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10 dark:border-white/5 group relative md:left-4 md:top-4 md:right-auto md:w-fit md:rounded-2xl">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10 dark:border-white/5 group relative md:left-1/2 md:-translate-x-1/2 md:top-4 md:w-fit md:rounded-2xl">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 blur-lg -z-10 group-hover:blur-xl transition-all duration-500 pointer-events-none md:rounded-2xl"></div>
       <div className="flex items-center gap-4 h-16 px-4 sm:px-6">
         {/* Logo */}
@@ -105,7 +105,7 @@ export default function Navbar() {
         </Link>
 
         {/* Browser Tabs */}
-        <div className="flex items-center gap-1 flex-1">
+        <div className="flex items-center gap-1 flex-1 md:flex-none md:gap-2">
           {displayTabs.map((tab) => (
             <div
               key={tab.label}
