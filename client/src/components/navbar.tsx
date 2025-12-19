@@ -123,12 +123,12 @@ export default function Navbar() {
         </Link>
 
         {/* Browser Tabs */}
-        <div className={cn("flex items-center gap-1 flex-1 md:flex-none md:gap-2", openTabs.length === 3 && "overflow-x-auto scrollbar-styled")}>
+        <div className={cn("flex items-center gap-1 flex-1 md:flex-none md:gap-2 min-w-0", openTabs.length > 2 && "overflow-x-auto scrollbar-styled")}>
           {displayTabs.map((tab) => (
             <div
               key={tab.label}
               className={cn(
-                "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-pointer",
+                "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-pointer flex-shrink-0",
                 tab.active
                   ? "bg-primary/10 text-foreground"
                   : "bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground"
@@ -147,31 +147,56 @@ export default function Navbar() {
               </button>
             </div>
           ))}
+        </div>
 
-          {/* Add Tab Button */}
-          <div className="relative">
-            <button
-              onClick={() => setShowAddTabMenu(!showAddTabMenu)}
-              className="flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-md bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground transition-all text-xs sm:text-sm font-medium"
-              title="Add new tab"
-            >
-              <Plus className="w-4 h-4 md:w-5 md:h-5" />
-            </button>
+        {/* Add Tab Button - Outside scrollable area on mobile */}
+        <div className="relative flex-shrink-0 md:hidden">
+          <button
+            onClick={() => setShowAddTabMenu(!showAddTabMenu)}
+            className="flex items-center justify-center w-8 h-8 rounded-md bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground transition-all text-xs sm:text-sm font-medium"
+            title="Add new tab"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
 
-            {showAddTabMenu && availablePagesToAdd.length > 0 && (
-              <div className="absolute top-full left-0 mt-1 bg-card border border-primary/30 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
-                {availablePagesToAdd.map((page) => (
-                  <button
-                    key={page.label}
-                    onClick={(e) => handleAddTab(page.label, e)}
-                    className="w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10 text-foreground first:rounded-t-lg last:rounded-b-lg"
-                  >
-                    {page.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {showAddTabMenu && availablePagesToAdd.length > 0 && (
+            <div className="absolute top-full left-0 mt-1 bg-card border border-primary/30 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
+              {availablePagesToAdd.map((page) => (
+                <button
+                  key={page.label}
+                  onClick={(e) => handleAddTab(page.label, e)}
+                  className="w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10 text-foreground first:rounded-t-lg last:rounded-b-lg"
+                >
+                  {page.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Add Tab Button - Desktop version inside theme controls */}
+        <div className="relative flex-shrink-0 hidden md:block">
+          <button
+            onClick={() => setShowAddTabMenu(!showAddTabMenu)}
+            className="flex items-center justify-center w-9 h-9 rounded-md bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground transition-all text-xs sm:text-sm font-medium"
+            title="Add new tab"
+          >
+            <Plus className="w-5 h-5" />
+          </button>
+
+          {showAddTabMenu && availablePagesToAdd.length > 0 && (
+            <div className="absolute top-full right-0 mt-1 bg-card border border-primary/30 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
+              {availablePagesToAdd.map((page) => (
+                <button
+                  key={page.label}
+                  onClick={(e) => handleAddTab(page.label, e)}
+                  className="w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10 text-foreground first:rounded-t-lg last:rounded-b-lg"
+                >
+                  {page.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button - Only show when all tabs are open (collision) */}
