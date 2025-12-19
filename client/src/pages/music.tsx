@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Music as MusicIcon, Disc3, Play, Pause, Volume2 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
-import Navbar from "@/components/navbar";
+import { useState } from "react";
 import { VertexBackground } from "@/components/vertex-background";
 
 interface Track {
@@ -27,7 +26,7 @@ const favoriteArtists: Artist[] = [
     genre: "Indie Pop / Alternative",
     description: "All-time favorite, extremely underrated",
     color: "from-pink-500/20 to-red-500/20",
-    imageUrl: "https://raw.githubusercontent.com/LampDelivery/lamp.delivery/refs/heads/main/public/images/blood-cultures.jpg",
+    imageUrl: "/images/blood-cultures.jpg",
     songs: [
       {
         title: "Where The City Can't See",
@@ -54,7 +53,7 @@ const favoriteArtists: Artist[] = [
     genre: "Vocaloid / Pop",
     description: "Amazing voice",
     color: "from-purple-500/20 to-blue-500/20",
-    imageUrl: "https://raw.githubusercontent.com/LampDelivery/lamp.delivery/refs/heads/main/public/images/ado.jpg",
+    imageUrl: "/images/ado.jpg",
     songs: [
       {
         title: "God-ish",
@@ -79,64 +78,7 @@ const favoriteArtists: Artist[] = [
 ];
 
 export default function Music() {
-  const [artists, setArtists] = useState(favoriteArtists);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchArtistsAndAlbumArt = async () => {
-      try {
-        const artistNames = ["Blood Cultures", "Ado"];
-        const fetchedArtists = await Promise.all(
-          artistNames.map(async (name) => {
-            try {
-              const response = await fetch(`/api/artists/${encodeURIComponent(name)}`);
-              if (response.ok) {
-                const data = await response.json();
-                const artist = favoriteArtists.find(a => a.name === name);
-                
-                // Fetch album art for each song
-                const songsWithArt = await Promise.all(
-                  artist?.songs.map(async (song) => {
-                    try {
-                      const trackResponse = await fetch(
-                        `/api/search-track?title=${encodeURIComponent(song.title)}&artist=${encodeURIComponent(name)}`
-                      );
-                      if (trackResponse.ok) {
-                        const trackData = await trackResponse.json();
-                        return {
-                          ...song,
-                          albumArt: trackData.albumArt,
-                        };
-                      }
-                    } catch (error) {
-                      console.error(`Error fetching album art for ${song.title}:`, error);
-                    }
-                    return song;
-                  }) || []
-                );
-
-                return {
-                  ...artist,
-                  imageUrl: data.imageUrl || artist?.imageUrl,
-                  songs: songsWithArt,
-                };
-              }
-            } catch (error) {
-              console.error(`Error fetching ${name}:`, error);
-            }
-            return favoriteArtists.find(a => a.name === name);
-          })
-        );
-        setArtists(fetchedArtists.filter(Boolean) as Artist[]);
-      } catch (error) {
-        console.error("Error fetching artists:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArtistsAndAlbumArt();
-  }, []);
+  const [artists] = useState(favoriteArtists);
 
   const handlePlayTrack = (youtubeUrl: string) => {
     window.open(youtubeUrl, '_blank');
@@ -146,8 +88,6 @@ export default function Music() {
     <div className="min-h-screen bg-background font-sans relative">
       <VertexBackground />
       <div className="relative z-10">
-        <Navbar />
-
         <main className="container mx-auto px-4 sm:px-6 pt-32 pb-16 max-w-4xl space-y-16">
           {/* Hero Section */}
           <section className="relative text-center space-y-8">

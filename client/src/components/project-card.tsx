@@ -18,14 +18,14 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
         <CardHeader className="space-y-3">
           <div className="flex justify-between items-start gap-4">
             <div className="flex-1">
-              <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors">
+              <CardTitle className="text-lg font-bold hover-text-underline group-hover:text-primary transition-colors cursor-default">
                 {project.name}
               </CardTitle>
-              <CardDescription className="mt-1">
+              <CardDescription className="mt-1 hover-text-glow cursor-default">
                 {project.description}
               </CardDescription>
             </div>
-            <div className="flex gap-3 text-muted-foreground flex-shrink-0">
+            <div className="flex gap-3 text-muted-foreground flex-shrink-0 hover-text-glow cursor-default">
               <div className="flex items-center gap-1 text-xs font-medium">
                 <Star className="w-3 h-3" />
                 {project.stars}
@@ -38,7 +38,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           </div>
         </CardHeader>
         <CardContent className="grow space-y-4">
-          <Badge variant="secondary" className="font-mono text-xs font-medium">
+          <Badge variant="secondary" className="font-mono text-xs font-medium hover-text-glow cursor-default">
             {project.language}
           </Badge>
           {project.id === 2 && (

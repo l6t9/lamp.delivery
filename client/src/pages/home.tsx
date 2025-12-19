@@ -1,9 +1,6 @@
 import { motion } from "framer-motion";
 import { Github, ExternalLink, Lightbulb, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Navbar from "@/components/navbar";
-import { ProjectCard } from "@/components/project-card";
-import { projects } from "@/lib/github-data";
 import { useGitHubUser } from "@/hooks/use-github-user";
 import { VertexBackground } from "@/components/vertex-background";
 
@@ -14,8 +11,6 @@ export default function Home() {
     <div className="min-h-screen bg-background font-sans relative">
       <VertexBackground />
       <div className="relative z-10">
-        <Navbar />
-
       <main className="container mx-auto px-4 sm:px-6 pt-32 pb-16 max-w-4xl space-y-24">
         {/* Hero Section */}
         <section className="relative text-center space-y-8">
@@ -46,17 +41,17 @@ export default function Home() {
             className="space-y-6"
           >
             <div className="space-y-2">
-              <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-foreground">
+              <h1 className="text-4xl sm:text-6xl font-black tracking-tight gradient-text">
                 LampDelivery
               </h1>
-              <p className="text-xl sm:text-2xl text-muted-foreground font-medium">
+              <p className="text-xl sm:text-2xl text-muted-foreground font-medium hover-text-glow cursor-default">
                 heya nerds
               </p>
             </div>
 
-            <p className="text-lg text-muted-foreground/80 max-w-lg mx-auto leading-relaxed">
+            <p className="text-lg text-muted-foreground/80 max-w-lg mx-auto leading-relaxed hover-text-glow cursor-default">
               I make stuff on the web. Mostly open source, sometimes useful.
-              Developer for <span className="text-primary font-semibold">Raincord</span>.
+              Developer for <span className="text-primary font-semibold hover-text-underline">Raincord</span>.
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 pt-4">
@@ -83,6 +78,7 @@ export default function Home() {
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
           className="relative group"
         >
@@ -111,28 +107,6 @@ export default function Home() {
             </div>
           </div>
         </motion.section>
-
-        {/* Other Projects */}
-        <section id="projects" className="space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl font-bold">More Projects</h2>
-            <p className="text-muted-foreground">Other cool things I've built</p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <ProjectCard project={project} index={index} />
-              </motion.div>
-            ))}
-          </div>
-        </section>
       </main>
 
       <footer className="py-12 text-center text-sm text-muted-foreground">

@@ -196,4 +196,10 @@ export function applyTheme(themeKey: string, isDark: boolean) {
   Object.entries(mode).forEach(([key, value]) => {
     root.style.setProperty(`--${key}`, value);
   });
+
+  // Set gradient colors based on theme
+  const primaryColor = mode.primary;
+  const secondaryColor = mode.secondary;
+  root.style.setProperty('--gradient-color-1', `hsl(${primaryColor})`);
+  root.style.setProperty('--gradient-color-2', `hsl(${secondaryColor})`);
 }

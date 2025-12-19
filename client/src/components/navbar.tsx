@@ -1,5 +1,5 @@
-import { Link, useLocation } from "wouter";
-import { Moon, Sun, Palette, Menu, X } from "lucide-react";
+import { Link, useLocation, useRouter } from "wouter";
+import { Moon, Sun, Palette, X, Plus } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -8,9 +8,16 @@ import { themes } from "@/lib/themes";
 
 export default function Navbar() {
   const { theme, setTheme, colorScheme, setColorScheme } = useTheme();
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [showThemeMenu, setShowThemeMenu] = useState(false);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showAddTabMenu, setShowAddTabMenu] = useState(false);
+  const [openTabs, setOpenTabs] = useState<string[]>(["Home"]);
+
+  const allPages = [
+    { label: "Home", href: "/" },
+    { label: "Music", href: "/music" },
+    { label: "Projects", href: "/projects" },
+  ];
 
   const handleScrollToProjects = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -20,116 +27,145 @@ export default function Navbar() {
         element.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      // Navigate to home first, then scroll to projects
       window.location.href = "/#projects";
     }
   };
 
+  const handleCloseTab = (tabLabel: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newTabs = openTabs.filter(tab => tab !== tabLabel);
+    
+    // Always keep at least one tab open
+    if (newTabs.length === 0) {
+      setOpenTabs(["Home"]);
+      setLocation("/");
+    } else {
+      setOpenTabs(newTabs);
+      
+      // If closing the active tab, navigate to another open tab
+      const tabRoutes: { [key: string]: string } = {
+        "Home": "/",
+        "Music": "/music",
+        "Projects": "/projects"
+      };
+      
+      if (location === tabRoutes[tabLabel]) {
+        const nextTab = newTabs[0];
+        setLocation(tabRoutes[nextTab] || "/");
+      }
+    }
+  };
+
+  const getTabHref = (label: string) => {
+    const routes: { [key: string]: string } = {
+      "Home": "/",
+      "Music": "/music",
+      "Projects": "/projects"
+    };
+    return routes[label] || "/";
+  };
+
+  const handleAddTab = (pageLabel: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowAddTabMenu(false);
+    
+    const tabHref = getTabHref(pageLabel);
+    
+    // Add to tabs if not already there
+    setOpenTabs(prev => {
+      if (!prev.includes(pageLabel)) {
+        return [...prev, pageLabel];
+      }
+      return prev;
+    });
+    
+    // Always navigate to the page, ensuring it happens
+    setTimeout(() => setLocation(tabHref), 0);
+  };
+
+  const tabs = allPages.map(page => ({
+    label: page.label,
+    href: page.href,
+    active: location === page.href
+  }));
+
+  const displayTabs = tabs.filter(tab => openTabs.includes(tab.label));
+  const availablePagesToAdd = allPages.filter(page => !openTabs.includes(page.label));
+
   return (
     <nav className="fixed top-0 w-full z-50 glass border-b border-white/10 dark:border-white/5">
-      <div className="container mx-auto px-6 h-16 flex items-center justify-center">
-        <div className="flex items-center gap-8 absolute left-6">
-          <Link href="/" className="text-lg font-bold font-mono tracking-tight hover:text-primary transition-colors">
-            lamp
-          </Link>
-        </div>
+      <div className="container mx-auto px-4 sm:px-6 flex items-center gap-4 h-16">
+        {/* Logo */}
+        <Link href="/" className="text-lg font-bold font-mono tracking-tight hover:text-primary transition-colors flex-shrink-0">
+          lamp
+        </Link>
 
-        <div className="hidden md:flex items-center gap-8">
-          <Link
-            href="/"
-            className={cn(
-              "text-sm font-medium transition-colors hover:text-primary",
-              location === "/" ? "text-foreground" : "text-muted-foreground"
-            )}
-          >
-            Home
-          </Link>
-          <a
-            href="#projects"
-            onClick={handleScrollToProjects}
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary cursor-pointer"
-          >
-            Projects
-          </a>
-          <Link
-            href="/music"
-            className={cn(
-              "text-sm font-medium transition-colors hover:text-primary",
-              location === "/music" ? "text-foreground" : "text-muted-foreground"
-            )}
-          >
-            Music
-          </Link>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden absolute left-20">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="hover:bg-primary/10 hover:text-primary"
-          >
-            {showMobileMenu ? (
-              <X className="h-[1.2rem] w-[1.2rem]" />
-            ) : (
-              <Menu className="h-[1.2rem] w-[1.2rem]" />
-            )}
-          </Button>
-        </div>
-
-        {/* Mobile Menu Dropdown */}
-        {showMobileMenu && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-card border-b border-border/50 shadow-lg z-40">
-            <div className="flex flex-col p-4 space-y-2">
-              <Link
-                href="/"
-                onClick={() => setShowMobileMenu(false)}
-                className={cn(
-                  "px-4 py-2 text-sm font-medium rounded-md transition-colors",
-                  location === "/" 
-                    ? "bg-primary/20 text-foreground" 
-                    : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                )}
+        {/* Browser Tabs */}
+        <div className="flex items-center gap-1 flex-1">
+          {displayTabs.map((tab) => (
+            <div
+              key={tab.label}
+              className={cn(
+                "flex items-center gap-1 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium transition-all rounded-md whitespace-nowrap group cursor-pointer",
+                tab.active
+                  ? "bg-primary/10 text-foreground"
+                  : "bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground"
+              )}
+              onClick={() => setLocation(tab.href)}
+            >
+              <span className="flex-1">
+                {tab.label}
+              </span>
+              <button
+                onClick={(e) => handleCloseTab(tab.label, e)}
+                className="ml-1 p-0.5 rounded hover:bg-destructive/20 transition-colors opacity-70 hover:opacity-100 active:opacity-100"
+                title={`Close ${tab.label}`}
               >
-                Home
-              </Link>
-              <a
-                href="#projects"
-                onClick={(e) => {
-                  handleScrollToProjects(e);
-                  setShowMobileMenu(false);
-                }}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
-              >
-                Projects
-              </a>
-              <Link
-                href="/music"
-                onClick={() => setShowMobileMenu(false)}
-                className={cn(
-                  "px-4 py-2 text-sm font-medium rounded-md transition-colors",
-                  location === "/music" 
-                    ? "bg-primary/20 text-foreground" 
-                    : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                )}
-              >
-                Music
-              </Link>
+                <X className="w-3 h-3 sm:w-3.5 h-3.5" />
+              </button>
             </div>
-          </div>
-        )}
+          ))}
 
-        <div className="flex items-center gap-4 absolute right-6">
+          {/* Add Tab Button */}
+          <div className="relative">
+            <button
+              onClick={() => setShowAddTabMenu(!showAddTabMenu)}
+              className="flex items-center justify-center w-8 h-8 rounded-md bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground transition-all text-xs sm:text-sm font-medium"
+              title="Add new tab"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+
+            {showAddTabMenu && availablePagesToAdd.length > 0 && (
+              <div className="absolute top-full left-0 mt-1 bg-card border border-primary/30 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
+                {availablePagesToAdd.map((page) => (
+                  <button
+                    key={page.label}
+                    onClick={(e) => handleAddTab(page.label, e)}
+                    className="w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10 text-foreground first:rounded-t-lg last:rounded-b-lg"
+                  >
+                    {page.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Theme Controls */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           <div className="relative">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setShowThemeMenu(!showThemeMenu)}
-              className="rounded-full hover:bg-primary/10 hover:text-primary"
+              className="rounded-full hover:bg-primary/10 hover:text-primary h-8 w-8"
               data-testid="button-theme-selector"
             >
-              <Palette className="h-[1.2rem] w-[1.2rem]" />
+              <Palette className="h-4 w-4" />
               <span className="sr-only">Color schemes</span>
             </Button>
             {showThemeMenu && (
@@ -158,10 +194,10 @@ export default function Navbar() {
             variant="ghost"
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-full hover:bg-primary/10 hover:text-primary"
+            className="rounded-full hover:bg-primary/10 hover:text-primary h-8 w-8"
           >
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
         </div>
