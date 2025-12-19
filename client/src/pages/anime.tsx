@@ -43,17 +43,17 @@ export default function Anime() {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center"
         >
-          <div className="flex items-center justify-center mb-6">
+          <h1 className="text-3xl sm:text-4xl font-black gradient-text mb-4">
+            Favorite Anime
+          </h1>
+          <p className="text-muted-foreground mb-6">This show is peak, watch it</p>
+          <div className="flex items-center justify-center">
             <img
               src={callOfTheNightLogo}
               alt="Call of the Night"
-              className="h-16 sm:h-20 object-contain drop-shadow-lg"
+              className="h-32 sm:h-40 object-contain drop-shadow-lg"
             />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black gradient-text mb-2">
-            Anime Gallery
-          </h1>
-          <p className="text-muted-foreground">A collection of beautiful moments</p>
         </motion.div>
 
         {/* Manga Panel Grid */}
