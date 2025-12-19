@@ -56,7 +56,7 @@ export default function Home() {
               </p>
 
               <div className="flex flex-wrap justify-center gap-4 pt-4">
-                <Button onClick={() => window.location.href = "/projects"} size="lg" className="rounded-full px-8 font-bold shadow-lg shadow-primary/20">
+                <Button onClick={() => window.location.href = "/projects"} size="lg" className="rounded-full px-8 font-bold shadow-lg shadow-primary/20 text-foreground bg-primary border-primary">
                   View Projects
                 </Button>
                 <div className="flex gap-2">
