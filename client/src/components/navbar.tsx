@@ -163,8 +163,8 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu Button - Only show when space is constrained */}
-        <div className="relative sm:hidden flex-shrink-0">
+        {/* Mobile Menu Button - Only show when all tabs are open (collision) */}
+        <div className={cn("relative flex-shrink-0", openTabs.length === 3 ? "block" : "hidden")}>
           <Button
             variant="ghost"
             size="icon"
@@ -221,8 +221,8 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Theme Controls - Show on sm and above, hide only when space is constrained */}
-        <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+        {/* Theme Controls - Hide only when all tabs are open (collision) */}
+        <div className={cn("flex items-center gap-2 flex-shrink-0", openTabs.length === 3 && "hidden")}>
           <div className="relative">
             <Button
               variant="ghost"
