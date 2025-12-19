@@ -122,8 +122,9 @@ export default function Navbar() {
           lamp
         </Link>
 
-        {/* Browser Tabs - with Add button positioned inside/overlay */}
-        <div className="relative flex-1 md:flex-none min-w-0">
+        {/* Browser Tabs and Add Button Container */}
+        <div className="flex items-center gap-1 md:gap-2 flex-1 md:flex-none min-w-0">
+          {/* Scrollable Tabs */}
           <div className={cn("flex items-center gap-1 md:gap-2 min-w-0", openTabs.length > 2 && "overflow-x-auto scrollbar-styled")}>
             {displayTabs.map((tab) => (
               <div
@@ -148,61 +149,32 @@ export default function Navbar() {
                 </button>
               </div>
             ))}
+          </div>
 
-            {/* Add Tab Button - Inside tabs container on mobile (not scrollable) */}
-            {openTabs.length <= 2 && (
-              <div className="relative flex-shrink-0 md:hidden">
-                <button
-                  onClick={() => setShowAddTabMenu(!showAddTabMenu)}
-                  className="flex items-center justify-center w-8 h-8 rounded-md bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground transition-all text-xs sm:text-sm font-medium"
-                  title="Add new tab"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
+          {/* Add Tab Button - Mobile (always in navbar flow) */}
+          <div className="relative flex-shrink-0 md:hidden">
+            <button
+              onClick={() => setShowAddTabMenu(!showAddTabMenu)}
+              className="flex items-center justify-center w-8 h-8 rounded-md bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground transition-all text-xs sm:text-sm font-medium"
+              title="Add new tab"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
 
-                {showAddTabMenu && availablePagesToAdd.length > 0 && (
-                  <div className="absolute top-full left-0 mt-1 bg-card border border-primary/30 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
-                    {availablePagesToAdd.map((page) => (
-                      <button
-                        key={page.label}
-                        onClick={(e) => handleAddTab(page.label, e)}
-                        className="w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10 text-foreground first:rounded-t-lg last:rounded-b-lg"
-                      >
-                        {page.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
+            {showAddTabMenu && availablePagesToAdd.length > 0 && (
+              <div className="absolute top-full left-0 mt-1 bg-card border border-primary/30 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
+                {availablePagesToAdd.map((page) => (
+                  <button
+                    key={page.label}
+                    onClick={(e) => handleAddTab(page.label, e)}
+                    className="w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10 text-foreground first:rounded-t-lg last:rounded-b-lg"
+                  >
+                    {page.label}
+                  </button>
+                ))}
               </div>
             )}
           </div>
-
-          {/* Add Tab Button - Overlay on mobile when scrollable */}
-          {openTabs.length > 2 && (
-            <div className="absolute right-1 top-1/2 -translate-y-1/2 flex-shrink-0 md:hidden z-40">
-              <button
-                onClick={() => setShowAddTabMenu(!showAddTabMenu)}
-                className="flex items-center justify-center w-8 h-8 rounded-md bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground transition-all text-xs sm:text-sm font-medium backdrop-blur-sm"
-                title="Add new tab"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-
-              {showAddTabMenu && availablePagesToAdd.length > 0 && (
-                <div className="absolute top-full right-0 mt-1 bg-card border border-primary/30 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
-                  {availablePagesToAdd.map((page) => (
-                    <button
-                      key={page.label}
-                      onClick={(e) => handleAddTab(page.label, e)}
-                      className="w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10 text-foreground first:rounded-t-lg last:rounded-b-lg"
-                    >
-                      {page.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Add Tab Button - Desktop version inside theme controls */}
