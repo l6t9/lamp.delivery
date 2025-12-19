@@ -111,6 +111,9 @@ export default function Navbar() {
     // Only drag with left mouse button
     if (e.button !== 0) return;
     
+    // Prevent text selection on mobile/desktop
+    e.preventDefault();
+    
     draggedTab.current = tabLabel;
     dragStartX.current = e.clientX;
     setDraggingTab(tabLabel);
@@ -199,12 +202,13 @@ export default function Navbar() {
                 data-tab-id={tab.label}
                 onMouseDown={(e) => handleMouseDown(e, tab.label)}
                 className={cn(
-                  "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-grab active:cursor-grabbing flex-shrink-0",
+                  "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-grab active:cursor-grabbing flex-shrink-0 select-none",
                   draggingTab === tab.label && "opacity-50",
                   tab.active
                     ? "bg-primary/10 text-foreground"
                     : "bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground"
                 )}
+                style={{ touchAction: "none" }}
                 onClick={() => setLocation(tab.href)}
               >
                 <span className="flex-1">
