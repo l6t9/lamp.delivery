@@ -274,7 +274,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu Button - Only show on mobile when tabs are full */}
-        <div className={cn("relative flex-shrink-0 md:hidden", openTabs.length === 3 ? "block" : "hidden")}>
+        <div className={cn("relative flex-shrink-0 md:hidden", openTabs.length >= 3 ? "block" : "hidden")}>
           <Button
             variant="ghost"
             size="icon"
