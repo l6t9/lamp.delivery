@@ -3,7 +3,7 @@ import { Moon, Sun, Palette, X, Plus } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { themes } from "@/lib/themes";
 
 export default function Navbar() {
@@ -12,6 +12,12 @@ export default function Navbar() {
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [showAddTabMenu, setShowAddTabMenu] = useState(false);
   const [openTabs, setOpenTabs] = useState<string[]>(["Home"]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const allPages = [
     { label: "Home", href: "/" },
@@ -96,7 +102,7 @@ export default function Navbar() {
   const availablePagesToAdd = allPages.filter(page => !openTabs.includes(page.label));
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10 dark:border-white/5 group relative md:left-1/2 md:-translate-x-1/2 md:top-4 md:w-fit md:rounded-2xl">
+    <nav className={cn("fixed top-0 left-0 right-0 z-50 glass border-b border-white/10 dark:border-white/5 group relative md:left-1/2 md:-translate-x-1/2 md:top-4 md:w-fit md:rounded-2xl transition-all duration-500", isLoading && "navbar-loading")}>
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 blur-lg -z-10 group-hover:blur-xl transition-all duration-500 pointer-events-none md:rounded-2xl"></div>
       <div className="flex items-center gap-4 h-16 px-4 sm:px-6">
         {/* Logo */}
