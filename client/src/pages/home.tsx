@@ -8,9 +8,9 @@ export default function Home() {
   const { user, loading } = useGitHubUser("LampDelivery");
 
   return (
-    <div className="min-h-screen bg-background font-sans relative flex flex-col">
+    <div className="bg-background font-sans relative">
       <VertexBackground />
-      <div className="relative z-10 flex-1 flex flex-col justify-center">
+      <div className="relative z-10 min-h-screen flex flex-col justify-center pt-20 sm:pt-24">
       <main className="container mx-auto px-4 sm:px-6 pb-16 max-w-4xl space-y-24">
         {/* Hero Section */}
         <section className="relative text-center">
