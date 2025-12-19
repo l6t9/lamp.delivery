@@ -26,6 +26,14 @@ export default function Navbar() {
     { label: "Projects", href: "/projects" },
   ];
 
+  // Auto-add tab when navigating to a page
+  useEffect(() => {
+    const currentPageLabel = allPages.find(p => p.href === location)?.label;
+    if (currentPageLabel && !openTabs.includes(currentPageLabel)) {
+      setOpenTabs(prev => [...prev, currentPageLabel]);
+    }
+  }, [location, allPages]);
+
   const handleScrollToProjects = (e: React.MouseEvent) => {
     e.preventDefault();
     if (location === "/") {
