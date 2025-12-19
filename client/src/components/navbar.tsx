@@ -116,7 +116,7 @@ export default function Navbar() {
             <div
               key={tab.label}
               className={cn(
-                "flex items-center gap-1 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium transition-all rounded-md whitespace-nowrap group cursor-pointer",
+                "flex items-center gap-1 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium transition-colors rounded-md whitespace-nowrap group cursor-pointer",
                 tab.active
                   ? "bg-primary/10 text-foreground"
                   : "bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground"
@@ -128,7 +128,7 @@ export default function Navbar() {
               </span>
               <button
                 onClick={(e) => handleCloseTab(tab.label, e)}
-                className="ml-1 p-0.5 rounded hover:bg-destructive/20 transition-colors opacity-70 hover:opacity-100 active:opacity-100"
+                className="ml-1 p-0.5 rounded hover:bg-destructive/20 transition-colors opacity-70 hover:opacity-100 active:opacity-100 flex-shrink-0"
                 title={`Close ${tab.label}`}
               >
                 <X className="w-3 h-3 sm:w-3.5 h-3.5" />
