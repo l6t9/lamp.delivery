@@ -3,9 +3,11 @@ import { Github, ExternalLink, Lightbulb, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGitHubUser } from "@/hooks/use-github-user";
 import { VertexBackground } from "@/components/vertex-background";
+import { useLocation } from "wouter";
 
 export default function Home() {
   const { user, loading } = useGitHubUser("LampDelivery");
+  const [, setLocation] = useLocation();
 
   return (
     <div className="bg-background font-sans relative">
@@ -56,7 +58,7 @@ export default function Home() {
               </p>
 
               <div className="flex flex-wrap justify-center gap-4 pt-4">
-                <Button onClick={() => window.location.href = "/projects"} size="lg" className="rounded-full px-8 font-bold shadow-lg shadow-primary/20 text-foreground bg-primary border-primary">
+                <Button onClick={() => setLocation("/projects")} size="lg" className="rounded-full px-8 font-bold shadow-lg shadow-primary/20 text-foreground bg-primary border-primary">
                   View Projects
                 </Button>
                 <div className="flex gap-2">
