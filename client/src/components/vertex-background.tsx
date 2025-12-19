@@ -227,8 +227,10 @@ export function VertexBackground() {
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.strokeStyle = colors.lineColor;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.8;
+        ctx.globalAlpha = 0.4;
         ctx.stroke();
+        ctx.globalAlpha = 1;
         connectingLines++;
       }
 
@@ -255,31 +257,50 @@ export function VertexBackground() {
       ctx.fillStyle = gradientBg;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Add multiple small nebula clouds for galaxy depth (anime night sky effect)
-      const nebulaPositions = [
-        { x: 0.15, y: 0.2, w: 120, h: 90, rot: 0.5, color: nebulaColor1 },
-        { x: 0.85, y: 0.75, w: 110, h: 85, rot: -0.3, color: nebulaColor2 },
-        { x: 0.6, y: 0.4, w: 100, h: 75, rot: 1.2, color: nebulaColor1 },
-        { x: 0.3, y: 0.7, w: 95, h: 70, rot: -0.8, color: nebulaColor2 },
-        { x: 0.5, y: 0.15, w: 90, h: 65, rot: 0.3, color: nebulaColor1 },
-        { x: 0.75, y: 0.35, w: 85, h: 60, rot: -0.5, color: nebulaColor2 },
-        { x: 0.25, y: 0.5, w: 80, h: 55, rot: 0.8, color: nebulaColor1 },
-        { x: 0.65, y: 0.65, w: 75, h: 50, rot: -0.2, color: nebulaColor2 },
+      // Draw layered nebula clouds with gaussian blur for smooth galaxy effect
+      const drawNebulaLayer = (x: number, y: number, w: number, h: number, rot: number, color: string, blurAmount: number, opacity: number) => {
+        ctx.save();
+        ctx.filter = `blur(${blurAmount}px)`;
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.ellipse(x, y, w, h, rot, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      };
+
+      // Multi-layered nebula clouds for depth and smoothness
+      const nebulaLayers = [
+        // Large background nebulas (very soft, atmospheric)
+        { x: 0.15, y: 0.2, w: 200, h: 150, rot: 0.5, color: nebulaColor1, blur: 40, opacity: 0.08 },
+        { x: 0.85, y: 0.75, w: 180, h: 140, rot: -0.3, color: nebulaColor2, blur: 35, opacity: 0.07 },
+        { x: 0.6, y: 0.4, w: 220, h: 160, rot: 1.2, color: nebulaColor1, blur: 38, opacity: 0.06 },
+        { x: 0.3, y: 0.7, w: 190, h: 145, rot: -0.8, color: nebulaColor2, blur: 36, opacity: 0.07 },
+        
+        // Medium nebulas (more defined core)
+        { x: 0.15, y: 0.2, w: 140, h: 100, rot: 0.5, color: nebulaColor1, blur: 25, opacity: 0.12 },
+        { x: 0.85, y: 0.75, w: 120, h: 90, rot: -0.3, color: nebulaColor2, blur: 22, opacity: 0.11 },
+        { x: 0.6, y: 0.4, w: 150, h: 110, rot: 1.2, color: nebulaColor1, blur: 24, opacity: 0.10 },
+        { x: 0.3, y: 0.7, w: 130, h: 95, rot: -0.8, color: nebulaColor2, blur: 23, opacity: 0.11 },
+        
+        // Smaller accent nebulas (sharper cores with animation)
+        { x: 0.5 + Math.sin(currentTime * 0.0005) * 0.02, y: 0.15, w: 90, h: 70, rot: 0.3, color: nebulaColor1, blur: 15, opacity: 0.14 },
+        { x: 0.75, y: 0.35, w: 85, h: 65, rot: -0.5, color: nebulaColor2, blur: 14, opacity: 0.12 },
+        { x: 0.25, y: 0.5, w: 80, h: 60, rot: 0.8, color: nebulaColor1, blur: 13, opacity: 0.11 },
+        { x: 0.65 + Math.sin(currentTime * 0.0003) * 0.015, y: 0.65, w: 75, h: 55, rot: -0.2, color: nebulaColor2, blur: 12, opacity: 0.13 },
       ];
 
-      for (const nebula of nebulaPositions) {
-        ctx.fillStyle = nebula.color;
-        ctx.beginPath();
-        ctx.ellipse(
+      for (const nebula of nebulaLayers) {
+        drawNebulaLayer(
           canvas.width * nebula.x,
           canvas.height * nebula.y,
           nebula.w,
           nebula.h,
           nebula.rot,
-          0,
-          Math.PI * 2
+          nebula.color,
+          nebula.blur,
+          nebula.opacity
         );
-        ctx.fill();
       }
 
       // Draw stars with twinkling
