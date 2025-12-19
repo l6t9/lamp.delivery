@@ -1,5 +1,5 @@
 import { Link, useLocation, useRouter } from "wouter";
-import { Moon, Sun, Palette, X, Plus } from "lucide-react";
+import { Moon, Sun, Palette, X, Plus, Menu } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ export default function Navbar() {
   const [location, setLocation] = useLocation();
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [showAddTabMenu, setShowAddTabMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [openTabs, setOpenTabs] = useState<string[]>(["Home"]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -162,8 +163,66 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Theme Controls */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        {/* Mobile Menu Button */}
+        <div className="relative md:hidden flex-shrink-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="rounded-full hover:bg-primary/10 hover:text-primary h-8 w-8"
+          >
+            <Menu className="h-4 w-4" />
+            <span className="sr-only">Menu</span>
+          </Button>
+          
+          {showMobileMenu && (
+            <div className="absolute right-0 top-full mt-2 w-48 bg-card border border-primary/30 rounded-lg shadow-lg z-50" onClick={(e) => e.stopPropagation()}>
+              {/* Theme Selector */}
+              <div className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Theme</div>
+              {Object.entries(themes).map(([key, themeData]) => (
+                <button
+                  key={key}
+                  onClick={() => {
+                    setColorScheme(key);
+                    setShowMobileMenu(false);
+                  }}
+                  className={cn(
+                    "w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10",
+                    colorScheme === key ? "text-primary font-semibold" : "text-foreground"
+                  )}
+                >
+                  {themeData.label}
+                </button>
+              ))}
+              
+              <div className="border-t border-border/50 my-2"></div>
+              
+              {/* Dark/Light Toggle */}
+              <button
+                onClick={() => {
+                  setTheme(theme === "dark" ? "light" : "dark");
+                  setShowMobileMenu(false);
+                }}
+                className="w-full text-left px-4 py-2 text-sm transition-colors hover:bg-primary/10 text-foreground flex items-center gap-2"
+              >
+                {theme === "dark" ? (
+                  <>
+                    <Sun className="h-4 w-4" />
+                    Light Mode
+                  </>
+                ) : (
+                  <>
+                    <Moon className="h-4 w-4" />
+                    Dark Mode
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Theme Controls */}
+        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
           <div className="relative">
             <Button
               variant="ghost"
