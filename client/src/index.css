@@ -146,11 +146,11 @@
     }
     
     html::-webkit-scrollbar-track {
-      margin: 100px 0;
+      margin: 200px 0;
     }
     
     html::-webkit-scrollbar-thumb {
-      min-height: 8px;
+      min-height: 0px;
     }
   }
   
