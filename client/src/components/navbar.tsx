@@ -332,7 +332,7 @@ export default function Navbar() {
         </div>
 
         {/* Theme Controls - Always show on desktop */}
-        <div className={cn("flex items-center gap-2 flex-shrink-0", openTabs.length === 3 && "hidden md:!flex")}>
+        <div className={cn("flex items-center gap-2 flex-shrink-0", openTabs.length >= 3 && "hidden md:!flex")}>
           <div className="relative">
             <Button
               variant="ghost"
