@@ -249,15 +249,26 @@ export function VertexBackground() {
       ctx.fillStyle = gradientBg;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Add nebula clouds - simplified
+      // Add subtle nebula clouds - scattered galaxy effects
       ctx.fillStyle = nebulaColor1;
       ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.3, canvas.height * 0.3, 300, 250, 0, 0, Math.PI * 2);
+      ctx.ellipse(canvas.width * 0.15, canvas.height * 0.2, 200, 150, 0.5, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.fillStyle = nebulaColor2;
       ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.8, canvas.height * 0.6, 350, 300, 0, 0, Math.PI * 2);
+      ctx.ellipse(canvas.width * 0.85, canvas.height * 0.75, 180, 140, -0.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Add more subtle nebula spots for galaxy depth
+      ctx.fillStyle = nebulaColor1.replace('0.15)', '0.06)');
+      ctx.beginPath();
+      ctx.ellipse(canvas.width * 0.6, canvas.height * 0.4, 250, 200, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = nebulaColor2.replace('0.12)', '0.05)');
+      ctx.beginPath();
+      ctx.ellipse(canvas.width * 0.3, canvas.height * 0.7, 220, 160, -0.8, 0, Math.PI * 2);
       ctx.fill();
 
       // Draw stars with twinkling

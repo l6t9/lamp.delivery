@@ -38,37 +38,40 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="space-y-6"
+            className="relative"
           >
-            <div className="space-y-2">
-              <h1 className="text-4xl sm:text-6xl font-black tracking-tight gradient-text">
-                LampDelivery
-              </h1>
-              <p className="text-xl sm:text-2xl text-muted-foreground font-medium hover-text-glow cursor-default">
-                heya nerds
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-secondary/15 to-primary/15 rounded-3xl blur-2xl -z-10"></div>
+            <div className="bg-gradient-to-br from-primary/8 to-secondary/8 backdrop-blur-md border border-border/30 rounded-3xl p-8 sm:p-12 space-y-6">
+              <div className="space-y-2">
+                <h1 className="text-4xl sm:text-6xl font-black tracking-tight gradient-text">
+                  LampDelivery
+                </h1>
+                <p className="text-xl sm:text-2xl text-muted-foreground font-medium hover-text-glow cursor-default">
+                  heya nerds
+                </p>
+              </div>
+
+              <p className="text-lg text-muted-foreground/80 max-w-lg mx-auto leading-relaxed hover-text-glow cursor-default">
+                I make stuff on the web. Mostly open source, sometimes useful.
+                Developer for <span className="text-primary font-semibold hover-text-underline">Raincord</span>.
               </p>
-            </div>
 
-            <p className="text-lg text-muted-foreground/80 max-w-lg mx-auto leading-relaxed hover-text-glow cursor-default">
-              I make stuff on the web. Mostly open source, sometimes useful.
-              Developer for <span className="text-primary font-semibold hover-text-underline">Raincord</span>.
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-4 pt-4">
-              <Button asChild size="lg" className="rounded-full px-8 font-bold shadow-lg shadow-primary/20">
-                <a href="#projects">View Projects</a>
-              </Button>
-              <div className="flex gap-2">
-                <Button variant="outline" size="icon" className="rounded-full" asChild>
-                  <a href="https://github.com/LampDelivery" target="_blank" rel="noreferrer">
-                    <Github className="w-5 h-5" />
-                  </a>
+              <div className="flex flex-wrap justify-center gap-4 pt-4">
+                <Button asChild size="lg" className="rounded-full px-8 font-bold shadow-lg shadow-primary/20">
+                  <a href="#projects">View Projects</a>
                 </Button>
-                <Button variant="outline" size="icon" className="rounded-full" asChild>
-                  <a href="https://youtube.com/@LampDelivery" target="_blank" rel="noreferrer">
-                    <Youtube className="w-5 h-5" />
-                  </a>
-                </Button>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="icon" className="rounded-full" asChild>
+                    <a href="https://github.com/LampDelivery" target="_blank" rel="noreferrer">
+                      <Github className="w-5 h-5" />
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="icon" className="rounded-full" asChild>
+                    <a href="https://youtube.com/@LampDelivery" target="_blank" rel="noreferrer">
+                      <Youtube className="w-5 h-5" />
+                    </a>
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>
