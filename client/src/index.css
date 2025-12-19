@@ -140,6 +140,20 @@
     background: hsl(var(--primary));
   }
   
+  @media (max-width: 768px) {
+    html::-webkit-scrollbar {
+      width: 2px;
+    }
+    
+    html::-webkit-scrollbar-track {
+      margin: 100px 0;
+    }
+    
+    html::-webkit-scrollbar-thumb {
+      min-height: 8px;
+    }
+  }
+  
   body {
     @apply font-sans antialiased bg-background text-foreground selection:bg-primary/25 selection:text-primary;
   }
