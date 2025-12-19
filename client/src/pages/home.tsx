@@ -13,35 +13,34 @@ export default function Home() {
       <div className="relative z-10">
       <main className="container mx-auto px-4 sm:px-6 pt-32 pb-16 max-w-4xl space-y-24">
         {/* Hero Section */}
-        <section className="relative text-center space-y-8">
-          {/* Avatar */}
-          {!loading && user && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="flex justify-center"
-            >
-              <div className="relative w-32 h-32 sm:w-40 sm:h-40">
-                <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl animate-pulse"></div>
-                <img
-                  src={user.avatar_url}
-                  alt="lamp"
-                  className="relative w-full h-full rounded-full object-cover border-4 border-background shadow-xl"
-                />
-              </div>
-            </motion.div>
-          )}
-
-          {/* Text Content */}
+        <section className="relative text-center">
+          {/* Text Content with integrated Avatar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.5 }}
             className="relative"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-secondary/15 to-primary/15 rounded-3xl blur-2xl -z-10"></div>
-            <div className="bg-gradient-to-br from-primary/8 to-secondary/8 backdrop-blur-md border border-border/30 rounded-3xl p-8 sm:p-12 space-y-6">
+            <div className="bg-gradient-to-br from-primary/8 to-secondary/8 backdrop-blur-md border border-border/30 rounded-3xl p-8 sm:p-12 space-y-6 flex flex-col items-center">
+              {/* Avatar integrated into card */}
+              {!loading && user && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="-mt-16 sm:-mt-24 mb-2 sm:mb-4"
+                >
+                  <div className="relative w-32 h-32 sm:w-40 sm:h-40">
+                    <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl animate-pulse"></div>
+                    <img
+                      src={user.avatar_url}
+                      alt="lamp"
+                      className="relative w-full h-full rounded-full object-cover border-4 border-background shadow-xl"
+                    />
+                  </div>
+                </motion.div>
+              )}
               <div className="space-y-2">
                 <h1 className="text-4xl sm:text-6xl font-black tracking-tight gradient-text">
                   LampDelivery
