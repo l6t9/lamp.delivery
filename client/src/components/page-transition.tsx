@@ -11,14 +11,14 @@ export function PageTransition({ children }: PageTransitionProps) {
 
   useEffect(() => {
     setIsTransitioning(true);
-    const timer = setTimeout(() => setIsTransitioning(false), 150);
+    const timer = setTimeout(() => setIsTransitioning(false), 50);
     return () => clearTimeout(timer);
   }, [location]);
 
   return (
     <div
-      className={`transition-opacity duration-300 ${
-        isTransitioning ? "opacity-0" : "opacity-100"
+      className={`transition-opacity duration-100 ${
+        isTransitioning ? "opacity-50" : "opacity-100"
       }`}
     >
       {children}
