@@ -47,7 +47,7 @@ export default function Home() {
                 <h1 className="text-4xl sm:text-6xl font-black tracking-tight gradient-text">
                   LampDelivery
                 </h1>
-                <p className="text-xl sm:text-2xl text-muted-foreground font-medium hover-text-glow cursor-default">
+                <p className="stylized-greeting">
                   heya nerds
                 </p>
               </div>

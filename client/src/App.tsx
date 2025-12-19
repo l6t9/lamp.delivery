@@ -10,6 +10,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Music from "@/pages/music";
 import Projects from "@/pages/projects";
+import Anime from "@/pages/anime";
 import Redirect from "@/pages/redirect";
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/music" component={Music} />
         <Route path="/projects" component={Projects} />
+        <Route path="/anime" component={Anime} />
         <Route path="/raincord">
           <Redirect to="https://raincord.dev" />
         </Route>

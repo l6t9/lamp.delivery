@@ -24,6 +24,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "Music", href: "/music" },
     { label: "Projects", href: "/projects" },
+    { label: "Anime", href: "/anime" },
   ];
 
   // Auto-add tab when navigating to a page

@@ -298,6 +298,30 @@
     color: hsl(280 20% 62%);
   }
 
+  .stylized-greeting {
+    @apply text-2xl sm:text-3xl font-black cursor-default;
+    background: linear-gradient(135deg, hsl(280 20% 62%), hsl(313 43% 75%), hsl(280 20% 62%));
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-flow 4s ease-in-out infinite, stylized-bounce 3s ease-in-out infinite;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    font-style: italic;
+  }
+
+  @keyframes stylized-bounce {
+    0%, 100% {
+      transform: translateY(0);
+      filter: drop-shadow(0 0 8px rgba(146, 111, 150, 0.2));
+    }
+    50% {
+      transform: translateY(-4px);
+      filter: drop-shadow(0 0 16px rgba(224, 178, 207, 0.4));
+    }
+  }
+
   .navbar-loading {
     animation: navbar-load 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
