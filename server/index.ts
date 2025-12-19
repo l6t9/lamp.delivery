@@ -2,7 +2,10 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const httpServer = createServer(app);
 
@@ -21,7 +24,7 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static("public"));
+app.use(express.static(path.resolve(__dirname, "..", "public")));
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
