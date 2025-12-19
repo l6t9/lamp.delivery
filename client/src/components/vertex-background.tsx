@@ -64,6 +64,12 @@ function drawStar(ctx: CanvasRenderingContext2D, star: Star, currentTime: number
   ctx.beginPath();
   ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
   ctx.fill();
+  
+  // Add glow effect to stars for anime effect
+  ctx.fillStyle = color.replace('1)', `${opacity * 0.3})`);
+  ctx.beginPath();
+  ctx.arc(star.x, star.y, star.size * 2.5, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 export function VertexBackground() {
@@ -98,8 +104,8 @@ export function VertexBackground() {
         );
       }
 
-      // Create stars
-      const starCount = Math.max(100, Math.floor(canvas.width / 8));
+      // Create stars - more for anime night sky effect
+      const starCount = Math.max(200, Math.floor(canvas.width / 5));
       if (starsRef.current.length === 0) {
         starsRef.current = createStars(canvas.width, canvas.height, starCount);
       }
@@ -169,26 +175,26 @@ export function VertexBackground() {
           starColor = 'rgba(100, 80, 150, 1)';
         }
       } else if (colorScheme === 'pyon') {
-        bgColor1 = 'rgba(40, 15, 30, 1)';
-        bgColor2 = 'rgba(25, 8, 18, 1)';
-        bgColor3 = 'rgba(15, 4, 10, 1)';
-        nebulaColor1 = 'rgba(200, 60, 120, 0.15)';
-        nebulaColor2 = 'rgba(180, 80, 140, 0.12)';
-        starColor = 'rgba(255, 150, 200, 1)';
+        bgColor1 = 'rgba(35, 10, 35, 1)';
+        bgColor2 = 'rgba(20, 5, 25, 1)';
+        bgColor3 = 'rgba(10, 2, 15, 1)';
+        nebulaColor1 = 'rgba(220, 80, 150, 0.18)';
+        nebulaColor2 = 'rgba(200, 100, 160, 0.14)';
+        starColor = 'rgba(255, 180, 220, 1)';
       } else if (colorScheme === 'rain') {
-        bgColor1 = 'rgba(10, 20, 40, 1)';
-        bgColor2 = 'rgba(5, 12, 25, 1)';
-        bgColor3 = 'rgba(2, 6, 15, 1)';
-        nebulaColor1 = 'rgba(60, 120, 180, 0.15)';
-        nebulaColor2 = 'rgba(80, 140, 200, 0.12)';
-        starColor = 'rgba(150, 200, 255, 1)';
+        bgColor1 = 'rgba(8, 15, 45, 1)';
+        bgColor2 = 'rgba(3, 8, 30, 1)';
+        bgColor3 = 'rgba(1, 3, 15, 1)';
+        nebulaColor1 = 'rgba(80, 150, 220, 0.18)';
+        nebulaColor2 = 'rgba(100, 170, 240, 0.14)';
+        starColor = 'rgba(180, 220, 255, 1)';
       } else {
-        bgColor1 = 'rgba(20, 10, 40, 1)';
-        bgColor2 = 'rgba(10, 5, 30, 1)';
-        bgColor3 = 'rgba(5, 2, 15, 1)';
-        nebulaColor1 = 'rgba(100, 50, 150, 0.15)';
-        nebulaColor2 = 'rgba(80, 100, 180, 0.12)';
-        starColor = 'rgba(200, 180, 255, 1)';
+        bgColor1 = 'rgba(15, 8, 40, 1)';
+        bgColor2 = 'rgba(8, 3, 30, 1)';
+        bgColor3 = 'rgba(3, 1, 15, 1)';
+        nebulaColor1 = 'rgba(130, 80, 200, 0.18)';
+        nebulaColor2 = 'rgba(110, 120, 220, 0.14)';
+        starColor = 'rgba(220, 200, 255, 1)';
       }
 
       const newColors = { lineColor, bgColor1, bgColor2, bgColor3, nebulaColor1, nebulaColor2, starColor, theme, colorScheme };
@@ -249,27 +255,32 @@ export function VertexBackground() {
       ctx.fillStyle = gradientBg;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Add subtle nebula clouds - scattered galaxy effects
-      ctx.fillStyle = nebulaColor1;
-      ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.15, canvas.height * 0.2, 200, 150, 0.5, 0, Math.PI * 2);
-      ctx.fill();
+      // Add multiple small nebula clouds for galaxy depth (anime night sky effect)
+      const nebulaPositions = [
+        { x: 0.15, y: 0.2, w: 120, h: 90, rot: 0.5, color: nebulaColor1 },
+        { x: 0.85, y: 0.75, w: 110, h: 85, rot: -0.3, color: nebulaColor2 },
+        { x: 0.6, y: 0.4, w: 100, h: 75, rot: 1.2, color: nebulaColor1 },
+        { x: 0.3, y: 0.7, w: 95, h: 70, rot: -0.8, color: nebulaColor2 },
+        { x: 0.5, y: 0.15, w: 90, h: 65, rot: 0.3, color: nebulaColor1 },
+        { x: 0.75, y: 0.35, w: 85, h: 60, rot: -0.5, color: nebulaColor2 },
+        { x: 0.25, y: 0.5, w: 80, h: 55, rot: 0.8, color: nebulaColor1 },
+        { x: 0.65, y: 0.65, w: 75, h: 50, rot: -0.2, color: nebulaColor2 },
+      ];
 
-      ctx.fillStyle = nebulaColor2;
-      ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.85, canvas.height * 0.75, 180, 140, -0.3, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Add more subtle nebula spots for galaxy depth
-      ctx.fillStyle = nebulaColor1.replace('0.15)', '0.06)');
-      ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.6, canvas.height * 0.4, 250, 200, 1.2, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = nebulaColor2.replace('0.12)', '0.05)');
-      ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.3, canvas.height * 0.7, 220, 160, -0.8, 0, Math.PI * 2);
-      ctx.fill();
+      for (const nebula of nebulaPositions) {
+        ctx.fillStyle = nebula.color;
+        ctx.beginPath();
+        ctx.ellipse(
+          canvas.width * nebula.x,
+          canvas.height * nebula.y,
+          nebula.w,
+          nebula.h,
+          nebula.rot,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
 
       // Draw stars with twinkling
       for (const star of starsRef.current) {
