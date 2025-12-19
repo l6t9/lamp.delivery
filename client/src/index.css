@@ -45,36 +45,36 @@
 
 :root {
   /* Avatar Color Palette - Light Mode */
-  --background: 280 15% 93%;
-  --foreground: 280 28% 15%;
+  --background: 280 25% 85%;
+  --foreground: 280 28% 12%;
   
-  --card: 280 15% 96%;
-  --card-foreground: 280 28% 15%;
+  --card: 280 20% 92%;
+  --card-foreground: 280 28% 12%;
   
-  --popover: 280 15% 96%;
-  --popover-foreground: 280 28% 15%;
+  --popover: 280 20% 92%;
+  --popover-foreground: 280 28% 12%;
   
   /* Primary: Avatar Purple (#926F96) */
-  --primary: 280 20% 55%;
-  --primary-foreground: 280 15% 96%;
+  --primary: 280 25% 48%;
+  --primary-foreground: 280 20% 92%;
   
   /* Secondary: Avatar Soft Pink (#E0B2CF) */
-  --secondary: 313 43% 75%;
-  --secondary-foreground: 280 28% 15%;
+  --secondary: 313 50% 68%;
+  --secondary-foreground: 280 28% 12%;
   
-  --muted: 280 20% 75%;
-  --muted-foreground: 280 15% 35%;
+  --muted: 280 20% 70%;
+  --muted-foreground: 280 15% 30%;
   
   /* Accent: Avatar Light Purple (#B08BAE) */
-  --accent: 280 20% 62%;
-  --accent-foreground: 280 28% 15%;
+  --accent: 280 25% 56%;
+  --accent-foreground: 280 20% 92%;
   
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 280 15% 96%;
+  --destructive-foreground: 280 20% 92%;
 
-  --border: 280 15% 85%;
-  --input: 280 15% 88%;
-  --ring: 280 20% 55%;
+  --border: 280 20% 78%;
+  --input: 280 20% 82%;
+  --ring: 280 25% 48%;
 }
 
 .dark {
