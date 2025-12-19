@@ -305,7 +305,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: gradient-flow 4s ease-in-out infinite, stylized-bounce 3s ease-in-out infinite;
+    animation: gradient-flow 4s ease-in-out infinite;
     letter-spacing: 0.05em;
     text-transform: lowercase;
     font-style: italic;
