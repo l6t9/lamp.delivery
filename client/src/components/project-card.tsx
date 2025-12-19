@@ -14,7 +14,8 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
       transition={{ duration: 0.4, delay: index * 0.1 }}
       viewport={{ once: true }}
     >
-      <Card className="h-full flex flex-col bg-card/40 backdrop-blur-sm border border-white/10 dark:border-white/5 hover:border-primary/50 hover:bg-card/60 transition-all duration-300 group">
+      <Card className="h-full flex flex-col bg-card/40 backdrop-blur-sm border border-white/10 dark:border-white/5 hover:border-primary/50 hover:bg-card/60 transition-all duration-300 group relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 blur-xl -z-10 group-hover:blur-2xl transition-all duration-500 pointer-events-none rounded-lg"></div>
         <CardHeader className="space-y-3">
           <div className="flex justify-between items-start gap-4">
             <div className="flex-1">

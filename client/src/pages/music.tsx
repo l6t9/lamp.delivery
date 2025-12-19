@@ -121,8 +121,9 @@ export default function Music() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: artistIndex * 0.1 }}
                   viewport={{ once: true }}
-                  className="group"
+                  className="group relative"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 blur-xl -z-10 group-hover:blur-2xl transition-all duration-500 pointer-events-none rounded-2xl"></div>
                   <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8 space-y-6 hover:border-primary/50 transition-colors duration-300">
                     {/* Artist Header */}
                     <div className="flex items-center gap-3">

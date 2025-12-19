@@ -251,11 +251,11 @@
   .scrollbar-styled {
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--muted)) transparent;
-    padding-bottom: 4px;
+    padding-bottom: 2px;
   }
 
   .scrollbar-styled::-webkit-scrollbar {
-    height: 4px;
+    height: 2px;
   }
 
   .scrollbar-styled::-webkit-scrollbar-track {
