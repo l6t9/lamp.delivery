@@ -117,7 +117,7 @@ export default function Navbar() {
             <div
               key={tab.label}
               className={cn(
-                "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded-none whitespace-nowrap group cursor-pointer",
+                "flex items-center gap-1 px-3 sm:px-4 md:px-5 py-1.5 md:py-2 text-xs sm:text-sm md:text-base font-medium transition-colors rounded whitespace-nowrap group cursor-pointer",
                 tab.active
                   ? "bg-primary/10 text-foreground"
                   : "bg-card/40 text-muted-foreground hover:bg-card/60 hover:text-foreground"
