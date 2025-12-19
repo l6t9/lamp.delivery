@@ -272,38 +272,11 @@
 
   /* Styled scrollbar for tabs */
   .scrollbar-styled {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted)) transparent;
-    padding-bottom: 1px;
+    scrollbar-width: none;
   }
 
   .scrollbar-styled::-webkit-scrollbar {
-    height: 1px;
-  }
-
-  .scrollbar-styled::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .scrollbar-styled::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted));
-    border-radius: 3px;
-  }
-
-  .scrollbar-styled::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground));
-  }
-
-  .dark .scrollbar-styled {
-    scrollbar-color: hsl(var(--muted)) transparent;
-  }
-
-  .dark .scrollbar-styled::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted));
-  }
-
-  .dark .scrollbar-styled::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground));
+    display: none;
   }
 
   .hover-text-underline::after {
