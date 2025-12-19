@@ -112,7 +112,7 @@ export default function Navbar() {
         </Link>
 
         {/* Browser Tabs */}
-        <div className="flex items-center gap-1 flex-1 md:flex-none md:gap-2">
+        <div className={cn("flex items-center gap-1 flex-1 md:flex-none md:gap-2", openTabs.length === 3 && "overflow-x-auto")}>
           {displayTabs.map((tab) => (
             <div
               key={tab.label}
