@@ -10,18 +10,12 @@
 </script>
 
 <div class="container">
-  <div class="header-nav">
-    <a href="/" class="nav-link">home</a>
-    <a href="/projects" class="nav-link active">projects</a>
-    <a href="/other-stuff" class="nav-link">my other stuff</a>
-  </div>
-
   <div class="title">
     <div class="profile-header">
       <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
       <div>
         <h1>my other stuff</h1>
-        <p class="subtext">things i've worked on // {hour} for me</p>
+        <p class="subtext">things i've worked on // {hour} for me // <a href="/" class="link">home</a></p>
       </div>
     </div>
   </div>

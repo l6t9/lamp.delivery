@@ -38,18 +38,12 @@
 </script>
 
 <div class="container">
-  <div class="header-nav">
-    <a href="/" class="nav-link active">home</a>
-    <a href="/projects" class="nav-link">projects</a>
-    <a href="/other-stuff" class="nav-link">my other stuff</a>
-  </div>
-
   <div class="title">
     <div class="profile-header">
       <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
       <div>
         <h1>hiya, i'm lamp!</h1>
-        <p class="subtext">any/all // utc-5 (currently {hour} for me)</p>
+        <p class="subtext">any/all // utc-5 (currently {hour} for me) // <a href="/other-stuff" class="link">my other stuff</a></p>
       </div>
     </div>
   </div>
