@@ -1,0 +1,59 @@
+@import url("https://cdn.jsdelivr.net/npm/@catppuccin/palette/css/catppuccin.css");
+
+:root {
+  --primary-tint: rgba(103, 80, 164, 0.1); /* M3 Purple tint */
+  --bg-color: #1c1b1f;
+  --text-color: #e6e1e5;
+  --subtext-color: #938f99;
+  --container-bg: rgba(103, 80, 164, 0.05);
+  --container-border: rgba(103, 80, 164, 0.2);
+  --pill-bg: rgba(103, 80, 164, 0.1);
+  --pill-bg-hover: rgba(103, 80, 164, 0.15);
+}
+
+@font-face {
+  font-family: "Maple Mono";
+  src: url("$lib/assets/maple-mono/regular.woff2");
+}
+@font-face {
+  font-family: "Maple Mono";
+  src: url("$lib/assets/maple-mono/bold.woff2");
+  font-weight: bolder;
+}
+@font-face {
+  font-family: "Maple Mono";
+  src: url("$lib/assets/maple-mono/italic.woff2");
+  font-style: italic;
+}
+@font-face {
+  font-family: "Maple Mono";
+  src: url("$lib/assets/maple-mono/bold-italic.woff2");
+  font-weight: bolder;
+  font-style: italic;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Maple Mono", monospace;
+}
+
+.container {
+  background-color: var(--container-bg) !important;
+  border: 1px solid var(--container-border);
+}
+
+.pill {
+  background-color: var(--pill-bg) !important;
+}
+
+.pill .pill {
+  background-color: var(--pill-bg-hover) !important;
+}
+
+h1,
+h2,
+h3 {
+  margin-top: 0;
+}

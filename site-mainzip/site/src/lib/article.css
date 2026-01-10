@@ -1,0 +1,20 @@
+article {
+  & .shiki {
+    padding: 1rem;
+    border-radius: 16px;
+    & code {
+      font-family: "Maple Mono", monospace;
+    }
+  }
+  & p:has(> img) {
+    display: flex;
+    justify-content: center;
+    & img {
+      border-radius: 16px;
+      width: max(50vw, 32rem);
+      /* &::after {
+        content: attr(alt);
+      } */
+    }
+  }
+}

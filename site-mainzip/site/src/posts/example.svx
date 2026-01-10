@@ -1,0 +1,23 @@
+---
+title: example post
+description: this post is really cool
+date: "16/8/2025"
+categories:
+  - cats
+  - cute
+published: true
+---
+
+## very interesting title
+
+wow this is **cool**
+
+like _really_ cool
+
+```ts
+function howCool(articleName: string) {
+  return "very cool!";
+}
+```
+
+![a bunch of cats](/articleAssets/example/image.webp)
