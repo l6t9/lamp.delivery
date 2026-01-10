@@ -68,21 +68,11 @@
     <div class="pill">
       <h2>technologies</h2>
       <div class="pill">
-        <h3>good knowledge</h3>
-        <HTMLLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
-        <CSSLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
+        <h3>stuff I type</h3>
+        <KotlinLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
         <TSLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
         <ReactLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
-      </div>
-      <div class="pill">
-        <h3>still learning</h3>
-        <SvelteLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
-        <CPPLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
-      </div>
-      <div class="pill">
-        <h3>interested in</h3>
         <PythonLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
-        <KotlinLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
       </div>
     </div>
     <div class="pill">
