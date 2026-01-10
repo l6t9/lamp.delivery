@@ -39,8 +39,13 @@
 
 <div class="container">
   <div class="title">
-    <h1>hiya, i'm lamp!</h1>
-    <p class="subtext">any/all // utc-5 (currently {hour} for me)</p>
+    <div class="profile-header">
+      <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
+      <div>
+        <h1>hiya, i'm lamp!</h1>
+        <p class="subtext">any/all // utc-5 (currently {hour} for me)</p>
+      </div>
+    </div>
   </div>
   <div class="pill">
     developer, eager learner and silly cat, specifically in that order
@@ -133,6 +138,9 @@
     <div class="pill">
       <h2>people i know</h2>
       <div class="avatars">
+        <a href="https://github.com/Ushie" target="_blank">
+          <img src="https://github.com/Ushie.png" alt="Ushie" />
+        </a>
       </div>
     </div>
     <div class="pill">
@@ -157,6 +165,17 @@
   .subtext {
     font-size: 0.75rem;
     color: var(--subtext-color);
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .profile-header .avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
   }
   .pill {
     margin: 0.5rem;
