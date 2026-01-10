@@ -146,7 +146,7 @@
     <div class="pill">
       <h2>my other stuff</h2>
       <div class="previews-container">
-        <div class="pill website-preview">
+        <div class="website-preview">
           <a href="https://raincord.dev" class="link" target="_blank">
             <div class="preview-box raincord">
               <img src="/images/raincord-banner.png" alt="raincord.dev" class="preview-img" />
@@ -154,7 +154,7 @@
             <span>raincord.dev</span>
           </a>
         </div>
-        <div class="pill website-preview">
+        <div class="website-preview">
           <a href="https://github.com/Aliucord/LumiBot" class="link" target="_blank">
             <div class="preview-box lumibot">
               <img src="https://opengraph.githubassets.com/1/Aliucord/LumiBot" alt="lumibot" class="preview-img" />
@@ -301,18 +301,26 @@
   .previews-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    gap: 1rem;
+    padding: 0.5rem;
   }
   @media (max-width: 600px) {
     .previews-container {
       grid-template-columns: 1fr;
     }
   }
+  .website-preview {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--pill-bg);
+    padding: 1rem;
+    border-radius: 16px;
+  }
   .preview-box {
     background-color: var(--pill-bg-hover);
     border-radius: 8px;
     aspect-ratio: 16 / 9;
-    height: auto;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -322,12 +330,16 @@
   .preview-img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    background-color: #000;
+    object-fit: cover;
   }
   .website-preview .link {
     display: flex;
     flex-direction: column;
     text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+  }
+  .website-preview .link:hover span {
+    text-decoration: underline;
   }
 </style>
