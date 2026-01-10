@@ -242,7 +242,10 @@
   }
   @media (max-width: 800px) {
     .container {
-      height: unset;
+      margin: 1rem;
+      padding: 1rem;
+      height: auto;
+      min-height: 100vh;
     }
     .grid {
       grid-template-columns: 1fr;
@@ -254,7 +257,7 @@
         "five";
     }
     .pill {
-      max-height: 65vh;
+      max-height: none;
     }
   }
   .pill:nth-child(1) {
