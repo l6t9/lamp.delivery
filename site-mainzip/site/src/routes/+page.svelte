@@ -145,21 +145,23 @@
     </div>
     <div class="pill">
       <h2>my other stuff</h2>
-      <div class="pill website-preview">
-        <a href="https://raincord.dev" class="link" target="_blank">
-          <div class="preview-box raincord">
-            <img src="/images/raincord-banner.png" alt="raincord.dev" class="preview-img" />
-          </div>
-          <span>raincord.dev</span>
-        </a>
-      </div>
-      <div class="pill website-preview">
-        <a href="https://github.com/Aliucord/LumiBot" class="link" target="_blank">
-          <div class="preview-box lumibot">
-            <img src="https://opengraph.githubassets.com/1/Aliucord/LumiBot" alt="lumibot" class="preview-img" />
-          </div>
-          <span>lumibot</span>
-        </a>
+      <div class="previews-container">
+        <div class="pill website-preview">
+          <a href="https://raincord.dev" class="link" target="_blank">
+            <div class="preview-box raincord">
+              <img src="/images/raincord-banner.png" alt="raincord.dev" class="preview-img" />
+            </div>
+            <span>raincord.dev</span>
+          </a>
+        </div>
+        <div class="pill website-preview">
+          <a href="https://github.com/Aliucord/LumiBot" class="link" target="_blank">
+            <div class="preview-box lumibot">
+              <img src="https://opengraph.githubassets.com/1/Aliucord/LumiBot" alt="lumibot" class="preview-img" />
+            </div>
+            <span>lumibot</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -296,10 +298,21 @@
     color: var(--text-color);
     text-decoration: none;
   }
+  .previews-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  @media (max-width: 600px) {
+    .previews-container {
+      grid-template-columns: 1fr;
+    }
+  }
   .preview-box {
     background-color: var(--pill-bg-hover);
     border-radius: 8px;
-    height: 150px;
+    aspect-ratio: 16 / 9;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -309,7 +322,8 @@
   .preview-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    background-color: #000;
   }
   .website-preview .link {
     display: flex;
