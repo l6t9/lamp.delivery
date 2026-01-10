@@ -41,7 +41,6 @@ body {
 
 .container {
   background-color: var(--container-bg) !important;
-  border: 1px solid var(--container-border);
 }
 
 .pill {
