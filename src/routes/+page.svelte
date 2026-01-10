@@ -221,6 +221,38 @@
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
   }
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .social-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--pill-bg-hover, #28223a);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    padding: 0.4rem 0.9rem;
+    font-size: 1rem;
+    font-family: inherit;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+  }
+  .social-btn:hover {
+    background: var(--pill-bg, #3a3350);
+    color: var(--primary, #a78bfa);
+  }
+  .icon {
+    width: 1.2em;
+    height: 1.2em;
+    display: inline-block;
+    vertical-align: middle;
+  }
   .avatar-container {
     width: 6rem;
     height: 6rem;
