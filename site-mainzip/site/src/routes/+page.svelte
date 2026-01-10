@@ -154,7 +154,9 @@
 
 <style>
   .container {
-    margin: 2rem min(8rem, 10vw);
+    margin: 2rem auto;
+    max-width: 1200px;
+    width: calc(100% - 4rem);
     padding: 2rem;
     height: calc(100vh - 4rem);
     background-color: var(--container-bg);
