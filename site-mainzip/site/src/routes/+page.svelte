@@ -68,11 +68,15 @@
     <div class="pill">
       <h2>languages</h2>
       <div class="pill">
-        <h3>stuff I type</h3>
+        <h3>stuff i type</h3>
         <KotlinLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
         <TSLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
         <ReactLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
         <PythonLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
+      </div>
+      <div class="pill">
+        <h3>stuff i speak</h3>
+        <p>english, french</p>
       </div>
     </div>
     <div class="pill">
