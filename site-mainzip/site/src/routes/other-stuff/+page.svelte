@@ -12,7 +12,8 @@
 <div class="container">
   <div class="header-nav">
     <a href="/" class="nav-link">home</a>
-    <a href="/projects" class="nav-link active">projects</a>
+    <a href="/projects" class="nav-link">projects</a>
+    <a href="/other-stuff" class="nav-link active">my other stuff</a>
   </div>
 
   <div class="title">
