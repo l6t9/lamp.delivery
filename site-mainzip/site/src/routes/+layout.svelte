@@ -8,7 +8,10 @@
 
 <svelte:head>
   <link rel="icon" href={favicon} />
-  <title>hiya, i'm lamp</title>
+  <title>lamp</title>
+  <meta property="og:title" content="hiya, i'm lamp!" />
+  <meta property="og:description" content="just making stuff" />
+  <meta property="og:type" content="website" />
   <meta name="description" content="just making stuff" />
 </svelte:head>
 
