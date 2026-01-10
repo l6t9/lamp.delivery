@@ -1,0 +1,367 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+  import notplaying from "$lib/assets/notplaying.png";
+  import placeholder from "$lib/assets/placeholder.png";
+  import type { TrackInfo } from "$lib";
+
+  import HTMLLogo from "virtual:icons/catppuccin/html";
+  import CSSLogo from "virtual:icons/catppuccin/css3";
+  import TSLogo from "virtual:icons/catppuccin/typescript";
+  import ReactLogo from "virtual:icons/catppuccin/typescript-react";
+  import SvelteLogo from "virtual:icons/catppuccin/svelte";
+  import CPPLogo from "virtual:icons/catppuccin/cpp";
+  import PythonLogo from "virtual:icons/catppuccin/python";
+  import KotlinLogo from "virtual:icons/catppuccin/kotlin";
+  import GithubLogo from "virtual:icons/simple-icons/github";
+  import CodebergLogo from "virtual:icons/simple-icons/codeberg";
+  import DiscordLogo from "virtual:icons/simple-icons/discord";
+  import YoutubeLogo from "virtual:icons/simple-icons/youtube";
+
+  let { data } = $props();
+
+  let isLoading = $state(true);
+  let nowPlaying: TrackInfo = $state(null);
+
+  onMount(async () => {
+    try {
+      const data = await fetch("/api/now-playing").then((r) => r.json());
+      nowPlaying = data.track;
+    } catch (e) {
+      console.error(e);
+      nowPlaying = null;
+    } finally {
+      isLoading = false;
+    }
+  });
+
+  const hour = new Date().toLocaleTimeString("en-GB", {
+    timeZone: "Etc/GMT+5",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+</script>
+
+<div class="container">
+  <div class="title">
+    <div class="profile-header">
+      <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
+      <div>
+        <h1>heya, i'm lamp!</h1>
+        <p class="subtext">any/all // utc-5 (currently {hour} for me) // <a href="/other-stuff" class="link">my other stuff</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="pill">
+    developer, eager learner and <i>silly</i> cat, specifically in that order
+    <div class="social-links">
+      <a href="https://github.com/LampDelivery" class="social-button" target="_blank">
+        <GithubLogo /> github
+      </a>
+      <a href="https://codeberg.org/LampDelivery" class="social-button" target="_blank">
+        <CodebergLogo /> codeberg
+      </a>
+      <a href="https://discord.com/users/406028027768733696" class="social-button" target="_blank">
+        <DiscordLogo /> discord
+      </a>
+      <a href="https://youtube.com/@LampDelivery" class="social-button" target="_blank">
+        <YoutubeLogo /> youtube
+      </a>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="pill">
+      <h2>languages</h2>
+      <div class="pill">
+        <h3>stuff i type</h3>
+        <KotlinLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
+        <TSLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
+        <ReactLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
+        <PythonLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
+      </div>
+      <div class="pill">
+        <h3>stuff i speak</h3>
+        <p>english & french</p>
+      </div>
+    </div>
+    <div class="pill">
+      <h2>
+        <a
+          class="link"
+          target="_blank"
+          href="https://www.last.fm/user/Lmpamapa"
+          >i'm currently listening to</a
+        >
+      </h2>
+      <div class="pill listening">
+        {#if isLoading}
+          <img src={placeholder} alt="it's empty here" />
+          <h3>loading</h3>
+          <p class="subtext">there's gotta be cool stuff here</p>
+        {:else if nowPlaying}
+          <img src={nowPlaying.cover} alt="album cover" />
+          <h3>
+            {#if nowPlaying.link}
+              <a
+                class="link"
+                target="_blank"
+                href="https://song.link/{nowPlaying.link}"
+                >{nowPlaying.songName}</a
+              >
+            {:else}
+              {nowPlaying.songName}
+            {/if}
+          </h3>
+          <p class="subtext">
+            by {nowPlaying.artistName}{#if nowPlaying.albumName}
+              {" "}- from {nowPlaying.albumName}{/if}
+          </p>
+        {:else}
+          <img src={notplaying} alt="peace and quiet" />
+          <h3>nothing</h3>
+          <p class="subtext">rare case of touching grass?</p>
+        {/if}
+      </div>
+    </div>
+    <div class="pill">
+      <h2>blog posts</h2>
+      {#each data.posts as post}
+        <a class="article" href="/blog/{post.slug}">
+          <div class="pill">
+            <h3>{post.title}</h3>
+            <p>{post.description}</p>
+            <p class="subtext">{post.date}</p>
+          </div>
+        </a>
+      {/each}
+    </div>
+    <div class="pill">
+      <h2>people i know</h2>
+      <div class="avatars">
+        <a href="https://ushie.dev" target="_blank">
+          <img src="https://github.com/Ushie.png" alt="Ushie" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    margin: 2rem auto;
+    max-width: 2000px;
+    width: calc(100% - 4rem);
+    padding: 2rem;
+    height: auto;
+    min-height: calc(100vh - 4rem);
+    background-color: var(--container-bg);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .header-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+  .nav-link.active {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  .subtext {
+    font-size: 0.75rem;
+    color: var(--subtext-color);
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+  }
+  .profile-header .avatar {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid var(--container-border);
+  }
+  .pill {
+    margin: 0.5rem;
+    padding: 1rem;
+    background-color: var(--pill-bg);
+    border-radius: 16px;
+    scrollbar-color: var(--container-border) var(--pill-bg);
+  }
+  .grid .pill {
+    min-height: 0;
+    overflow: auto;
+  }
+  .pill .pill {
+    background-color: var(--pill-bg-hover);
+  }
+  .pill .listening {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 0.5rem;
+    grid-template-areas:
+      "left top"
+      "left bottom";
+  }
+  .pill .listening img {
+    border-radius: 16px;
+    height: 6rem;
+    aspect-ratio: 1 / 1;
+    grid-area: left;
+  }
+  .pill .listening p {
+    margin-top: 0;
+  }
+  .subtext .link,
+  .subtext .link:visited {
+    color: var(--subtext-color);
+  }
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .social-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--pill-bg-hover);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+  .social-button:hover {
+    background-color: var(--container-border);
+    transform: translateY(-2px);
+  }
+  .link,
+  .link:visited {
+    color: var(--text-color);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .pill .avatars img {
+    border-radius: 16px;
+    padding: 0.5rem;
+    height: 4rem;
+    aspect-ratio: 1 / 1;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 0 1rem;
+    grid-template-areas:
+      "one two"
+      "one three"
+      "four three"
+      "five five";
+    flex-grow: 1;
+    min-height: 0;
+  }
+  @media (max-width: 800px) {
+    .container {
+      margin: 1rem auto;
+      padding: 1rem;
+      height: auto;
+      min-height: 100vh;
+      max-width: calc(100% - 2rem);
+    }
+    .grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "one"
+        "three"
+        "two"
+        "four"
+        "five";
+    }
+    .pill {
+      max-height: none;
+    }
+  }
+  .pill:nth-child(1) {
+    grid-area: one;
+  }
+  .pill:nth-child(2) {
+    grid-area: two;
+  }
+  .pill:nth-child(3) {
+    grid-area: three;
+  }
+  .pill:nth-child(4) {
+    grid-area: four;
+  }
+  .pill:nth-child(5) {
+    grid-area: five;
+  }
+  .article,
+  .article:visited {
+    color: var(--text-color);
+    text-decoration: none;
+  }
+  .previews-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+  @media (max-width: 600px) {
+    .previews-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  .website-preview {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--pill-bg);
+    padding: 1rem;
+    border-radius: 16px;
+  }
+  .preview-box {
+    background-color: var(--pill-bg-hover);
+    border-radius: 8px;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+  }
+  .preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .website-preview .link {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+  }
+  .website-preview .link:hover span {
+    text-decoration: underline;
+  }
+</style>
