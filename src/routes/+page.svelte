@@ -41,6 +41,9 @@
   <div class="title">
     <div class="profile-header">
       <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
+        <div class="avatar-container">
+          <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
+        </div>
       <div>
         <h1>heya, i'm lamp!</h1>
         <p class="subtext">any/all // utc-5 (currently {hour} for me) // <a href="/other-stuff" class="link">my other stuff</a></p>
@@ -187,15 +190,28 @@
     gap: 2.5rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
-  }
-  .profile-header {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-  }
-  .pill {
-    margin: 0.5rem;
+    .avatar-container {
+      width: 6rem;
+      height: 6rem;
+      min-width: 6rem;
+      min-height: 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 50%;
+      background: var(--container-bg, #18141f);
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+      border: 2px solid var(--pill-bg-hover, #fff3);
+      margin-left: 0;
+    }
+    .avatar-container .avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
     padding: 1rem;
     background-color: var(--pill-bg);
     border-radius: 16px;
