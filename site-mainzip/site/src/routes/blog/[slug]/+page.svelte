@@ -36,13 +36,18 @@
 <style>
   article,
   .header {
-    margin: 2rem min(8rem, 10vw);
+    margin: 2rem auto;
+    max-width: 800px;
+    width: calc(100% - 4rem);
     padding: 2rem;
-    background-color: var(--ctp-mocha-base);
+    background-color: var(--container-bg);
     border-radius: 16px;
     & a {
-      color: var(--ctp-mocha-text);
+      color: var(--text-color);
       text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -52,14 +57,28 @@
       margin: 0.25rem;
       padding: 0.5rem;
       border-radius: 16px;
-      background-color: var(--ctp-mocha-surface0);
+      background-color: var(--pill-bg);
+      font-size: 0.8rem;
     }
   }
 
   .separator {
-    height: 0.25rem;
-    margin: 0.5rem 0;
-    background-color: var(--ctp-mocha-surface0);
-    border-radius: 16px;
+    height: 1px;
+    margin: 1.5rem 0;
+    background-color: var(--container-border);
+  }
+
+  .prose {
+    line-height: 1.6;
+    color: var(--text-color);
+  }
+
+  hgroup h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  hgroup p {
+    color: var(--subtext-color);
+    font-size: 0.9rem;
   }
 </style>
