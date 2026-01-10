@@ -12,6 +12,10 @@
   import CPPLogo from "virtual:icons/catppuccin/cpp";
   import PythonLogo from "virtual:icons/catppuccin/python";
   import KotlinLogo from "virtual:icons/catppuccin/kotlin";
+  import GithubLogo from "virtual:icons/simple-icons/github";
+  import CodebergLogo from "virtual:icons/simple-icons/codeberg";
+  import DiscordLogo from "virtual:icons/simple-icons/discord";
+  import YoutubeLogo from "virtual:icons/simple-icons/youtube";
 
   let { data } = $props();
 
@@ -40,9 +44,7 @@
 <div class="container">
   <div class="title">
     <div class="profile-header">
-      <div class="avatar-container">
-        <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
-      </div>
+      <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
       <div>
         <h1>heya, i'm lamp!</h1>
         <p class="subtext">any/all // utc-5 (currently {hour} for me) // <a href="/other-stuff" class="link">my other stuff</a></p>
@@ -50,26 +52,21 @@
     </div>
   </div>
   <div class="pill">
-    developer and <i>silly</i> person
-    <p class="subtext">
-      <a href="https://github.com/LampDelivery" class="link" target="_blank"
-        >github: LampDelivery</a
-      >
-      {" "}|{" "}
-      <a href="https://codeberg.org/LampDelivery" class="link" target="_blank"
-        >codeberg: LampDelivery</a
-      >
-      {" "}|{" "}
-      <a
-        href="https://discord.com/users/406028027768733696"
-        class="link"
-        target="_blank">discord: @lampdelivery</a
-      >
-      {" "}|{" "}
-      <a href="https://youtube.com/@LampDelivery" class="link" target="_blank"
-        >youtube: LampDelivery</a
-      >
-    </p>
+    i might be too <i>silly</i>
+    <div class="social-links">
+      <a href="https://github.com/LampDelivery" class="social-button" target="_blank">
+        <GithubLogo /> github
+      </a>
+      <a href="https://codeberg.org/LampDelivery" class="social-button" target="_blank">
+        <CodebergLogo /> codeberg
+      </a>
+      <a href="https://discord.com/users/406028027768733696" class="social-button" target="_blank">
+        <DiscordLogo /> discord
+      </a>
+      <a href="https://youtube.com/@LampDelivery" class="social-button" target="_blank">
+        <YoutubeLogo /> youtube
+      </a>
+    </div>
   </div>
   <div class="grid">
     <div class="pill">
@@ -186,31 +183,16 @@
   .profile-header {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 1.5rem;
     margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding: 0.5rem;
   }
-  .avatar-container {
-    width: 6rem;
-    height: 6rem;
-    min-width: 6rem;
-    min-height: 6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  .profile-header .avatar {
+    width: 5rem;
+    height: 5rem;
     border-radius: 50%;
-    background: var(--container-bg, #18141f);
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
-    border: 2px solid var(--pill-bg-hover, #fff3);
-    margin-left: 0;
-  }
-  .avatar-container .avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    display: block;
+    flex-shrink: 0;
+    border: 2px solid var(--container-border);
   }
   .pill {
     margin: 0.5rem;
@@ -247,6 +229,28 @@
   .subtext .link,
   .subtext .link:visited {
     color: var(--subtext-color);
+  }
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .social-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--pill-bg-hover);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+  .social-button:hover {
+    background-color: var(--container-border);
+    transform: translateY(-2px);
   }
   .link,
   .link:visited {
