@@ -192,10 +192,7 @@
     width: 5.5rem;
     height: 5.5rem;
     border-radius: 50%;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
     border: 2px solid var(--pill-bg-hover, #fff3);
-    background: var(--container-bg, #18141f);
-    padding-left: 0.5rem;
   }
   .pill {
     margin: 0.5rem;
