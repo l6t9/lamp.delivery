@@ -155,7 +155,7 @@
 <style>
   .container {
     margin: 2rem auto;
-    max-width: 1200px;
+    max-width: 1400px;
     width: calc(100% - 4rem);
     padding: 2rem;
     height: calc(100vh - 4rem);
