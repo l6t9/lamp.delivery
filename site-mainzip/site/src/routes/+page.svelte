@@ -145,11 +145,19 @@
     </div>
     <div class="pill">
       <h2>my other stuff</h2>
-      <div class="pill">
-        <a href="https://raincord.dev" class="link" target="_blank">raincord.dev</a>
+      <div class="pill website-preview">
+        <a href="https://raincord.dev" class="link" target="_blank">
+          <div class="preview-box">
+            <span>raincord.dev</span>
+          </div>
+        </a>
       </div>
-      <div class="pill">
-        <a href="https://github.com/Aliucord/LumiBot" class="link" target="_blank">lumibot</a>
+      <div class="pill website-preview">
+        <a href="https://github.com/Aliucord/LumiBot" class="link" target="_blank">
+          <div class="preview-box">
+            <span>lumibot</span>
+          </div>
+        </a>
       </div>
     </div>
   </div>
@@ -284,5 +292,20 @@
   .article:visited {
     color: var(--text-color);
     text-decoration: none;
+  }
+  .preview-box {
+    background-color: var(--pill-bg-hover);
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--container-border);
+  }
+  .website-preview .link {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
   }
 </style>

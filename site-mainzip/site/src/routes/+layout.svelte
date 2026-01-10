@@ -8,7 +8,8 @@
 
 <svelte:head>
   <link rel="icon" href={favicon} />
-  <title>the coolest site</title>
+  <title>hiya, i'm lamp</title>
+  <meta name="description" content="just making stuff" />
 </svelte:head>
 
 {@render children?.()}
