@@ -135,6 +135,12 @@
       <div class="avatars">
       </div>
     </div>
+    <div class="pill">
+      <h2>my other stuff</h2>
+      <div class="pill">
+        <a href="https://raincord.dev" class="link" target="_blank">raincord.dev</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -210,7 +216,8 @@
     grid-template-areas:
       "one two"
       "one three"
-      "four three";
+      "four three"
+      "five five";
     flex-grow: 1;
     min-height: 0;
   }
@@ -224,7 +231,8 @@
         "one"
         "three"
         "two"
-        "four";
+        "four"
+        "five";
     }
     .pill {
       max-height: 65vh;
@@ -241,6 +249,9 @@
   }
   .pill:nth-child(4) {
     grid-area: four;
+  }
+  .pill:nth-child(5) {
+    grid-area: five;
   }
   .article,
   .article:visited {
