@@ -170,7 +170,7 @@
 <style>
   .container {
     margin: 2rem auto;
-    max-width: 1000px;
+    max-width: 1100px;
     width: calc(100% - 4rem);
     padding: 2rem;
     height: calc(100vh - 4rem);
