@@ -48,7 +48,7 @@
     </div>
   </div>
   <div class="pill">
-    developer, eager learner and <span style="font-family: 'Dancing Script', cursive; font-size: 1.2em; letter-spacing: -0.5px;">silly</span> cat, specifically in that order
+    developer, eager learner and <i>silly</i> cat, specifically in that order
     <p class="subtext">
       <a href="https://github.com/LampDelivery" class="link" target="_blank"
         >github: LampDelivery</a
