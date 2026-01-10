@@ -31,7 +31,7 @@
   });
 
   const hour = new Date().toLocaleTimeString("en-GB", {
-    timeZone: "Etc/GMT-2",
+    timeZone: "Etc/GMT+5",
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -40,7 +40,7 @@
 <div class="container">
   <div class="title">
     <h1>hiya, i'm lamp!</h1>
-    <p class="subtext">they/them // utc+2 (currently {hour} for me)</p>
+    <p class="subtext">any/all // utc-5 (currently {hour} for me)</p>
   </div>
   <div class="pill">
     developer, eager learner and silly cat, specifically in that order
