@@ -38,6 +38,11 @@
 </script>
 
 <div class="container">
+  <div class="header-nav">
+    <a href="/" class="nav-link active">home</a>
+    <a href="/projects" class="nav-link">projects</a>
+  </div>
+
   <div class="title">
     <div class="profile-header">
       <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
@@ -138,7 +143,7 @@
     <div class="pill">
       <h2>people i know</h2>
       <div class="avatars">
-        <a href="https://github.com/Ushie" target="_blank">
+        <a href="https://ushie.dev" target="_blank">
           <img src="https://github.com/Ushie.png" alt="Ushie" />
         </a>
       </div>
@@ -146,22 +151,7 @@
     <div class="pill">
       <h2>my other stuff</h2>
       <div class="previews-container">
-        <div class="website-preview">
-          <a href="https://raincord.dev" class="link" target="_blank">
-            <div class="preview-box raincord">
-              <img src="/images/raincord-banner.png" alt="raincord.dev" class="preview-img" />
-            </div>
-            <span>raincord.dev</span>
-          </a>
-        </div>
-        <div class="website-preview">
-          <a href="https://github.com/Aliucord/LumiBot" class="link" target="_blank">
-            <div class="preview-box lumibot">
-              <img src="/images/lumibot-preview.jpg" alt="lumibot" class="preview-img" />
-            </div>
-            <span>lumibot</span>
-          </a>
-        </div>
+        <p>Check out <a href="/projects" class="link">my other stuff</a> on the projects page!</p>
       </div>
     </div>
   </div>
@@ -170,14 +160,37 @@
 <style>
   .container {
     margin: 2rem auto;
-    max-width: 1300px;
+    max-width: 2000px;
     width: calc(100% - 4rem);
     padding: 2rem;
-    height: calc(100vh - 4rem);
+    height: auto;
+    min-height: calc(100vh - 4rem);
     background-color: var(--container-bg);
     border-radius: 16px;
     display: flex;
     flex-direction: column;
+  }
+  .header-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background-color: var(--pill-bg);
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+  }
+  .nav-link:hover {
+    background-color: var(--pill-bg-hover);
+  }
+  .nav-link.active {
+    background-color: var(--pill-bg-hover);
+    font-weight: bold;
+    border: 1px solid var(--container-border);
   }
   .subtext {
     font-size: 0.75rem;
