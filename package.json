@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "rest-express",
   "version": "1.0.0",
   "type": "module",
@@ -107,5 +108,19 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
+=======
+  "name": "workspace",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@sveltejs/adapter-vercel": "^1.0.0-next.88"
+>>>>>>> a266e37 (Adapt site for Vercel deployment and organize assets)
   }
 }
