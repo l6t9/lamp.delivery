@@ -184,12 +184,13 @@
   .profile-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    justify-content: center;
   }
   .profile-header .avatar {
-    width: 4rem;
-    height: 4rem;
+    width: 7rem;
+    height: 7rem;
     border-radius: 50%;
   }
   .pill {
