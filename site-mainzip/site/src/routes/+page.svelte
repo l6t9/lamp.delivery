@@ -255,10 +255,11 @@
   }
   @media (max-width: 800px) {
     .container {
-      margin: 1rem;
+      margin: 1rem auto;
       padding: 1rem;
       height: auto;
       min-height: 100vh;
+      max-width: calc(100% - 2rem);
     }
     .grid {
       grid-template-columns: 1fr;
