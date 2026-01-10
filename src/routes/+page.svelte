@@ -48,7 +48,7 @@
     </div>
   </div>
   <div class="pill">
-    developer, eager learner and <i>silly</i> cat, specifically in that order
+    developer and <i>silly</i> person
     <p class="subtext">
       <a href="https://github.com/LampDelivery" class="link" target="_blank"
         >github: LampDelivery</a
