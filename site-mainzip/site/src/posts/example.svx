@@ -1,5 +1,5 @@
 ---
-title: a blog
+title: test
 description: hi
 date: "10/01/2026"
 categories:
