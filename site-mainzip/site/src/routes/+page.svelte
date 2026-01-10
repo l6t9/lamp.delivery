@@ -66,7 +66,7 @@
   </div>
   <div class="grid">
     <div class="pill">
-      <h2>technologies</h2>
+      <h2>languages</h2>
       <div class="pill">
         <h3>stuff I type</h3>
         <KotlinLogo style="font-size: 1.5rem; margin-top: 0.5rem" />
