@@ -137,9 +137,7 @@
     <div class="pill">
       <h2>people i know</h2>
       <div class="avatars">
-        <a href="https://ushie.dev" target="_blank">
-          <img src="https://github.com/Ushie.png" alt="Ushie" />
-        </a>
+        <!-- No people listed -->
       </div>
     </div>
   </div>
