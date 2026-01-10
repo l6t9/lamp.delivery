@@ -148,6 +148,9 @@
       <div class="pill">
         <a href="https://raincord.dev" class="link" target="_blank">raincord.dev</a>
       </div>
+      <div class="pill">
+        <a href="https://github.com/Aliucord/LumiBot" class="link" target="_blank">lumibot</a>
+      </div>
     </div>
   </div>
 </div>
