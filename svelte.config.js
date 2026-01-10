@@ -34,11 +34,11 @@ const config = {
         preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
         kit: {
                 adapter: adapter(),
-                vite: {
-                        plugins: [
-                                Icons({ compiler: 'svelte' })
-                        ]
-                }
+        },
+        vite: {
+                plugins: [
+                        Icons({ compiler: 'svelte' })
+                ]
         },
         extensions: ['.svelte', '.svx'],
 };
