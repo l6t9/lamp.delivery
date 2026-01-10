@@ -1,6 +1,6 @@
 ---
-title: hello world!
-description: welcome to my little corner of the internet
+title: a blog
+description: hi
 date: "10/01/2026"
 categories:
   - personal
