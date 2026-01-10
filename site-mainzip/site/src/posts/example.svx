@@ -1,23 +1,30 @@
 ---
-title: example post
-description: this post is really cool
-date: "16/8/2025"
+title: hello world!
+description: welcome to my little corner of the internet
+date: "10/01/2026"
 categories:
-  - cats
-  - cute
+  - personal
+  - intro
 published: true
 ---
 
-## very interesting title
+## hiya!
 
-wow this is **cool**
+i'm lamp, and this is my personal site. i'm a developer and a silly cat who loves learning new things.
 
-like _really_ cool
+this site is built with **Svelte 5** and **SvelteKit**, styled with the lovely **Catppuccin** palette. i wanted a place to share my projects, thoughts, and whatever music i'm vibing to at the moment.
+
+### some stuff i like:
+- **coding**: mostly svelte, typescript, and python
+- **music**: check out the now playing section on the home page!
+- **cats**: obviously.
 
 ```ts
-function howCool(articleName: string) {
-  return "very cool!";
+function greet() {
+  console.log("hiya, i'm lamp! welcome to my site.");
 }
+
+greet();
 ```
 
-![a bunch of cats](/articleAssets/example/image.webp)
+thanks for stopping by! i'll be posting more here as i build out new projects and have interesting (or just silly) things to share.
