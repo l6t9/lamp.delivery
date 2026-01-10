@@ -157,7 +157,7 @@
         <div class="website-preview">
           <a href="https://github.com/Aliucord/LumiBot" class="link" target="_blank">
             <div class="preview-box lumibot">
-              <img src="https://opengraph.githubassets.com/1/Aliucord/LumiBot" alt="lumibot" class="preview-img" />
+              <img src="/images/lumibot-preview.jpg" alt="lumibot" class="preview-img" />
             </div>
             <span>lumibot</span>
           </a>
