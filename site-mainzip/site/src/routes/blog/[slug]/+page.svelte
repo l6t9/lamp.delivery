@@ -11,7 +11,7 @@
 </svelte:head>
 
 <div class="header">
-  <h2><a href="/">sunnie</a></h2>
+  <h2><a href="/">lamp</a></h2>
 </div>
 
 <article>
