@@ -69,19 +69,15 @@
   .nav-link {
     color: var(--text-color);
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    background-color: var(--pill-bg);
     font-size: 0.9rem;
-    transition: background-color 0.2s;
+    transition: color 0.2s;
   }
   .nav-link:hover {
-    background-color: var(--pill-bg-hover);
+    text-decoration: underline;
   }
   .nav-link.active {
-    background-color: var(--pill-bg-hover);
     font-weight: bold;
-    border: 1px solid var(--container-border);
+    text-decoration: underline;
   }
   .subtext {
     font-size: 0.75rem;
