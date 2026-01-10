@@ -188,11 +188,11 @@
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
   }
-  .profile-header .avatar {
-    width: 5.5rem;
-    height: 5.5rem;
-    border-radius: 50%;
-    border: 2px solid var(--pill-bg-hover, #fff3);
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
   }
   .pill {
     margin: 0.5rem;
