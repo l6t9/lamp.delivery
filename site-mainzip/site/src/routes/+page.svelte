@@ -45,22 +45,22 @@
   <div class="pill">
     developer, eager learner and silly cat, specifically in that order
     <p class="subtext">
-      <a href="https://github.com/sunnniee/" class="link" target="_blank"
-        >github: sunnniee</a
+      <a href="https://github.com/LampDelivery" class="link" target="_blank"
+        >github: LampDelivery</a
       >
       {" "}|{" "}
-      <a href="https://codeberg.org/sunnie" class="link" target="_blank"
-        >codeberg: sunnie</a
+      <a href="https://codeberg.org/LampDelivery" class="link" target="_blank"
+        >codeberg: LampDelivery</a
       >
       {" "}|{" "}
       <a
         href="https://discord.com/users/406028027768733696"
         class="link"
-        target="_blank">discord: @s.unnie</a
+        target="_blank">discord: @lampdelivery</a
       >
       {" "}|{" "}
-      <a href="https://vozer.cafe/@sunnie" class="link" target="_blank"
-        >mastodon: @sunnie@vozer.cafe</a
+      <a href="https://youtube.com/@LampDelivery" class="link" target="_blank"
+        >youtube: LampDelivery</a
       >
     </p>
   </div>
