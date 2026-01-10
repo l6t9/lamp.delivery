@@ -8,4 +8,4 @@ categories:
 published: true
 ---
 
-hi
+hi [silly](https://ushie.dev)
