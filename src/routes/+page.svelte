@@ -184,14 +184,18 @@
   .profile-header {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    justify-content: center;
+    gap: 2.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--pill-bg-hover, #28223a);
+    padding-bottom: 1.5rem;
   }
   .profile-header .avatar {
-    width: 7rem;
-    height: 7rem;
+    width: 5.5rem;
+    height: 5.5rem;
     border-radius: 50%;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+    border: 2px solid var(--pill-bg-hover, #fff3);
+    background: var(--container-bg, #18141f);
   }
   .pill {
     margin: 0.5rem;
