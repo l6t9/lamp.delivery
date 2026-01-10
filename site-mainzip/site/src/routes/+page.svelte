@@ -42,7 +42,7 @@
     <div class="profile-header">
       <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
       <div>
-        <h1>hiya, i'm lamp!</h1>
+        <h1>heya, i'm lamp!</h1>
         <p class="subtext">any/all // utc-5 (currently {hour} for me) // <a href="/other-stuff" class="link">my other stuff</a></p>
       </div>
     </div>
@@ -81,7 +81,7 @@
       </div>
       <div class="pill">
         <h3>stuff i speak</h3>
-        <p>english, french</p>
+        <p>english & french</p>
       </div>
     </div>
     <div class="pill">
