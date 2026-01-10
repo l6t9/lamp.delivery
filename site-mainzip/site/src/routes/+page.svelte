@@ -41,6 +41,7 @@
   <div class="header-nav">
     <a href="/" class="nav-link active">home</a>
     <a href="/projects" class="nav-link">projects</a>
+    <a href="/other-stuff" class="nav-link">my other stuff</a>
   </div>
 
   <div class="title">
@@ -146,12 +147,6 @@
         <a href="https://ushie.dev" target="_blank">
           <img src="https://github.com/Ushie.png" alt="Ushie" />
         </a>
-      </div>
-    </div>
-    <div class="pill">
-      <h2>my other stuff</h2>
-      <div class="previews-container">
-        <p>Check out <a href="/projects" class="link">my other stuff</a> on the projects page!</p>
       </div>
     </div>
   </div>
