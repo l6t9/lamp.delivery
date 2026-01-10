@@ -90,7 +90,7 @@
         <a
           class="link"
           target="_blank"
-          href="https://www.last.fm/user/{data.username || 'lamp'}"
+          href="https://www.last.fm/user/Lmpamapa"
           >i'm currently listening to</a
         >
       </h2>
