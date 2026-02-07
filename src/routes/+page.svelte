@@ -60,7 +60,7 @@
       <a href="https://codeberg.org/LampDelivery" class="social-button" target="_blank">
         <CodebergLogo /> codeberg
       </a>
-      <a href="https://discord.com/users/406028027768733696" class="social-button" target="_blank">
+      <a href="https://discord.com/users/650805815623680030" class="social-button" target="_blank">
         <DiscordLogo /> discord
       </a>
       <a href="https://youtube.com/@LampDelivery" class="social-button" target="_blank">
