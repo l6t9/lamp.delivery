@@ -34,6 +34,9 @@ const config = {
         preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
         kit: {
                 adapter: adapter(),
+                files: {
+                        assets: 'public'
+                }
         },
         vite: {
                 plugins: [
