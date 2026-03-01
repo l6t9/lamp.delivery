@@ -1,3 +1,7 @@
+
+permissions:
+  contents: write
+
 name: Update rain.js from Codeberg
 
 on:
@@ -47,12 +51,12 @@ jobs:
 
       - name: Commit and push changes
         env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "LampDelivery"
           git config user.email "lampdelivery@protonmail.com"
           git add public/rain.js
           git commit -m "Update rain.js from Codeberg" || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/LampDelivery/lamp.delivery.git
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/LampDelivery/lamp.delivery.git
           git remote get-url origin
           git push origin HEAD:main
