@@ -18,6 +18,13 @@ jobs:
         run: |
           git clone https://raincord:${CODEBERG_TOKEN}@codeberg.org/raincord/rain-private.git codeberg-src
 
+      - name: Install dependencies and build rain.js
+        run: |
+          cd codeberg-src
+          bun install || npm install
+          bun run build || npm run build
+          cd ..
+
       - name: Copy rain.js to public/
         run: |
           cp codeberg-src/dist/rain.js public/rain.js
