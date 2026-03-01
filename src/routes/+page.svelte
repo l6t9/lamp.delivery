@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import notplaying from "$lib/assets/notplaying.png";
-  import placeholder from "$lib/assets/placeholder.png";
+
+  // import notplaying from "$lib/assets/notplaying.png";
+  // import placeholder from "$lib/assets/placeholder.png";
   import type { TrackInfo } from "$lib";
 
   import HTMLLogo from "virtual:icons/catppuccin/html";
@@ -178,6 +179,28 @@
     display: flex;
     flex-direction: column;
   }
+  .header-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+  .nav-link.active {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  .subtext {
+    font-size: 0.75rem;
+    color: var(--subtext-color);
+  }
   .profile-header {
     display: flex;
     align-items: center;
@@ -199,6 +222,10 @@
     border-radius: 16px;
     scrollbar-color: var(--container-border) var(--pill-bg);
   }
+  .grid .pill {
+    min-height: 0;
+    overflow: auto;
+  }
   .pill .pill {
     background-color: var(--pill-bg-hover);
   }
@@ -219,10 +246,6 @@
   }
   .pill .listening p {
     margin-top: 0;
-  }
-  .subtext {
-    font-size: 0.75rem;
-    color: var(--subtext-color);
   }
   .subtext .link,
   .subtext .link:visited {
@@ -256,20 +279,112 @@
   .link:visited {
     color: var(--text-color);
     text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
-  .link:hover {
-    text-decoration: underline;
-  }
-  .avatars img {
+  .pill .avatars img {
     border-radius: 16px;
     padding: 0.5rem;
-    width: 3rem;
-    height: 3rem;
-    object-fit: cover;
+    height: 4rem;
+    aspect-ratio: 1 / 1;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 0 1rem;
+    grid-template-areas:
+      "one two"
+      "one three"
+      "four three"
+      "five five";
+    flex-grow: 1;
+    min-height: 0;
+  }
+  @media (max-width: 800px) {
+    .container {
+      margin: 1rem auto;
+      padding: 1rem;
+      height: auto;
+      min-height: 100vh;
+      max-width: calc(100% - 2rem);
+    }
+    .grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "one"
+        "three"
+        "two"
+        "four"
+        "five";
+    }
+    .pill {
+      max-height: none;
+    }
+  }
+  .pill:nth-child(1) {
+    grid-area: one;
+  }
+  .pill:nth-child(2) {
+    grid-area: two;
+  }
+  .pill:nth-child(3) {
+    grid-area: three;
+  }
+  .pill:nth-child(4) {
+    grid-area: four;
+  }
+  .pill:nth-child(5) {
+    grid-area: five;
   }
   .article,
   .article:visited {
     color: var(--text-color);
     text-decoration: none;
+  }
+  .previews-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+  @media (max-width: 600px) {
+    .previews-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  .website-preview {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--pill-bg);
+    padding: 1rem;
+    border-radius: 16px;
+  }
+  .preview-box {
+    background-color: var(--pill-bg-hover);
+    border-radius: 8px;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+  }
+  .preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .website-preview .link {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color);
+  }
+  .website-preview .link:hover span {
+    text-decoration: underline;
   }
 </style>
