@@ -6,11 +6,6 @@ on:
     branches: [main]
 
 jobs:
-        - name: Echo remote URL
-          run: |
-            git remote get-url origin
-          env:
-            GH_PAT: ${{ secrets.GH_PAT }}
   update-rain-bundle:
     runs-on: ubuntu-latest
     steps:
