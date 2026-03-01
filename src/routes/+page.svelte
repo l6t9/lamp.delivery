@@ -44,26 +44,49 @@
 <div class="container">
   <div class="title">
     <div class="profile-header">
-      <img src="https://github.com/LampDelivery.png" alt="LampDelivery" class="avatar" />
+      <img
+        src="https://github.com/LampDelivery.png"
+        alt="LampDelivery"
+        class="avatar"
+      />
       <div>
         <h1>heya, i'm lamp!</h1>
-        <p class="subtext">any/all // utc-5 (currently {hour} for me) // <a href="/other-stuff" class="link">my other stuff</a></p>
+        <p class="subtext">
+          any/all // utc-5 (currently {hour} for me) //
+          <a href="/other-stuff" class="link">my other stuff</a>
+        </p>
       </div>
     </div>
   </div>
   <div class="pill">
     i might be too <i>silly</i>
     <div class="social-links">
-      <a href="https://github.com/LampDelivery" class="social-button" target="_blank">
+      <a
+        href="https://github.com/LampDelivery"
+        class="social-button"
+        target="_blank"
+      >
         <GithubLogo /> github
       </a>
-      <a href="https://codeberg.org/LampDelivery" class="social-button" target="_blank">
+      <a
+        href="https://codeberg.org/LampDelivery"
+        class="social-button"
+        target="_blank"
+      >
         <CodebergLogo /> codeberg
       </a>
-      <a href="https://discord.com/users/650805815623680030" class="social-button" target="_blank">
+      <a
+        href="https://discord.com/users/650805815623680030"
+        class="social-button"
+        target="_blank"
+      >
         <DiscordLogo /> discord
       </a>
-      <a href="https://youtube.com/@LampDelivery" class="social-button" target="_blank">
+      <a
+        href="https://youtube.com/@LampDelivery"
+        class="social-button"
+        target="_blank"
+      >
         <YoutubeLogo /> youtube
       </a>
     </div>
@@ -85,10 +108,7 @@
     </div>
     <div class="pill">
       <h2>
-        <a
-          class="link"
-          target="_blank"
-          href="https://www.last.fm/user/Lmpamapa"
+        <a class="link" target="_blank" href="https://www.last.fm/user/Lmpamapa"
           >i'm currently listening to</a
         >
       </h2>
@@ -246,7 +266,9 @@
     text-decoration: none;
     color: var(--text-color);
     font-size: 0.85rem;
-    transition: background-color 0.2s, transform 0.2s;
+    transition:
+      background-color 0.2s,
+      transform 0.2s;
   }
   .social-button:hover {
     background-color: var(--container-border);
