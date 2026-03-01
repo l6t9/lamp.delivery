@@ -18,11 +18,17 @@ jobs:
         run: |
           git clone https://raincord:${CODEBERG_TOKEN}@codeberg.org/raincord/rain-private.git codeberg-src
 
+
+      - name: Install bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+
       - name: Install dependencies and build rain.js
         run: |
           cd codeberg-src
-          bun install || npm install
-          bun run build || npm run build
+          bun install
+          bun run build
           cd ..
 
       - name: Copy rain.js to public/
