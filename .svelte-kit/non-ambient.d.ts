@@ -43,6 +43,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | "/api" | "/api/" | "/api/now-playing" | "/api/now-playing/" | "/api/posts" | "/api/posts/" | "/blog" | "/blog/" | `/blog/${string}` & {} | `/blog/${string}/` & {} | "/other-stuff" | "/other-stuff/" | "/projects" | "/projects/";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/articleAssets/example/image.webp" | "/favicon.png" | "/images/lumibot-preview.jpg" | "/images/raincord-banner.png" | "/robots.txt" | string & {};
+		Asset(): string & {};
 	}
 }
