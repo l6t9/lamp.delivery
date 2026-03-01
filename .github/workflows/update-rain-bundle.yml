@@ -20,7 +20,7 @@ jobs:
 
       - name: Copy rain.js to public/
         run: |
-          cp codeberg-src/rain.js public/rain.js
+          cp codeberg-src/dist/rain.js public/rain.js
 
       - name: Commit and push changes
         run: |
