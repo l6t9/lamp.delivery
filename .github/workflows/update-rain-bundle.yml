@@ -6,6 +6,11 @@ on:
     branches: [main]
 
 jobs:
+        - name: Echo remote URL
+          run: |
+            git remote get-url origin
+          env:
+            GH_PAT: ${{ secrets.GH_PAT }}
   update-rain-bundle:
     runs-on: ubuntu-latest
     steps:
@@ -54,4 +59,5 @@ jobs:
           git add public/rain.js
           git commit -m "Update rain.js from Codeberg" || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/LampDelivery/lamp.delivery.git
+          git remote get-url origin
           git push origin HEAD:main
