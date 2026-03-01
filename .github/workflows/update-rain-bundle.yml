@@ -49,8 +49,8 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "LampDelivery"
+          git config user.email "lampdelivery@protonmail.com"
           git add public/rain.js
           git commit -m "Update rain.js from Codeberg" || echo "No changes to commit"
           git push https://x-access-token:${GH_PAT}@github.com/LampDelivery/lamp.delivery.git HEAD:main
