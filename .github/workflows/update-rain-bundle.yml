@@ -5,6 +5,8 @@ permissions:
 name: Update rain.js from Codeberg
 
 on:
+  schedule:
+    - cron: '*/30 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
