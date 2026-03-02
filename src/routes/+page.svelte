@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import notplaying from "$lib/assets/notplaying.png";
-  import placeholder from "$lib/assets/placeholder.png";
+
+  // import notplaying from "$lib/assets/notplaying.png";
+  // import placeholder from "$lib/assets/placeholder.png";
   import type { TrackInfo } from "$lib";
 
   import HTMLLogo from "virtual:icons/catppuccin/html";
