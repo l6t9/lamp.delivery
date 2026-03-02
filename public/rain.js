@@ -2349,21 +2349,21 @@
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       createStoreImpl = (createState) => {
-        var state2;
-        var listeners2 = /* @__PURE__ */ new Set();
+        var state;
+        var listeners = /* @__PURE__ */ new Set();
         var setState = (partial, replace) => {
-          var nextState = typeof partial === "function" ? partial(state2) : partial;
-          if (!Object.is(nextState, state2)) {
-            var previousState = state2;
-            state2 = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state2, nextState);
-            listeners2.forEach((listener) => listener(state2, previousState));
+          var nextState = typeof partial === "function" ? partial(state) : partial;
+          if (!Object.is(nextState, state)) {
+            var previousState = state;
+            state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
+            listeners.forEach((listener) => listener(state, previousState));
           }
         };
-        var getState = () => state2;
+        var getState = () => state;
         var getInitialState = () => initialState;
         var subscribe = (listener) => {
-          listeners2.add(listener);
-          return () => listeners2.delete(listener);
+          listeners.add(listener);
+          return () => listeners.delete(listener);
         };
         var api = {
           setState,
@@ -2371,7 +2371,7 @@
           getInitialState,
           subscribe
         };
-        var initialState = state2 = createState(setState, getState, api);
+        var initialState = state = createState(setState, getState, api);
         return api;
       };
       createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
@@ -2467,8 +2467,8 @@
           if (optListener) {
             var equalityFn = (options == null ? void 0 : options.equalityFn) || Object.is;
             var currentSlice = selector(api.getState());
-            listener = (state2) => {
-              var nextSlice = selector(state2);
+            listener = (state) => {
+              var nextSlice = selector(state);
               if (!equalityFn(currentSlice, nextSlice)) {
                 var previousSlice = currentSlice;
                 optListener(currentSlice = nextSlice, previousSlice);
@@ -2512,7 +2512,7 @@
       persistImpl = (config, baseOptions) => (set, get, api) => {
         var options = {
           storage: createJSONStorage(() => globalThis.localStorage),
-          partialize: (state2) => state2,
+          partialize: (state) => state,
           version: 0,
           merge: (persistedState, currentState) => ({
             ...currentState,
@@ -2532,17 +2532,17 @@
           }, get, api);
         }
         var setItem = () => {
-          var state2 = options.partialize({
+          var state = options.partialize({
             ...get()
           });
           return storage3.setItem(options.name, {
-            state: state2,
+            state,
             version: options.version
           });
         };
         var savedSetState = api.setState;
-        api.setState = (state2, replace) => {
-          savedSetState(state2, replace);
+        api.setState = (state, replace) => {
+          savedSetState(state, replace);
           return setItem();
         };
         var configResult = config((...args) => {
@@ -2661,8 +2661,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = usePluginSettings2.subscribe((state2) => {
-          if (state2._hasHydrated) {
+        var unsubscribe2 = usePluginSettings2.subscribe((state) => {
+          if (state._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -2774,12 +2774,12 @@
           }
         },
         pinnedPlugins: [],
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        togglePinnedPlugin: (id) => set((state2) => {
-          var pinned = state2.pinnedPlugins || [];
+        togglePinnedPlugin: (id) => set((state) => {
+          var pinned = state.pinnedPlugins || [];
           if (pinned.includes(id)) {
             return {
               pinnedPlugins: pinned.filter((p) => p !== id)
@@ -2803,8 +2803,8 @@
           url: "http://localhost:4040/rain.js"
         },
         loadReactDevTools: false,
-        updateLoaderConfig: (newConfig) => set((state2) => ({
-          ...state2,
+        updateLoaderConfig: (newConfig) => set((state) => ({
+          ...state,
           ...newConfig
         }))
       }), {
@@ -2813,8 +2813,8 @@
       }));
       settings = () => useSettings.getState();
       useAssetBrowserSettings = () => {
-        var settings4 = useSettings((state2) => state2.assetBrowser);
-        var updateSettings = useSettings((state2) => state2.updateSettings);
+        var settings4 = useSettings((state) => state.assetBrowser);
+        var updateSettings = useSettings((state) => state.updateSettings);
         return {
           enabledFilters: settings4.enabledFilters,
           updateSettings: (newSettings) => {
@@ -3000,11 +3000,11 @@
         return ret;
       }
     };
-    var patches28 = [
+    var patches27 = [
       after("jsx", jsxRuntime, callback),
       after("jsxs", jsxRuntime, callback)
     ];
-    return () => patches28.forEach((unpatch6) => unpatch6());
+    return () => patches27.forEach((unpatch6) => unpatch6());
   }
   var callbacks, jsxRuntime;
   var init_jsx = __esm({
@@ -3637,18 +3637,18 @@
         customHost: "",
         customClientId: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "cloud-sync-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       cloudSyncSettings = new Proxy({}, {
@@ -3736,19 +3736,19 @@
           }
         },
         isAuthorized: () => !!get().token,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "cloud-sync-auth",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync-auth.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
-          state2?.init();
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
+          state?.init();
         }
       }));
     }
@@ -3797,19 +3797,19 @@
           }
         },
         hasData: () => !!get().data && !!get().at,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "cloud-sync-cache",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync-cache.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
-          state2?.init();
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
+          state?.init();
         }
       }));
     }
@@ -4266,17 +4266,17 @@
         fonts: {},
         _hasHydrated: false,
         setFont: (name, font) => {
-          set((state2) => ({
+          set((state) => ({
             fonts: {
-              ...state2.fonts,
+              ...state.fonts,
               [name]: font
             }
           }));
         },
         removeFont: (name) => {
-          set((state2) => {
+          set((state) => {
             var newFonts = {
-              ...state2.fonts
+              ...state.fonts
             };
             delete newFonts[name];
             return {
@@ -4285,9 +4285,9 @@
           });
         },
         setSelected: (name) => {
-          set((state2) => {
+          set((state) => {
             var newFonts = {
-              ...state2.fonts
+              ...state.fonts
             };
             if (name) {
               newFonts.__selected = name;
@@ -4299,16 +4299,16 @@
             };
           });
         },
-        setHasHydrated: (state2) => {
+        setHasHydrated: (state) => {
           set({
-            _hasHydrated: state2
+            _hasHydrated: state
           });
         }
       }), {
         name: "rain-fonts",
         storage: createJSONStorage(() => createFileStorage("RAIN_FONTS")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       fonts = new Proxy({}, {
@@ -4354,8 +4354,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = useColorsPref.subscribe((state2) => {
-          if (state2._hasHydrated) {
+        var unsubscribe2 = useColorsPref.subscribe((state) => {
+          if (state._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -4390,14 +4390,14 @@
         setSelected: (selected) => set({
           selected
         }),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "colors-pref",
         storage: createJSONStorage(() => createFileStorage("themes/colors/preferences.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       colorsPref = new Proxy({}, {
@@ -4405,10 +4405,10 @@
           return useColorsPref.getState()[prop];
         },
         set(target, prop, value) {
-          var state2 = useColorsPref.getState();
-          if (prop === "type") state2.setType(value);
-          else if (prop === "customBackground") state2.setCustomBackground(value);
-          else if (prop === "selected") state2.setSelected(value);
+          var state = useColorsPref.getState();
+          if (prop === "type") state.setType(value);
+          else if (prop === "customBackground") state.setCustomBackground(value);
+          else if (prop === "selected") state.setSelected(value);
           return true;
         }
       });
@@ -4703,7 +4703,7 @@
 
   // src/plugins/_core/painter/themes/patches/background.tsx
   function ThemeBackground({ children }) {
-    var customBackground = useColorsPref((state2) => state2.customBackground);
+    var customBackground = useColorsPref((state) => state.customBackground);
     if (!_colorRef.current || customBackground === "hidden" || !_colorRef.current.background?.url || _colorRef.current.background?.blur && typeof _colorRef.current.background?.blur !== "number") {
       return children;
     }
@@ -4721,7 +4721,7 @@
   }
   function patchChatBackground() {
     try {
-      var patches28 = [
+      var patches27 = [
         after("render", Messages, (_2, ret) => {
           if (!_colorRef.current || !_colorRef.current.background?.url) return;
           var messagesComponent = findInReactTree(ret, (x2) => x2 && "HACK_fixModalInteraction" in x2.props && x2?.props?.style);
@@ -4740,7 +4740,7 @@
           });
         })
       ];
-      return () => patches28.forEach((x2) => x2());
+      return () => patches27.forEach((x2) => x2());
     } catch (e) {
       logger.error("Failed to patch chat background.", e);
       return () => {
@@ -4874,11 +4874,11 @@
       "ThemeStore",
       "SelectivelySyncedUserSettingsStore"
     ]);
-    var patches28 = [
+    var patches27 = [
       after("get", mmkvStorage, ([key], ret) => {
         if (!_colorRef.current || !patchedKeys.has(key)) return;
-        var state2 = findInTree(ret._state, (s) => typeof s.theme === "string");
-        if (state2) state2.theme = _colorRef.key;
+        var state = findInTree(ret._state, (s) => typeof s.theme === "string");
+        if (state) state.theme = _colorRef.key;
       }),
       before("set", mmkvStorage, ([key, value]) => {
         if (!patchedKeys.has(key)) return;
@@ -4891,7 +4891,7 @@
         ];
       })
     ];
-    return () => patches28.forEach((p) => p());
+    return () => patches27.forEach((p) => p());
   }
   var mmkvStorage;
   var init_storage3 = __esm({
@@ -4917,12 +4917,12 @@
     if (manifest) updateColor(manifest, {
       update: false
     });
-    var patches28 = [
+    var patches27 = [
       patchStorage(),
       patchDefinitionAndResolver(),
       patchChatBackground()
     ];
-    return () => patches28.forEach((p) => p());
+    return () => patches27.forEach((p) => p());
   }
   var init_colors = __esm({
     "src/plugins/_core/painter/themes/colors.ts"() {
@@ -5034,8 +5034,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = useThemes.subscribe((state2) => {
-          if (state2._hasHydrated) {
+        var unsubscribe2 = useThemes.subscribe((state) => {
+          if (state._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -5096,9 +5096,9 @@
         themes: {},
         _hasHydrated: false,
         setTheme: (id, theme) => {
-          set((state2) => ({
+          set((state) => ({
             themes: {
-              ...state2.themes,
+              ...state.themes,
               [id]: theme
             }
           }));
@@ -5106,9 +5106,9 @@
         removeTheme: (id) => _async_to_generator(function* () {
           var theme = get().themes[id];
           if (theme?.selected) yield get().selectTheme(null);
-          set((state2) => {
+          set((state) => {
             var newThemes = {
-              ...state2.themes
+              ...state.themes
             };
             delete newThemes[id];
             return {
@@ -5120,9 +5120,9 @@
         selectTheme: (id, write = true) => _async_to_generator(function* () {
           var { themes: themes2 } = get();
           var theme = id ? themes2[id] : null;
-          set((state2) => {
+          set((state) => {
             var newThemes = {
-              ...state2.themes
+              ...state.themes
             };
             Object.keys(newThemes).forEach((k) => {
               newThemes[k] = {
@@ -5179,14 +5179,14 @@
           var { themes: themes2 } = get();
           yield allSettled(Object.keys(themes2).map((id) => get().fetchTheme(id, currentTheme2?.id === id)));
         })(),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "vendetta-themes",
         storage: createJSONStorage(() => createFileStorage("VENDETTA_THEMES")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       themes = new Proxy({}, {
@@ -6288,7 +6288,7 @@
         }
       },
       usePluginState() {
-        usePluginSettings((state2) => state2.settings);
+        usePluginSettings((state) => state.settings);
       },
       resolveSheetComponent() {
         return Promise.resolve({
@@ -6563,18 +6563,18 @@
       useMonetSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "monettheme-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/monettheme.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
     }
@@ -6631,7 +6631,7 @@
       refetch = () => _async_to_generator(function* () {
         var settings4 = useMonetSettings.getState();
         var url2 = settings4.patches.from === "local" ? devPatchesURL : getPatchesURL();
-        var patches28 = yield safeFetch(url2, {
+        var patches27 = yield safeFetch(url2, {
           cache: "no-store"
         }).then((x2) => x2.text().then((text) => {
           try {
@@ -6646,20 +6646,20 @@
           console.error("usePatches refetch error (fetch)", err);
           return null;
         });
-        data.patches = patches28;
+        data.patches = patches27;
         data.canRefetch = Date.now() + refetchTimeout;
-        for (var fnc of uponRevalidate) fnc(patches28);
+        for (var fnc of uponRevalidate) fnc(patches27);
       })();
       usePatches = () => {
-        var [patches28, setPatches] = React2.useState(data.patches);
+        var [patches27, setPatches] = React2.useState(data.patches);
         var revalFunc = (data4) => setPatches(data4);
         React2.useEffect(() => {
           uponRevalidate.add(revalFunc);
           return () => void uponRevalidate.delete(revalFunc);
         });
-        React2.useEffect(() => void ((!patches28 || data.canRefetch >= Date.now()) && refetch()), []);
+        React2.useEffect(() => void ((!patches27 || data.canRefetch >= Date.now()) && refetch()), []);
         return {
-          patches: patches28,
+          patches: patches27,
           revalidate: () => _async_to_generator(function* () {
             if (canRevalidate < Date.now()) return;
             canRevalidate = Number.NaN;
@@ -7695,7 +7695,7 @@
     }
     return "dark";
   }
-  function build(patches28) {
+  function build(patches27) {
     var raw = {};
     var semantic = {};
     var settings4 = useMonetSettings.getState();
@@ -7728,7 +7728,7 @@
       }
       return shouldPut;
     };
-    if (patches28.version === 3) {
+    if (patches27.version === 3) {
       var _loop2 = function(x3, y3) {
         var clr4 = parseColor(y3.color);
         if (!clr4) return "continue";
@@ -7739,9 +7739,9 @@
           raw[c2] = getLABShade(clr4, y3.base ? useShade + (500 - y3.base) : useShade, y3.ratio);
         }
       };
-      for (var [x2, y2] of entries(get(patches28.replacers))) _loop2(x2, y2);
+      for (var [x2, y2] of entries(get(patches27.replacers))) _loop2(x2, y2);
     }
-    var rawPatches = get(patches28.raw);
+    var rawPatches = get(patches27.raw);
     for (var key of Object.keys(rawPatches)) {
       var clr = parseColor(rawPatches[key]);
       if (clr) raw[key] = clr;
@@ -7750,21 +7750,21 @@
       raw["PLUM_23"] = raw["PRIMARY_700"];
       raw["PLUM_24"] = raw["PRIMARY_700"];
     }
-    for (var key1 of Object.keys(patches28.semantic.both)) {
+    for (var key1 of Object.keys(patches27.semantic.both)) {
       var clr1 = parseColor(rawPatches[key1]);
       if (clr1) semantic[key1] = [
         clr1,
         clr1
       ];
     }
-    for (var key2 of Object.keys(patches28.semantic.dark)) {
+    for (var key2 of Object.keys(patches27.semantic.dark)) {
       var clr2 = parseColor(rawPatches[key2]);
       if (semantic[key2] && clr2) semantic[key2][0] = clr2;
       else if (clr2) semantic[key2] = [
         clr2
       ];
     }
-    for (var key3 of Object.keys(patches28.semantic.light)) {
+    for (var key3 of Object.keys(patches27.semantic.light)) {
       var clr3 = parseColor(rawPatches[key3]);
       if (semantic[key3] && clr3) semantic[key3][1] = clr3;
       else if (clr3) semantic[key3] = [
@@ -7775,77 +7775,77 @@
     var semanticDefaults = {
       dark: {
         // Classic backgrounds
-        "BACKGROUND_PRIMARY": raw.PRIMARY_600,
-        "BACKGROUND_SECONDARY": raw.PRIMARY_630,
-        "BACKGROUND_SECONDARY_ALT": raw.PRIMARY_700,
-        "BACKGROUND_TERTIARY": raw.PRIMARY_630,
-        "BACKGROUND_FLOATING": raw.PRIMARY_600,
-        "BACKGROUND_NESTED_FLOATING": raw.PRIMARY_600,
-        "BACKGROUND_MOBILE_PRIMARY": raw.PRIMARY_600,
-        "BACKGROUND_MOBILE_SECONDARY": raw.PRIMARY_630,
-        "BACKGROUND_MODIFIER_ACCENT": raw.PRIMARY_660,
-        "BACKGROUND_MODIFIER_ACTIVE": raw.PRIMARY_630,
-        "BACKGROUND_MODIFIER_HOVER": raw.PRIMARY_630,
-        "BACKGROUND_MODIFIER_SELECTED": raw.PRIMARY_630,
+        "BACKGROUND_PRIMARY": raw["PRIMARY_600"],
+        "BACKGROUND_SECONDARY": raw["PRIMARY_630"],
+        "BACKGROUND_SECONDARY_ALT": raw["PRIMARY_700"],
+        "BACKGROUND_TERTIARY": raw["PRIMARY_630"],
+        "BACKGROUND_FLOATING": raw["PRIMARY_600"],
+        "BACKGROUND_NESTED_FLOATING": raw["PRIMARY_600"],
+        "BACKGROUND_MOBILE_PRIMARY": raw["PRIMARY_600"],
+        "BACKGROUND_MOBILE_SECONDARY": raw["PRIMARY_630"],
+        "BACKGROUND_MODIFIER_ACCENT": raw["PRIMARY_660"],
+        "BACKGROUND_MODIFIER_ACTIVE": raw["PRIMARY_630"],
+        "BACKGROUND_MODIFIER_HOVER": raw["PRIMARY_630"],
+        "BACKGROUND_MODIFIER_SELECTED": raw["PRIMARY_630"],
         // New base backgrounds
-        "BG_BASE_PRIMARY": raw.PRIMARY_600,
-        "BG_BASE_SECONDARY": raw.PRIMARY_700,
-        "BG_BASE_TERTIARY": raw.PRIMARY_660,
-        "BG_SURFACE_RAISED": raw.PRIMARY_630,
+        "BG_BASE_PRIMARY": raw["PRIMARY_600"],
+        "BG_BASE_SECONDARY": raw["PRIMARY_700"],
+        "BG_BASE_TERTIARY": raw["PRIMARY_660"],
+        "BG_SURFACE_RAISED": raw["PRIMARY_630"],
         // Modifiers
-        "BG_MOD_FAINT": raw.PRIMARY_460,
-        "BG_MOD_STRONG": raw.PRIMARY_530,
-        "BG_MOD_SUBTLE": raw.PRIMARY_630,
+        "BG_MOD_FAINT": raw["PRIMARY_460"],
+        "BG_MOD_STRONG": raw["PRIMARY_530"],
+        "BG_MOD_SUBTLE": raw["PRIMARY_630"],
         // Input / search bar
-        "CHANNELTEXTAREA_BACKGROUND": raw.PRIMARY_660,
-        "REDESIGN_CHAT_INPUT_BACKGROUND": raw.PRIMARY_660,
-        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw.PRIMARY_700,
-        "CHAT_INPUT_CONTAINER_BACKGROUND": raw.PRIMARY_700,
-        "INPUT_BACKGROUND": raw.PRIMARY_700,
+        "CHANNELTEXTAREA_BACKGROUND": raw["PRIMARY_660"],
+        "REDESIGN_CHAT_INPUT_BACKGROUND": raw["PRIMARY_660"],
+        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw["PRIMARY_700"],
+        "CHAT_INPUT_CONTAINER_BACKGROUND": raw["PRIMARY_700"],
+        "INPUT_BACKGROUND": raw["PRIMARY_700"],
         // Chat
-        "CHAT_BACKGROUND": raw.PRIMARY_600,
+        "CHAT_BACKGROUND": raw["PRIMARY_600"],
         // Cards
-        "CARD_PRIMARY_BG": raw.PRIMARY_630,
-        "CARD_SECONDARY_BG": raw.PRIMARY_630,
+        "CARD_PRIMARY_BG": raw["PRIMARY_630"],
+        "CARD_SECONDARY_BG": raw["PRIMARY_630"],
         // Buttons
-        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw.PRIMARY_630,
-        "REDESIGN_BUTTON_SECONDARY_BORDER": raw.PRIMARY_530,
-        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw.PRIMARY_700,
+        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw["PRIMARY_630"],
+        "REDESIGN_BUTTON_SECONDARY_BORDER": raw["PRIMARY_530"],
+        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw["PRIMARY_700"],
         // Activity cards
-        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw.PRIMARY_630
+        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw["PRIMARY_630"]
       },
       light: {
-        "BACKGROUND_PRIMARY": raw.PRIMARY_600,
-        "BACKGROUND_SECONDARY": raw.PRIMARY_630,
-        "BACKGROUND_SECONDARY_ALT": raw.PRIMARY_700,
-        "BACKGROUND_TERTIARY": raw.PRIMARY_630,
-        "BACKGROUND_FLOATING": raw.PRIMARY_600,
-        "BACKGROUND_NESTED_FLOATING": raw.PRIMARY_600,
-        "BACKGROUND_MOBILE_PRIMARY": raw.PRIMARY_600,
-        "BACKGROUND_MOBILE_SECONDARY": raw.PRIMARY_630,
-        "BACKGROUND_MODIFIER_ACCENT": raw.PRIMARY_660,
-        "BACKGROUND_MODIFIER_ACTIVE": raw.PRIMARY_630,
-        "BACKGROUND_MODIFIER_HOVER": raw.PRIMARY_630,
-        "BACKGROUND_MODIFIER_SELECTED": raw.PRIMARY_630,
-        "BG_BASE_PRIMARY": raw.PRIMARY_600,
-        "BG_BASE_SECONDARY": raw.PRIMARY_700,
-        "BG_BASE_TERTIARY": raw.PRIMARY_660,
-        "BG_SURFACE_RAISED": raw.PRIMARY_630,
-        "BG_MOD_FAINT": raw.PRIMARY_460,
-        "BG_MOD_STRONG": raw.PRIMARY_530,
-        "BG_MOD_SUBTLE": raw.PRIMARY_630,
-        "CHANNELTEXTAREA_BACKGROUND": raw.PRIMARY_660,
-        "REDESIGN_CHAT_INPUT_BACKGROUND": raw.PRIMARY_660,
-        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw.PRIMARY_700,
-        "CHAT_INPUT_CONTAINER_BACKGROUND": raw.PRIMARY_700,
-        "INPUT_BACKGROUND": raw.PRIMARY_700,
-        "CHAT_BACKGROUND": raw.PRIMARY_600,
-        "CARD_PRIMARY_BG": raw.PRIMARY_630,
-        "CARD_SECONDARY_BG": raw.PRIMARY_630,
-        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw.PRIMARY_630,
-        "REDESIGN_BUTTON_SECONDARY_BORDER": raw.PRIMARY_530,
-        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw.PRIMARY_700,
-        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw.PRIMARY_630
+        "BACKGROUND_PRIMARY": raw["PRIMARY_600"],
+        "BACKGROUND_SECONDARY": raw["PRIMARY_630"],
+        "BACKGROUND_SECONDARY_ALT": raw["PRIMARY_700"],
+        "BACKGROUND_TERTIARY": raw["PRIMARY_630"],
+        "BACKGROUND_FLOATING": raw["PRIMARY_600"],
+        "BACKGROUND_NESTED_FLOATING": raw["PRIMARY_600"],
+        "BACKGROUND_MOBILE_PRIMARY": raw["PRIMARY_600"],
+        "BACKGROUND_MOBILE_SECONDARY": raw["PRIMARY_630"],
+        "BACKGROUND_MODIFIER_ACCENT": raw["PRIMARY_660"],
+        "BACKGROUND_MODIFIER_ACTIVE": raw["PRIMARY_630"],
+        "BACKGROUND_MODIFIER_HOVER": raw["PRIMARY_630"],
+        "BACKGROUND_MODIFIER_SELECTED": raw["PRIMARY_630"],
+        "BG_BASE_PRIMARY": raw["PRIMARY_600"],
+        "BG_BASE_SECONDARY": raw["PRIMARY_700"],
+        "BG_BASE_TERTIARY": raw["PRIMARY_660"],
+        "BG_SURFACE_RAISED": raw["PRIMARY_630"],
+        "BG_MOD_FAINT": raw["PRIMARY_460"],
+        "BG_MOD_STRONG": raw["PRIMARY_530"],
+        "BG_MOD_SUBTLE": raw["PRIMARY_630"],
+        "CHANNELTEXTAREA_BACKGROUND": raw["PRIMARY_660"],
+        "REDESIGN_CHAT_INPUT_BACKGROUND": raw["PRIMARY_660"],
+        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw["PRIMARY_700"],
+        "CHAT_INPUT_CONTAINER_BACKGROUND": raw["PRIMARY_700"],
+        "INPUT_BACKGROUND": raw["PRIMARY_700"],
+        "CHAT_BACKGROUND": raw["PRIMARY_600"],
+        "CARD_PRIMARY_BG": raw["PRIMARY_630"],
+        "CARD_SECONDARY_BG": raw["PRIMARY_630"],
+        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw["PRIMARY_630"],
+        "REDESIGN_BUTTON_SECONDARY_BORDER": raw["PRIMARY_530"],
+        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw["PRIMARY_700"],
+        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw["PRIMARY_630"]
       }
     };
     var defaults = semanticDefaults[style] ?? {};
@@ -7865,14 +7865,14 @@
         alpha: 1
       };
     }
-    if (patches28.version === 3 && patches28.plus) {
+    if (patches27.version === 3 && patches27.plus) {
       theme.plus = {
         customOverlays: true,
         version: 0,
         icons: {}
       };
       var icons = {};
-      for (var key5 of Object.keys(get(patches28.plus.icons))) {
+      for (var key5 of Object.keys(get(patches27.plus.icons))) {
         icons[key5] = parseColor(key5);
       }
       theme.plus.icons = icons;
@@ -8062,8 +8062,8 @@
         name: Strings.PLUGIN__CORE_PAINTER,
         description: Strings.PLUGIN__CORE_PAINTER_DESC,
         author: [
-          Developers.cocobo1,
-          Developers.LampDelivery
+          Developers.LampDelivery,
+          Contributors.nexpid
         ],
         id: "painter",
         version: "1.0.0",
@@ -8213,18 +8213,18 @@
         transformEmoji: true,
         transformSticker: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "rainenhancements-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/rainenhancements.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       rainenhancementsSettings = new Proxy({}, {
@@ -10809,7 +10809,7 @@
     var colors = useMonetSettings((s) => s.colors);
     var patchConfig = useMonetSettings((s) => s.patches);
     var updateSettings = useMonetSettings((s) => s.updateSettings);
-    var { patches: patches28, revalidate: revalidatePatches } = usePatches_default();
+    var { patches: patches27, revalidate: revalidatePatches } = usePatches_default();
     var [isLoadedTheme, setIsLoadedTheme] = React2.useState(hasMonetTheme());
     var [syscolors, setSyscolors] = React2.useState(getMonetSysColors());
     var [sysColorsLoading, setSysColorsLoading] = React2.useState(!syscolors);
@@ -10959,7 +10959,7 @@
               ]
             })
           }),
-          !patches28 ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
+          !patches27 ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
             size: "small"
           }) : /* @__PURE__ */ jsxs(TableRowGroup, {
             title: "Theme Actions",
@@ -10983,7 +10983,7 @@
                 onPress: () => _async_to_generator(function* () {
                   var theme;
                   try {
-                    theme = build(patches28);
+                    theme = build(patches27);
                   } catch (e) {
                     var err = e instanceof Error ? e : new Error(String(e));
                     logger3.error("Error during applying theme", err.stack);
@@ -10995,7 +10995,7 @@
               }),
               /* @__PURE__ */ jsx(TableRow, {
                 label: "Reload Theme Patches",
-                subLabel: `Patch v${patches28.version ?? "?"} (${patchConfig.from === "local" ? "from a local source" : "from GitHub"})`,
+                subLabel: `Patch v${patches27.version ?? "?"} (${patchConfig.from === "local" ? "from a local source" : "from GitHub"})`,
                 icon: /* @__PURE__ */ jsx(TableRow.Icon, {
                   source: findAssetId2("ActivitiesIcon")
                 }),
@@ -11016,17 +11016,17 @@
       init_async_to_generator();
       init_jsxRuntime();
       init_assets();
-      init_color();
       init_styles();
+      init_color();
       init_toasts();
       init_logger();
       init_common();
       init_components();
+      init_storage4();
+      init_buildTheme();
       init_Color();
       init_usePatches();
       init_monet();
-      init_storage4();
-      init_buildTheme();
       logger3 = new LoggerClass("MonetTheme");
       useStyles3 = createStyles({
         pill: {
@@ -11057,8 +11057,8 @@
   function MonetCard() {
     var navigation2 = NavigationNative.useNavigation();
     var isMonetActive = hasMonetTheme();
-    var { patches: patches28 } = usePatches_default();
-    var hasUrlTheme = useThemes(React2.useCallback((state2) => Object.values(state2.themes).some((t) => t.selected), []));
+    var { patches: patches27 } = usePatches_default();
+    var hasUrlTheme = useThemes(React2.useCallback((state) => Object.values(state.themes).some((t) => t.selected), []));
     var isSelected = isMonetActive && !hasUrlTheme;
     if (ReactNative.Platform.OS !== "android") return null;
     return /* @__PURE__ */ jsx(AddonCard, {
@@ -11077,12 +11077,12 @@
           if (hasUrlTheme) {
             yield useThemes.getState().selectTheme(null);
           }
-          if (!patches28) {
+          if (!patches27) {
             showToast("Patches not loaded yet, try again", findAssetId2("CircleXIcon-primary"));
             return;
           }
           try {
-            var theme = build(patches28);
+            var theme = build(patches27);
             applyMonetTheme(theme);
           } catch (e) {
             showToast("Failed to build theme", findAssetId2("CircleXIcon-primary"));
@@ -11112,12 +11112,12 @@
       init_assets();
       init_toasts();
       init_common();
-      init_AddonCard();
       init_themes();
-      init_usePatches();
+      init_AddonCard();
       init_monet();
       init_Settings();
       init_buildTheme();
+      init_usePatches();
     }
   });
 
@@ -11234,7 +11234,7 @@
     var [error, setError] = React2.useState(null);
     var [searchQuery, setSearchQuery] = React2.useState("");
     var [sort, setSort] = React2.useState("NameAZ");
-    var installedItems = useStore2((state2) => type === "fonts" ? state2.fonts : state2.themes);
+    var installedItems = useStore2((state) => type === "fonts" ? state.fonts : state.themes);
     var fetchAddons = (forceRefresh = false) => _async_to_generator(function* () {
       if (cache.data && !forceRefresh) return;
       setLoading(true);
@@ -11649,10 +11649,10 @@
     })();
   }
   function ThemeCard({ item: theme }) {
-    var isSelected = useThemes(React8.useCallback((state2) => state2.themes[theme.id]?.selected ?? false, [
+    var isSelected = useThemes(React8.useCallback((state) => state.themes[theme.id]?.selected ?? false, [
       theme.id
     ]));
-    var safeModeEnabled = useSettings((state2) => state2.safeMode);
+    var safeModeEnabled = useSettings((state) => state.safeMode);
     var { fetchTheme: fetchTheme2, removeTheme: removeTheme2 } = useThemes.getState();
     var [removed, setRemoved] = React8.useState(false);
     if (removed) return null;
@@ -11709,7 +11709,7 @@
   function Themes() {
     var themesMap = useThemes((s) => s.themes);
     var themesList = Object.values(themesMap);
-    var safeMode = useSettings((state2) => state2.safeMode);
+    var safeMode = useSettings((state) => state.safeMode);
     var navigation2 = NavigationNative.useNavigation();
     return /* @__PURE__ */ jsx(AddonPage, {
       title: Strings.THEMES,
@@ -11830,10 +11830,10 @@
       init_i18n();
       init_common();
       init_components();
-      init_MonetCard();
       init_themes();
       init_preferences();
       init_updater();
+      init_MonetCard();
       init_AddonPage();
       init_Themes();
       import_react_native25 = __toESM(require_react_native());
@@ -12570,7 +12570,7 @@
     });
   }
   function FontEditor(props) {
-    var currentFonts = useFonts((state2) => state2.fonts);
+    var currentFonts = useFonts((state) => state.fonts);
     var [name, setName] = (0, import_react8.useState)(props.name);
     var [source, setSource] = (0, import_react8.useState)(props.name && currentFonts[props.name]?.source);
     var [importing, setIsImporting] = (0, import_react8.useState)(false);
@@ -12940,7 +12940,7 @@
     }
   }
   function FontCard({ item: font }) {
-    var selectedFont = useFonts((state2) => state2.fonts.__selected);
+    var selectedFont = useFonts((state) => state.fonts.__selected);
     var navigation2 = NavigationNative.useNavigation();
     var selected = selectedFont === font.name;
     return /* @__PURE__ */ jsx(Card, {
@@ -13051,7 +13051,7 @@
   });
   function Fonts() {
     useSettings();
-    var fonts2 = useFonts((state2) => state2.fonts);
+    var fonts2 = useFonts((state) => state.fonts);
     var navigation2 = NavigationNative.useNavigation();
     return /* @__PURE__ */ jsx(AddonPage, {
       title: Strings.FONTS,
@@ -13104,7 +13104,7 @@
 
   // src/api/storage/useFS.ts
   function useFileExists(path, prefix2) {
-    var [state2, setState] = (0, import_react10.useState)(2);
+    var [state, setState] = (0, import_react10.useState)(2);
     var check = () => fileExists(path, {
       prefix: prefix2
     }).then((exists) => setState(exists ? 1 : 0)).catch(() => setState(3));
@@ -13124,7 +13124,7 @@
     }), []);
     (0, import_react10.useEffect)(() => void check(), []);
     return [
-      state2,
+      state,
       customFS
     ];
   }
@@ -13831,7 +13831,7 @@ Type: ${asset.type}`,
           icon: findAssetId2("WrenchIcon"),
           render: () => Promise.resolve().then(() => (init_Developer(), Developer_exports)),
           usePredicate: () => {
-            var developerSettings = useSettings((state2) => state2.developerSettings);
+            var developerSettings = useSettings((state) => state.developerSettings);
             return developerSettings ?? false;
           }
         }
@@ -13939,27 +13939,27 @@ Type: ${asset.type}`,
       useActionSheetFinderSettings = create2()(persist((set) => ({
         logs: [],
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        addLog: (log3) => set((state2) => ({
+        addLog: (log3) => set((state) => ({
           logs: [
-            ...state2.logs.slice(-99),
+            ...state.logs.slice(-99),
             log3
           ]
         })),
         clearLogs: () => set({
           logs: []
         }),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "actionsheetfinder-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/actionsheetfinder.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
     }
@@ -14233,36 +14233,36 @@ Type: ${asset.type}`,
           send: false
         },
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "betterchatbuttons-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/betterchatbuttons.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       betterChatButtonsSettings = new Proxy({}, {
         get(target, prop) {
-          var state2 = useBetterChatButtonsSettings.getState();
+          var state = useBetterChatButtonsSettings.getState();
           if (prop.includes(".")) {
             var [parent, child] = prop.split(".");
-            return state2[parent]?.[child];
+            return state[parent]?.[child];
           }
-          return state2[prop];
+          return state[prop];
         },
         set(target, prop, value) {
           if (prop.includes(".")) {
             var [parent, child] = prop.split(".");
-            var state2 = useBetterChatButtonsSettings.getState();
+            var state = useBetterChatButtonsSettings.getState();
             useBetterChatButtonsSettings.getState().updateSettings({
               [parent]: {
-                ...state2[parent],
+                ...state[parent],
                 [child]: value
               }
             });
@@ -14457,8 +14457,8 @@ Type: ${asset.type}`,
           var actionsRef;
           if (ChatInputSendButton2?.type) {
             unpatches.push(before("render", ChatInputSendButton2.type, ([props, ref]) => {
-              var state2 = useBetterChatButtonsSettings.getState();
-              if (props.canSendVoiceMessage) props.canSendVoiceMessage = !state2.hide.voice;
+              var state = useBetterChatButtonsSettings.getState();
+              if (props.canSendVoiceMessage) props.canSendVoiceMessage = !state.hide.voice;
               sendBtnRef2 = ref;
             }));
             unpatches.push(after("render", ChatInputSendButton2.type, () => {
@@ -14467,8 +14467,8 @@ Type: ${asset.type}`,
                   var { setHasText } = sendBtnRef2.current;
                   unpatches.push(() => sendBtnRef2.current.setHasText = setHasText);
                   sendBtnRef2.current.setHasText = (hasText_) => {
-                    var state2 = useBetterChatButtonsSettings.getState();
-                    if (state2.dismiss.send) hasText2 = hasText_;
+                    var state = useBetterChatButtonsSettings.getState();
+                    if (state.dismiss.send) hasText2 = hasText_;
                     return setHasText(hasText_);
                   };
                 }
@@ -14478,10 +14478,10 @@ Type: ${asset.type}`,
           }
           if (ChatInputActions2?.type) {
             unpatches.push(before("render", ChatInputActions2.type, ([props, ref]) => {
-              var state2 = useBetterChatButtonsSettings.getState();
-              if (props.isAppLauncherEnabled) props.isAppLauncherEnabled = !state2.hide.app;
-              props.canStartThreads = state2.show.thread || !state2.hide.thread;
-              props.shouldShowGiftButton = !state2.hide.gift;
+              var state = useBetterChatButtonsSettings.getState();
+              if (props.isAppLauncherEnabled) props.isAppLauncherEnabled = !state.hide.app;
+              props.canStartThreads = state.show.thread || !state.hide.thread;
+              props.shouldShowGiftButton = !state.hide.gift;
               actionsRef = ref;
             }));
             unpatches.push(after("render", ChatInputActions2.type, () => {
@@ -14490,8 +14490,8 @@ Type: ${asset.type}`,
                   var { onDismissActions } = actionsRef.current;
                   unpatches.push(() => actionsRef.current.onDismissActions = onDismissActions);
                   actionsRef.current.onDismissActions = () => {
-                    var state2 = useBetterChatButtonsSettings.getState();
-                    if (state2.dismiss.actions) return onDismissActions();
+                    var state = useBetterChatButtonsSettings.getState();
+                    if (state.dismiss.actions) return onDismissActions();
                   };
                 }
               }));
@@ -14806,18 +14806,18 @@ Type: ${asset.type}`,
         userHash: "",
         litterboxDuration: "1",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "uploader-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/uploader.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       uploaderSettings = new Proxy({}, {
@@ -15226,18 +15226,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         showStatusCutout: false,
         collapseWhileTyping: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "chatboxavatar-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/chatboxavatar.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated?.(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated?.(true);
         }
       }));
     }
@@ -15649,18 +15649,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         bubbleChatRadius: 12,
         bubbleChatColor: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "chatbubbles-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/chatbubbles.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       chatBubblesSettings = new Proxy({}, {
@@ -15850,8 +15850,8 @@ ${pendingInsertLink}` : pendingInsertLink;
         rules: null,
         lastModified: null,
         _hasHydrated: false,
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         }),
         update: () => _async_to_generator(function* () {
           try {
@@ -15876,13 +15876,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       }), {
         name: "cleanurls-rules",
         storage: createJSONStorage(() => createFileStorage("plugins/cleanurls-rules.json")),
-        partialize: (state2) => ({
-          rules: state2.rules,
-          lastModified: state2.lastModified
+        partialize: (state) => ({
+          rules: state.rules,
+          lastModified: state.lastModified
         }),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
-          state2?.update();
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
+          state?.update();
         }
       }));
     }
@@ -15902,18 +15902,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         redirect: true,
         referrals: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "cleanurls-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/cleanurls.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       cleanUrlsSettings = new Proxy({}, {
@@ -16021,22 +16021,22 @@ ${pendingInsertLink}` : pendingInsertLink;
     }
   }
   function setupPatches() {
-    var patches28 = [];
+    var patches27 = [];
     try {
       var Messages3 = findByProps("sendMessage", "editMessage", "startEditMessage");
       if (Messages3?.sendMessage) {
-        patches28.push(before("sendMessage", Messages3, (args) => {
+        patches27.push(before("sendMessage", Messages3, (args) => {
           handleMessage(args[1]);
         }));
       }
       if (Messages3?.editMessage) {
-        patches28.push(before("editMessage", Messages3, (args) => {
+        patches27.push(before("editMessage", Messages3, (args) => {
           handleMessage(args[2]);
         }));
       }
     } catch (e) {
     }
-    return patches28;
+    return patches27;
   }
   var HTTP_REGEX_MULTI;
   var init_patcher2 = __esm({
@@ -16303,18 +16303,18 @@ ${pendingInsertLink}` : pendingInsertLink;
           hideAll: false
         },
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "clearmenus-settingssections",
         storage: createJSONStorage(() => createFileStorage("plugins/clearmenus-settingssections.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       messageActionLabels = [
@@ -16347,18 +16347,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         hideUnknown: false,
         customLabels: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "messageactionsheet-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/messageactionsheet.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
     }
@@ -16471,9 +16471,9 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/clearmenus/patches/SettingsSections.ts
   function patchSettingsSections() {
-    var patches28 = [];
+    var patches27 = [];
     var createListModule2 = findByPropsLazy("createList");
-    if (!createListModule2) return patches28;
+    if (!createListModule2) return patches27;
     var unpatch6 = after("createList", createListModule2, function(args, ret) {
       var [config] = args;
       if (!config?.sections || !Array.isArray(config.sections)) {
@@ -16595,8 +16595,8 @@ ${pendingInsertLink}` : pendingInsertLink;
         for (var i1 = sectionData.length - 1; i1 >= 0; i1--) _loop2(i1);
       }
     });
-    patches28.push(unpatch6);
-    return patches28;
+    patches27.push(unpatch6);
+    return patches27;
   }
   var BILLING_ITEMS, RAIN_CATEGORIES;
   var init_SettingsSections = __esm({
@@ -18068,9 +18068,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         start() {
           try {
             unpatch2 = patchMessageActionSheet();
-            var patches28 = patchSettingsSections();
-            if (Array.isArray(patches28)) {
-              unpatchSettingsSections = () => patches28.forEach((fn) => fn());
+            var patches27 = patchSettingsSections();
+            if (Array.isArray(patches27)) {
+              unpatchSettingsSections = () => patches27.forEach((fn) => fn());
             }
           } catch (error) {
           }
@@ -18205,10 +18205,10 @@ ${pendingInsertLink}` : pendingInsertLink;
         setToken: (token) => {
           var user = UserStore3?.getCurrentUser?.();
           if (!user?.id) return;
-          set((state2) => ({
+          set((state) => ({
             token,
             tokens: {
-              ...state2.tokens,
+              ...state.tokens,
               [user.id]: token
             }
           }));
@@ -18216,19 +18216,19 @@ ${pendingInsertLink}` : pendingInsertLink;
         isAuthorized: () => {
           return !!get().token;
         },
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "decor-auth",
         storage: createJSONStorage(() => createFileStorage("plugins/decor_auth.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
-          state2?.init();
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
+          state?.init();
         }
       }));
       unsubscribe = subscribeToFluxDispatcher("CONNECTION_OPEN", () => useAuthorizationStore2.getState().init());
@@ -18534,9 +18534,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         })
       })));
       subscriptions2 = [
-        useCurrentUserDecorationsStore.subscribe((state2) => [
-          state2.selectedDecoration,
-          state2.fetched
+        useCurrentUserDecorationsStore.subscribe((state) => [
+          state.selectedDecoration,
+          state.fetched
         ], (0, import_lodash2.debounce)(([decoration, fetched], [prevDecoration, prevFetched]) => {
           if (fetched !== prevFetched || decoration?.hash === prevDecoration?.hash) return;
           var bllub = setUserDecoration(decoration);
@@ -18698,7 +18698,7 @@ ${pendingInsertLink}` : pendingInsertLink;
     ]);
     var insets = useSafeAreaInsets2();
     var navigation2 = useNavigation();
-    var createDecoration = useCurrentUserDecorationsStore((state2) => state2.create);
+    var createDecoration = useCurrentUserDecorationsStore((state) => state.create);
     var styles5 = useStyles8();
     var isDisabled = !asset || !alt.trim() || asset.type !== "image/png" || !!error;
     return /* @__PURE__ */ jsxs(import_react_native41.View, {
@@ -19041,7 +19041,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/ui/components/Preset.tsx
   function Preset({ preset }) {
-    var select = useCurrentUserDecorationsStore((state2) => state2.select);
+    var select = useCurrentUserDecorationsStore((state) => state.select);
     var navigation2 = NavigationNative.useNavigation();
     var styles5 = useStyles10();
     return /* @__PURE__ */ jsxs(View25, {
@@ -19304,8 +19304,8 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/ui/pages/Settings.tsx
   function Settings3() {
-    var isAuthorized = useAuthorizationStore2((state2) => !!state2.token);
-    var setToken = useAuthorizationStore2((state2) => state2.setToken);
+    var isAuthorized = useAuthorizationStore2((state) => !!state.token);
+    var setToken = useAuthorizationStore2((state) => state.setToken);
     var styles5 = useStyles12();
     return /* @__PURE__ */ jsxs(import_react_native43.View, {
       style: {
@@ -19670,19 +19670,19 @@ ${pendingInsertLink}` : pendingInsertLink;
         showCopyURLButton: true,
         showCopyMarkdownButton: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "expressionutils-storage",
         storage: createJSONStorage(() => createFileStorage("plugins/expressionutils.json")),
-        onRehydrateStorage: () => (state2) => {
-          if (state2 && typeof state2 === "object" && "setHasHydrated" in state2 && typeof state2.setHasHydrated === "function") {
-            state2.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          if (state && typeof state === "object" && "setHasHydrated" in state && typeof state.setHasHydrated === "function") {
+            state.setHasHydrated(true);
           }
         }
       }));
@@ -20075,7 +20075,7 @@ ${pendingInsertLink}` : pendingInsertLink;
     var LazyActionSheet8 = findByProps("openLazy", "hideActionSheet");
     if (!LazyActionSheet8) return () => {
     };
-    var patches28 = [];
+    var patches27 = [];
     var unpatchLazy = before("openLazy", LazyActionSheet8, ([lazySheet, name]) => {
       if (![
         "MessageEmojiActionSheet",
@@ -20083,14 +20083,14 @@ ${pendingInsertLink}` : pendingInsertLink;
       ].includes(name)) return;
       unpatchLazy();
       lazySheet.then((module) => {
-        patches28.push(after("default", module, (_2, res) => {
-          patches28.push(patchSheet("type", res, true));
+        patches27.push(after("default", module, (_2, res) => {
+          patches27.push(patchSheet("type", res, true));
         }));
       });
     });
     return () => {
       unpatchLazy();
-      patches28.forEach((p) => p?.());
+      patches27.forEach((p) => p?.());
     };
   }
   var init_patchMessageEmojiActionSheet = __esm({
@@ -20508,7 +20508,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         var LazyActionSheet8 = findByProps("openLazy", "hideActionSheet");
         if (!LazyActionSheet8) return () => {
         };
-        var patches28 = [];
+        var patches27 = [];
         var unpatchLazy = before("openLazy", LazyActionSheet8, ([lazySheet, name]) => {
           if (![
             "MessageEmojiActionSheet",
@@ -20516,14 +20516,14 @@ ${pendingInsertLink}` : pendingInsertLink;
           ].includes(name)) return;
           unpatchLazy();
           lazySheet.then((module) => {
-            patches28.push(after("default", module, (_2, res) => {
-              patches28.push(patchSheet2("type", res, true));
+            patches27.push(after("default", module, (_2, res) => {
+              patches27.push(patchSheet2("type", res, true));
             }));
           });
         });
         return () => {
           unpatchLazy();
-          patches28.forEach((p) => p?.());
+          patches27.forEach((p) => p?.());
         };
       })()
     ];
@@ -20561,18 +20561,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         hidePremiumRestoreSubscription: false,
         hideQuests: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "fakenitro-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/fakenitro.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       fakenitroSettings = new Proxy({}, {
@@ -20642,7 +20642,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/fakenitro/patches/sendMessage.ts
   function getPatches5() {
-    var patches28 = [
+    var patches27 = [
       before("sendMessage", messageModule, (args) => {
         if (getCurrentUser2?.().premiumType === null) modifyIfNeeded(args[1]);
       }),
@@ -20663,11 +20663,11 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     ];
     if (uploadModule?.uploadLocalFiles !== void 0) {
-      patches28.push(before("uploadLocalFiles", uploadModule, (args) => {
+      patches27.push(before("uploadLocalFiles", uploadModule, (args) => {
         if (getCurrentUser2?.().premiumType === null) modifyIfNeeded(args[0].parsedMessage);
       }));
     }
-    return patches28;
+    return patches27;
   }
   var messageModule, uploadModule, getCurrentUser2, getStickerById2, ChannelStore2;
   var init_sendMessage = __esm({
@@ -20847,18 +20847,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         showOtherColors: true,
         registryUrl: "https://profilecolors-registry.songspotlight.workers.dev",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "profilecolor-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/profilecolor.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       profilecolorSettings = new Proxy({}, {
@@ -21226,8 +21226,8 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
   function ensureRegistryColors(userId) {
     if (resolvedColors.has(userId) || pendingFetches.has(userId)) return;
-    var state2 = useProfileColorStore.getState();
-    if (!state2.showOtherColors || !state2.registryUrl) return;
+    var state = useProfileColorStore.getState();
+    if (!state.showOtherColors || !state.registryUrl) return;
     pendingFetches.add(userId);
     fetchRegistryColors(userId).then((colors) => {
       resolvedColors.set(userId, colors);
@@ -21254,15 +21254,15 @@ ${pendingInsertLink}` : pendingInsertLink;
       if (userId !== currentUser.id) {
         return profileTheme;
       }
-      var state2 = useProfileColorStore.getState();
-      if (state2.enabled && (state2.primary !== null || state2.accent !== null)) {
-        if (state2.primary !== null) {
-          profileTheme.primaryColor = state2.primary;
-          profileTheme.secondaryColor = state2.accent ?? state2.primary;
+      var state = useProfileColorStore.getState();
+      if (state.enabled && (state.primary !== null || state.accent !== null)) {
+        if (state.primary !== null) {
+          profileTheme.primaryColor = state.primary;
+          profileTheme.secondaryColor = state.accent ?? state.primary;
           profileTheme.theme = profileTheme.theme;
-        } else if (state2.accent !== null) {
-          profileTheme.primaryColor = state2.accent;
-          profileTheme.secondaryColor = state2.accent;
+        } else if (state.accent !== null) {
+          profileTheme.primaryColor = state.accent;
+          profileTheme.secondaryColor = state.accent;
           profileTheme.theme = profileTheme.theme;
         }
       }
@@ -21280,8 +21280,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       if (!currentUser) {
         return profile;
       }
-      var state2 = useProfileColorStore.getState();
-      if (!state2._hasHydrated) {
+      var state = useProfileColorStore.getState();
+      if (!state._hasHydrated) {
         return profile;
       }
       var userId = profile.id;
@@ -21298,9 +21298,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         return parseInt(hex, 16);
       }
       if (userId === currentUser.id) {
-        var primary = safeHex(state2.primary);
-        var accent = safeHex(state2.accent);
-        if (state2.enabled && (primary !== null || accent !== null)) {
+        var primary = safeHex(state.primary);
+        var accent = safeHex(state.accent);
+        if (state.enabled && (primary !== null || accent !== null)) {
           profile.themeColors = [
             primary ?? accent,
             accent ?? primary ?? accent
@@ -21309,7 +21309,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         } else {
         }
       } else {
-        if (state2.showOtherColors) {
+        if (state.showOtherColors) {
           var regColors = resolvedColors.get(userId);
           if (regColors) {
             profile.themeColors = [
@@ -21321,7 +21321,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           }
           ensureRegistryColors(userId);
         }
-        if (state2.bannerFallback && (!profile.premiumType || profile.premiumType === 0) && profile.bannerColor) {
+        if (state.bannerFallback && (!profile.premiumType || profile.premiumType === 0) && profile.bannerColor) {
           var color2 = profile.bannerColor;
           if (typeof color2 === "number") color2 = `#${color2.toString(16).padStart(6, "0")}`;
           if (!/^#?[0-9a-fA-F]{6}$/.test(color2)) {
@@ -21666,18 +21666,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         mods: false,
         customs: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "globalbadges-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/globalbadges.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       customBadgesSettings = new Proxy({}, {
@@ -22072,18 +22072,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         showIcon: true,
         showPopup: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "hiddenchannels-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hiddenchannels.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       hiddenChannelsSettings = new Proxy({}, {
@@ -22283,18 +22283,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         ignored: true,
         removeReplies: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "hideblockedandignoredmessages-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hideblockedandignored.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       hideblockedandignoredmessagesSettings = new Proxy({}, {
@@ -22524,18 +22524,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         dmHideVideoButton: true,
         hideVCVideoButton: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "hidecallbuttons-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hidecallbuttons.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       hidecallbuttonsSettings = new Proxy({}, {
@@ -22784,9 +22784,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       };
       useLetItRainSettings = create2()(persist((set) => ({
         settings: DEFAULT_SETTINGS2,
-        updateSetting: (key, value) => set((state2) => ({
+        updateSetting: (key, value) => set((state) => ({
           settings: {
-            ...state2.settings,
+            ...state.settings,
             [key]: value
           }
         }))
@@ -23062,18 +23062,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         },
         databaseLogging: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "messagelogger-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/messagelogger.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
     }
@@ -23426,14 +23426,14 @@ ${separator2}
           if (storage3.edited?.enabled && typeof msg.content === "string" && msg.content.includes(EDIT_HISTORY_SEPARATOR)) {
             var separator2 = new RegExp(EDIT_HISTORY_SEPARATOR, "gmi");
             if (separator2.test(msg.content) && data4.buttons) {
-              var React25 = require_react();
+              var React26 = require_react();
               var ActionSheet3 = findByName("ActionSheet");
               var FormRow4 = findByName("FormRow");
               var getAssetIDByName = findByProps("getAssetIDByName")?.getAssetIDByName;
               var FluxDispatcher2 = findByProps("dispatch", "_subscriptions");
-              data4.buttons.push(React25.createElement(FormRow4, {
+              data4.buttons.push(React26.createElement(FormRow4, {
                 label: "Remove Edit History",
-                leading: React25.createElement("img", {
+                leading: React26.createElement("img", {
                   style: {
                     opacity: 1
                   },
@@ -23559,8 +23559,8 @@ ${separator2}
           resolve();
           return;
         }
-        var unsubscribe2 = useMoreCommandsSettings.subscribe((state2) => {
-          if (state2._hasHydrated) {
+        var unsubscribe2 = useMoreCommandsSettings.subscribe((state) => {
+          if (state._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -23652,41 +23652,41 @@ ${separator2}
         sortdefs: true,
         nsfwwarn: true,
         _hasHydrated: false,
-        updateFactSettings: (newSettings) => set((state2) => ({
+        updateFactSettings: (newSettings) => set((state) => ({
           factSettings: {
-            ...state2.factSettings,
+            ...state.factSettings,
             ...newSettings
           }
         })),
-        updateGarySettings: (newSettings) => set((state2) => ({
+        updateGarySettings: (newSettings) => set((state) => ({
           garySettings: {
-            ...state2.garySettings,
+            ...state.garySettings,
             ...newSettings
           }
         })),
-        updateEnabledCommands: (newCommands) => set((state2) => ({
+        updateEnabledCommands: (newCommands) => set((state) => ({
           enabledCommands: {
-            ...state2.enabledCommands,
+            ...state.enabledCommands,
             ...newCommands
           }
         })),
-        updateHiddenSettings: (newSettings) => set((state2) => ({
+        updateHiddenSettings: (newSettings) => set((state) => ({
           hiddenSettings: {
-            ...state2.hiddenSettings,
+            ...state.hiddenSettings,
             ...newSettings
           }
         })),
         setPendingRestart: (pending) => set({
           pendingRestart: pending
         }),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "morecommands-settings",
         storage: createJSONStorage(() => createFileStorage2("plugins/morecommands.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       storage = new Proxy({}, {
@@ -23694,15 +23694,15 @@ ${separator2}
           return useMoreCommandsSettings.getState()[prop];
         },
         set(target, prop, value) {
-          var state2 = useMoreCommandsSettings.getState();
+          var state = useMoreCommandsSettings.getState();
           if (prop === "factSettings") {
-            state2.updateFactSettings(value);
+            state.updateFactSettings(value);
           } else if (prop === "garySettings") {
-            state2.updateGarySettings(value);
+            state.updateGarySettings(value);
           } else if (prop === "enabledCommands") {
-            state2.updateEnabledCommands(value);
+            state.updateEnabledCommands(value);
           } else if (prop === "hiddenSettings") {
-            state2.updateHiddenSettings(value);
+            state.updateHiddenSettings(value);
           }
           return true;
         }
@@ -26649,8 +26649,8 @@ ${formattedData}
       init_middleware();
       useMoyaiSettings = create2()(persist((set) => ({
         allowReactions: true,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         }))
       }), {
@@ -26835,18 +26835,18 @@ ${formattedData}
       useMultiScrobblerSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS3,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "multiscrobbler-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/multiscrobbler.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       multiScrobblerSettings = new Proxy({}, {
@@ -29803,18 +29803,18 @@ ${formattedData}
         removeDefaultMobile: true,
         useThemeColors: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "platformindicator-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/platformindicator.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       platformIndicatorSettings = new Proxy({}, {
@@ -30152,8 +30152,8 @@ ${formattedData}
                 userId: user.id
               }));
             }));
-            var Status2 = findByName("Status", false);
-            unpatches5.push(before("default", Status2, (args) => {
+            var Status = findByName("Status", false);
+            unpatches5.push(before("default", Status, (args) => {
               if (!args) return;
               if (!args[0]) return;
               if (!platformIndicatorSettings.removeDefaultMobile) return;
@@ -30263,18 +30263,18 @@ ${formattedData}
         autoConfirmMessage: true,
         autoConfirmEmbed: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "quickdelete-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/quickdelete.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       quickDeleteSettings = new Proxy({}, {
@@ -30446,18 +30446,18 @@ ${formattedData}
         authToken: "",
         useThemedSend: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "reviewdb-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/reviewdb.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       reviewdbSettings = new Proxy({}, {
@@ -31001,7 +31001,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     React.useEffect(fetchReviews, []);
     var hasExistingReview = reviews.filter((i) => i.sender.discordID === getCurrentUser5()?.id).length !== 0;
     var themeColors = getDisplayProfile?.(userId)?.themeColors;
-    var useStyles17 = createStyles({
+    var useStyles16 = createStyles({
       avatar: {
         height: 36,
         width: 36,
@@ -31016,7 +31016,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         backgroundColor: themeColors === void 0 ? semanticColors.CARD_SECONDARY_BG : "#00000083"
       }
     });
-    var styles5 = useStyles17();
+    var styles5 = useStyles16();
     return /* @__PURE__ */ jsx(ErrorBoundary, {
       children: /* @__PURE__ */ jsx(ReactNative.View, {
         style: [
@@ -31556,6 +31556,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         trackCount: 5,
         period: "7day",
         displayMode: "top",
+        displaySource: "lastfm",
         showAlbumArt: true,
         showPlayCount: true,
         showAlbumName: true,
@@ -31569,23 +31570,25 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         cardOpacity: 40,
         shareUsername: false,
         registryUrl: "https://songspotlight-registry.songspotlight.workers.dev",
-        displayPosition: "aboveBio"
+        favoritesRegistryUrl: "https://songspotlight-favorites.songspotlight.workers.dev",
+        displayPosition: "aboveBio",
+        favoriteSongs: []
       };
       useSongSpotlightSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS4,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "songspotlight-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/songspotlight.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       songSpotlightSettings = new Proxy({}, {
@@ -31696,6 +31699,41 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         return res.ok;
       } catch (unused) {
         return false;
+      }
+    })();
+  }
+  function publishFavoritesToRegistry(discordId, favorites) {
+    return _async_to_generator(function* () {
+      var favoritesRegistryUrl = songSpotlightSettings.favoritesRegistryUrl;
+      if (!favoritesRegistryUrl || !discordId) return false;
+      try {
+        var res = yield fetch(`${favoritesRegistryUrl}/favorites/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            discordId,
+            favorites
+          })
+        });
+        return res.ok;
+      } catch (unused) {
+        return false;
+      }
+    })();
+  }
+  function fetchFavoritesFromRegistry(userId) {
+    return _async_to_generator(function* () {
+      var favoritesRegistryUrl = songSpotlightSettings.favoritesRegistryUrl;
+      if (!favoritesRegistryUrl || !userId) return null;
+      try {
+        var res = yield fetch(`${favoritesRegistryUrl}/favorites/lookup/${userId}`);
+        if (!res.ok) return null;
+        var data4 = yield res.json();
+        return data4?.favorites ?? null;
+      } catch (unused) {
+        return null;
       }
     })();
   }
@@ -31834,6 +31872,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         art: null,
         album: ""
       };
+    })();
+  }
+  function fetchTrackInfo(artist, track) {
+    return _async_to_generator(function* () {
+      return fetchITunesInfo(artist, track);
     })();
   }
   function clearTrackCache() {
@@ -31981,10 +32024,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   function getBlurSource(artUrl) {
     return artUrl.replace(/\d+x\d+/, "100x100");
   }
-  function SongRow({ track, style, showAlbumArt, showPlayCount, showAlbumName = true, showRankNumbers = true, hasThemeColors, colorfulCards, cardOpacity = 40 }) {
+  function SongRow({ track, style, showAlbumArt, showPlayCount, showAlbumName = true, showRankNumbers = true, hasThemeColors, colorfulCards, cardOpacity = 40, trailing }) {
     var showBlur = colorfulCards && !!track.albumArt;
     var overlayOpacity = cardOpacity / 100;
-    var useStyles17 = createStyles({
+    var useStyles16 = createStyles({
       outerClip: {
         borderRadius: 8,
         overflow: "hidden"
@@ -32038,9 +32081,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         flexDirection: "row",
         alignItems: "center",
         marginTop: 2
+      },
+      trailingContainer: {
+        marginLeft: 8,
+        alignItems: "flex-end",
+        justifyContent: "center"
       }
     });
-    var styles5 = useStyles17();
+    var styles5 = useStyles16();
     var handlePress = () => {
       if (track.url) {
         ReactNative.Linking.openURL(track.url);
@@ -32130,7 +32178,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                     })
                   })
                 ]
-              })
+              }),
+              trailing ? /* @__PURE__ */ jsx(ReactNative.View, {
+                style: styles5.trailingContainer,
+                children: trailing
+              }) : null
             ]
           })
         ]
@@ -32159,6 +32211,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var [lastFmUsername, setLastFmUsername] = React.useState(null);
     var [resolving, setResolving] = React.useState(true);
     var [userInfo, setUserInfo] = React.useState(null);
+    var [favorites, setFavorites] = React.useState([]);
+    var [favoritesLoading, setFavoritesLoading] = React.useState(true);
     var isOwnProfile = userId === UserStore17.getCurrentUser()?.id;
     var displayProfile = getDisplayProfile2?.(userId);
     var themeColors = displayProfile?.themeColors;
@@ -32188,7 +32242,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       }
     };
     var hSize = headerSizes[settings4.headerSize] || headerSizes.small;
-    var useStyles17 = createStyles({
+    var useStyles16 = createStyles({
       card: {
         backgroundColor: hasThemeColors ? "#00000073" : semanticColors.CARD_PRIMARY_BG,
         borderRadius: 16,
@@ -32219,8 +32273,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         color: hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
       }
     });
-    var styles5 = useStyles17();
+    var styles5 = useStyles16();
     var sectionTitle = settings4.sectionTitle?.trim() || "Song Spotlight";
+    var favoriteSongs = settings4.favoriteSongs ?? [];
+    var autofillTracks = tracks.slice(0, Math.max(0, Math.min(settings4.trackCount || 0, 5)));
     React.useEffect(() => {
       setResolving(true);
       resolveLastFmUsername(userId, isOwnProfile, bio).then((username) => {
@@ -32247,6 +32303,12 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     ]);
     React.useEffect(() => {
       if (resolving) return;
+      if (settings4.displaySource === "favorites") {
+        setTracks([]);
+        setLoading(false);
+        setError(null);
+        return;
+      }
       if (!hasCredentials()) {
         setLoading(false);
         setError(null);
@@ -32283,11 +32345,55 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       settings4.showOnOwnProfile,
       settings4.showOnOtherProfiles
     ]);
-    if (!hasCredentials()) return null;
-    if (resolving) return null;
-    if (!lastFmUsername) return null;
-    if (isOwnProfile && !settings4.showOnOwnProfile) return null;
-    if (!isOwnProfile && !settings4.showOnOtherProfiles) return null;
+    React.useEffect(() => {
+      if (settings4.displaySource !== "favorites") return;
+      setFavoritesLoading(true);
+      if (isOwnProfile) {
+        setFavorites((settings4.favoriteSongs ?? []).map((song, index) => ({
+          name: song.title,
+          artist: song.artist,
+          album: song.album,
+          playCount: 0,
+          url: song.url,
+          albumArt: song.albumArt || null,
+          rank: index + 1
+        })));
+        setFavoritesLoading(false);
+      } else {
+        fetchFavoritesFromRegistry(userId).then((favs) => {
+          setFavorites((favs ?? []).map((song, index) => ({
+            name: song.title,
+            artist: song.artist,
+            album: song.album,
+            playCount: 0,
+            url: song.url,
+            albumArt: song.albumArt || null,
+            rank: index + 1
+          })));
+          setFavoritesLoading(false);
+        }).catch(() => {
+          setFavorites([]);
+          setFavoritesLoading(false);
+        });
+      }
+    }, [
+      settings4.displaySource,
+      userId,
+      isOwnProfile,
+      settings4.favoriteSongs
+    ]);
+    if (settings4.displaySource === "favorites") {
+      if (favoritesLoading) return null;
+      if (favorites.length === 0) return null;
+      if (isOwnProfile && !settings4.showOnOwnProfile) return null;
+      if (!isOwnProfile && !settings4.showOnOtherProfiles) return null;
+    } else {
+      if (!hasCredentials()) return null;
+      if (resolving) return null;
+      if (!lastFmUsername) return null;
+      if (isOwnProfile && !settings4.showOnOwnProfile) return null;
+      if (!isOwnProfile && !settings4.showOnOtherProfiles) return null;
+    }
     var handleHeaderPress = () => {
       var url2 = userInfo?.url || `https://www.last.fm/user/${lastFmUsername}`;
       ReactNative.Linking.openURL(url2);
@@ -32299,7 +32405,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         ],
         children: /* @__PURE__ */ jsxs(UserProfileCard2, {
           title: sectionTitle,
-          styles: [
+          style: [
             styles5.card
           ],
           children: [
@@ -32323,18 +32429,56 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                   }),
                   /* @__PURE__ */ jsx(Text, {
                     variant: hSize.arrowVariant,
-                    style: [
-                      styles5.headerText,
-                      {
-                        marginLeft: 4
-                      }
-                    ],
+                    style: {
+                      ...styles5.headerText,
+                      marginLeft: 4
+                    },
                     children: "\u2197"
                   })
                 ]
               })
             }),
-            loading ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
+            settings4.displaySource === "favorites" ? /* @__PURE__ */ jsxs(ReactNative.View, {
+              style: {
+                marginBottom: 10
+              },
+              children: [
+                /* @__PURE__ */ jsx(ReactNative.View, {
+                  style: {
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 4
+                  },
+                  children: /* @__PURE__ */ jsx(Text, {
+                    variant: "text-sm/semibold",
+                    style: {
+                      color: "#FF69B4"
+                    },
+                    children: "Favorites"
+                  })
+                }),
+                favorites.map((song, index) => /* @__PURE__ */ jsxs(React.Fragment, {
+                  children: [
+                    index > 0 && /* @__PURE__ */ jsx(ReactNative.View, {
+                      style: {
+                        height: 6
+                      }
+                    }),
+                    /* @__PURE__ */ jsx(SongRow, {
+                      track: song,
+                      style: styles5.trackCard,
+                      showAlbumArt: settings4.showAlbumArt,
+                      showPlayCount: false,
+                      showAlbumName: settings4.showAlbumName,
+                      showRankNumbers: settings4.showRankNumbers,
+                      hasThemeColors,
+                      colorfulCards: settings4.colorfulCards,
+                      cardOpacity: settings4.cardOpacity
+                    })
+                  ]
+                }, song.url || song.name || index))
+              ]
+            }) : loading ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
               size: "small",
               style: {
                 paddingVertical: 20
@@ -32343,12 +32487,12 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               variant: "text-sm/medium",
               style: styles5.emptyText,
               children: error
-            }) : tracks.length === 0 ? /* @__PURE__ */ jsx(Text, {
+            }) : autofillTracks.length === 0 ? /* @__PURE__ */ jsx(Text, {
               variant: "text-sm/medium",
               style: styles5.emptyText,
               children: settings4.displayMode === "recent" ? "No recent tracks" : "No top tracks found"
             }) : /* @__PURE__ */ jsx(ReactNative.View, {
-              children: tracks.map((track, index) => /* @__PURE__ */ jsxs(React.Fragment, {
+              children: autofillTracks.map((track, index) => /* @__PURE__ */ jsxs(React.Fragment, {
                 children: [
                   index > 0 && /* @__PURE__ */ jsx(ReactNative.View, {
                     style: {
@@ -32484,9 +32628,117 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     }
   });
 
-  // src/plugins/songspotlight/pages/DisplaySettingsPage.tsx
-  function DisplaySettingsPage2() {
+  // src/plugins/songspotlight/pages/FavoriteSongsSettingsPage.tsx
+  var FavoriteSongsSettingsPage_exports = {};
+  __export(FavoriteSongsSettingsPage_exports, {
+    default: () => FavoriteSongsSettingsPage
+  });
+  function FavoriteSongsSettingsPage() {
     var settings4 = useSongSpotlightSettings();
+    var [input, setInput] = import_react29.default.useState("");
+    var [loading, setLoading] = import_react29.default.useState(false);
+    var [error, setError] = import_react29.default.useState(null);
+    function handleAdd() {
+      return _async_to_generator(function* () {
+        setError(null);
+        if (!input) return;
+        var m2 = input.match(/last\.fm\/music\/([^\/]+)(?:\/_\/|\/)([^\/?#]+)/i);
+        if (!m2) {
+          setError("Invalid Last.fm track URL");
+          return;
+        }
+        var artist = decodeURIComponent(m2[1].replace(/\+/g, " ").trim());
+        var title = decodeURIComponent(m2[2].replace(/\+/g, " ").trim());
+        setLoading(true);
+        try {
+          var info = yield fetchTrackInfo(artist, title);
+          var newSong = {
+            title,
+            artist,
+            album: info.album || "",
+            url: input,
+            albumArt: info.art
+          };
+          var updated = [
+            ...settings4.favoriteSongs || [],
+            newSong
+          ];
+          settings4.updateSettings({
+            favoriteSongs: updated
+          });
+          try {
+            var UserStore20 = findByStoreName("UserStore");
+            var myId = UserStore20?.getCurrentUser?.()?.id;
+            if (myId && settings4.shareUsername) {
+              publishFavoritesToRegistry(myId, updated);
+            }
+          } catch (unused) {
+          }
+          setInput("");
+          showToast("Added to favorites", findAssetId2("CheckIcon"));
+        } catch (e) {
+          setError("Failed to fetch track info");
+        }
+        setLoading(false);
+      })();
+    }
+    function handleRemove(idx) {
+      var updated = [
+        ...settings4.favoriteSongs || []
+      ];
+      updated.splice(idx, 1);
+      settings4.updateSettings({
+        favoriteSongs: updated
+      });
+      showToast("Removed favorite", findAssetId2("CheckIcon"));
+      try {
+        var UserStore20 = findByStoreName("UserStore");
+        var myId = UserStore20?.getCurrentUser?.()?.id;
+        if (myId && settings4.shareUsername) {
+          publishFavoritesToRegistry(myId, updated);
+        }
+      } catch (unused) {
+      }
+    }
+    function handleMoveUp(idx) {
+      if (idx <= 0) return;
+      var list = [
+        ...settings4.favoriteSongs || []
+      ];
+      var tmp = list[idx - 1];
+      list[idx - 1] = list[idx];
+      list[idx] = tmp;
+      settings4.updateSettings({
+        favoriteSongs: list
+      });
+      showToast("Moved up", findAssetId2("CheckIcon"));
+      try {
+        var UserStore20 = findByStoreName("UserStore");
+        var myId = UserStore20?.getCurrentUser?.()?.id;
+        if (myId && settings4.shareUsername) publishFavoritesToRegistry(myId, list);
+      } catch (unused) {
+      }
+    }
+    function handleMoveDown(idx) {
+      var len = (settings4.favoriteSongs || []).length;
+      if (idx >= len - 1) return;
+      var list = [
+        ...settings4.favoriteSongs || []
+      ];
+      var tmp = list[idx + 1];
+      list[idx + 1] = list[idx];
+      list[idx] = tmp;
+      settings4.updateSettings({
+        favoriteSongs: list
+      });
+      showToast("Moved down", findAssetId2("CheckIcon"));
+      try {
+        var UserStore20 = findByStoreName("UserStore");
+        var myId = UserStore20?.getCurrentUser?.()?.id;
+        if (myId && settings4.shareUsername) publishFavoritesToRegistry(myId, list);
+      } catch (unused) {
+      }
+    }
     return /* @__PURE__ */ jsx(ScrollView30, {
       style: {
         flex: 1
@@ -32498,6 +32750,131 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         spacing: 8,
         children: [
           /* @__PURE__ */ jsxs(TableRowGroup15, {
+            title: "Add songs with Last.fm links",
+            children: [
+              /* @__PURE__ */ jsx(TextInput7, {
+                placeholder: "https://www.last.fm/music/Artist/_/Track",
+                value: input,
+                onChange: setInput,
+                isClearable: true,
+                editable: !loading
+              }),
+              /* @__PURE__ */ jsx(Button3, {
+                text: "Add to favorites",
+                size: "md",
+                onPress: handleAdd,
+                disabled: loading || !input,
+                style: {
+                  borderRadius: 8
+                }
+              }),
+              error && /* @__PURE__ */ jsx(Text8, {
+                style: {
+                  color: "#FF6B6B"
+                },
+                children: error
+              })
+            ]
+          }),
+          /* @__PURE__ */ jsx(TableRowGroup15, {
+            title: "Favorites",
+            children: (settings4.favoriteSongs || []).length === 0 ? /* @__PURE__ */ jsx(Text8, {
+              style: {
+                color: "#888",
+                padding: 8
+              },
+              children: "No favorites added."
+            }) : (settings4.favoriteSongs || []).map((s, idx) => /* @__PURE__ */ jsx(import_react29.default.Fragment, {
+              children: /* @__PURE__ */ jsx(SongRow, {
+                track: {
+                  name: s.title,
+                  artist: s.artist,
+                  album: s.album,
+                  playCount: 0,
+                  url: s.url,
+                  albumArt: s.albumArt || null,
+                  rank: idx + 1
+                },
+                style: {
+                  marginBottom: 6
+                },
+                showAlbumArt: true,
+                showPlayCount: false,
+                showAlbumName: true,
+                showRankNumbers: false,
+                hasThemeColors: true,
+                trailing: /* @__PURE__ */ jsxs(ReactNative.View, {
+                  style: {
+                    flexDirection: "row",
+                    gap: 6
+                  },
+                  children: [
+                    /* @__PURE__ */ jsx(IconButton, {
+                      size: "sm",
+                      icon: findAssetId2("ArrowSmallUpIcon"),
+                      onPress: () => {
+                        if (idx > 0) handleMoveUp(idx);
+                      }
+                    }),
+                    /* @__PURE__ */ jsx(IconButton, {
+                      size: "sm",
+                      icon: findAssetId2("ArrowSmallDownIcon"),
+                      onPress: () => {
+                        if (idx < (settings4.favoriteSongs || []).length - 1) handleMoveDown(idx);
+                      }
+                    }),
+                    /* @__PURE__ */ jsx(IconButton, {
+                      size: "sm",
+                      variant: "destructive",
+                      icon: findAssetId2("TrashIcon"),
+                      onPress: () => handleRemove(idx)
+                    })
+                  ]
+                })
+              })
+            }, s.url || `${s.title}-${idx}`))
+          })
+        ]
+      })
+    });
+  }
+  var import_react29, ScrollView30, TableRowGroup15, TableRow8, Stack12, TextInput7, Text8, Button3;
+  var init_FavoriteSongsSettingsPage = __esm({
+    "src/plugins/songspotlight/pages/FavoriteSongsSettingsPage.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_jsxRuntime();
+      import_react29 = __toESM(require_react());
+      init_metro();
+      init_components();
+      init_common();
+      init_toasts();
+      init_assets();
+      init_storage28();
+      init_api7();
+      init_SongRow();
+      ({ ScrollView: ScrollView30 } = findByProps("ScrollView"));
+      ({ TableRowGroup: TableRowGroup15, TableRow: TableRow8, Stack: Stack12, TextInput: TextInput7, Text: Text8, Button: Button3 } = findByProps("TableRowGroup", "TableRow", "Stack", "TextInput", "Text", "Button"));
+    }
+  });
+
+  // src/plugins/songspotlight/pages/DisplaySettingsPage.tsx
+  function DisplaySettingsPage2() {
+    var settings4 = useSongSpotlightSettings();
+    var navigation2 = NavigationNative.useNavigation();
+    return /* @__PURE__ */ jsx(ScrollView31, {
+      style: {
+        flex: 1
+      },
+      contentContainerStyle: {
+        padding: 10
+      },
+      children: /* @__PURE__ */ jsxs(Stack13, {
+        spacing: 8,
+        children: [
+          /* @__PURE__ */ jsxs(TableRowGroup16, {
             title: "Track Display",
             children: [
               /* @__PURE__ */ jsx(TableSwitchRow10, {
@@ -32534,7 +32911,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               })
             ]
           }),
-          /* @__PURE__ */ jsx(TableRowGroup15, {
+          /* @__PURE__ */ jsx(TableRowGroup16, {
             title: "Section Position",
             children: /* @__PURE__ */ jsxs(TableRadioGroup5, {
               value: settings4.displayPosition,
@@ -32557,7 +32934,37 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup15, {
+          /* @__PURE__ */ jsx(TableRowGroup16, {
+            title: "Source",
+            children: /* @__PURE__ */ jsxs(TableRadioGroup5, {
+              value: settings4.displaySource,
+              onChange: (value) => settings4.updateSettings({
+                displaySource: value
+              }),
+              children: [
+                /* @__PURE__ */ jsx(TableRadioRow5, {
+                  label: "Last.fm stats",
+                  value: "lastfm"
+                }),
+                /* @__PURE__ */ jsx(TableRadioRow5, {
+                  label: "Favorites",
+                  value: "favorites"
+                })
+              ]
+            })
+          }),
+          settings4.displaySource === "favorites" && /* @__PURE__ */ jsx(TableRowGroup16, {
+            title: "Favorites",
+            children: /* @__PURE__ */ jsx(TableRow9, {
+              label: "Configure favorite songs",
+              trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
+              onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
+                title: "Favorite Songs",
+                render: (init_FavoriteSongsSettingsPage(), __toCommonJS(FavoriteSongsSettingsPage_exports)).default
+              })
+            })
+          }),
+          /* @__PURE__ */ jsxs(TableRowGroup16, {
             title: "Visibility",
             children: [
               /* @__PURE__ */ jsx(TableSwitchRow10, {
@@ -32577,7 +32984,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               })
             ]
           }),
-          /* @__PURE__ */ jsx(TableRowGroup15, {
+          /* @__PURE__ */ jsx(TableRowGroup16, {
             title: "Last.fm Header",
             children: /* @__PURE__ */ jsx(TableSwitchRow10, {
               label: "Show Last.fm profile header",
@@ -32609,7 +33016,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               })
             ]
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup15, {
+          /* @__PURE__ */ jsxs(TableRowGroup16, {
             title: "Advanced",
             children: [
               /* @__PURE__ */ jsx(TableSwitchRow10, {
@@ -32620,10 +33027,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                 }),
                 value: settings4.showRankNumbers
               }),
-              /* @__PURE__ */ jsx(TableRow8, {
+              /* @__PURE__ */ jsx(TableRow9, {
                 label: "Clear Track Cache",
                 subLabel: "Force refresh track data on next profile view",
-                trailing: /* @__PURE__ */ jsx(TableRow8.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
                 onPress: () => {
                   clearTrackCache();
                   showToast("Track cache cleared", findAssetId2("CheckIcon"));
@@ -32631,11 +33038,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               })
             ]
           }),
-          /* @__PURE__ */ jsx(TableRowGroup15, {
-            children: /* @__PURE__ */ jsxs(Stack12, {
+          /* @__PURE__ */ jsx(TableRowGroup16, {
+            children: /* @__PURE__ */ jsxs(Stack13, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput7, {
+                /* @__PURE__ */ jsx(TextInput8, {
                   placeholder: "Section Title (default: Song Spotlight)",
                   value: settings4.sectionTitle,
                   onChange: (v2) => settings4.updateSettings({
@@ -32643,7 +33050,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                   }),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput7, {
+                /* @__PURE__ */ jsx(TextInput8, {
                   placeholder: "Card Opacity % (default: 40)",
                   value: settings4.cardOpacity === 40 ? "" : String(settings4.cardOpacity),
                   onChange: (v2) => {
@@ -32669,7 +33076,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView30, TableSwitchRow10, TableRowGroup15, TableRow8, TableRadioRow5, TableRadioGroup5, Stack12, TextInput7;
+  var ScrollView31, TableSwitchRow10, TableRowGroup16, TableRow9, TableRadioRow5, TableRadioGroup5, Stack13, TextInput8;
   var init_DisplaySettingsPage2 = __esm({
     "src/plugins/songspotlight/pages/DisplaySettingsPage.tsx"() {
       "use strict";
@@ -32680,10 +33087,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_toasts();
       init_metro();
       init_api7();
+      init_common();
       init_storage28();
-      ({ ScrollView: ScrollView30 } = findByProps("ScrollView"));
-      ({ TableSwitchRow: TableSwitchRow10, TableRowGroup: TableRowGroup15, TableRow: TableRow8, TableRadioRow: TableRadioRow5, TableRadioGroup: TableRadioGroup5, Stack: Stack12 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput7 } = findByProps("TextInput"));
+      ({ ScrollView: ScrollView31 } = findByProps("ScrollView"));
+      ({ TableSwitchRow: TableSwitchRow10, TableRowGroup: TableRowGroup16, TableRow: TableRow9, TableRadioRow: TableRadioRow5, TableRadioGroup: TableRadioGroup5, Stack: Stack13 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ TextInput: TextInput8 } = findByProps("TextInput"));
     }
   });
 
@@ -32702,22 +33110,22 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         showToast("\u274C Connection error", findAssetId2("XIcon"));
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView31, {
+    return /* @__PURE__ */ jsx(ScrollView32, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack13, {
+      children: /* @__PURE__ */ jsxs(Stack14, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup16, {
+          /* @__PURE__ */ jsx(TableRowGroup17, {
             title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack13, {
+            children: /* @__PURE__ */ jsxs(Stack14, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput8, {
+                /* @__PURE__ */ jsx(TextInput9, {
                   placeholder: "Last.fm Username",
                   value: settings4.username,
                   onChange: (v2) => settings4.updateSettings({
@@ -32725,7 +33133,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                   }),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput8, {
+                /* @__PURE__ */ jsx(TextInput9, {
                   placeholder: "Last.fm API Key",
                   value: settings4.apiKey,
                   onChange: (v2) => settings4.updateSettings({
@@ -32737,29 +33145,29 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup16, {
+          /* @__PURE__ */ jsxs(TableRowGroup17, {
             title: "Actions",
             children: [
-              /* @__PURE__ */ jsx(TableRow9, {
+              /* @__PURE__ */ jsx(TableRow10, {
                 label: "Test Connection",
                 subLabel: "Verify your Last.fm credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
                 onPress: handleTestConnection
               }),
-              /* @__PURE__ */ jsx(TableRow9, {
+              /* @__PURE__ */ jsx(TableRow10, {
                 label: "Get API Key",
                 subLabel: "Create a Last.fm API key at last.fm/api/account/create",
-                trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
                 onPress: () => {
                   import_react_native61.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
                     showToast("Failed to open web browser. Please visit: https://www.last.fm/api/account/create", findAssetId2("XIcon"));
                   });
                 }
               }),
-              /* @__PURE__ */ jsx(TableRow9, {
+              /* @__PURE__ */ jsx(TableRow10, {
                 label: "Clear Track Cache",
                 subLabel: "Force refresh track data on next profile view",
-                trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
                 onPress: () => {
                   clearTrackCache();
                   showToast("Track cache cleared", findAssetId2("CheckIcon"));
@@ -32771,7 +33179,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native61, ScrollView31, TableRowGroup16, TableRow9, Stack13, TextInput8;
+  var import_react_native61, ScrollView32, TableRowGroup17, TableRow10, Stack14, TextInput9;
   var init_LastFmCredentialsPage = __esm({
     "src/plugins/songspotlight/pages/LastFmCredentialsPage.tsx"() {
       "use strict";
@@ -32784,9 +33192,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       import_react_native61 = __toESM(require_react_native());
       init_api7();
       init_storage28();
-      ({ ScrollView: ScrollView31 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup16, TableRow: TableRow9, Stack: Stack13 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput8 } = findByProps("TextInput"));
+      ({ ScrollView: ScrollView32 } = findByProps("ScrollView"));
+      ({ TableRowGroup: TableRowGroup17, TableRow: TableRow10, Stack: Stack14 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ TextInput: TextInput9 } = findByProps("TextInput"));
     }
   });
 
@@ -32795,40 +33203,40 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var settings4 = useSongSpotlightSettings();
     var navigation2 = NavigationNative.useNavigation();
     var credentialStatus = settings4.username && settings4.apiKey ? "\u2705 Authenticated" : "\u274C Missing credentials";
-    return /* @__PURE__ */ jsx(ScrollView32, {
+    return /* @__PURE__ */ jsx(ScrollView33, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack14, {
+      children: /* @__PURE__ */ jsxs(Stack15, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup17, {
+          /* @__PURE__ */ jsx(TableRowGroup18, {
             title: "Service Configuration",
-            children: /* @__PURE__ */ jsx(TableRow10, {
+            children: /* @__PURE__ */ jsx(TableRow11, {
               label: "Last.fm Settings",
               subLabel: credentialStatus,
-              trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
+              trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
               onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                 title: "Last.fm Settings",
                 render: LastFmCredentialsPage
               })
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup17, {
+          /* @__PURE__ */ jsx(TableRowGroup18, {
             title: "Display",
-            children: /* @__PURE__ */ jsx(TableRow10, {
+            children: /* @__PURE__ */ jsx(TableRow11, {
               label: "Configure display",
-              trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
+              trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
               onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                 title: "Display",
                 render: DisplaySettingsPage2
               })
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup17, {
+          /* @__PURE__ */ jsxs(TableRowGroup18, {
             title: "Sharing",
             children: [
               /* @__PURE__ */ jsx(TableSwitchRow11, {
@@ -32854,10 +33262,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                 },
                 value: settings4.shareUsername
               }),
-              /* @__PURE__ */ jsx(TableRow10, {
+              /* @__PURE__ */ jsx(TableRow11, {
                 label: "Publish Now",
                 subLabel: "Manually sync your Last.fm username to the registry",
-                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
                 onPress: () => {
                   if (!settings4.username) {
                     showToast("Set your Last.fm username first", findAssetId2("XIcon"));
@@ -32883,9 +33291,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               })
             ]
           }),
-          /* @__PURE__ */ jsx(TableRowGroup17, {
+          /* @__PURE__ */ jsx(TableRowGroup18, {
             title: "Preview",
-            children: /* @__PURE__ */ jsx(Stack14, {
+            children: /* @__PURE__ */ jsx(Stack15, {
               spacing: 0,
               children: UserStore18?.getCurrentUser?.()?.id ? /* @__PURE__ */ jsx(SongSection, {
                 userId: UserStore18.getCurrentUser().id
@@ -32903,7 +33311,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView32, TableSwitchRow11, TableRowGroup17, TableRow10, Stack14, UserStore18;
+  var ScrollView33, TableSwitchRow11, TableRowGroup18, TableRow11, Stack15, UserStore18;
   var init_Settings6 = __esm({
     "src/plugins/songspotlight/Settings.tsx"() {
       "use strict";
@@ -32920,8 +33328,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_DisplaySettingsPage2();
       init_LastFmCredentialsPage();
       init_storage28();
-      ({ ScrollView: ScrollView32 } = findByProps("ScrollView"));
-      ({ TableSwitchRow: TableSwitchRow11, TableRowGroup: TableRowGroup17, TableRow: TableRow10, Stack: Stack14 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ ScrollView: ScrollView33 } = findByProps("ScrollView"));
+      ({ TableSwitchRow: TableSwitchRow11, TableRowGroup: TableRowGroup18, TableRow: TableRow11, Stack: Stack15 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
       UserStore18 = findByStoreName("UserStore");
     }
   });
@@ -32947,7 +33355,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_storage28();
       patches22 = [];
       songspotlight_default = definePlugin({
-        name: "Song Spotlight",
+        name: "SongSpotlight",
         description: "Show your top Last.fm tracks on your Discord profile.",
         author: [
           Developers.LampDelivery
@@ -32983,18 +33391,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       useStaffTagsSettings = create2()(persist((set) => ({
         useRoleColor: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "stafftags-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/stafftags.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       storage2 = new Proxy({}, {
@@ -33203,9 +33611,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         }
       };
       details_default = (() => {
-        var patches28 = [];
-        findByTypeNameAll("UserRow").forEach((UserRow) => patches28.push(after("type", UserRow, (args, res) => rowPatch(args, res))));
-        return () => patches28.forEach((unpatch6) => unpatch6());
+        var patches27 = [];
+        findByTypeNameAll("UserRow").forEach((UserRow) => patches27.push(after("type", UserRow, (args, res) => rowPatch(args, res))));
+        return () => patches27.forEach((unpatch6) => unpatch6());
       });
     }
   });
@@ -33229,14 +33637,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       GuildStore4 = findByStoreName("GuildStore");
       ChannelStore4 = findByStoreName("ChannelStore");
       name_default = (() => {
-        var patches28 = [];
+        var patches27 = [];
         if (HeaderName) {
-          patches28.push(after("default", HeaderName, ([{ channelId }], ret) => {
+          patches27.push(after("default", HeaderName, ([{ channelId }], ret) => {
             ret.props.channelId = channelId;
           }));
         }
         if (DisplayName) {
-          patches28.push(after("default", DisplayName, ([{ guildId, channelId, user }], ret) => {
+          patches27.push(after("default", DisplayName, ([{ guildId, channelId, user }], ret) => {
             var tagComponent = findInReactTree(ret, (c2) => c2?.type?.Types);
             var labelText = getBotLabel2?.(tagComponent?.props?.type);
             if (!tagComponent || labelText && !BUILT_IN_TAGS.includes(labelText)) {
@@ -33268,7 +33676,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             }
           }));
         }
-        return () => patches28.forEach((unpatch6) => unpatch6());
+        return () => patches27.forEach((unpatch6) => unpatch6());
       });
     }
   });
@@ -33405,18 +33813,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         delay: "300",
         debugMode: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "taptap-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/taptap.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       taptapSettings = new Proxy({}, {
@@ -33437,13 +33845,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   function TapTapSettings() {
     var { developerSettings } = useSettings();
     var taptapSettings2 = useTapTapSettings();
-    var [delayStr, setDelayStr] = import_react29.default.useState(taptapSettings2.delay ?? "300");
-    import_react29.default.useEffect(() => {
+    var [delayStr, setDelayStr] = import_react30.default.useState(taptapSettings2.delay ?? "300");
+    import_react30.default.useEffect(() => {
       setDelayStr(taptapSettings2.delay ?? "300");
     }, [
       taptapSettings2.delay
     ]);
-    var applyDelay = import_react29.default.useCallback((val) => {
+    var applyDelay = import_react30.default.useCallback((val) => {
       var parsed = parseInt(val, 10);
       if (!Number.isNaN(parsed)) {
         var clamped = Math.max(150, parsed);
@@ -33511,7 +33919,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react29, import_react_native63;
+  var import_react30, import_react_native63;
   var init_settings24 = __esm({
     "src/plugins/taptap/settings.tsx"() {
       "use strict";
@@ -33521,7 +33929,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_settings();
       init_common();
       init_components();
-      import_react29 = __toESM(require_react());
+      import_react30 = __toESM(require_react());
       import_react_native63 = __toESM(require_react_native());
       init_storage30();
     }
@@ -33575,11 +33983,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       if (taptapSettings.debugMode) logger.error("TapTap: openKeyboard error", e);
     }
   }
-  function doubleTapState(state2, nativeEvent) {
+  function doubleTapState(state, nativeEvent) {
     try {
       if (taptapSettings.debugMode) {
         logger.log("TapTap: DoubleTapState", {
-          state: state2,
+          state,
           data: nativeEvent
         });
       }
@@ -33849,732 +34257,6 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         settings() {
           return TapTapSettings();
         }
-      });
-    }
-  });
-
-  // src/plugins/themes-plus/stuff/active.ts
-  function updateState() {
-    for (var x2 of listeners) x2();
-  }
-  function useState13() {
-    var [, setTick] = React2.useState(0);
-    React2.useEffect(() => {
-      var listener = () => setTick((t) => t + 1);
-      listeners.add(listener);
-      return () => {
-        listeners.delete(listener);
-      };
-    }, []);
-  }
-  var state, listeners;
-  var init_active = __esm({
-    "src/plugins/themes-plus/stuff/active.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_common();
-      state = {
-        loading: true,
-        active: false,
-        iconpack: {
-          iconpack: void 0,
-          list: [],
-          hashes: {}
-        },
-        patches: [],
-        inactive: []
-      };
-      listeners = /* @__PURE__ */ new Set();
-    }
-  });
-
-  // src/plugins/themes-plus/stuff/resolveColor.ts
-  function resolveColor(color2) {
-    if (color2.startsWith("#")) return color2;
-    var semanticColor = tokens.colors[color2];
-    if (semanticColor) return semanticColor;
-    return void 0;
-  }
-  var ThemeStore5;
-  var init_resolveColor = __esm({
-    "src/plugins/themes-plus/stuff/resolveColor.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_common();
-      init_wrappers();
-      ThemeStore5 = findByStoreName("ThemeStore");
-    }
-  });
-
-  // src/plugins/themes-plus/stuff/iconOverlays.tsx
-  function getIconOverlay(plus, id, style) {
-    var asset = findAsset(id);
-    if (!asset) return;
-    var overlay = plus.customOverlays?.[asset.name];
-    if (!overlay) return;
-    return {
-      replace: overlay.replace,
-      style: overlay.style,
-      children: overlay.children
-    };
-  }
-  function getIconTint(plus, source, name) {
-    var tint = plus.icons?.[name];
-    if (!tint) return;
-    return resolveColor(tint);
-  }
-  var init_iconOverlays = __esm({
-    "src/plugins/themes-plus/stuff/iconOverlays.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_assets();
-      init_resolveColor();
-    }
-  });
-
-  // src/plugins/themes-plus/stuff/modIcons.ts
-  var modIcons_default;
-  var init_modIcons = __esm({
-    "src/plugins/themes-plus/stuff/modIcons.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      modIcons_default = {
-        bunny: {
-          source: "https://raw.githubusercontent.com/bunny-mod/Bunny/main/src/assets/icons/pyoncord.png",
-          raw: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAABoBJREFUeF7lW1nIVlUUXasom80kijJKaVQzGtTUjCJteNBmeqigssnIpDIqwmw0GqhQi4iw8SEaHtKgMpNKM7SiyUZpLppoTi0rd2f9nCu36/2+79zxv/5t8MV/n333WWefffb0EQ0iM+sH4AEAowG8CGAqycVVqsgqhWeVbWavAtg/tu4vABNIPphVVih/YwAws2EAlrRQfChJgVM6NQmARwGc0GKHX5PcofTdA2gSAJ8A2KXNJueQPLpsEJoEwI8A+rTZ4GrnIAeQ/KpMEJoEwCoAm3TY3DKSezcKADPbCMDWADYEIK/9B4CVJC2LomYWwv8PgC1JCqxSqJAFmNlOAF6PAfA3ACn3MYBLSD4bqmUgABI3l+T4ULmd+IoCcDeAs9p8RI5NPDNJrminTAYAZAVbkJSlFaaiALwJYEiAFh8CuJHk7Fa8ZqaNbRAgSyzjSc4N5G3LVhQAmfiYDIosBXAGyXeSa8xMJ9orUNb7AAZm9TNpsosCMNnd/9sDlY7Y/gRwAYDZJOUzusjMfvK+JFRcX5J6OgtRUQB2B/BBDg3k8ZeQHBED4AsASoZCaTTJRaHMrfiKAqD1jwM4NqcinwE4mOTnZiYgBWgozSN5RChzJQB40x0A4KMCivwO4GQAFwI4JIMcRYa9i74GhSwgZr5XuWs8LYPyaazPAMh6ojvLeop8tywA5L0V/FSSsbXZ4Eh3DV7udgD8VdgMwK8+JC6iU5a115GcmmVBkrcUC4hdhYPcPX6+RhAWkDysMQB4SzgXwB0Zoroi+q8iKcvLTaVaQMwSZgGYWBMIfUj+nBeBSgDwljADwHk1XIdCL0FlAMRAOL/i0tsgku82zgI8AMruLgNwfV4FA9btQ/KtAL5UlkotIOYTjgdwr6o5eRVts244SWWZuagWALw1DFUGCGBwLk1bLxpG8pW8MmsDwIPQ25W+7wNwTF6FU9bJ2U7L+xLUCkDsSij5keLblASEagmjSL6XVV63AOCtQSVw3d2yytxr3JN7LUklZsHUnQAMcnUE1RRVTi+TXgIwjqSsoiN1CwBmtqvzA28A2LyjhvkYlCKr9vhcp+W1A2BmewB4AcB2nZQr+Hc1aaaQlK9pSbUC4E9eLfCynF8IRoo/JpJUMXYdqgUAM9N3RgFYGKJxDh71FK5WAwbAvgAeShRnPgWwZxoIdQFwEwCV0DfOsbmQJWPi993MZGGqMsdT5e9VdE3GC5UCYGY69ehUQjaSh0dv/5B4j0FCXJ8hrWexHMAIkj9EH6oEADNTZUjNj+MqeOaSIM0nOTb5n2amStH8FEQVNh8eWcJaAHybe7gfU9kLgEzmbd/91VCCujArXdd3hdA2M73fKobKzDTYIK+uRsel7tT75jnKnGvUUtuWpMrra8nMNG12aguZatjKMa7pAsDMtnK9tkdylKVz6lz6snsATFKPwB+M+gtppx//sBoyCyMAkuNppWtYg0CVxeT4tvfPbKcI8zHXpD2RZnaOW3RXDQo27ROrSfYSAGowylv/30iR4qYCQBFSVe9zk0Fd5GKH0QJAPfpO96XJG8mjmyJHOcHFAuA1APvlkbIerzmN5P3SXwBc7IaOblmPN5NVdaXK/RUDRACoTqcOq4KfptA37l1XuKpma0QKrlQ/2LEEJY8i+XQXAD4Q6u+uwZwKKrbtdNWYjMboNDClf0qTl+ktb5W6RsLMbDc/naZK80Cvt/YQSvruYJIr46GwanQTAJzph5Y1/Vk2aVZQCck8xR4kpUgpZGYCQDHNOK9/p6bpRSRvS02GzEx1tZGlaAbopH8DcDnJO0uS2VaMmWnzk1xz9hrXldIob9o+ldf0W+cPZiafkLvbmtDsSY3MytQ7mXUVwJiZrFozTKoK6QcZSVrXAszsSABPFVRIs4MzyjTxgvoo4TsAwCm+Yy2rEC1PswC9CAfm+KBMSsWPW0l+l2N9LUt8UfYKf8Vn/gcAM9MT82VGTeTYngBwdqeB6Ixya2FPAnCSKx4+HPhlBRJ6vsaS/DZwTePYkgCozx7SqpJXl69YmqzFNW6HHRSKxwGhc79XApgV2npqOiBxAE73/ftWOquRqbJT7mGEJoIRhcIaZVGjMm14QT+BucHVDKa7oUSlkT2KIgAUT6/zIwbXYFTmpLxZU909kiIAprhM6+bEDqf7Hy93pY09lSIAFriO7aF+k7/4aYs0i+hxOEQAqIGgNrJ+iDS5p3j4kNP6F9f7+CyBdXonAAAAAElFTkSuQmCC"
-        },
-        revenge: {
-          source: "https://raw.githubusercontent.com/revenge-mod/revenge-bundle/main/src/assets/icons/revenge.png",
-          raw: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuMWK1UgwAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAMAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAvm4AAOgDAAC+bgAA6AMAAFBhaW50Lk5FVCA1LjEuMQADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAABcs0MzPnTW7QAABiFJREFUeF7tmlmIlWUYx2emyRzTppz2Pc3QNqKijQqRQgoKSyGri4S5CLqRyIyi5SKCugmKLqK6EDNIsZKCCrKYmxYkK6gQi0Zpc8GZsdKc1HH6/c63nPOd41m+M/s35w8/vuWc877v83zv8rzPd5oaaqihhhqaxGoOjxNSg4ODrRymwYkwAw5BD/Q1Nzcf4VhVE84BGD2Fw81wI1wE58LpEDlgB2yENbClVkdMCGF8MyyCnVBJA7AV7oVjw59PfGHMLNgEtUpH3Q0TeqjnhBFt8DIchjT6Bs4LixleUbBdcgrYuBHzcljPEuiDtDoID4VFlaimRlPAMRyOAyeak+EsOB+chGZDG6yC9Uw6hzkOi6i3hYOT3iXwBlwB9egduJ+2/Rdc5lXiACr13glwAdh1ZsGc8Pps0AHtoENsYKQ/4UH4MM3MG9ang6eC9Z4COtj6LgQdfCno8Hp72XewkHbtDi7zShRIY6ZzuBOWweWgoT6BQkMr6QdYRkWbg8u8QkOjdfskOBVcwnSwhmrgmaCDdUSxg4cil8ZbadePwWVesQNoYAeHZ0Dj7er1aBC64GGwRxignAH2pOhpeu66rRN0uMvUcBlaTv/CYhzwcXCZV84BGK+3n4Xl4BMfiuz+v8JemAk6wTnCp19vFx6qbNML8DROSMxRkQNu4bAWbHBW5UNZhAO+DS4DtWC8XfA+yLLxygl8YTgXxXLsafiVuatsS1svBodiLG86/o/PXWVf54DLbSwd8A/syV1lX64+LrGxdMB++C13lX053A20YukA99C/gGt41mV8Y7AVq4VlQcN/huwkDsrL+S6xM7QHqO3QH5xmWto7m6Uwsjt2gGHrX8Fp5uUmK14KIweYSKxnJRiA9+BdcBg5oY7kXGLZ1vETuMWVtNtvA6J42Y9CYddGC7vd6xTaBreBQ8glxkDjergO5oI7PvcW9e4BNPgg7IIt8BV8GZ57z/H8EbijrFW2dQFzn20PZHgIr0BavQ9udGJxbVkzYB4sBdNYX8BuOATV5Hd2wefwEtwDc2E6JBzJ9VTYAGlkVunasIi8uLkcjviNFHoNTGaUlZ9DB1wNT8E+KKf98CRcBTOhlrJfhTQyRbY4LCKeA1Q32N3SyORGYRkloqsNQA98zeVn4LxRTo7nLr67GXr9bXC7rKw7bRjv5s+JMKfCxv8O+4LTmuU4N7FRq0xtVWqwn10WnNYkcw22Ia3m0Atythc6wHyZq0EaWfl8Cqs6yfEdw9AlUKlb+5nZX7NTFRXWOR/m5W6kk5OnQVHCAcYBxgNp5BNbAWaHy4rGuhJ0gq+zqukG6OQ3uQZWkHVad9ohoEzTmY7LiwpbYRWkla+hPoVrILHXVtxzAlwJPVCr/O5jYII0Ie7ZTuvaCNZdj/6A3NCJuy43PH8CzA1W7dJFcr12R/kBONHtBGMLx/xdYFyQ2IfXIENz1/0N8H14fRosADPX7u3TtjOSc90dTLJdiQJwwlIOq6HeF4pR4OILCMezMULhMKtHbtIOgCuCw2IogVUkV5tOHLC6uHEmDg0165UNs5EmHRybQzVeWYZlRe8Khmq88uGYoi9poOGl6eysSyf6prm12AF94PidDHIOaSt2gPlBd1qTQW7e2hMOYFIwPfYJTIbkSC4/WNwDlP+v2RScZlruYzqO5gAnwuchbVQ40eRS2F/iAIaBa7nDYCVkOV3ukr/9aD1AJ+idt8F3hkZivZClrLHB2luwo2pQwVrppsE/SxjOGjxEAY7RouGt0Z7jyWMUqUVHv+P+IMIAxN9abyGjKSd6jX+EB92bqvJwv1BogOeicRpbiE7QQYXovELcytrL/Gw0pPH27BUYX/J3mVEVzpwGr0O9O7q0Mtf4Jrj+j71oyE2wB0ZDGr8GzAMkZPcdKzmvmNIaaTmhr4NH6fb+WSqhsXTA3zDSK4vGrwcnvBLjx1R0R98bdMNIyW6/FhJvg8eNaJiprcfhAAy3NH4d+Bps/IoGtsOLUOllSVpFxrvdHf+iob7yegB8FbYXfHOjEWnph23wHJg7rEmpAqGREg22HW5PzdS6VFV6d1BO/ht0K3SHoXxDDTXUUEMNVVRT0/+M4LN4eqsYNQAAAABJRU5ErkJggg=="
-        }
-      };
-    }
-  });
-
-  // src/plugins/themes-plus/stores/CacheStore.ts
-  var useCacheStore2;
-  var init_CacheStore2 = __esm({
-    "src/plugins/themes-plus/stores/CacheStore.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_storage();
-      init_esm();
-      init_middleware();
-      useCacheStore2 = create2()(persist((set) => ({
-        iconpacks: {},
-        setIconpack: (id, data4) => set((state2) => ({
-          iconpacks: {
-            ...state2.iconpacks,
-            [id]: data4
-          }
-        }))
-      }), {
-        name: "themes-plus-cache",
-        storage: createJSONStorage(() => createFileStorage("plugins/themes-plus-cache.json"))
-      }));
-    }
-  });
-
-  // src/plugins/themes-plus/stuff/util.ts
-  function fixPath(path) {
-    return path.startsWith("../") ? `_/${path.slice(3)}` : path;
-  }
-  function cFetch2(url2, init, format = "text") {
-    return _async_to_generator(function* () {
-      var cache = useCacheStore2.getState();
-      var rawUrl = typeof url2 === "string" ? url2 : url2.url;
-      var res = yield fetch(url2, init);
-      var ret;
-      if (res.status !== 200) {
-        if (cache?.isCached?.(rawUrl)) ret = cache.readCache(rawUrl);
-        else throw new Error(`Failed to fetch ${rawUrl}`);
-      } else {
-        ret = yield res.text();
-        cache?.writeCache?.(rawUrl, ret);
-      }
-      if (format === "json") return JSON.parse(ret);
-      return ret;
-    })();
-  }
-  var init_util = __esm({
-    "src/plugins/themes-plus/stuff/util.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_themes_plus();
-      init_CacheStore2();
-    }
-  });
-
-  // src/plugins/themes-plus/patches/icons.tsx
-  function patchIcons(plus, tree, config) {
-    var { iconpack } = state.iconpack;
-    if (config.biggerStatus) {
-      patches25.push(before("default", Status, ([props], ...args) => [
-        {
-          ...props,
-          size: Math.floor(props.size * 1.5)
-        },
-        ...args
-      ]));
-    }
-    if (plus.icons || plus.customOverlays || iconpack) {
-      if (plus.icons) state.patches.push(PatchType.Icons);
-      if (plus.customOverlays) {
-        state.patches.push(PatchType.CustomIconOverlays);
-      }
-      if (iconpack) state.patches.push(PatchType.Iconpack);
-      patches25.push(waitFor((exports) => typeof exports?.jsx === "function" && typeof exports?.jsxs === "function" ? exports : void 0, (ReactJSX) => {
-        function interceptJSX(args, orig) {
-          var [type, props, ...rest] = args;
-          if (type !== OriginalImage || !props) {
-            return orig(...args);
-          }
-          var patchedProps = {
-            ...props
-          };
-          var { source } = patchedProps;
-          var asset = null;
-          var modIcon = Object.entries(modIcons_default).find(([_2, { raw }]) => source?.uri === raw);
-          if (modIcon) {
-            asset = {
-              httpServerLocation: "//_",
-              width: 64,
-              height: 64,
-              name: modIcon[0],
-              type: "png"
-            };
-          } else if (source && typeof source.uri === "string" && typeof source.width === "number" && typeof source.height === "number" && typeof source.file === "string" && source.allowIconTheming) {
-            var [file, ...parent] = source.file.split("/").reverse();
-            var [ext, ...base] = file.split(".").reverse();
-            asset = {
-              httpServerLocation: `//_/external${parent[0] ? "/" : ""}${parent.reverse().join("/")}`,
-              width: source.width,
-              height: source.height,
-              name: base.reverse().join("."),
-              type: ext
-            };
-          } else if (typeof source === "number") {
-            asset = findAsset(source);
-          }
-          if (!asset?.httpServerLocation) return orig(...args);
-          var assetIconpackLocation = iconpack && fixPath([
-            ...asset.httpServerLocation.split("/").slice(2),
-            `${asset.name}${iconpack.suffix}.${asset.type}`
-          ].join("/"));
-          var useIconpack = assetIconpackLocation && (tree.length ? tree.includes(assetIconpackLocation) : true);
-          var overlayChildren;
-          var overlay;
-          if (plus.customOverlays && !useIconpack && typeof source === "number") {
-            var overlay1 = getIconOverlay(plus, source, patchedProps.style);
-            if (overlay1) {
-              if (overlay1.replace) patchedProps.source = findAsset(overlay1.replace)?.id;
-              if (overlay1.style) patchedProps.style = [
-                patchedProps.style,
-                overlay1.style
-              ];
-              overlayChildren = overlay1.children;
-            }
-          }
-          if (plus.icons) {
-            var tint = getIconTint(plus, source, asset.name);
-            if (tint) {
-              patchedProps.style = [
-                patchedProps.style,
-                {
-                  tintColor: tint
-                }
-              ];
-            }
-          }
-          if (useIconpack) {
-            patchedProps.source = {
-              uri: iconpack.load + assetIconpackLocation,
-              headers: {
-                "cache-control": "public, max-age=3600"
-              },
-              width: asset.width,
-              height: asset.height,
-              original: patchedProps.source
-            };
-          }
-          var imageEl = orig(OriginalImage, patchedProps, ...rest);
-          return overlayChildren ? orig(RN.View, null, imageEl, overlayChildren) : imageEl;
-        }
-        patches25.push(instead("jsx", ReactJSX, (args, orig) => interceptJSX(args, orig)));
-      }));
-    }
-  }
-  var Status, RN, OriginalImage;
-  var init_icons = __esm({
-    "src/plugins/themes-plus/patches/icons.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_assets();
-      init_patcher();
-      init_modules2();
-      init_wrappers();
-      init_themes_plus();
-      init_active();
-      init_iconOverlays();
-      init_loader2();
-      init_modIcons();
-      init_util();
-      Status = findByName("Status", false);
-      RN = findByProps("Image", "View");
-      OriginalImage = RN.Image;
-    }
-  });
-
-  // src/plugins/themes-plus/patches/mentionLineColor.ts
-  function patchMentionLineColors(plus) {
-    if (plus.mentionLineColor) {
-      state.patches.push(PatchType.MentionLineColor);
-      patches25.push(after("createBackgroundHighlight", RowGeneratorUtils, ([x2], ret) => {
-        var clr = resolveColor(plus.mentionLineColor);
-        if (x2?.message?.mentioned && clr) {
-          ret.gutterColor = androidifyColor(clr, 200);
-        }
-      }));
-    }
-  }
-  var RowGeneratorUtils, androidifyColor;
-  var init_mentionLineColor = __esm({
-    "src/plugins/themes-plus/patches/mentionLineColor.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_patcher();
-      init_wrappers();
-      init_themes_plus();
-      init_active();
-      init_loader2();
-      init_resolveColor();
-      RowGeneratorUtils = findByProps("createBackgroundHighlight");
-      androidifyColor = (color2, alpha) => {
-        return color2;
-      };
-    }
-  });
-
-  // src/plugins/themes-plus/stuff/constants.ts
-  var constants_default2;
-  var init_constants5 = __esm({
-    "src/plugins/themes-plus/stuff/constants.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      constants_default2 = {
-        iconpacks: {
-          list: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/list.json",
-          assets: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/assets/",
-          tree: (iconpack) => `https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/${iconpack}.txt`,
-          hashes: "https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/_hashes.txt"
-        }
-      };
-    }
-  });
-
-  // src/plugins/themes-plus/stuff/iconpackDataGetter.ts
-  function getIconpackData(id, configUrl) {
-    return _async_to_generator(function* () {
-      var treeUrl = constants_default2.iconpacks.tree(id);
-      var [config, tree] = yield allSettled([
-        configUrl ? cFetch2(configUrl, void 0, "json") : new Promise((res) => res(/* @__PURE__ */ Symbol())),
-        cFetch2(treeUrl).then((x2) => x2.replaceAll("\r", "").split("\n"))
-      ]);
-      return {
-        config: config.status === "fulfilled" && typeof config.value !== "symbol" ? config.value : null,
-        tree: tree.status === "fulfilled" ? tree.value : null
-      };
-    })();
-  }
-  var init_iconpackDataGetter = __esm({
-    "src/plugins/themes-plus/stuff/iconpackDataGetter.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_constants5();
-      init_util();
-    }
-  });
-
-  // src/plugins/themes-plus/stuff/loader.tsx
-  function load() {
-    return _async_to_generator(function* () {
-      for (var x2 of patches25) {
-        x2();
-      }
-      patches25.length = 0;
-      state.loading = true;
-      state.active = false;
-      state.iconpack = {
-        iconpack: void 0,
-        list: [],
-        hashes: {}
-      };
-      state.patches = [];
-      state.inactive = [];
-      updateState();
-      try {
-        state.iconpack = {
-          iconpack: void 0,
-          list: yield cFetch2(constants_default2.iconpacks.list, void 0, "json").then((res) => res.list),
-          hashes: yield cFetch2(constants_default2.iconpacks.hashes, void 0, "json")
-        };
-      } catch (unused) {
-        if (!state.iconpack.list.length || !Object.keys(state.iconpack.hashes).length) {
-          state.loading = false;
-          state.inactive.push(InactiveReason.NoIconpacksList);
-          updateState();
-          return;
-        }
-      }
-      var selectedTheme = getCurrentTheme();
-      if (!selectedTheme) {
-        state.loading = false;
-        state.inactive.push(InactiveReason.NoTheme);
-        updateState();
-        return;
-      }
-      var plusData = selectedTheme.data?.plus;
-      if (!plusData) {
-        state.loading = false;
-        state.inactive.push(InactiveReason.ThemesPlusUnsupported);
-        updateState();
-        return;
-      }
-      var useIconpack = plusData.iconpack;
-      var isCustomIconpack = false;
-      var user = UserStore20.getCurrentUser();
-      state.iconpack.iconpack = state.iconpack.list.find((x3) => useIconpack === x3.id);
-      var iconpackConfig = {
-        biggerStatus: false
-      };
-      var tree = [];
-      if (!isCustomIconpack && state.iconpack.iconpack) {
-        var dt;
-        try {
-          dt = yield getIconpackData(state.iconpack.iconpack.id, state.iconpack.iconpack.config);
-        } catch (unused) {
-          dt = {
-            config: null,
-            tree: null
-          };
-        }
-        if (dt.tree === null) {
-          state.loading = false;
-          if (dt.config === null) {
-            state.inactive.push(InactiveReason.NoIconpackConfig);
-          }
-          if (dt.tree === null) {
-            state.inactive.push(InactiveReason.NoIconpackFiles);
-          }
-          updateState();
-          return;
-        }
-        tree = dt.tree;
-        if (dt.config) iconpackConfig = dt.config;
-      }
-      state.active = true;
-      state.loading = false;
-      patchIcons(plusData, tree, iconpackConfig);
-      patchMentionLineColors(plusData);
-      updateState();
-    })();
-  }
-  var UserStore20, patches25;
-  var init_loader2 = __esm({
-    "src/plugins/themes-plus/stuff/loader.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_wrappers();
-      init_themes();
-      init_themes_plus();
-      init_icons();
-      init_mentionLineColor();
-      init_active();
-      init_constants5();
-      init_iconpackDataGetter();
-      init_util();
-      UserStore20 = findByStoreName("UserStore");
-      patches25 = [];
-    }
-  });
-
-  // src/plugins/themes-plus/components/Settings.tsx
-  function Settings_default2() {
-    useState13();
-    var styles5 = useStyles16();
-    return /* @__PURE__ */ jsxs(ReactNative.View, {
-      style: styles5.base,
-      children: [
-        /* @__PURE__ */ jsx(ReactNative.View, {
-          style: styles5.container,
-          children: state.loading ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
-            size: "large",
-            style: {
-              flex: 1,
-              marginVertical: 30
-            }
-          }) : /* @__PURE__ */ jsxs(Fragment, {
-            children: [
-              /* @__PURE__ */ jsxs(ReactNative.View, {
-                style: styles5.rowTitle,
-                children: [
-                  /* @__PURE__ */ jsx(ReactNative.Image, {
-                    source: state.active ? findAssetId2("CircleCheckIcon-primary") : findAssetId2("CircleXIcon-primary"),
-                    style: styles5.titleIcon,
-                    resizeMode: "cover"
-                  }),
-                  /* @__PURE__ */ jsx(Text, {
-                    variant: "text-lg/semibold",
-                    style: {
-                      color: tokens.colors.TEXT_NORMAL
-                    },
-                    children: state.active ? "Themes+ is active" : "Themes+ is inactive"
-                  })
-                ]
-              }),
-              state.active ? Object.values(PatchType).map((x2, i) => /* @__PURE__ */ jsx(ListItem, {
-                index: i,
-                state: state.patches.includes(x2),
-                trolley: false,
-                children: x2
-              }, x2)) : state.inactive.map((x2, i) => /* @__PURE__ */ jsx(ListItem, {
-                index: i,
-                state: false,
-                trolley: false,
-                children: x2
-              }, x2))
-            ]
-          })
-        }),
-        /* @__PURE__ */ jsxs(ReactNative.View, {
-          style: styles5.bottomButtons,
-          children: [
-            /* @__PURE__ */ jsx(Button, {
-              size: "md",
-              variant: "primary",
-              text: "Reload",
-              onPress: () => !state.loading && load(),
-              loading: state.loading,
-              style: {
-                flex: 0.5
-              }
-            }),
-            /* @__PURE__ */ jsx(Button, {
-              size: "md",
-              variant: "secondary",
-              text: "Config",
-              onPress: () => {
-                openAlert({
-                  title: "Config",
-                  content: "Config modal is not yet implemented in this port.",
-                  confirmText: "OK",
-                  onConfirm: () => {
-                  }
-                });
-              },
-              style: {
-                flex: 0.5
-              }
-            })
-          ]
-        }),
-        /* @__PURE__ */ jsx(FloatingActionButton, {
-          icon: findAssetId2("CircleQuestionIcon-primary"),
-          onPress: () => url.openURL("https://github.com/nexpid/ThemesPlus")
-        })
-      ]
-    });
-  }
-  var useStyles16, ListItem;
-  var init_Settings8 = __esm({
-    "src/plugins/themes-plus/components/Settings.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_alerts();
-      init_styles();
-      init_common();
-      init_common();
-      init_components();
-      init_themes_plus();
-      init_active();
-      init_loader2();
-      useStyles16 = createStyles({
-        icon: {
-          width: 16,
-          height: 16,
-          marginTop: 3
-        },
-        row: {
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 4
-        },
-        base: {
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          paddingHorizontal: 12,
-          gap: 15
-        },
-        container: {
-          width: "100%",
-          padding: 12,
-          backgroundColor: tokens.colors.CARD_PRIMARY_BG,
-          borderColor: tokens.colors.BORDER_SUBTLE,
-          borderWidth: 1,
-          borderRadius: 16,
-          gap: 2,
-          overflow: "hidden"
-        },
-        bottomButtons: {
-          width: "100%",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 8
-        },
-        titleIcon: {
-          tintColor: tokens.colors.TEXT_NORMAL,
-          width: 20,
-          height: 20
-        },
-        btnIcon: {
-          tintColor: tokens.colors.WHITE,
-          width: 20,
-          height: 20,
-          marginRight: 4
-        },
-        btnIconSecondary: {
-          tintColor: tokens.colors.INTERACTIVE_NORMAL
-        },
-        rowTitle: {
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 6,
-          marginBottom: 2
-        }
-      });
-      ListItem = ({ state: state2, index, children }) => {
-        var styles5 = useStyles16();
-        var color2 = state2 ? tokens.colors.TEXT_POSITIVE : tokens.colors.TEXT_DANGER;
-        return /* @__PURE__ */ jsxs(ReactNative.View, {
-          style: styles5.row,
-          children: [
-            /* @__PURE__ */ jsx(ReactNative.Image, {
-              source: state2 ? findAssetId2("CircleCheckIcon-primary") : findAssetId2("CircleXIcon-primary"),
-              style: [
-                styles5.icon,
-                {
-                  tintColor: color2
-                }
-              ],
-              resizeMode: "cover"
-            }),
-            /* @__PURE__ */ jsx(Text, {
-              variant: state2 ? "text-md/semibold" : "text-md/medium",
-              style: {
-                color: color2
-              },
-              children
-            })
-          ]
-        });
-      };
-    }
-  });
-
-  // src/plugins/themes-plus/index.tsx
-  var themes_plus_exports = {};
-  __export(themes_plus_exports, {
-    ConfigIconpackMode: () => ConfigIconpackMode,
-    InactiveReason: () => InactiveReason,
-    PatchType: () => PatchType,
-    default: () => themes_plus_default,
-    vstorage: () => vstorage
-  });
-  var PatchType, InactiveReason, ConfigIconpackMode, vstorage, themes_plus_default;
-  var init_themes_plus = __esm({
-    "src/plugins/themes-plus/index.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_plugins3();
-      init_Developers();
-      init_Settings8();
-      init_loader2();
-      PatchType = /* @__PURE__ */ (function(PatchType2) {
-        PatchType2["Icons"] = "icons";
-        PatchType2["CustomIconOverlays"] = "custom_icon_overlays";
-        PatchType2["MentionLineColor"] = "mention_line_color";
-        PatchType2["Iconpack"] = "iconpack";
-        return PatchType2;
-      })({});
-      InactiveReason = /* @__PURE__ */ (function(InactiveReason2) {
-        InactiveReason2["NoTheme"] = "no_theme";
-        InactiveReason2["ThemesPlusUnsupported"] = "themes_plus_unsupported";
-        InactiveReason2["NoIconpacksList"] = "no_iconpacks_list";
-        InactiveReason2["NoIconpackConfig"] = "no_iconpack_config";
-        InactiveReason2["NoIconpackFiles"] = "no_iconpack_files";
-        return InactiveReason2;
-      })({});
-      ConfigIconpackMode = /* @__PURE__ */ (function(ConfigIconpackMode2) {
-        ConfigIconpackMode2["Automatic"] = "automatic";
-        ConfigIconpackMode2["Manual"] = "manual";
-        ConfigIconpackMode2["Disabled"] = "disabled";
-        return ConfigIconpackMode2;
-      })({});
-      vstorage = {
-        iconpack: {
-          mode: "automatic",
-          custom: {
-            url: "https://raw.githubusercontent.com/mudrhiod/discord-iconpacks/master/plus/solar-duotone/",
-            suffix: "",
-            config: {
-              biggerStatus: false
-            }
-          },
-          isCustom: false
-        }
-      };
-      themes_plus_default = definePlugin({
-        name: "Themes+",
-        description: "Adds more customizability to Themes",
-        author: [
-          Contributors.nexpid
-        ],
-        id: "themes-plus",
-        version: "1.0.0",
-        eagerStart() {
-          try {
-            load();
-          } catch (e) {
-            console.log("Themes+ failed to load whoopsies!!", e);
-          }
-        },
-        stop() {
-          for (var x2 of patches25) {
-            x2();
-          }
-          patches25.length = 0;
-        },
-        settings: Settings_default2
       });
     }
   });
@@ -34879,18 +34561,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         translator: 1,
         immersive_enabled: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
+        updateSettings: (newSettings) => set((state) => ({
+          ...state,
           ...newSettings
         })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "translator-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/translator.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       settings3 = new Proxy({}, {
@@ -35053,7 +34735,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var [query, setQuery] = React2.useState("");
     var langs = settings4.translator === 0 ? DeepLLangs : GTranslateLangs;
     var filteredLangs = Object.entries(langs).filter(([key]) => key.toLowerCase().includes(query.toLowerCase()));
-    return /* @__PURE__ */ jsxs(ScrollView33, {
+    return /* @__PURE__ */ jsxs(ScrollView34, {
       style: {
         flex: 1
       },
@@ -35092,7 +34774,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       ]
     });
   }
-  var ScrollView33;
+  var ScrollView34;
   var init_TargetLang = __esm({
     "src/plugins/translator/settings/TargetLang.tsx"() {
       "use strict";
@@ -35104,7 +34786,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_components();
       init_lang();
       init_storage31();
-      ({ ScrollView: ScrollView33 } = ReactNative);
+      ({ ScrollView: ScrollView34 } = ReactNative);
     }
   });
 
@@ -35140,7 +34822,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         ]
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView34, {
+    return /* @__PURE__ */ jsx(ScrollView35, {
       style: {
         flex: 1
       },
@@ -35193,7 +34875,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView34, Text8, showSimpleActionSheet6, hideActionSheet9;
+  var ScrollView35, Text9, showSimpleActionSheet6, hideActionSheet9;
   var init_settings25 = __esm({
     "src/plugins/translator/settings/index.tsx"() {
       "use strict";
@@ -35206,7 +34888,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_components();
       init_storage31();
       init_TargetLang();
-      ({ ScrollView: ScrollView34, Text: Text8 } = ReactNative);
+      ({ ScrollView: ScrollView35, Text: Text9 } = ReactNative);
       ({ showSimpleActionSheet: showSimpleActionSheet6 } = findByProps("showSimpleActionSheet"));
       ({ hideActionSheet: hideActionSheet9 } = findByProps("openLazy", "hideActionSheet"));
     }
@@ -35217,7 +34899,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(translator_exports, {
     default: () => translator_default
   });
-  var patches26, translator_default;
+  var patches25, translator_default;
   var init_translator = __esm({
     "src/plugins/translator/index.ts"() {
       "use strict";
@@ -35231,7 +34913,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       settings3.target_lang ??= "en";
       settings3.translator ??= 1;
       settings3.immersive_enabled ??= true;
-      patches26 = [];
+      patches25 = [];
       translator_default = definePlugin({
         name: "Translator",
         description: "Translate messages using DeepL or Google Translate",
@@ -35245,10 +34927,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "translator",
         version: "1.0.0",
         start() {
-          patches26.push(ActionSheet_default());
+          patches25.push(ActionSheet_default());
         },
         stop() {
-          for (var unpatch6 of patches26) unpatch6();
+          for (var unpatch6 of patches25) unpatch6();
         },
         settings: Settings11
       });
@@ -35465,12 +35147,12 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       dataURL = "https://userpfp.github.io/UserPFP/source/data.json";
       pluginEnabled2 = false;
       patcher_default2 = (() => {
-        var patches28 = [];
+        var patches27 = [];
         fetchData2();
         var avatarStuff = findByProps("getUserAvatarURL", "getUserAvatarSource");
-        var UserStore21 = findByStoreName("UserStore");
+        var UserStore20 = findByStoreName("UserStore");
         dataInterval = setInterval(() => fetchData2(), 1e3 * 60 * 60);
-        patches28.push(instead("getUser", UserStore21, (args, orig) => {
+        patches27.push(instead("getUser", UserStore20, (args, orig) => {
           var ret = orig(...args);
           if (!pluginEnabled2 || !data3?.avatars?.[args[0]]) return ret;
           var ext = data3.avatars[args[0]] && urlExt(data3.avatars[args[0]]);
@@ -35480,11 +35162,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           }
           return ret;
         }));
-        patches28.push(instead("getUserAvatarURL", avatarStuff, (args, orig) => {
+        patches27.push(instead("getUserAvatarURL", avatarStuff, (args, orig) => {
           var custom = pluginEnabled2 ? getCustomAvatar(args[0].id, !args[1]) : void 0;
           return custom ?? orig(...args);
         }));
-        patches28.push(instead("getUserAvatarSource", avatarStuff, (args, orig) => {
+        patches27.push(instead("getUserAvatarSource", avatarStuff, (args, orig) => {
           if (!pluginEnabled2) return orig(...args);
           var custom = getCustomAvatar(args[0].id, !args[1]);
           if (!custom) return orig(...args);
@@ -35493,7 +35175,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           };
         }));
         return () => {
-          for (var x2 of patches28) {
+          for (var x2 of patches27) {
             x2();
           }
           if (dataInterval) {
@@ -35582,7 +35264,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       message.id
     ]);
     return /* @__PURE__ */ jsx(Fragment, {
-      children: /* @__PURE__ */ jsx(ScrollView37, {
+      children: /* @__PURE__ */ jsx(ScrollView38, {
         style: {
           flex: 1,
           marginVertical: 10
@@ -35632,7 +35314,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView37;
+  var ScrollView38;
   var init_RawPage = __esm({
     "src/plugins/viewraw/patches/RawPage.tsx"() {
       "use strict";
@@ -35645,7 +35327,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_common();
       init_components();
       init_cleanmessage();
-      ({ ScrollView: ScrollView37 } = ReactNative);
+      ({ ScrollView: ScrollView38 } = ReactNative);
     }
   });
 
@@ -35748,7 +35430,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(viewraw_exports, {
     default: () => viewraw_default2
   });
-  var patches27, viewraw_default2;
+  var patches26, viewraw_default2;
   var init_viewraw2 = __esm({
     "src/plugins/viewraw/index.ts"() {
       "use strict";
@@ -35757,7 +35439,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_viewraw();
       init_Developers();
-      patches27 = [];
+      patches26 = [];
       viewraw_default2 = definePlugin({
         name: "ViewRaw",
         description: "View raw message data",
@@ -35770,10 +35452,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "viewraw",
         version: "1.0.0",
         start() {
-          patches27.push(...viewraw_default());
+          patches26.push(...viewraw_default());
         },
         stop() {
-          for (var unpatch6 of patches27) unpatch6();
+          for (var unpatch6 of patches26) unpatch6();
         }
       });
     }
@@ -36134,14 +35816,6 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return null;
           }
         })(),
-        "themes-plus": (() => {
-          try {
-            return (init_themes_plus(), __toCommonJS(themes_plus_exports)).default;
-          } catch (error) {
-            console.error("[Failed to compile 'themes-plus' from './plugins/themes-plus':", error.message);
-            return null;
-          }
-        })(),
         "translator": (() => {
           try {
             return (init_translator(), __toCommonJS(translator_exports)).default;
@@ -36278,9 +35952,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         settings: {},
         _hasHydrated: false,
         updatePluginSetting: (id, enabled) => {
-          set((state2) => ({
+          set((state) => ({
             settings: {
-              ...state2.settings,
+              ...state.settings,
               [id]: {
                 enabled
               }
@@ -36288,14 +35962,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           }));
         },
         getPluginSetting: (id) => get().settings[id],
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
+        setHasHydrated: (state) => set({
+          _hasHydrated: state
         })
       }), {
         name: "plugin-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/settings.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
+        onRehydrateStorage: () => (state) => {
+          state?.setHasHydrated(true);
         }
       }));
       pluginSettings = new Proxy({}, {
