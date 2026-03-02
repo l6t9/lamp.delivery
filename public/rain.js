@@ -32438,46 +32438,30 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                 ]
               })
             }),
-            settings4.displaySource === "favorites" ? /* @__PURE__ */ jsxs(ReactNative.View, {
+            settings4.displaySource === "favorites" ? /* @__PURE__ */ jsx(ReactNative.View, {
               style: {
                 marginBottom: 10
               },
-              children: [
-                /* @__PURE__ */ jsx(ReactNative.View, {
-                  style: {
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 4
-                  },
-                  children: /* @__PURE__ */ jsx(Text, {
-                    variant: "text-sm/semibold",
+              children: favorites.map((song, index) => /* @__PURE__ */ jsxs(React.Fragment, {
+                children: [
+                  index > 0 && /* @__PURE__ */ jsx(ReactNative.View, {
                     style: {
-                      color: "#FF69B4"
-                    },
-                    children: "Favorites"
+                      height: 6
+                    }
+                  }),
+                  /* @__PURE__ */ jsx(SongRow, {
+                    track: song,
+                    style: styles5.trackCard,
+                    showAlbumArt: settings4.showAlbumArt,
+                    showPlayCount: false,
+                    showAlbumName: settings4.showAlbumName,
+                    showRankNumbers: settings4.showRankNumbers,
+                    hasThemeColors,
+                    colorfulCards: settings4.colorfulCards,
+                    cardOpacity: settings4.cardOpacity
                   })
-                }),
-                favorites.map((song, index) => /* @__PURE__ */ jsxs(React.Fragment, {
-                  children: [
-                    index > 0 && /* @__PURE__ */ jsx(ReactNative.View, {
-                      style: {
-                        height: 6
-                      }
-                    }),
-                    /* @__PURE__ */ jsx(SongRow, {
-                      track: song,
-                      style: styles5.trackCard,
-                      showAlbumArt: settings4.showAlbumArt,
-                      showPlayCount: false,
-                      showAlbumName: settings4.showAlbumName,
-                      showRankNumbers: settings4.showRankNumbers,
-                      hasThemeColors,
-                      colorfulCards: settings4.colorfulCards,
-                      cardOpacity: settings4.cardOpacity
-                    })
-                  ]
-                }, song.url || song.name || index))
-              ]
+                ]
+              }, song.url || song.name || index))
             }) : loading ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
               size: "small",
               style: {
