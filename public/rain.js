@@ -31572,7 +31572,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         registryUrl: "https://songspotlight-registry.songspotlight.workers.dev",
         favoritesRegistryUrl: "https://songspotlight-favorites.songspotlight.workers.dev",
         displayPosition: "aboveBio",
-        favoriteSongs: []
+        favoriteSongs: [],
+        albumGridView: false
       };
       useSongSpotlightSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS4,
@@ -31588,6 +31589,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         name: "songspotlight-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/songspotlight.json")),
         onRehydrateStorage: () => (state) => {
+          if (state && typeof state.albumGridView === "undefined") {
+            Object.assign(state, DEFAULT_SETTINGS4);
+          }
           state?.setHasHydrated(true);
         }
       }));
@@ -32251,6 +32255,41 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       trackCard: {
         backgroundColor: hasThemeColors ? "#00000083" : semanticColors.CARD_SECONDARY_BG
       },
+      grid: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "flex-start"
+      },
+      gridItem: {
+        width: 89,
+        height: 89,
+        margin: 6,
+        borderRadius: 10,
+        overflow: "hidden",
+        alignItems: "center",
+        justifyContent: "center",
+        borderWidth: 4,
+        borderColor: "transparent"
+      },
+      gridImage: {
+        width: 89,
+        height: 89,
+        borderRadius: 10
+      },
+      gridText: {
+        position: "absolute",
+        bottom: 4,
+        left: 4,
+        right: 4,
+        color: "#fff",
+        fontSize: 12,
+        textShadowColor: "#000",
+        textShadowOffset: {
+          width: 0,
+          height: 1
+        },
+        textShadowRadius: 2
+      },
       emptyText: {
         textAlign: "center",
         paddingVertical: 16,
@@ -32398,6 +32437,61 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       var url2 = userInfo?.url || `https://www.last.fm/user/${lastFmUsername}`;
       ReactNative.Linking.openURL(url2);
     };
+    function getGridBorderColor(track) {
+      if (!settings4.colorfulCards || !track.albumArt) return "transparent";
+      var hash = 0;
+      for (var i = 0; i < track.albumArt.length; i++) {
+        hash = track.albumArt.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      var color2 = `hsl(${hash % 360}, 30%, 35%)`;
+      return color2;
+    }
+    function renderGrid(tracks2) {
+      return /* @__PURE__ */ jsx(ReactNative.View, {
+        style: styles5.grid,
+        children: tracks2.map((track, idx) => /* @__PURE__ */ jsx(PressableScale, {
+          onPress: () => track.url && ReactNative.Linking.openURL(track.url),
+          children: /* @__PURE__ */ jsxs(ReactNative.View, {
+            style: [
+              styles5.gridItem,
+              settings4.colorfulCards && track.albumArt ? {
+                borderColor: getGridBorderColor(track)
+              } : null
+            ],
+            children: [
+              track.albumArt ? /* @__PURE__ */ jsx(ReactNative.Image, {
+                source: {
+                  uri: track.albumArt
+                },
+                style: styles5.gridImage,
+                resizeMode: "cover"
+              }) : /* @__PURE__ */ jsx(ReactNative.View, {
+                style: [
+                  styles5.gridImage,
+                  {
+                    backgroundColor: hasThemeColors ? "#FFFFFF1A" : semanticColors.BACKGROUND_TERTIARY,
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }
+                ],
+                children: /* @__PURE__ */ jsx(Text, {
+                  variant: "text-lg/bold",
+                  style: {
+                    color: hasThemeColors ? "#fff" : semanticColors.TEXT_NORMAL
+                  },
+                  children: "\u266A"
+                })
+              }),
+              /* @__PURE__ */ jsx(Text, {
+                style: styles5.gridText,
+                numberOfLines: 2,
+                children: track.name
+              })
+            ]
+          })
+        }, track.url || track.name || idx))
+      });
+    }
     return /* @__PURE__ */ jsx(ErrorBoundary, {
       children: /* @__PURE__ */ jsx(ReactNative.View, {
         style: [
@@ -32438,7 +32532,20 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                 ]
               })
             }),
-            settings4.displaySource === "favorites" ? /* @__PURE__ */ jsx(ReactNative.View, {
+            settings4.albumGridView ? settings4.displaySource === "favorites" ? renderGrid(favorites) : loading ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
+              size: "small",
+              style: {
+                paddingVertical: 20
+              }
+            }) : error ? /* @__PURE__ */ jsx(Text, {
+              variant: "text-sm/medium",
+              style: styles5.emptyText,
+              children: error
+            }) : autofillTracks.length === 0 ? /* @__PURE__ */ jsx(Text, {
+              variant: "text-sm/medium",
+              style: styles5.emptyText,
+              children: settings4.displayMode === "recent" ? "No recent tracks" : "No top tracks found"
+            }) : renderGrid(autofillTracks) : settings4.displaySource === "favorites" ? /* @__PURE__ */ jsx(ReactNative.View, {
               style: {
                 marginBottom: 10
               },
@@ -32847,6 +32954,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   // src/plugins/songspotlight/pages/DisplaySettingsPage.tsx
   function DisplaySettingsPage2() {
     var settings4 = useSongSpotlightSettings();
+    var albumGridValue = settings4.albumGridView ?? false;
     var navigation2 = NavigationNative.useNavigation();
     return /* @__PURE__ */ jsx(ScrollView31, {
       style: {
@@ -32858,6 +32966,17 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       children: /* @__PURE__ */ jsxs(Stack13, {
         spacing: 8,
         children: [
+          /* @__PURE__ */ jsx(TableRowGroup16, {
+            title: "Layout",
+            children: /* @__PURE__ */ jsx(TableSwitchRow10, {
+              label: "Album grid view",
+              subLabel: "Show album art in a grid instead of a list (applies to both Last.fm and Favorites)",
+              onValueChange: (value) => settings4.updateSettings({
+                albumGridView: value
+              }),
+              value: albumGridValue
+            })
+          }),
           /* @__PURE__ */ jsxs(TableRowGroup16, {
             title: "Track Display",
             children: [
