@@ -2104,6 +2104,7 @@
         COPY_URL: "Copy URL",
         COULD_NOT_FIND: "Hmmm... could not find that!",
         COULD_NOT_LOAD_PREVIEW: "Could not load preview for",
+        CUSTOMISATION: "Customisation",
         DARK: "Dark",
         DEBUGGER_URL: "Debugger URL",
         DELETE: "delete",
@@ -2213,7 +2214,7 @@
         SAVE: "Save",
         SEARCH_PLACEHOLDER: "Search...",
         SETTINGS: "Settings",
-        SHOW_BACKGROUND: "Show Background",
+        SHOW_BACKGROUND: "Show Chat Background",
         SHOW_BACKGROUND_DESC: "Shows or hides the theme's background image in chat",
         SHOW_CORE: "Show Core Plugins",
         SOME_ENTRIES_ERROR: "Some font entries cannot be imported. Please modify the entries and try again.",
@@ -2228,6 +2229,8 @@
         UNAPPLY: "Unapply",
         UNINSTALL: "Uninstall",
         UNKNOWN_AUTHOR: "Unknown",
+        USE_CUSTOM_ICONS: "Show custom icons",
+        USE_CUSTOM_ICONS_DESC: "Replace icons with custom ones",
         VERSIONS: "Versions"
       };
     }
@@ -2349,21 +2352,21 @@
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       createStoreImpl = (createState) => {
-        var state;
-        var listeners = /* @__PURE__ */ new Set();
+        var state2;
+        var listeners2 = /* @__PURE__ */ new Set();
         var setState = (partial, replace) => {
-          var nextState = typeof partial === "function" ? partial(state) : partial;
-          if (!Object.is(nextState, state)) {
-            var previousState = state;
-            state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
-            listeners.forEach((listener) => listener(state, previousState));
+          var nextState = typeof partial === "function" ? partial(state2) : partial;
+          if (!Object.is(nextState, state2)) {
+            var previousState = state2;
+            state2 = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state2, nextState);
+            listeners2.forEach((listener) => listener(state2, previousState));
           }
         };
-        var getState = () => state;
+        var getState = () => state2;
         var getInitialState = () => initialState;
         var subscribe = (listener) => {
-          listeners.add(listener);
-          return () => listeners.delete(listener);
+          listeners2.add(listener);
+          return () => listeners2.delete(listener);
         };
         var api = {
           setState,
@@ -2371,7 +2374,7 @@
           getInitialState,
           subscribe
         };
-        var initialState = state = createState(setState, getState, api);
+        var initialState = state2 = createState(setState, getState, api);
         return api;
       };
       createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
@@ -2467,8 +2470,8 @@
           if (optListener) {
             var equalityFn = (options == null ? void 0 : options.equalityFn) || Object.is;
             var currentSlice = selector(api.getState());
-            listener = (state) => {
-              var nextSlice = selector(state);
+            listener = (state2) => {
+              var nextSlice = selector(state2);
               if (!equalityFn(currentSlice, nextSlice)) {
                 var previousSlice = currentSlice;
                 optListener(currentSlice = nextSlice, previousSlice);
@@ -2512,7 +2515,7 @@
       persistImpl = (config, baseOptions) => (set, get, api) => {
         var options = {
           storage: createJSONStorage(() => globalThis.localStorage),
-          partialize: (state) => state,
+          partialize: (state2) => state2,
           version: 0,
           merge: (persistedState, currentState) => ({
             ...currentState,
@@ -2532,17 +2535,17 @@
           }, get, api);
         }
         var setItem = () => {
-          var state = options.partialize({
+          var state2 = options.partialize({
             ...get()
           });
           return storage3.setItem(options.name, {
-            state,
+            state: state2,
             version: options.version
           });
         };
         var savedSetState = api.setState;
-        api.setState = (state, replace) => {
-          savedSetState(state, replace);
+        api.setState = (state2, replace) => {
+          savedSetState(state2, replace);
           return setItem();
         };
         var configResult = config((...args) => {
@@ -2661,8 +2664,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = usePluginSettings2.subscribe((state) => {
-          if (state._hasHydrated) {
+        var unsubscribe2 = usePluginSettings2.subscribe((state2) => {
+          if (state2._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -2774,12 +2777,12 @@
           }
         },
         pinnedPlugins: [],
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        togglePinnedPlugin: (id) => set((state) => {
-          var pinned = state.pinnedPlugins || [];
+        togglePinnedPlugin: (id) => set((state2) => {
+          var pinned = state2.pinnedPlugins || [];
           if (pinned.includes(id)) {
             return {
               pinnedPlugins: pinned.filter((p) => p !== id)
@@ -2803,8 +2806,8 @@
           url: "http://localhost:4040/rain.js"
         },
         loadReactDevTools: false,
-        updateLoaderConfig: (newConfig) => set((state) => ({
-          ...state,
+        updateLoaderConfig: (newConfig) => set((state2) => ({
+          ...state2,
           ...newConfig
         }))
       }), {
@@ -2813,8 +2816,8 @@
       }));
       settings = () => useSettings.getState();
       useAssetBrowserSettings = () => {
-        var settings4 = useSettings((state) => state.assetBrowser);
-        var updateSettings = useSettings((state) => state.updateSettings);
+        var settings4 = useSettings((state2) => state2.assetBrowser);
+        var updateSettings = useSettings((state2) => state2.updateSettings);
         return {
           enabledFilters: settings4.enabledFilters,
           updateSettings: (newSettings) => {
@@ -3000,11 +3003,11 @@
         return ret;
       }
     };
-    var patches27 = [
+    var patches28 = [
       after("jsx", jsxRuntime, callback),
       after("jsxs", jsxRuntime, callback)
     ];
-    return () => patches27.forEach((unpatch6) => unpatch6());
+    return () => patches28.forEach((unpatch6) => unpatch6());
   }
   var callbacks, jsxRuntime;
   var init_jsx = __esm({
@@ -3637,18 +3640,18 @@
         customHost: "",
         customClientId: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "cloud-sync-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       cloudSyncSettings = new Proxy({}, {
@@ -3736,19 +3739,19 @@
           }
         },
         isAuthorized: () => !!get().token,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "cloud-sync-auth",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync-auth.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-          state?.init();
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
+          state2?.init();
         }
       }));
     }
@@ -3797,19 +3800,19 @@
           }
         },
         hasData: () => !!get().data && !!get().at,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "cloud-sync-cache",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync-cache.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-          state?.init();
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
+          state2?.init();
         }
       }));
     }
@@ -4266,17 +4269,17 @@
         fonts: {},
         _hasHydrated: false,
         setFont: (name, font) => {
-          set((state) => ({
+          set((state2) => ({
             fonts: {
-              ...state.fonts,
+              ...state2.fonts,
               [name]: font
             }
           }));
         },
         removeFont: (name) => {
-          set((state) => {
+          set((state2) => {
             var newFonts = {
-              ...state.fonts
+              ...state2.fonts
             };
             delete newFonts[name];
             return {
@@ -4285,9 +4288,9 @@
           });
         },
         setSelected: (name) => {
-          set((state) => {
+          set((state2) => {
             var newFonts = {
-              ...state.fonts
+              ...state2.fonts
             };
             if (name) {
               newFonts.__selected = name;
@@ -4299,16 +4302,16 @@
             };
           });
         },
-        setHasHydrated: (state) => {
+        setHasHydrated: (state2) => {
           set({
-            _hasHydrated: state
+            _hasHydrated: state2
           });
         }
       }), {
         name: "rain-fonts",
         storage: createJSONStorage(() => createFileStorage("RAIN_FONTS")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       fonts = new Proxy({}, {
@@ -4354,8 +4357,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = useColorsPref.subscribe((state) => {
-          if (state._hasHydrated) {
+        var unsubscribe2 = useColorsPref.subscribe((state2) => {
+          if (state2._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -4380,6 +4383,7 @@
       useColorsPref = create2()(persist((set) => ({
         selected: null,
         customBackground: null,
+        iconsEnabled: true,
         _hasHydrated: false,
         setType: (type) => set({
           type
@@ -4390,14 +4394,17 @@
         setSelected: (selected) => set({
           selected
         }),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setIconsEnabled: (enabled) => set({
+          iconsEnabled: enabled
+        }),
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "colors-pref",
         storage: createJSONStorage(() => createFileStorage("themes/colors/preferences.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       colorsPref = new Proxy({}, {
@@ -4405,13 +4412,536 @@
           return useColorsPref.getState()[prop];
         },
         set(target, prop, value) {
-          var state = useColorsPref.getState();
-          if (prop === "type") state.setType(value);
-          else if (prop === "customBackground") state.setCustomBackground(value);
-          else if (prop === "selected") state.setSelected(value);
+          var state2 = useColorsPref.getState();
+          if (prop === "type") state2.setType(value);
+          else if (prop === "customBackground") state2.setCustomBackground(value);
+          else if (prop === "selected") state2.setSelected(value);
+          else if (prop === "iconsEnabled") state2.setIconsEnabled(value);
           return true;
         }
       });
+    }
+  });
+
+  // src/plugins/_core/painter/plus/index.ts
+  var PatchType, InactiveReason;
+  var init_plus = __esm({
+    "src/plugins/_core/painter/plus/index.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      PatchType = /* @__PURE__ */ (function(PatchType2) {
+        PatchType2["Icons"] = "icons";
+        PatchType2["CustomIconOverlays"] = "custom_icon_overlays";
+        PatchType2["MentionLineColor"] = "mention_line_color";
+        PatchType2["Iconpack"] = "iconpack";
+        return PatchType2;
+      })({});
+      InactiveReason = /* @__PURE__ */ (function(InactiveReason2) {
+        InactiveReason2["NoTheme"] = "no_theme";
+        InactiveReason2["ThemesPlusUnsupported"] = "themes_plus_unsupported";
+        InactiveReason2["NoIconpacksList"] = "no_iconpacks_list";
+        InactiveReason2["NoIconpackConfig"] = "no_iconpack_config";
+        InactiveReason2["NoIconpackFiles"] = "no_iconpack_files";
+        return InactiveReason2;
+      })({});
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/active.ts
+  function updateState() {
+    for (var x2 of listeners) x2();
+  }
+  var state, listeners;
+  var init_active = __esm({
+    "src/plugins/_core/painter/plus/stuff/active.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_common();
+      state = {
+        loading: true,
+        active: false,
+        iconpack: {
+          iconpack: void 0,
+          list: [],
+          hashes: {}
+        },
+        patches: [],
+        inactive: []
+      };
+      listeners = /* @__PURE__ */ new Set();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/resolveColor.ts
+  function matchTheme(colors) {
+    var { theme } = ThemeStore2;
+    if (theme in colors) return colors[theme];
+    if ([
+      "dark",
+      "midnight"
+    ].includes(theme)) return colors.darker;
+    return colors.light;
+  }
+  function resolveColor_default(color2) {
+    if (Array.isArray(color2)) {
+      return matchTheme({
+        darker: color2[0],
+        light: color2[1],
+        midnight: color2[2]
+      });
+    }
+    if (color2.startsWith("SC_")) {
+      return semanticColors[color2.slice(3)] ? resolveSemanticColor(semanticColors[color2.slice(3)]) : "#ffffff";
+    }
+    if (color2.startsWith("RC_")) return rawColors[color2.slice(3)] ?? "#ffffff";
+    if (color2.startsWith("#") && color2.length === 4) {
+      return `#${color2[1].repeat(2)}${color2[2].repeat(2)}${color2[3].repeat(2)}`;
+    }
+    if (color2.startsWith("#") && color2.length === 7) return color2;
+  }
+  var ThemeStore2;
+  var init_resolveColor = __esm({
+    "src/plugins/_core/painter/plus/stuff/resolveColor.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_color();
+      init_metro();
+      ThemeStore2 = findByStoreName("ThemeStore");
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/iconOverlays.tsx
+  function getIconOverlay(plus, id, style) {
+    var asset = findAsset(id);
+    if (!asset) return;
+    var overlay = plus.customOverlays?.[asset.name];
+    if (!overlay) return;
+    return {
+      replace: overlay.replace,
+      style: overlay.style,
+      children: overlay.children
+    };
+  }
+  function getIconTint(plus, source, name) {
+    var tint = plus.icons?.[name];
+    if (!tint) return;
+    return resolveColor_default(tint);
+  }
+  var init_iconOverlays = __esm({
+    "src/plugins/_core/painter/plus/stuff/iconOverlays.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_assets();
+      init_resolveColor();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/modIcons.ts
+  var modIcons_default;
+  var init_modIcons = __esm({
+    "src/plugins/_core/painter/plus/stuff/modIcons.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      modIcons_default = {
+        bunny: {
+          source: "https://raw.githubusercontent.com/bunny-mod/Bunny/main/src/assets/icons/pyoncord.png",
+          raw: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAABoBJREFUeF7lW1nIVlUUXasom80kijJKaVQzGtTUjCJteNBmeqigssnIpDIqwmw0GqhQi4iw8SEaHtKgMpNKM7SiyUZpLppoTi0rd2f9nCu36/2+79zxv/5t8MV/n333WWefffb0EQ0iM+sH4AEAowG8CGAqycVVqsgqhWeVbWavAtg/tu4vABNIPphVVih/YwAws2EAlrRQfChJgVM6NQmARwGc0GKHX5PcofTdA2gSAJ8A2KXNJueQPLpsEJoEwI8A+rTZ4GrnIAeQ/KpMEJoEwCoAm3TY3DKSezcKADPbCMDWADYEIK/9B4CVJC2LomYWwv8PgC1JCqxSqJAFmNlOAF6PAfA3ACn3MYBLSD4bqmUgABI3l+T4ULmd+IoCcDeAs9p8RI5NPDNJrminTAYAZAVbkJSlFaaiALwJYEiAFh8CuJHk7Fa8ZqaNbRAgSyzjSc4N5G3LVhQAmfiYDIosBXAGyXeSa8xMJ9orUNb7AAZm9TNpsosCMNnd/9sDlY7Y/gRwAYDZJOUzusjMfvK+JFRcX5J6OgtRUQB2B/BBDg3k8ZeQHBED4AsASoZCaTTJRaHMrfiKAqD1jwM4NqcinwE4mOTnZiYgBWgozSN5RChzJQB40x0A4KMCivwO4GQAFwI4JIMcRYa9i74GhSwgZr5XuWs8LYPyaazPAMh6ojvLeop8tywA5L0V/FSSsbXZ4Eh3DV7udgD8VdgMwK8+JC6iU5a115GcmmVBkrcUC4hdhYPcPX6+RhAWkDysMQB4SzgXwB0Zoroi+q8iKcvLTaVaQMwSZgGYWBMIfUj+nBeBSgDwljADwHk1XIdCL0FlAMRAOL/i0tsgku82zgI8AMruLgNwfV4FA9btQ/KtAL5UlkotIOYTjgdwr6o5eRVts244SWWZuagWALw1DFUGCGBwLk1bLxpG8pW8MmsDwIPQ25W+7wNwTF6FU9bJ2U7L+xLUCkDsSij5keLblASEagmjSL6XVV63AOCtQSVw3d2yytxr3JN7LUklZsHUnQAMcnUE1RRVTi+TXgIwjqSsoiN1CwBmtqvzA28A2LyjhvkYlCKr9vhcp+W1A2BmewB4AcB2nZQr+Hc1aaaQlK9pSbUC4E9eLfCynF8IRoo/JpJUMXYdqgUAM9N3RgFYGKJxDh71FK5WAwbAvgAeShRnPgWwZxoIdQFwEwCV0DfOsbmQJWPi993MZGGqMsdT5e9VdE3GC5UCYGY69ehUQjaSh0dv/5B4j0FCXJ8hrWexHMAIkj9EH6oEADNTZUjNj+MqeOaSIM0nOTb5n2amStH8FEQVNh8eWcJaAHybe7gfU9kLgEzmbd/91VCCujArXdd3hdA2M73fKobKzDTYIK+uRsel7tT75jnKnGvUUtuWpMrra8nMNG12aguZatjKMa7pAsDMtnK9tkdylKVz6lz6snsATFKPwB+M+gtppx//sBoyCyMAkuNppWtYg0CVxeT4tvfPbKcI8zHXpD2RZnaOW3RXDQo27ROrSfYSAGowylv/30iR4qYCQBFSVe9zk0Fd5GKH0QJAPfpO96XJG8mjmyJHOcHFAuA1APvlkbIerzmN5P3SXwBc7IaOblmPN5NVdaXK/RUDRACoTqcOq4KfptA37l1XuKpma0QKrlQ/2LEEJY8i+XQXAD4Q6u+uwZwKKrbtdNWYjMboNDClf0qTl+ktb5W6RsLMbDc/naZK80Cvt/YQSvruYJIr46GwanQTAJzph5Y1/Vk2aVZQCck8xR4kpUgpZGYCQDHNOK9/p6bpRSRvS02GzEx1tZGlaAbopH8DcDnJO0uS2VaMmWnzk1xz9hrXldIob9o+ldf0W+cPZiafkLvbmtDsSY3MytQ7mXUVwJiZrFozTKoK6QcZSVrXAszsSABPFVRIs4MzyjTxgvoo4TsAwCm+Yy2rEC1PswC9CAfm+KBMSsWPW0l+l2N9LUt8UfYKf8Vn/gcAM9MT82VGTeTYngBwdqeB6Ixya2FPAnCSKx4+HPhlBRJ6vsaS/DZwTePYkgCozx7SqpJXl69YmqzFNW6HHRSKxwGhc79XApgV2npqOiBxAE73/ftWOquRqbJT7mGEJoIRhcIaZVGjMm14QT+BucHVDKa7oUSlkT2KIgAUT6/zIwbXYFTmpLxZU909kiIAprhM6+bEDqf7Hy93pY09lSIAFriO7aF+k7/4aYs0i+hxOEQAqIGgNrJ+iDS5p3j4kNP6F9f7+CyBdXonAAAAAElFTkSuQmCC"
+        },
+        revenge: {
+          source: "https://raw.githubusercontent.com/revenge-mod/revenge-bundle/main/src/assets/icons/revenge.png",
+          raw: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuMWK1UgwAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAMAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAvm4AAOgDAAC+bgAA6AMAAFBhaW50Lk5FVCA1LjEuMQADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAABcs0MzPnTW7QAABiFJREFUeF7tmlmIlWUYx2emyRzTppz2Pc3QNqKijQqRQgoKSyGri4S5CLqRyIyi5SKCugmKLqK6EDNIsZKCCrKYmxYkK6gQi0Zpc8GZsdKc1HH6/c63nPOd41m+M/s35w8/vuWc877v83zv8rzPd5oaaqihhhqaxGoOjxNSg4ODrRymwYkwAw5BD/Q1Nzcf4VhVE84BGD2Fw81wI1wE58LpEDlgB2yENbClVkdMCGF8MyyCnVBJA7AV7oVjw59PfGHMLNgEtUpH3Q0TeqjnhBFt8DIchjT6Bs4LixleUbBdcgrYuBHzcljPEuiDtDoID4VFlaimRlPAMRyOAyeak+EsOB+chGZDG6yC9Uw6hzkOi6i3hYOT3iXwBlwB9egduJ+2/Rdc5lXiACr13glwAdh1ZsGc8Pps0AHtoENsYKQ/4UH4MM3MG9ang6eC9Z4COtj6LgQdfCno8Hp72XewkHbtDi7zShRIY6ZzuBOWweWgoT6BQkMr6QdYRkWbg8u8QkOjdfskOBVcwnSwhmrgmaCDdUSxg4cil8ZbadePwWVesQNoYAeHZ0Dj7er1aBC64GGwRxignAH2pOhpeu66rRN0uMvUcBlaTv/CYhzwcXCZV84BGK+3n4Xl4BMfiuz+v8JemAk6wTnCp19vFx6qbNML8DROSMxRkQNu4bAWbHBW5UNZhAO+DS4DtWC8XfA+yLLxygl8YTgXxXLsafiVuatsS1svBodiLG86/o/PXWVf54DLbSwd8A/syV1lX64+LrGxdMB++C13lX053A20YukA99C/gGt41mV8Y7AVq4VlQcN/huwkDsrL+S6xM7QHqO3QH5xmWto7m6Uwsjt2gGHrX8Fp5uUmK14KIweYSKxnJRiA9+BdcBg5oY7kXGLZ1vETuMWVtNtvA6J42Y9CYddGC7vd6xTaBreBQ8glxkDjergO5oI7PvcW9e4BNPgg7IIt8BV8GZ57z/H8EbijrFW2dQFzn20PZHgIr0BavQ9udGJxbVkzYB4sBdNYX8BuOATV5Hd2wefwEtwDc2E6JBzJ9VTYAGlkVunasIi8uLkcjviNFHoNTGaUlZ9DB1wNT8E+KKf98CRcBTOhlrJfhTQyRbY4LCKeA1Q32N3SyORGYRkloqsNQA98zeVn4LxRTo7nLr67GXr9bXC7rKw7bRjv5s+JMKfCxv8O+4LTmuU4N7FRq0xtVWqwn10WnNYkcw22Ia3m0Atythc6wHyZq0EaWfl8Cqs6yfEdw9AlUKlb+5nZX7NTFRXWOR/m5W6kk5OnQVHCAcYBxgNp5BNbAWaHy4rGuhJ0gq+zqukG6OQ3uQZWkHVad9ohoEzTmY7LiwpbYRWkla+hPoVrILHXVtxzAlwJPVCr/O5jYII0Ie7ZTuvaCNZdj/6A3NCJuy43PH8CzA1W7dJFcr12R/kBONHtBGMLx/xdYFyQ2IfXIENz1/0N8H14fRosADPX7u3TtjOSc90dTLJdiQJwwlIOq6HeF4pR4OILCMezMULhMKtHbtIOgCuCw2IogVUkV5tOHLC6uHEmDg0165UNs5EmHRybQzVeWYZlRe8Khmq88uGYoi9poOGl6eysSyf6prm12AF94PidDHIOaSt2gPlBd1qTQW7e2hMOYFIwPfYJTIbkSC4/WNwDlP+v2RScZlruYzqO5gAnwuchbVQ40eRS2F/iAIaBa7nDYCVkOV3ukr/9aD1AJ+idt8F3hkZivZClrLHB2luwo2pQwVrppsE/SxjOGjxEAY7RouGt0Z7jyWMUqUVHv+P+IMIAxN9abyGjKSd6jX+EB92bqvJwv1BogOeicRpbiE7QQYXovELcytrL/Gw0pPH27BUYX/J3mVEVzpwGr0O9O7q0Mtf4Jrj+j71oyE2wB0ZDGr8GzAMkZPcdKzmvmNIaaTmhr4NH6fb+WSqhsXTA3zDSK4vGrwcnvBLjx1R0R98bdMNIyW6/FhJvg8eNaJiprcfhAAy3NH4d+Bps/IoGtsOLUOllSVpFxrvdHf+iob7yegB8FbYXfHOjEWnph23wHJg7rEmpAqGREg22HW5PzdS6VFV6d1BO/ht0K3SHoXxDDTXUUEMNVVRT0/+M4LN4eqsYNQAAAABJRU5ErkJggg=="
+        }
+      };
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stores/CacheStore.ts
+  var useCacheStore2;
+  var init_CacheStore2 = __esm({
+    "src/plugins/_core/painter/plus/stores/CacheStore.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_storage();
+      init_esm();
+      init_middleware();
+      useCacheStore2 = create2()(persist((set) => ({
+        iconpacks: {},
+        setIconpack: (id, data4) => set((state2) => ({
+          iconpacks: {
+            ...state2.iconpacks,
+            [id]: data4
+          }
+        }))
+      }), {
+        name: "themes-plus-cache",
+        storage: createJSONStorage(() => createFileStorage("plugins/themes-plus-cache.json"))
+      }));
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/util.ts
+  function fixPath(path) {
+    return path.startsWith("../") ? `_/${path.slice(3)}` : path;
+  }
+  function cFetch(url2, init, format = "text") {
+    return _async_to_generator(function* () {
+      var cache = useCacheStore2.getState();
+      var rawUrl = typeof url2 === "string" ? url2 : url2.url;
+      var res = yield fetch(url2, init);
+      var ret;
+      if (res.status !== 200) {
+        if (cache?.isCached?.(rawUrl)) ret = cache.readCache(rawUrl);
+        else throw new Error(`Failed to fetch ${rawUrl}`);
+      } else {
+        ret = yield res.text();
+        cache?.writeCache?.(rawUrl, ret);
+      }
+      if (format === "json") return JSON.parse(ret);
+      return ret;
+    })();
+  }
+  var init_util = __esm({
+    "src/plugins/_core/painter/plus/stuff/util.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_plus();
+      init_CacheStore2();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/patches/icons.tsx
+  function patchIcons(plus, tree, config) {
+    var { iconpack } = state.iconpack;
+    if (config.biggerStatus) {
+      patches.push(before("default", Status, ([props], ...args) => [
+        {
+          ...props,
+          size: Math.floor(props.size * 1.5)
+        },
+        ...args
+      ]));
+    }
+    if (plus.icons || plus.customOverlays || iconpack) {
+      if (plus.icons) state.patches.push(PatchType.Icons);
+      if (plus.customOverlays) {
+        state.patches.push(PatchType.CustomIconOverlays);
+      }
+      if (iconpack) state.patches.push(PatchType.Iconpack);
+      patches.push(waitFor((exports) => typeof exports?.jsx === "function" && typeof exports?.jsxs === "function" ? exports : void 0, (ReactJSX) => {
+        if (!useColorsPref.getState().iconsEnabled) return;
+        function interceptJSX(args, orig) {
+          var [type, props, ...rest] = args;
+          if (!props) return orig(...args);
+          var { source } = props;
+          var isOriginalImage = type === OriginalImage;
+          if (!isOriginalImage) {
+            if (typeof source === "number" && iconpack) {
+              var asset = findAsset(source);
+              if (asset?.httpServerLocation) {
+                var assetIconpackLocation = fixPath([
+                  ...asset.httpServerLocation.split("/").slice(2),
+                  `${asset.name}${iconpack.suffix}.${asset.type}`
+                ].join("/"));
+                var useIconpack = tree.length ? tree.includes(assetIconpackLocation) : true;
+                if (useIconpack) {
+                  return orig(type, {
+                    ...props,
+                    source: {
+                      uri: iconpack.load + assetIconpackLocation,
+                      headers: {
+                        "cache-control": "public, max-age=3600"
+                      },
+                      width: asset.width,
+                      height: asset.height,
+                      original: source
+                    }
+                  }, ...rest);
+                }
+              }
+            }
+            return orig(...args);
+          }
+          var patchedProps = {
+            ...props
+          };
+          var asset1 = null;
+          var modIcon = Object.entries(modIcons_default).find(([_2, { raw }]) => source?.uri === raw);
+          if (modIcon) {
+            asset1 = {
+              httpServerLocation: "//_",
+              width: 64,
+              height: 64,
+              name: modIcon[0],
+              type: "png"
+            };
+          } else if (source && typeof source.uri === "string" && typeof source.width === "number" && typeof source.height === "number" && typeof source.file === "string" && source.allowIconTheming) {
+            var [file, ...parent] = source.file.split("/").reverse();
+            var [ext, ...base] = file.split(".").reverse();
+            asset1 = {
+              httpServerLocation: `//_/external${parent[0] ? "/" : ""}${parent.reverse().join("/")}`,
+              width: source.width,
+              height: source.height,
+              name: base.reverse().join("."),
+              type: ext
+            };
+          } else if (typeof source === "number") {
+            asset1 = findAsset(source);
+          }
+          if (!asset1?.httpServerLocation) return orig(...args);
+          var assetIconpackLocation1 = iconpack && fixPath([
+            ...asset1.httpServerLocation.split("/").slice(2),
+            `${asset1.name}${iconpack.suffix}.${asset1.type}`
+          ].join("/"));
+          var useIconpack1 = assetIconpackLocation1 && (tree.length ? tree.includes(assetIconpackLocation1) : true);
+          var overlayChildren;
+          if (plus.customOverlays && !useIconpack1 && typeof source === "number") {
+            var overlay = getIconOverlay(plus, source, patchedProps.style);
+            if (overlay) {
+              if (overlay.replace) patchedProps.source = findAsset(overlay.replace)?.id;
+              if (overlay.style) patchedProps.style = [
+                patchedProps.style,
+                overlay.style
+              ];
+              overlayChildren = overlay.children;
+            }
+          }
+          if (plus.icons) {
+            var tint = getIconTint(plus, source, asset1.name);
+            if (tint) {
+              patchedProps.style = [
+                patchedProps.style,
+                {
+                  tintColor: tint
+                }
+              ];
+            }
+          }
+          if (useIconpack1) {
+            patchedProps.source = {
+              uri: iconpack.load + assetIconpackLocation1,
+              headers: {
+                "cache-control": "public, max-age=3600"
+              },
+              width: asset1.width,
+              height: asset1.height,
+              original: patchedProps.source
+            };
+          }
+          var imageEl = orig(OriginalImage, patchedProps, ...rest);
+          return overlayChildren ? orig(RN.View, null, imageEl, overlayChildren) : imageEl;
+        }
+        patches.push(instead("jsx", ReactJSX, (args, orig) => interceptJSX(args, orig)), instead("jsxs", ReactJSX, (args, orig) => interceptJSX(args, orig)));
+      }));
+    }
+  }
+  var Status, RN, OriginalImage;
+  var init_icons = __esm({
+    "src/plugins/_core/painter/plus/patches/icons.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_assets();
+      init_patcher();
+      init_modules2();
+      init_wrappers();
+      init_plus();
+      init_active();
+      init_iconOverlays();
+      init_loader2();
+      init_modIcons();
+      init_util();
+      init_preferences();
+      Status = findByName("Status", false);
+      RN = findByProps("Image", "View");
+      OriginalImage = RN.Image;
+    }
+  });
+
+  // src/plugins/_core/painter/plus/patches/mentionLineColor.ts
+  function patchMentionLineColors(plus) {
+    if (plus.mentionLineColor) {
+      state.patches.push(PatchType.MentionLineColor);
+      patches.push(after("createBackgroundHighlight", RowGeneratorUtils, ([x2], ret) => {
+        if (!ret || !x2?.message?.mentioned) return;
+        var clr = resolveColor_default(plus.mentionLineColor);
+        if (!clr) return;
+        var hex = clr.startsWith("#") && clr.length === 9 ? `#${clr.slice(3)}` : clr;
+        var r = parseInt(hex.slice(1, 3), 16);
+        var g2 = parseInt(hex.slice(3, 5), 16);
+        var b3 = parseInt(hex.slice(5, 7), 16);
+        ret.gutterColor = 4278190080 | r << 16 | g2 << 8 | b3 | 0;
+      }));
+    }
+  }
+  var RowGeneratorUtils;
+  var init_mentionLineColor = __esm({
+    "src/plugins/_core/painter/plus/patches/mentionLineColor.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_patcher();
+      init_wrappers();
+      init_plus();
+      init_active();
+      init_loader2();
+      init_resolveColor();
+      RowGeneratorUtils = findByProps("createBackgroundHighlight");
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/constants.ts
+  var constants_default;
+  var init_constants2 = __esm({
+    "src/plugins/_core/painter/plus/stuff/constants.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      constants_default = {
+        iconpacks: {
+          list: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/list.json",
+          assets: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/assets/",
+          tree: (iconpack) => `https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/${iconpack}.txt`,
+          hashes: "https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/_hashes.txt"
+        }
+      };
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/iconpackDataGetter.ts
+  function getIconpackData(id, configUrl) {
+    return _async_to_generator(function* () {
+      var treeUrl = constants_default.iconpacks.tree(id);
+      var [config, tree] = yield allSettled([
+        configUrl ? cFetch(configUrl, void 0, "json") : new Promise((res) => res(/* @__PURE__ */ Symbol())),
+        cFetch(treeUrl).then((x2) => x2.replaceAll("\r", "").split("\n"))
+      ]);
+      return {
+        config: config.status === "fulfilled" && typeof config.value !== "symbol" ? config.value : null,
+        tree: tree.status === "fulfilled" ? tree.value : null
+      };
+    })();
+  }
+  var init_iconpackDataGetter = __esm({
+    "src/plugins/_core/painter/plus/stuff/iconpackDataGetter.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_constants2();
+      init_util();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/loader.tsx
+  function initPlus() {
+    return _async_to_generator(function* () {
+      for (var x2 of patches) {
+        x2();
+      }
+      patches.length = 0;
+      state.loading = true;
+      state.active = false;
+      state.iconpack = {
+        iconpack: void 0,
+        list: [],
+        hashes: {}
+      };
+      state.patches = [];
+      state.inactive = [];
+      updateState();
+      try {
+        state.iconpack = {
+          iconpack: void 0,
+          list: yield cFetch(constants_default.iconpacks.list, void 0, "json").then((res) => res.list),
+          hashes: yield cFetch(constants_default.iconpacks.hashes, void 0, "json")
+        };
+      } catch (unused) {
+        if (!state.iconpack.list.length || !Object.keys(state.iconpack.hashes).length) {
+          state.loading = false;
+          state.inactive.push(InactiveReason.NoIconpacksList);
+          updateState();
+          return;
+        }
+      }
+      var selectedTheme = getCurrentTheme();
+      if (!selectedTheme) {
+        state.loading = false;
+        state.inactive.push(InactiveReason.NoTheme);
+        updateState();
+        return;
+      }
+      var plusData = selectedTheme.data?.plus;
+      if (!plusData) {
+        state.loading = false;
+        state.inactive.push(InactiveReason.ThemesPlusUnsupported);
+        updateState();
+        return;
+      }
+      var useIconpack = plusData.iconpack;
+      var isCustomIconpack = false;
+      var user = UserStore2.getCurrentUser();
+      state.iconpack.iconpack = state.iconpack.list.find((x3) => useIconpack === x3.id);
+      var iconpackConfig = {
+        biggerStatus: false
+      };
+      var tree = [];
+      if (!isCustomIconpack && state.iconpack.iconpack) {
+        var dt;
+        try {
+          dt = yield getIconpackData(state.iconpack.iconpack.id, state.iconpack.iconpack.config);
+        } catch (unused) {
+          dt = {
+            config: null,
+            tree: null
+          };
+        }
+        if (dt.tree === null) {
+          state.loading = false;
+          if (dt.config === null) {
+            state.inactive.push(InactiveReason.NoIconpackConfig);
+          }
+          if (dt.tree === null) {
+            state.inactive.push(InactiveReason.NoIconpackFiles);
+          }
+          updateState();
+          return;
+        }
+        tree = dt.tree;
+        if (dt.config) iconpackConfig = dt.config;
+      }
+      state.active = true;
+      state.loading = false;
+      patchIcons(plusData, tree, iconpackConfig);
+      patchMentionLineColors(plusData);
+      updateState();
+    })();
+  }
+  var UserStore2, patches;
+  var init_loader2 = __esm({
+    "src/plugins/_core/painter/plus/stuff/loader.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_wrappers();
+      init_themes();
+      init_plus();
+      init_icons();
+      init_mentionLineColor();
+      init_active();
+      init_constants2();
+      init_iconpackDataGetter();
+      init_util();
+      UserStore2 = findByStoreName("UserStore");
+      patches = [];
     }
   });
 
@@ -4654,42 +5184,47 @@
   });
 
   // src/plugins/_core/painter/themes/updater.ts
-  function updateColor(colorManifest, { update = true }) {
-    var internalDef = colorManifest ? parseColorManifest(colorManifest) : null;
-    var ref = Object.assign(_colorRef, {
-      current: internalDef,
-      key: `rain-theme-${++_inc}`,
-      lastSetDiscordTheme: !ThemeStore2.theme.startsWith("rain-theme-") ? ThemeStore2.theme : _colorRef.lastSetDiscordTheme
-    });
-    if (internalDef != null) {
-      tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
-      FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
-      Object.keys(tokenRef2.Shadow).forEach((k) => tokenRef2.Shadow[k][ref.key] = tokenRef2.Shadow[k][ref.current.reference]);
-      Object.keys(tokenRef2.SemanticColor).forEach((k) => {
-        tokenRef2.SemanticColor[k][ref.key] = {
-          ...tokenRef2.SemanticColor[k][ref.current.reference]
-        };
+  function updateColor(_0, _1) {
+    return _async_to_generator(function* (colorManifest, { update = true }) {
+      var internalDef = colorManifest ? parseColorManifest(colorManifest) : null;
+      var ref = Object.assign(_colorRef, {
+        current: internalDef,
+        key: `rain-theme-${++_inc}`,
+        lastSetDiscordTheme: !ThemeStore3.theme.startsWith("rain-theme-") ? ThemeStore3.theme : _colorRef.lastSetDiscordTheme
       });
-    }
-    if (update) {
-      AppearanceManager.setShouldSyncAppearanceSettings(false);
-      AppearanceManager.updateTheme(internalDef != null ? ref.key : ref.lastSetDiscordTheme);
-    }
+      yield initPlus();
+      if (internalDef != null) {
+        tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
+        FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
+        Object.keys(tokenRef2.Shadow).forEach((k) => tokenRef2.Shadow[k][ref.key] = tokenRef2.Shadow[k][ref.current.reference]);
+        Object.keys(tokenRef2.SemanticColor).forEach((k) => {
+          tokenRef2.SemanticColor[k][ref.key] = {
+            ...tokenRef2.SemanticColor[k][ref.current.reference]
+          };
+        });
+      }
+      if (update) {
+        AppearanceManager.setShouldSyncAppearanceSettings(false);
+        AppearanceManager.updateTheme(internalDef != null ? ref.key : ref.lastSetDiscordTheme);
+      }
+    }).apply(this, arguments);
   }
-  var tokenRef2, origRawColor, AppearanceManager, ThemeStore2, FormDivider, _inc, _colorRef;
+  var tokenRef2, origRawColor, AppearanceManager, ThemeStore3, FormDivider, _inc, _colorRef;
   var init_updater = __esm({
     "src/plugins/_core/painter/themes/updater.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
+      init_async_to_generator();
       init_metro();
+      init_loader2();
       init_parser();
       tokenRef2 = findByProps("SemanticColor");
       origRawColor = {
         ...tokenRef2.RawColor
       };
       AppearanceManager = findByPropsLazy("updateTheme");
-      ThemeStore2 = findByStoreNameLazy("ThemeStore");
+      ThemeStore3 = findByStoreNameLazy("ThemeStore");
       FormDivider = findByPropsLazy("DIVIDER_COLORS");
       _inc = 1;
       _colorRef = {
@@ -4703,7 +5238,7 @@
 
   // src/plugins/_core/painter/themes/patches/background.tsx
   function ThemeBackground({ children }) {
-    var customBackground = useColorsPref((state) => state.customBackground);
+    var customBackground = useColorsPref((state2) => state2.customBackground);
     if (!_colorRef.current || customBackground === "hidden" || !_colorRef.current.background?.url || _colorRef.current.background?.blur && typeof _colorRef.current.background?.blur !== "number") {
       return children;
     }
@@ -4721,7 +5256,7 @@
   }
   function patchChatBackground() {
     try {
-      var patches27 = [
+      var patches28 = [
         after("render", Messages, (_2, ret) => {
           if (!_colorRef.current || !_colorRef.current.background?.url) return;
           var messagesComponent = findInReactTree(ret, (x2) => x2 && "HACK_fixModalInteraction" in x2.props && x2?.props?.style);
@@ -4740,7 +5275,7 @@
           });
         })
       ];
-      return () => patches27.forEach((x2) => x2());
+      return () => patches28.forEach((x2) => x2());
     } catch (e) {
       logger.error("Failed to patch chat background.", e);
       return () => {
@@ -4874,11 +5409,11 @@
       "ThemeStore",
       "SelectivelySyncedUserSettingsStore"
     ]);
-    var patches27 = [
+    var patches28 = [
       after("get", mmkvStorage, ([key], ret) => {
         if (!_colorRef.current || !patchedKeys.has(key)) return;
-        var state = findInTree(ret._state, (s) => typeof s.theme === "string");
-        if (state) state.theme = _colorRef.key;
+        var state2 = findInTree(ret._state, (s) => typeof s.theme === "string");
+        if (state2) state2.theme = _colorRef.key;
       }),
       before("set", mmkvStorage, ([key, value]) => {
         if (!patchedKeys.has(key)) return;
@@ -4891,7 +5426,7 @@
         ];
       })
     ];
-    return () => patches27.forEach((p) => p());
+    return () => patches28.forEach((p) => p());
   }
   var mmkvStorage;
   var init_storage3 = __esm({
@@ -4917,12 +5452,12 @@
     if (manifest) updateColor(manifest, {
       update: false
     });
-    var patches27 = [
+    var patches28 = [
       patchStorage(),
       patchDefinitionAndResolver(),
       patchChatBackground()
     ];
-    return () => patches27.forEach((p) => p());
+    return () => patches28.forEach((p) => p());
   }
   var init_colors = __esm({
     "src/plugins/_core/painter/themes/colors.ts"() {
@@ -5034,8 +5569,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = useThemes.subscribe((state) => {
-          if (state._hasHydrated) {
+        var unsubscribe2 = useThemes.subscribe((state2) => {
+          if (state2._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -5096,9 +5631,9 @@
         themes: {},
         _hasHydrated: false,
         setTheme: (id, theme) => {
-          set((state) => ({
+          set((state2) => ({
             themes: {
-              ...state.themes,
+              ...state2.themes,
               [id]: theme
             }
           }));
@@ -5106,9 +5641,9 @@
         removeTheme: (id) => _async_to_generator(function* () {
           var theme = get().themes[id];
           if (theme?.selected) yield get().selectTheme(null);
-          set((state) => {
+          set((state2) => {
             var newThemes = {
-              ...state.themes
+              ...state2.themes
             };
             delete newThemes[id];
             return {
@@ -5120,9 +5655,9 @@
         selectTheme: (id, write = true) => _async_to_generator(function* () {
           var { themes: themes2 } = get();
           var theme = id ? themes2[id] : null;
-          set((state) => {
+          set((state2) => {
             var newThemes = {
-              ...state.themes
+              ...state2.themes
             };
             Object.keys(newThemes).forEach((k) => {
               newThemes[k] = {
@@ -5179,14 +5714,14 @@
           var { themes: themes2 } = get();
           yield allSettled(Object.keys(themes2).map((id) => get().fetchTheme(id, currentTheme2?.id === id)));
         })(),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "vendetta-themes",
         storage: createJSONStorage(() => createFileStorage("VENDETTA_THEMES")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       themes = new Proxy({}, {
@@ -5659,7 +6194,7 @@
         return !c2.__rain?.shouldHide || !c2.__rain.shouldHide();
       }));
     });
-    patches.add(unpatchGetBuiltInCommands);
+    patches2.add(unpatchGetBuiltInCommands);
   }
   function registerCommand(command) {
     var builtInCommands;
@@ -5697,7 +6232,7 @@
     commands2.push(command);
     return () => commands2 = commands2.filter(({ id }) => id !== command.id);
   }
-  var commands2, patches;
+  var commands2, patches2;
   var init_commands = __esm({
     "src/api/commands/index.ts"() {
       "use strict";
@@ -5708,7 +6243,7 @@
       init_common();
       init_types();
       commands2 = [];
-      patches = /* @__PURE__ */ new Set();
+      patches2 = /* @__PURE__ */ new Set();
     }
   });
 
@@ -5990,17 +6525,18 @@
     };
   }
   function initDebugger() {
-    if (settings.autoDebugger) {
+    var currentSettings2 = settings();
+    if (currentSettings2.autoDebugger) {
       try {
-        connectToDebugger(settings.debuggerUrl);
+        connectToDebugger(currentSettings2.debuggerUrl);
       } catch (e) {
         logger.error("Failed to connect to Debugger during startup:", e);
       }
     }
-    if (settings.autoDevTools) {
+    if (currentSettings2.autoDevTools) {
       try {
-        if (settings.devToolsUrl) {
-          connectRdt(settings.devToolsUrl, true);
+        if (currentSettings2.devToolsUrl) {
+          connectRdt(currentSettings2.devToolsUrl, true);
         }
       } catch (e) {
         logger.error("Failed to connect to ReactDevTools during startup:", e);
@@ -6288,7 +6824,7 @@
         }
       },
       usePluginState() {
-        usePluginSettings((state) => state.settings);
+        usePluginSettings((state2) => state2.settings);
       },
       resolveSheetComponent() {
         return Promise.resolve({
@@ -6563,18 +7099,18 @@
       useMonetSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "monettheme-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/monettheme.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
     }
@@ -6631,7 +7167,7 @@
       refetch = () => _async_to_generator(function* () {
         var settings4 = useMonetSettings.getState();
         var url2 = settings4.patches.from === "local" ? devPatchesURL : getPatchesURL();
-        var patches27 = yield safeFetch(url2, {
+        var patches28 = yield safeFetch(url2, {
           cache: "no-store"
         }).then((x2) => x2.text().then((text) => {
           try {
@@ -6646,20 +7182,20 @@
           console.error("usePatches refetch error (fetch)", err);
           return null;
         });
-        data.patches = patches27;
+        data.patches = patches28;
         data.canRefetch = Date.now() + refetchTimeout;
-        for (var fnc of uponRevalidate) fnc(patches27);
+        for (var fnc of uponRevalidate) fnc(patches28);
       })();
       usePatches = () => {
-        var [patches27, setPatches] = React2.useState(data.patches);
+        var [patches28, setPatches] = React2.useState(data.patches);
         var revalFunc = (data4) => setPatches(data4);
         React2.useEffect(() => {
           uponRevalidate.add(revalFunc);
           return () => void uponRevalidate.delete(revalFunc);
         });
-        React2.useEffect(() => void ((!patches27 || data.canRefetch >= Date.now()) && refetch()), []);
+        React2.useEffect(() => void ((!patches28 || data.canRefetch >= Date.now()) && refetch()), []);
         return {
-          patches: patches27,
+          patches: patches28,
           revalidate: () => _async_to_generator(function* () {
             if (canRevalidate < Date.now()) return;
             canRevalidate = Number.NaN;
@@ -7689,13 +8225,13 @@
   // src/plugins/_core/painter/monet/stuff/buildTheme.ts
   function getDiscordTheme() {
     try {
-      var theme = ThemeStore3?.theme;
+      var theme = ThemeStore4?.theme;
       if (theme === "light") return "light";
     } catch (unused) {
     }
     return "dark";
   }
-  function build(patches27) {
+  function build(patches28) {
     var raw = {};
     var semantic = {};
     var settings4 = useMonetSettings.getState();
@@ -7728,7 +8264,7 @@
       }
       return shouldPut;
     };
-    if (patches27.version === 3) {
+    if (patches28.version === 3) {
       var _loop2 = function(x3, y3) {
         var clr4 = parseColor(y3.color);
         if (!clr4) return "continue";
@@ -7739,9 +8275,9 @@
           raw[c2] = getLABShade(clr4, y3.base ? useShade + (500 - y3.base) : useShade, y3.ratio);
         }
       };
-      for (var [x2, y2] of entries(get(patches27.replacers))) _loop2(x2, y2);
+      for (var [x2, y2] of entries(get(patches28.replacers))) _loop2(x2, y2);
     }
-    var rawPatches = get(patches27.raw);
+    var rawPatches = get(patches28.raw);
     for (var key of Object.keys(rawPatches)) {
       var clr = parseColor(rawPatches[key]);
       if (clr) raw[key] = clr;
@@ -7750,21 +8286,21 @@
       raw.PLUM_23 = raw.PRIMARY_700;
       raw.PLUM_24 = raw.PRIMARY_700;
     }
-    for (var key1 of Object.keys(patches27.semantic.both)) {
+    for (var key1 of Object.keys(patches28.semantic.both)) {
       var clr1 = parseColor(rawPatches[key1]);
       if (clr1) semantic[key1] = [
         clr1,
         clr1
       ];
     }
-    for (var key2 of Object.keys(patches27.semantic.dark)) {
+    for (var key2 of Object.keys(patches28.semantic.dark)) {
       var clr2 = parseColor(rawPatches[key2]);
       if (semantic[key2] && clr2) semantic[key2][0] = clr2;
       else if (clr2) semantic[key2] = [
         clr2
       ];
     }
-    for (var key3 of Object.keys(patches27.semantic.light)) {
+    for (var key3 of Object.keys(patches28.semantic.light)) {
       var clr3 = parseColor(rawPatches[key3]);
       if (semantic[key3] && clr3) semantic[key3][1] = clr3;
       else if (clr3) semantic[key3] = [
@@ -7865,14 +8401,14 @@
         alpha: 1
       };
     }
-    if (patches27.version === 3 && patches27.plus) {
+    if (patches28.version === 3 && patches28.plus) {
       theme.plus = {
         customOverlays: true,
         version: 0,
         icons: {}
       };
       var icons = {};
-      for (var key5 of Object.keys(get(patches27.plus.icons))) {
+      for (var key5 of Object.keys(get(patches28.plus.icons))) {
         icons[key5] = parseColor(key5);
       }
       theme.plus.icons = icons;
@@ -7881,7 +8417,7 @@
     theme.rawColors = raw;
     return JSON.parse(JSON.stringify(theme));
   }
-  var ThemeStore3;
+  var ThemeStore4;
   var init_buildTheme = __esm({
     "src/plugins/_core/painter/monet/stuff/buildTheme.ts"() {
       "use strict";
@@ -7891,7 +8427,7 @@
       init_wrappers();
       init_storage4();
       init_colors2();
-      ThemeStore3 = findByStoreNameLazy("ThemeStore");
+      ThemeStore4 = findByStoreNameLazy("ThemeStore");
     }
   });
 
@@ -8006,14 +8542,14 @@
         }
       };
       try {
-        ThemeStore4?.addChangeListener?.(onThemeChanged);
-        cleanupFns.push(() => ThemeStore4?.removeChangeListener?.(onThemeChanged));
+        ThemeStore5?.addChangeListener?.(onThemeChanged);
+        cleanupFns.push(() => ThemeStore5?.removeChangeListener?.(onThemeChanged));
       } catch (e) {
         logger2.error("Failed to add theme change listener", e);
       }
     })();
   }
-  var logger2, ThemeStore4, hasThemeKey, cachedSysColors, cleanupFns;
+  var logger2, ThemeStore5, hasThemeKey, cachedSysColors, cleanupFns;
   var init_monet = __esm({
     "src/plugins/_core/painter/monet/index.ts"() {
       "use strict";
@@ -8032,7 +8568,7 @@
       init_storage4();
       init_buildTheme();
       logger2 = new LoggerClass("MonetTheme");
-      ThemeStore4 = findByStoreNameLazy("ThemeStore");
+      ThemeStore5 = findByStoreNameLazy("ThemeStore");
       hasThemeKey = /* @__PURE__ */ Symbol.for("monettheme.isThemed");
       cachedSysColors = null;
       cleanupFns = [];
@@ -8213,18 +8749,18 @@
         transformEmoji: true,
         transformSticker: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "rainenhancements-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/rainenhancements.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       rainenhancementsSettings = new Proxy({}, {
@@ -8414,7 +8950,7 @@
   __export(rainenhancements_exports, {
     default: () => rainenhancements_default
   });
-  var patches2, rainenhancements_default;
+  var patches3, rainenhancements_default;
   var init_rainenhancements = __esm({
     "src/plugins/_core/rainenhancements/index.ts"() {
       "use strict";
@@ -8427,7 +8963,7 @@
       init_transformEmoji();
       init_transformSticker();
       init_settings2();
-      patches2 = [];
+      patches3 = [];
       rainenhancements_default = definePlugin({
         name: Strings.PLUGIN__CORE_RAINENHANCEMENTS,
         description: Strings.PLUGIN__CORE_RAINENHANCEMENTS_DESC,
@@ -8440,14 +8976,14 @@
         id: "rainenhancements",
         version: "1.0.0",
         start() {
-          patches2 = [
+          patches3 = [
             patchNetwork(),
             patchConsole(),
             patchMiscellaneous(),
             patchSentry()
           ].filter(Boolean);
-          patches2.push(...transformEmoji_default);
-          patches2.push(...transformSticker_default);
+          patches3.push(...transformEmoji_default);
+          patches3.push(...transformSticker_default);
         },
         settings: settings_default
       });
@@ -10809,7 +11345,7 @@
     var colors = useMonetSettings((s) => s.colors);
     var patchConfig = useMonetSettings((s) => s.patches);
     var updateSettings = useMonetSettings((s) => s.updateSettings);
-    var { patches: patches27, revalidate: revalidatePatches } = usePatches_default();
+    var { patches: patches28, revalidate: revalidatePatches } = usePatches_default();
     var [isLoadedTheme, setIsLoadedTheme] = React2.useState(hasMonetTheme());
     var [syscolors, setSyscolors] = React2.useState(getMonetSysColors());
     var [sysColorsLoading, setSysColorsLoading] = React2.useState(!syscolors);
@@ -10959,7 +11495,7 @@
               ]
             })
           }),
-          !patches27 ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
+          !patches28 ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
             size: "small"
           }) : /* @__PURE__ */ jsxs(TableRowGroup, {
             title: "Theme Actions",
@@ -10983,7 +11519,7 @@
                 onPress: () => _async_to_generator(function* () {
                   var theme;
                   try {
-                    theme = build(patches27);
+                    theme = build(patches28);
                   } catch (e) {
                     var err = e instanceof Error ? e : new Error(String(e));
                     logger3.error("Error during applying theme", err.stack);
@@ -10995,7 +11531,7 @@
               }),
               /* @__PURE__ */ jsx(TableRow, {
                 label: "Reload Theme Patches",
-                subLabel: `Patch v${patches27.version ?? "?"} (${patchConfig.from === "local" ? "from a local source" : "from GitHub"})`,
+                subLabel: `Patch v${patches28.version ?? "?"} (${patchConfig.from === "local" ? "from a local source" : "from GitHub"})`,
                 icon: /* @__PURE__ */ jsx(TableRow.Icon, {
                   source: findAssetId2("ActivitiesIcon")
                 }),
@@ -11057,8 +11593,8 @@
   function MonetCard() {
     var navigation2 = NavigationNative.useNavigation();
     var isMonetActive = hasMonetTheme();
-    var { patches: patches27 } = usePatches_default();
-    var hasUrlTheme = useThemes(React2.useCallback((state) => Object.values(state.themes).some((t) => t.selected), []));
+    var { patches: patches28 } = usePatches_default();
+    var hasUrlTheme = useThemes(React2.useCallback((state2) => Object.values(state2.themes).some((t) => t.selected), []));
     var isSelected = isMonetActive && !hasUrlTheme;
     if (ReactNative.Platform.OS !== "android") return null;
     return /* @__PURE__ */ jsx(AddonCard, {
@@ -11077,12 +11613,12 @@
           if (hasUrlTheme) {
             yield useThemes.getState().selectTheme(null);
           }
-          if (!patches27) {
+          if (!patches28) {
             showToast("Patches not loaded yet, try again", findAssetId2("CircleXIcon-primary"));
             return;
           }
           try {
-            var theme = build(patches27);
+            var theme = build(patches28);
             applyMonetTheme(theme);
           } catch (e) {
             showToast("Failed to build theme", findAssetId2("CircleXIcon-primary"));
@@ -11234,7 +11770,7 @@
     var [error, setError] = React2.useState(null);
     var [searchQuery, setSearchQuery] = React2.useState("");
     var [sort, setSort] = React2.useState("NameAZ");
-    var installedItems = useStore2((state) => type === "fonts" ? state.fonts : state.themes);
+    var installedItems = useStore2((state2) => type === "fonts" ? state2.fonts : state2.themes);
     var fetchAddons = (forceRefresh = false) => _async_to_generator(function* () {
       if (cache.data && !forceRefresh) return;
       setLoading(true);
@@ -11649,10 +12185,10 @@
     })();
   }
   function ThemeCard({ item: theme }) {
-    var isSelected = useThemes(React8.useCallback((state) => state.themes[theme.id]?.selected ?? false, [
+    var isSelected = useThemes(React8.useCallback((state2) => state2.themes[theme.id]?.selected ?? false, [
       theme.id
     ]));
-    var safeModeEnabled = useSettings((state) => state.safeMode);
+    var safeModeEnabled = useSettings((state2) => state2.safeMode);
     var { fetchTheme: fetchTheme2, removeTheme: removeTheme2 } = useThemes.getState();
     var [removed, setRemoved] = React8.useState(false);
     if (removed) return null;
@@ -11709,7 +12245,7 @@
   function Themes() {
     var themesMap = useThemes((s) => s.themes);
     var themesList = Object.values(themesMap);
-    var safeMode = useSettings((state) => state.safeMode);
+    var safeMode = useSettings((state2) => state2.safeMode);
     var navigation2 = NavigationNative.useNavigation();
     return /* @__PURE__ */ jsx(AddonPage, {
       title: Strings.THEMES,
@@ -11743,6 +12279,7 @@
       ListHeaderComponent: MonetCard,
       OptionsActionSheetComponent: () => {
         var { type, customBackground, setType, setCustomBackground } = useColorsPref();
+        var { iconsEnabled, setIconsEnabled } = useColorsPref();
         return /* @__PURE__ */ jsxs(ActionSheet, {
           children: [
             /* @__PURE__ */ jsx(BottomSheetTitleHeader, {
@@ -11791,25 +12328,39 @@
                     })
                   ]
                 }),
-                /* @__PURE__ */ jsx(TableRowGroup, {
-                  title: Strings.CHAT_BACKGROUND,
-                  children: /* @__PURE__ */ jsx(TableSwitchRow, {
-                    label: Strings.SHOW_BACKGROUND,
-                    subLabel: Strings.SHOW_BACKGROUND_DESC,
-                    icon: /* @__PURE__ */ jsx(TableRowIcon, {
-                      source: findAssetId2("ImageIcon")
-                    }),
-                    value: !customBackground,
-                    onValueChange: () => {
-                      setCustomBackground(customBackground ? null : "hidden");
-                      var currentTheme2 = getCurrentTheme();
-                      if (currentTheme2?.data) {
-                        updateColor(currentTheme2.data, {
-                          update: true
-                        });
+                /* @__PURE__ */ jsxs(TableRowGroup, {
+                  title: Strings.CUSTOMISATION,
+                  children: [
+                    /* @__PURE__ */ jsx(TableSwitchRow, {
+                      label: Strings.SHOW_BACKGROUND,
+                      subLabel: Strings.SHOW_BACKGROUND_DESC,
+                      icon: /* @__PURE__ */ jsx(TableRowIcon, {
+                        source: findAssetId2("ImageIcon")
+                      }),
+                      value: !customBackground,
+                      onValueChange: () => {
+                        setCustomBackground(customBackground ? null : "hidden");
+                        var currentTheme2 = getCurrentTheme();
+                        if (currentTheme2?.data) {
+                          updateColor(currentTheme2.data, {
+                            update: true
+                          });
+                        }
                       }
-                    }
-                  })
+                    }),
+                    /* @__PURE__ */ jsx(TableSwitchRow, {
+                      label: Strings.USE_CUSTOM_ICONS,
+                      subLabel: Strings.USE_CUSTOM_ICONS_DESC,
+                      icon: /* @__PURE__ */ jsx(TableRowIcon, {
+                        source: findAssetId2("PlusSmallIcon")
+                      }),
+                      value: iconsEnabled,
+                      onValueChange: () => {
+                        setIconsEnabled(!iconsEnabled);
+                        initPlus();
+                      }
+                    })
+                  ]
                 })
               ]
             })
@@ -11838,6 +12389,7 @@
       init_Themes();
       import_react_native25 = __toESM(require_react_native());
       init_ThemeCard();
+      init_loader2();
     }
   });
 
@@ -12570,7 +13122,7 @@
     });
   }
   function FontEditor(props) {
-    var currentFonts = useFonts((state) => state.fonts);
+    var currentFonts = useFonts((state2) => state2.fonts);
     var [name, setName] = (0, import_react8.useState)(props.name);
     var [source, setSource] = (0, import_react8.useState)(props.name && currentFonts[props.name]?.source);
     var [importing, setIsImporting] = (0, import_react8.useState)(false);
@@ -12940,7 +13492,7 @@
     }
   }
   function FontCard({ item: font }) {
-    var selectedFont = useFonts((state) => state.fonts.__selected);
+    var selectedFont = useFonts((state2) => state2.fonts.__selected);
     var navigation2 = NavigationNative.useNavigation();
     var selected = selectedFont === font.name;
     return /* @__PURE__ */ jsx(Card, {
@@ -13051,7 +13603,7 @@
   });
   function Fonts() {
     useSettings();
-    var fonts2 = useFonts((state) => state.fonts);
+    var fonts2 = useFonts((state2) => state2.fonts);
     var navigation2 = NavigationNative.useNavigation();
     return /* @__PURE__ */ jsx(AddonPage, {
       title: Strings.FONTS,
@@ -13104,7 +13656,7 @@
 
   // src/api/storage/useFS.ts
   function useFileExists(path, prefix2) {
-    var [state, setState] = (0, import_react10.useState)(2);
+    var [state2, setState] = (0, import_react10.useState)(2);
     var check = () => fileExists(path, {
       prefix: prefix2
     }).then((exists) => setState(exists ? 1 : 0)).catch(() => setState(3));
@@ -13124,7 +13676,7 @@
     }), []);
     (0, import_react10.useEffect)(() => void check(), []);
     return [
-      state,
+      state2,
       customFS
     ];
   }
@@ -13831,7 +14383,7 @@ Type: ${asset.type}`,
           icon: findAssetId2("WrenchIcon"),
           render: () => Promise.resolve().then(() => (init_Developer(), Developer_exports)),
           usePredicate: () => {
-            var developerSettings = useSettings((state) => state.developerSettings);
+            var developerSettings = useSettings((state2) => state2.developerSettings);
             return developerSettings ?? false;
           }
         }
@@ -13894,7 +14446,7 @@ Type: ${asset.type}`,
   __export(accountswitcher_exports, {
     default: () => accountswitcher_default
   });
-  var AccountDispatcher, patches3, accountswitcher_default;
+  var AccountDispatcher, patches4, accountswitcher_default;
   var init_accountswitcher = __esm({
     "src/plugins/accountswitcher/index.ts"() {
       "use strict";
@@ -13905,7 +14457,7 @@ Type: ${asset.type}`,
       init_plugins3();
       init_Developers();
       AccountDispatcher = findByProps("getCanUseMultiAccountMobile");
-      patches3 = [];
+      patches4 = [];
       accountswitcher_default = definePlugin({
         name: "AccountSwitcher",
         description: "Enables account switcher because discord got rid of experiment",
@@ -13915,12 +14467,12 @@ Type: ${asset.type}`,
         id: "accountswitcher",
         version: "1.0.0",
         start() {
-          patches3.push(after("getCanUseMultiAccountMobile", AccountDispatcher, () => {
+          patches4.push(after("getCanUseMultiAccountMobile", AccountDispatcher, () => {
             return true;
           }));
         },
         stop() {
-          for (var unpatch6 of patches3) unpatch6();
+          for (var unpatch6 of patches4) unpatch6();
         }
       });
     }
@@ -13939,27 +14491,27 @@ Type: ${asset.type}`,
       useActionSheetFinderSettings = create2()(persist((set) => ({
         logs: [],
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        addLog: (log3) => set((state) => ({
+        addLog: (log3) => set((state2) => ({
           logs: [
-            ...state.logs.slice(-99),
+            ...state2.logs.slice(-99),
             log3
           ]
         })),
         clearLogs: () => set({
           logs: []
         }),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "actionsheetfinder-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/actionsheetfinder.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
     }
@@ -14140,7 +14692,7 @@ Type: ${asset.type}`,
   __export(alwaystrust_exports, {
     default: () => alwaystrust_default
   });
-  var MaskedLink, patches4, alwaystrust_default;
+  var MaskedLink, patches5, alwaystrust_default;
   var init_alwaystrust = __esm({
     "src/plugins/alwaystrust/index.ts"() {
       "use strict";
@@ -14151,7 +14703,7 @@ Type: ${asset.type}`,
       init_plugins3();
       init_Developers();
       MaskedLink = findByStoreName("MaskedLinkStore");
-      patches4 = [];
+      patches5 = [];
       alwaystrust_default = definePlugin({
         name: "AlwaysTrust",
         description: "Disable the untrusted link popup for every link",
@@ -14161,12 +14713,12 @@ Type: ${asset.type}`,
         id: "alwaystrust",
         version: "1.0.0",
         start() {
-          patches4.push(after("isTrustedDomain", MaskedLink, () => {
+          patches5.push(after("isTrustedDomain", MaskedLink, () => {
             return true;
           }));
         },
         stop() {
-          for (var unpatch6 of patches4) unpatch6();
+          for (var unpatch6 of patches5) unpatch6();
         }
       });
     }
@@ -14233,36 +14785,36 @@ Type: ${asset.type}`,
           send: false
         },
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "betterchatbuttons-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/betterchatbuttons.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       betterChatButtonsSettings = new Proxy({}, {
         get(target, prop) {
-          var state = useBetterChatButtonsSettings.getState();
+          var state2 = useBetterChatButtonsSettings.getState();
           if (prop.includes(".")) {
             var [parent, child] = prop.split(".");
-            return state[parent]?.[child];
+            return state2[parent]?.[child];
           }
-          return state[prop];
+          return state2[prop];
         },
         set(target, prop, value) {
           if (prop.includes(".")) {
             var [parent, child] = prop.split(".");
-            var state = useBetterChatButtonsSettings.getState();
+            var state2 = useBetterChatButtonsSettings.getState();
             useBetterChatButtonsSettings.getState().updateSettings({
               [parent]: {
-                ...state[parent],
+                ...state2[parent],
                 [child]: value
               }
             });
@@ -14457,8 +15009,8 @@ Type: ${asset.type}`,
           var actionsRef;
           if (ChatInputSendButton2?.type) {
             unpatches.push(before("render", ChatInputSendButton2.type, ([props, ref]) => {
-              var state = useBetterChatButtonsSettings.getState();
-              if (props.canSendVoiceMessage) props.canSendVoiceMessage = !state.hide.voice;
+              var state2 = useBetterChatButtonsSettings.getState();
+              if (props.canSendVoiceMessage) props.canSendVoiceMessage = !state2.hide.voice;
               sendBtnRef2 = ref;
             }));
             unpatches.push(after("render", ChatInputSendButton2.type, () => {
@@ -14467,8 +15019,8 @@ Type: ${asset.type}`,
                   var { setHasText } = sendBtnRef2.current;
                   unpatches.push(() => sendBtnRef2.current.setHasText = setHasText);
                   sendBtnRef2.current.setHasText = (hasText_) => {
-                    var state = useBetterChatButtonsSettings.getState();
-                    if (state.dismiss.send) hasText2 = hasText_;
+                    var state2 = useBetterChatButtonsSettings.getState();
+                    if (state2.dismiss.send) hasText2 = hasText_;
                     return setHasText(hasText_);
                   };
                 }
@@ -14478,10 +15030,10 @@ Type: ${asset.type}`,
           }
           if (ChatInputActions2?.type) {
             unpatches.push(before("render", ChatInputActions2.type, ([props, ref]) => {
-              var state = useBetterChatButtonsSettings.getState();
-              if (props.isAppLauncherEnabled) props.isAppLauncherEnabled = !state.hide.app;
-              props.canStartThreads = state.show.thread || !state.hide.thread;
-              props.shouldShowGiftButton = !state.hide.gift;
+              var state2 = useBetterChatButtonsSettings.getState();
+              if (props.isAppLauncherEnabled) props.isAppLauncherEnabled = !state2.hide.app;
+              props.canStartThreads = state2.show.thread || !state2.hide.thread;
+              props.shouldShowGiftButton = !state2.hide.gift;
               actionsRef = ref;
             }));
             unpatches.push(after("render", ChatInputActions2.type, () => {
@@ -14490,8 +15042,8 @@ Type: ${asset.type}`,
                   var { onDismissActions } = actionsRef.current;
                   unpatches.push(() => actionsRef.current.onDismissActions = onDismissActions);
                   actionsRef.current.onDismissActions = () => {
-                    var state = useBetterChatButtonsSettings.getState();
-                    if (state.dismiss.actions) return onDismissActions();
+                    var state2 = useBetterChatButtonsSettings.getState();
+                    if (state2.dismiss.actions) return onDismissActions();
                   };
                 }
               }));
@@ -14516,7 +15068,7 @@ Type: ${asset.type}`,
   __export(bettersilentleave_exports, {
     default: () => bettersilentleave_default
   });
-  var patches5, APIUtils, bettersilentleave_default;
+  var patches6, APIUtils, bettersilentleave_default;
   var init_bettersilentleave = __esm({
     "src/plugins/bettersilentleave/index.ts"() {
       "use strict";
@@ -14530,7 +15082,7 @@ Type: ${asset.type}`,
       init_components();
       init_plugins3();
       init_Developers();
-      patches5 = [];
+      patches6 = [];
       APIUtils = findByProps("getAPIBaseURL", "del");
       bettersilentleave_default = definePlugin({
         name: "SilentLeave",
@@ -14541,7 +15093,7 @@ Type: ${asset.type}`,
         id: "silentleave",
         version: "1.0.0",
         start() {
-          patches5.push(after("render", ActionSheet, (args, res) => {
+          patches6.push(after("render", ActionSheet, (args, res) => {
             var dangerGroup = findInReactTree(res, (x2) => x2?.key === "gdm-destructive");
             if (!dangerGroup) return res;
             var children = React.Children.toArray(dangerGroup.props.children);
@@ -14586,7 +15138,7 @@ Type: ${asset.type}`,
           }));
         },
         stop() {
-          for (var unpatch6 of patches5) unpatch6();
+          for (var unpatch6 of patches6) unpatch6();
         }
       });
     }
@@ -14597,7 +15149,7 @@ Type: ${asset.type}`,
   __export(bluetoothaudiofix_exports, {
     default: () => bluetoothaudiofix_default
   });
-  var import_react_native33, patches6, bluetoothaudiofix_default;
+  var import_react_native33, patches7, bluetoothaudiofix_default;
   var init_bluetoothaudiofix = __esm({
     "src/plugins/bluetoothaudiofix/index.ts"() {
       "use strict";
@@ -14609,7 +15161,7 @@ Type: ${asset.type}`,
       init_plugins3();
       init_Developers();
       import_react_native33 = __toESM(require_react_native());
-      patches6 = [];
+      patches7 = [];
       bluetoothaudiofix_default = definePlugin({
         name: "BluetoothAudioFix",
         description: "Prevents Discord from enabling handsfree mode while in a call",
@@ -14630,11 +15182,11 @@ Type: ${asset.type}`,
             return;
           }
           var onUnload = ReactNative.TurboModuleRegistry.get("NativeAudioManagerModule") === null ? ReactNative.TurboModuleRegistry.get("RTNAudioManager") : ReactNative.TurboModuleRegistry.get("NativeAudioManagerModule");
-          patches6.push(instead("setCommunicationModeOn", onUnload, () => {
+          patches7.push(instead("setCommunicationModeOn", onUnload, () => {
           }));
         },
         stop() {
-          for (var unpatch6 of patches6) unpatch6();
+          for (var unpatch6 of patches7) unpatch6();
         }
       });
     }
@@ -14806,18 +15358,18 @@ Type: ${asset.type}`,
         userHash: "",
         litterboxDuration: "1",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "uploader-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/uploader.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       uploaderSettings = new Proxy({}, {
@@ -15177,7 +15729,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(bypassuploadlimit_exports, {
     default: () => bypassuploadlimit_default
   });
-  var patches7, bypassuploadlimit_default;
+  var patches8, bypassuploadlimit_default;
   var init_bypassuploadlimit = __esm({
     "src/plugins/bypassuploadlimit/index.ts"() {
       "use strict";
@@ -15187,7 +15739,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_Developers();
       init_upload();
       init_settings7();
-      patches7 = [];
+      patches8 = [];
       bypassuploadlimit_default = definePlugin({
         name: "BypassUploadLimit",
         description: "Bypass Discord's file size limit by uploading to Catbox, Litterbox, or Pomf",
@@ -15197,11 +15749,11 @@ ${pendingInsertLink}` : pendingInsertLink;
         id: "bypassuploadlimit",
         version: "1.0.0",
         start() {
-          patches7.push(...getUploaderPatch());
+          patches8.push(...getUploaderPatch());
         },
         stop() {
-          for (var unpatch6 of patches7) unpatch6();
-          patches7.length = 0;
+          for (var unpatch6 of patches8) unpatch6();
+          patches8.length = 0;
         },
         settings: UploaderSettings
       });
@@ -15226,18 +15778,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         showStatusCutout: false,
         collapseWhileTyping: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "chatboxavatar-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/chatboxavatar.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated?.(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated?.(true);
         }
       }));
     }
@@ -15365,8 +15917,8 @@ ${pendingInsertLink}` : pendingInsertLink;
   function AvatarAction() {
     var [textState, setTextState] = import_react18.default.useState(false);
     var self = Flux2?.useStateFromStores?.([
-      UserStore2
-    ], () => UserStore2?.getCurrentUser?.());
+      UserStore3
+    ], () => UserStore3?.getCurrentUser?.());
     var status = Flux2?.useStateFromStores?.([
       SelfPresenceStore
     ], () => SelfPresenceStore?.getStatus?.());
@@ -15487,7 +16039,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react18, Flux2, ChatInputActions, ChatInputSendButton, hasText, sendBtnRef, Pressable2, View17, Animated, avatarCollapse, Avatar2, UserStore2, SelectedChannelStore, ChannelStore, SelfPresenceStore, showUserProfileActionSheet2, showYouAccountActionSheetByProp, unpatches2, chatboxavatar_default;
+  var import_react18, Flux2, ChatInputActions, ChatInputSendButton, hasText, sendBtnRef, Pressable2, View17, Animated, avatarCollapse, Avatar2, UserStore3, SelectedChannelStore, ChannelStore, SelfPresenceStore, showUserProfileActionSheet2, showYouAccountActionSheetByProp, unpatches2, chatboxavatar_default;
   var init_chatboxavatar = __esm({
     "src/plugins/chatboxavatar/index.tsx"() {
       "use strict";
@@ -15509,7 +16061,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ({ Pressable: Pressable2, View: View17, Animated } = ReactNative);
       avatarCollapse = new Animated.Value(0);
       Avatar2 = findByPropsLazy("default", "AvatarSizes", "getStatusSize")?.default;
-      UserStore2 = findByStoreName("UserStore");
+      UserStore3 = findByStoreName("UserStore");
       SelectedChannelStore = findByStoreName("SelectedChannelStore");
       ChannelStore = findByStoreName("ChannelStore");
       SelfPresenceStore = findByStoreName("SelfPresenceStore");
@@ -15649,18 +16201,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         bubbleChatRadius: 12,
         bubbleChatColor: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "chatbubbles-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/chatbubbles.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       chatBubblesSettings = new Proxy({}, {
@@ -15850,8 +16402,8 @@ ${pendingInsertLink}` : pendingInsertLink;
         rules: null,
         lastModified: null,
         _hasHydrated: false,
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         }),
         update: () => _async_to_generator(function* () {
           try {
@@ -15876,13 +16428,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       }), {
         name: "cleanurls-rules",
         storage: createJSONStorage(() => createFileStorage("plugins/cleanurls-rules.json")),
-        partialize: (state) => ({
-          rules: state.rules,
-          lastModified: state.lastModified
+        partialize: (state2) => ({
+          rules: state2.rules,
+          lastModified: state2.lastModified
         }),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-          state?.update();
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
+          state2?.update();
         }
       }));
     }
@@ -15902,18 +16454,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         redirect: true,
         referrals: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "cleanurls-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/cleanurls.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       cleanUrlsSettings = new Proxy({}, {
@@ -16021,22 +16573,22 @@ ${pendingInsertLink}` : pendingInsertLink;
     }
   }
   function setupPatches() {
-    var patches27 = [];
+    var patches28 = [];
     try {
       var Messages3 = findByProps("sendMessage", "editMessage", "startEditMessage");
       if (Messages3?.sendMessage) {
-        patches27.push(before("sendMessage", Messages3, (args) => {
+        patches28.push(before("sendMessage", Messages3, (args) => {
           handleMessage(args[1]);
         }));
       }
       if (Messages3?.editMessage) {
-        patches27.push(before("editMessage", Messages3, (args) => {
+        patches28.push(before("editMessage", Messages3, (args) => {
           handleMessage(args[2]);
         }));
       }
     } catch (e) {
     }
-    return patches27;
+    return patches28;
   }
   var HTTP_REGEX_MULTI;
   var init_patcher2 = __esm({
@@ -16123,7 +16675,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(cleanurls_exports, {
     default: () => cleanurls_default
   });
-  var patches8, cleanurls_default;
+  var patches9, cleanurls_default;
   var init_cleanurls = __esm({
     "src/plugins/cleanurls/index.ts"() {
       "use strict";
@@ -16138,7 +16690,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_rulesStore();
       init_settings10();
       init_storage11();
-      patches8 = [];
+      patches9 = [];
       cleanurls_default = definePlugin({
         name: "CleanURLs",
         description: "Remove tracking parameters and redirect wrappers from URLs",
@@ -16153,19 +16705,19 @@ ${pendingInsertLink}` : pendingInsertLink;
               waitForHydration(useCleanUrlsSettings),
               waitForHydration(useRulesStore)
             ]);
-            patches8 = setupPatches();
+            patches9 = setupPatches();
             useRulesStore.getState().update();
           })();
         },
         stop() {
-          patches8.forEach((unpatch6) => {
+          patches9.forEach((unpatch6) => {
             try {
               unpatch6();
             } catch (e) {
               logger.error(e);
             }
           });
-          patches8 = [];
+          patches9 = [];
         },
         settings() {
           return CleanUrlsSettings();
@@ -16303,18 +16855,18 @@ ${pendingInsertLink}` : pendingInsertLink;
           hideAll: false
         },
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "clearmenus-settingssections",
         storage: createJSONStorage(() => createFileStorage("plugins/clearmenus-settingssections.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       messageActionLabels = [
@@ -16347,18 +16899,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         hideUnknown: false,
         customLabels: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "messageactionsheet-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/messageactionsheet.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
     }
@@ -16471,9 +17023,9 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/clearmenus/patches/SettingsSections.ts
   function patchSettingsSections() {
-    var patches27 = [];
+    var patches28 = [];
     var createListModule2 = findByPropsLazy("createList");
-    if (!createListModule2) return patches27;
+    if (!createListModule2) return patches28;
     var unpatch6 = after("createList", createListModule2, function(args, ret) {
       var [config] = args;
       if (!config?.sections || !Array.isArray(config.sections)) {
@@ -16595,8 +17147,8 @@ ${pendingInsertLink}` : pendingInsertLink;
         for (var i1 = sectionData.length - 1; i1 >= 0; i1--) _loop2(i1);
       }
     });
-    patches27.push(unpatch6);
-    return patches27;
+    patches28.push(unpatch6);
+    return patches28;
   }
   var BILLING_ITEMS, RAIN_CATEGORIES;
   var init_SettingsSections = __esm({
@@ -18068,9 +18620,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         start() {
           try {
             unpatch2 = patchMessageActionSheet();
-            var patches27 = patchSettingsSections();
-            if (Array.isArray(patches27)) {
-              unpatchSettingsSections = () => patches27.forEach((fn) => fn());
+            var patches28 = patchSettingsSections();
+            if (Array.isArray(patches28)) {
+              unpatchSettingsSections = () => patches28.forEach((fn) => fn());
             }
           } catch (error) {
           }
@@ -18095,7 +18647,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(dashless_exports, {
     default: () => dashless_default
   });
-  var View21, patches9, dashless_default, traverseAndModify;
+  var View21, patches10, dashless_default, traverseAndModify;
   var init_dashless = __esm({
     "src/plugins/dashless/index.ts"() {
       "use strict";
@@ -18106,7 +18658,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       ({ View: View21 } = findByProps("View", "Text"));
-      patches9 = [];
+      patches10 = [];
       dashless_default = definePlugin({
         name: "Dashless",
         description: "Changes dashes in text channel names to spaces",
@@ -18116,13 +18668,13 @@ ${pendingInsertLink}` : pendingInsertLink;
         id: "dashless",
         version: "1.0.0",
         start() {
-          patches9.push(after("render", View21.prototype || View21, (_2, res) => {
+          patches10.push(after("render", View21.prototype || View21, (_2, res) => {
             return traverseAndModify(res);
           }));
         },
         stop() {
-          for (var unpatch6 of patches9) unpatch6();
-          patches9.length = 0;
+          for (var unpatch6 of patches10) unpatch6();
+          patches10.length = 0;
         }
       });
       traverseAndModify = (node) => {
@@ -18148,7 +18700,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/lib/constants.ts
   var BASE_URL, API_URL, AUTHORIZE_URL, CDN_URL, CLIENT_ID, SKU_ID, RAW_SKU_ID;
-  var init_constants2 = __esm({
+  var init_constants3 = __esm({
     "src/plugins/decor/lib/constants.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -18178,7 +18730,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/decor/lib/stores/AuthorizationStore.ts
-  var UserStore3, useAuthorizationStore2, unsubscribe, decorAuthSettings;
+  var UserStore4, useAuthorizationStore2, unsubscribe, decorAuthSettings;
   var init_AuthorizationStore2 = __esm({
     "src/plugins/decor/lib/stores/AuthorizationStore.ts"() {
       "use strict";
@@ -18189,13 +18741,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_esm();
       init_middleware();
       init_subscribeToFluxDispatcher();
-      UserStore3 = findByStoreName("UserStore");
+      UserStore4 = findByStoreName("UserStore");
       useAuthorizationStore2 = create2()(persist((set, get) => ({
         token: null,
         tokens: {},
         _hasHydrated: false,
         init: () => {
-          var user = UserStore3?.getCurrentUser?.();
+          var user = UserStore4?.getCurrentUser?.();
           if (!user?.id) return;
           var { tokens: tokens2 } = get();
           set({
@@ -18203,12 +18755,12 @@ ${pendingInsertLink}` : pendingInsertLink;
           });
         },
         setToken: (token) => {
-          var user = UserStore3?.getCurrentUser?.();
+          var user = UserStore4?.getCurrentUser?.();
           if (!user?.id) return;
-          set((state) => ({
+          set((state2) => ({
             token,
             tokens: {
-              ...state.tokens,
+              ...state2.tokens,
               [user.id]: token
             }
           }));
@@ -18216,19 +18768,19 @@ ${pendingInsertLink}` : pendingInsertLink;
         isAuthorized: () => {
           return !!get().token;
         },
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "decor-auth",
         storage: createJSONStorage(() => createFileStorage("plugins/decor_auth.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-          state?.init();
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
+          state2?.init();
         }
       }));
       unsubscribe = subscribeToFluxDispatcher("CONNECTION_OPEN", () => useAuthorizationStore2.getState().init());
@@ -18256,7 +18808,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/decor/lib/api.ts
-  function cFetch(url2, options) {
+  function cFetch2(url2, options) {
     return _async_to_generator(function* () {
       var res = yield fetch(url2, {
         ...options,
@@ -18276,7 +18828,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_async_to_generator();
-      init_constants2();
+      init_constants3();
       init_AuthorizationStore2();
       getUsersDecorations = (ids = void 0) => _async_to_generator(function* () {
         if (ids && ids.length === 0) return {};
@@ -18285,10 +18837,10 @@ ${pendingInsertLink}` : pendingInsertLink;
         return yield fetch(url2).then((c2) => c2.json());
       })();
       getUserDecorations = (id = "@me") => _async_to_generator(function* () {
-        return cFetch(API_URL + `/users/${id}/decorations`).then((c2) => c2.json());
+        return cFetch2(API_URL + `/users/${id}/decorations`).then((c2) => c2.json());
       })();
       getUserDecoration = (id = "@me") => _async_to_generator(function* () {
-        return cFetch(API_URL + `/users/${id}/decoration`).then((c2) => c2.json());
+        return cFetch2(API_URL + `/users/${id}/decoration`).then((c2) => c2.json());
       })();
       setUserDecoration = (decoration, id = "@me") => _async_to_generator(function* () {
         var formData = new FormData();
@@ -18306,7 +18858,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           });
           formData.append("alt", decoration.alt);
         }
-        return cFetch(API_URL + `/users/${id}/decoration`, {
+        return cFetch2(API_URL + `/users/${id}/decoration`, {
           method: "PUT",
           body: formData
         }).then((c2) => {
@@ -18314,7 +18866,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         });
       })();
       deleteDecoration = (hash) => _async_to_generator(function* () {
-        yield cFetch(API_URL + `/decorations/${hash}`, {
+        yield cFetch2(API_URL + `/decorations/${hash}`, {
           method: "DELETE"
         });
       })();
@@ -18342,7 +18894,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
-      init_constants2();
+      init_constants3();
       init_decorationToString();
       discordifyDecoration_default = ((d) => ({
         asset: decorationToString_default(d),
@@ -18352,7 +18904,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/decor/lib/stores/UsersDecorationsStore.ts
-  var import_lodash, UserStore4, SelectedChannelStore2, useUsersDecorationsStore, subscriptions;
+  var import_lodash, UserStore5, SelectedChannelStore2, useUsersDecorationsStore, subscriptions;
   var init_UsersDecorationsStore = __esm({
     "src/plugins/decor/lib/stores/UsersDecorationsStore.ts"() {
       "use strict";
@@ -18364,7 +18916,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_esm();
       init_api2();
       init_subscribeToFluxDispatcher();
-      UserStore4 = findByStoreName("UserStore");
+      UserStore5 = findByStoreName("UserStore");
       SelectedChannelStore2 = findByStoreName("SelectedChannelStore");
       useUsersDecorationsStore = create2((set, get) => ({
         usersDecorations: /* @__PURE__ */ new Map(),
@@ -18438,7 +18990,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           useUsersDecorationsStore.getState().fetchMany(messages.map((m2) => m2.author.id));
         }),
         subscribeToFluxDispatcher("CONNECTION_OPEN", () => {
-          useUsersDecorationsStore.getState().fetch(UserStore4.getCurrentUser().id, true);
+          useUsersDecorationsStore.getState().fetch(UserStore5.getCurrentUser().id, true);
         }),
         subscribeToFluxDispatcher("MESSAGE_CREATE", (data4) => {
           var channelId = SelectedChannelStore2.getChannelId();
@@ -18458,7 +19010,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/lib/stores/CurrentUserDecorationsStore.ts
   function updateCurrentUserAvatarDecoration(decoration) {
-    var user = UserStore5.getCurrentUser();
+    var user = UserStore6.getCurrentUser();
     if (decoration) {
       user.avatarDecoration = discordifyDecoration_default(decoration);
       user.avatarDecorationData = user.avatarDecoration;
@@ -18472,7 +19024,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       type: "USER_SETTINGS_ACCOUNT_SUBMIT_SUCCESS"
     });
   }
-  var import_lodash2, UserStore5, useCurrentUserDecorationsStore, subscriptions2;
+  var import_lodash2, UserStore6, useCurrentUserDecorationsStore, subscriptions2;
   var init_CurrentUserDecorationsStore = __esm({
     "src/plugins/decor/lib/stores/CurrentUserDecorationsStore.ts"() {
       "use strict";
@@ -18489,7 +19041,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_discordifyDecoration();
       init_subscribeToFluxDispatcher();
       init_UsersDecorationsStore();
-      UserStore5 = findByStoreName("UserStore");
+      UserStore6 = findByStoreName("UserStore");
       useCurrentUserDecorationsStore = create2(subscribeWithSelector((set, get) => ({
         decorations: [],
         selectedDecoration: null,
@@ -18534,9 +19086,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         })
       })));
       subscriptions2 = [
-        useCurrentUserDecorationsStore.subscribe((state) => [
-          state.selectedDecoration,
-          state.fetched
+        useCurrentUserDecorationsStore.subscribe((state2) => [
+          state2.selectedDecoration,
+          state2.fetched
         ], (0, import_lodash2.debounce)(([decoration, fetched], [prevDecoration, prevFetched]) => {
           if (fetched !== prevFetched || decoration?.hash === prevDecoration?.hash) return;
           var bllub = setUserDecoration(decoration);
@@ -18557,7 +19109,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_async_to_generator();
       init_metro();
       init_i18n();
-      init_constants2();
+      init_constants3();
       init_AuthorizationStore2();
       ({ pushModal: pushModal2, popModal: popModal2 } = findByProps("pushModal"));
       OAuth2AuthorizeModal2 = findByName("OAuth2AuthorizeModal");
@@ -18626,7 +19178,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         style: styles5.headerAvatarContainer,
         children: [
           /* @__PURE__ */ jsx(HeaderAvatar, {
-            user: UserStore6.getCurrentUser(),
+            user: UserStore7.getCurrentUser(),
             pendingAvatarDecoration: decoration,
             size: "editAvatarDecoration",
             decorationStyle: {
@@ -18647,7 +19199,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react_native40, HeaderAvatar, UserStore6, useStyles7;
+  var import_react_native40, HeaderAvatar, UserStore7, useStyles7;
   var init_AvatarDecorationPreviews = __esm({
     "src/plugins/decor/ui/components/AvatarDecorationPreviews.tsx"() {
       "use strict";
@@ -18657,12 +19209,12 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_color();
       init_styles();
       init_metro();
-      init_constants2();
+      init_constants3();
       init_CurrentUserDecorationsStore();
       init_discordifyDecoration();
       import_react_native40 = __toESM(require_react_native());
       HeaderAvatar = findByName("HeaderAvatar");
-      UserStore6 = findByStoreName("UserStore");
+      UserStore7 = findByStoreName("UserStore");
       useStyles7 = createStyles((_2) => ({
         headerAvatarContainer: {
           display: "flex",
@@ -18698,7 +19250,7 @@ ${pendingInsertLink}` : pendingInsertLink;
     ]);
     var insets = useSafeAreaInsets2();
     var navigation2 = useNavigation();
-    var createDecoration = useCurrentUserDecorationsStore((state) => state.create);
+    var createDecoration = useCurrentUserDecorationsStore((state2) => state2.create);
     var styles5 = useStyles8();
     var isDisabled = !asset || !alt.trim() || asset.type !== "image/png" || !!error;
     return /* @__PURE__ */ jsxs(import_react_native41.View, {
@@ -18836,7 +19388,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_common();
       init_components();
       import_react_native41 = __toESM(require_react_native());
-      init_constants2();
+      init_constants3();
       init_CurrentUserDecorationsStore();
       init_readFileAsBase64();
       init_AvatarDecorationPreviews();
@@ -18871,7 +19423,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/decor/lib/utils/showDecorationActionSheet.tsx
-  var ImageResolver, showSimpleActionSheet4, hideActionSheet4, UserStore7, Image6, showDecorationActionSheet_default;
+  var ImageResolver, showSimpleActionSheet4, hideActionSheet4, UserStore8, Image6, showDecorationActionSheet_default;
   var init_showDecorationActionSheet = __esm({
     "src/plugins/decor/lib/utils/showDecorationActionSheet.tsx"() {
       "use strict";
@@ -18888,7 +19440,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ImageResolver = findByProps("getAvatarDecorationURL", "default");
       ({ showSimpleActionSheet: showSimpleActionSheet4 } = findByProps("showSimpleActionSheet"));
       ({ hideActionSheet: hideActionSheet4 } = findByProps("openLazy", "hideActionSheet"));
-      UserStore7 = findByStoreName("UserStore");
+      UserStore8 = findByStoreName("UserStore");
       ({ Image: Image6 } = ReactNative);
       showDecorationActionSheet_default = ((decoration) => showSimpleActionSheet4({
         key: "DecorationActionSheet",
@@ -18917,7 +19469,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               showToast("Copied Decoration Hash!", findAssetId2("toast_copy_message"));
             }
           },
-          ...decoration.authorId === UserStore7.getCurrentUser().id ? [
+          ...decoration.authorId === UserStore8.getCurrentUser().id ? [
             {
               icon: findAssetId2("ic_message_delete"),
               label: "Delete",
@@ -19041,7 +19593,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/ui/components/Preset.tsx
   function Preset({ preset }) {
-    var select = useCurrentUserDecorationsStore((state) => state.select);
+    var select = useCurrentUserDecorationsStore((state2) => state2.select);
     var navigation2 = NavigationNative.useNavigation();
     var styles5 = useStyles10();
     return /* @__PURE__ */ jsxs(View25, {
@@ -19088,7 +19640,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var FormTitle, View25, FlatList2, Image7, TextStyleSheet2, Text4, SummarizedIconRow, OverflowCircle, Avatar3, useStyles10, UserUtils, UserStore8, defaultAvatars;
+  var FormTitle, View25, FlatList2, Image7, TextStyleSheet2, Text4, SummarizedIconRow, OverflowCircle, Avatar3, useStyles10, UserUtils, UserStore9, defaultAvatars;
   var init_Preset = __esm({
     "src/plugins/decor/ui/components/Preset.tsx"() {
       "use strict";
@@ -19117,7 +19669,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         }
       }));
       UserUtils = findByProps("getUser", "fetchCurrentUser");
-      UserStore8 = findByStoreName("UserStore");
+      UserStore9 = findByStoreName("UserStore");
       defaultAvatars = [
         findAssetId2("default_avatar_0"),
         findAssetId2("default_avatar_1"),
@@ -19251,7 +19803,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var FlatList4, View27, ActivityIndicator2, Pressable4, Stack5, TextStyleSheet3, Text5, UserStore9, Parser2, showUserProfile, UserUtils2, useStyles11;
+  var FlatList4, View27, ActivityIndicator2, Pressable4, Stack5, TextStyleSheet3, Text5, UserStore10, Parser2, showUserProfile, UserUtils2, useStyles11;
   var init_DecorationPicker = __esm({
     "src/plugins/decor/ui/components/DecorationPicker.tsx"() {
       "use strict";
@@ -19274,7 +19826,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ({ FlatList: FlatList4, View: View27, ActivityIndicator: ActivityIndicator2, Pressable: Pressable4 } = ReactNative);
       ({ Stack: Stack5 } = findByProps("Stack"));
       ({ TextStyleSheet: TextStyleSheet3, Text: Text5 } = findByProps("TextStyleSheet"));
-      UserStore9 = findByStoreName("UserStore");
+      UserStore10 = findByStoreName("UserStore");
       Parser2 = findByProps("parse", "parseToAST");
       ({ showUserProfile } = findByProps("showUserProfile"));
       UserUtils2 = findByProps("getUser", "fetchCurrentUser");
@@ -19304,8 +19856,8 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/ui/pages/Settings.tsx
   function Settings3() {
-    var isAuthorized = useAuthorizationStore2((state) => !!state.token);
-    var setToken = useAuthorizationStore2((state) => state.setToken);
+    var isAuthorized = useAuthorizationStore2((state2) => !!state2.token);
+    var setToken = useAuthorizationStore2((state2) => state2.setToken);
     var styles5 = useStyles12();
     return /* @__PURE__ */ jsxs(import_react_native43.View, {
       style: {
@@ -19386,7 +19938,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(decor_exports, {
     default: () => decor_default
   });
-  var UserStore10, ImageResolver2, AvatarDecorationUtils, patches10, decor_default;
+  var UserStore11, ImageResolver2, AvatarDecorationUtils, patches11, decor_default;
   var init_decor = __esm({
     "src/plugins/decor/index.ts"() {
       "use strict";
@@ -19398,15 +19950,15 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_common();
       init_plugins3();
       init_Developers();
-      init_constants2();
+      init_constants3();
       init_AuthorizationStore2();
       init_CurrentUserDecorationsStore();
       init_UsersDecorationsStore();
       init_Settings2();
-      UserStore10 = findByStoreName("UserStore");
+      UserStore11 = findByStoreName("UserStore");
       ImageResolver2 = findByProps("getAvatarDecorationURL", "default");
       AvatarDecorationUtils = findByProps("isAnimatedAvatarDecoration");
-      patches10 = [];
+      patches11 = [];
       decor_default = definePlugin({
         name: "Decor",
         description: "Create and use your own custom avatar decorations, or pick your favorite from the presets.",
@@ -19419,10 +19971,10 @@ ${pendingInsertLink}` : pendingInsertLink;
         version: "1.0.0",
         eagerStart() {
           return _async_to_generator(function* () {
-            patches10.push(unsubscribe);
-            patches10.push(...subscriptions);
-            patches10.push(...subscriptions2);
-            patches10.push(after("getUser", UserStore10, (_2, user) => {
+            patches11.push(unsubscribe);
+            patches11.push(...subscriptions);
+            patches11.push(...subscriptions2);
+            patches11.push(after("getUser", UserStore11, (_2, user) => {
               var store = useUsersDecorationsStore.getState();
               if (user && store.has(user.id)) {
                 var decoration = store.get(user.id);
@@ -19437,7 +19989,7 @@ ${pendingInsertLink}` : pendingInsertLink;
                 user.avatarDecorationData = user.avatarDecoration;
               }
             }));
-            patches10.push(instead("getAvatarDecorationURL", ImageResolver2, (args, orig) => {
+            patches11.push(instead("getAvatarDecorationURL", ImageResolver2, (args, orig) => {
               var [{ avatarDecoration, canAnimate }] = args;
               if (avatarDecoration?.skuId === SKU_ID) {
                 var parts = avatarDecoration.asset.split("_");
@@ -19450,16 +20002,16 @@ ${pendingInsertLink}` : pendingInsertLink;
               }
             }));
             if (AvatarDecorationUtils) {
-              patches10.push(after("isAnimatedAvatarDecoration", AvatarDecorationUtils, ([avatarDecoration]) => {
+              patches11.push(after("isAnimatedAvatarDecoration", AvatarDecorationUtils, ([avatarDecoration]) => {
                 if (ReactNative.Platform.OS === "ios" && avatarDecoration?.asset?.startsWith("file://")) return true;
               }));
             }
-            useUsersDecorationsStore.getState().fetch(UserStore10.getCurrentUser().id, true);
+            useUsersDecorationsStore.getState().fetch(UserStore11.getCurrentUser().id, true);
           })();
         },
         stop() {
-          for (var unpatch6 of patches10) unpatch6();
-          patches10.length = 0;
+          for (var unpatch6 of patches11) unpatch6();
+          patches11.length = 0;
           useUsersDecorationsStore.getState().clear();
           useCurrentUserDecorationsStore.getState().clear();
         },
@@ -19670,19 +20222,19 @@ ${pendingInsertLink}` : pendingInsertLink;
         showCopyURLButton: true,
         showCopyMarkdownButton: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "expressionutils-storage",
         storage: createJSONStorage(() => createFileStorage("plugins/expressionutils.json")),
-        onRehydrateStorage: () => (state) => {
-          if (state && typeof state === "object" && "setHasHydrated" in state && typeof state.setHasHydrated === "function") {
-            state.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          if (state2 && typeof state2 === "object" && "setHasHydrated" in state2 && typeof state2.setHasHydrated === "function") {
+            state2.setHasHydrated(true);
           }
         }
       }));
@@ -20075,7 +20627,7 @@ ${pendingInsertLink}` : pendingInsertLink;
     var LazyActionSheet8 = findByProps("openLazy", "hideActionSheet");
     if (!LazyActionSheet8) return () => {
     };
-    var patches27 = [];
+    var patches28 = [];
     var unpatchLazy = before("openLazy", LazyActionSheet8, ([lazySheet, name]) => {
       if (![
         "MessageEmojiActionSheet",
@@ -20083,14 +20635,14 @@ ${pendingInsertLink}` : pendingInsertLink;
       ].includes(name)) return;
       unpatchLazy();
       lazySheet.then((module) => {
-        patches27.push(after("default", module, (_2, res) => {
-          patches27.push(patchSheet("type", res, true));
+        patches28.push(after("default", module, (_2, res) => {
+          patches28.push(patchSheet("type", res, true));
         }));
       });
     });
     return () => {
       unpatchLazy();
-      patches27.forEach((p) => p?.());
+      patches28.forEach((p) => p?.());
     };
   }
   var init_patchMessageEmojiActionSheet = __esm({
@@ -20508,7 +21060,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         var LazyActionSheet8 = findByProps("openLazy", "hideActionSheet");
         if (!LazyActionSheet8) return () => {
         };
-        var patches27 = [];
+        var patches28 = [];
         var unpatchLazy = before("openLazy", LazyActionSheet8, ([lazySheet, name]) => {
           if (![
             "MessageEmojiActionSheet",
@@ -20516,14 +21068,14 @@ ${pendingInsertLink}` : pendingInsertLink;
           ].includes(name)) return;
           unpatchLazy();
           lazySheet.then((module) => {
-            patches27.push(after("default", module, (_2, res) => {
-              patches27.push(patchSheet2("type", res, true));
+            patches28.push(after("default", module, (_2, res) => {
+              patches28.push(patchSheet2("type", res, true));
             }));
           });
         });
         return () => {
           unpatchLazy();
-          patches27.forEach((p) => p?.());
+          patches28.forEach((p) => p?.());
         };
       })()
     ];
@@ -20561,18 +21113,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         hidePremiumRestoreSubscription: false,
         hideQuests: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "fakenitro-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/fakenitro.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       fakenitroSettings = new Proxy({}, {
@@ -20642,7 +21194,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/fakenitro/patches/sendMessage.ts
   function getPatches5() {
-    var patches27 = [
+    var patches28 = [
       before("sendMessage", messageModule, (args) => {
         if (getCurrentUser2?.().premiumType === null) modifyIfNeeded(args[1]);
       }),
@@ -20663,11 +21215,11 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     ];
     if (uploadModule?.uploadLocalFiles !== void 0) {
-      patches27.push(before("uploadLocalFiles", uploadModule, (args) => {
+      patches28.push(before("uploadLocalFiles", uploadModule, (args) => {
         if (getCurrentUser2?.().premiumType === null) modifyIfNeeded(args[0].parsedMessage);
       }));
     }
-    return patches27;
+    return patches28;
   }
   var messageModule, uploadModule, getCurrentUser2, getStickerById2, ChannelStore2;
   var init_sendMessage = __esm({
@@ -20785,7 +21337,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(fakenitro_exports, {
     default: () => fakenitro_default
   });
-  var patches11, fakenitro_default;
+  var patches12, fakenitro_default;
   var init_fakenitro = __esm({
     "src/plugins/fakenitro/index.ts"() {
       "use strict";
@@ -20799,7 +21351,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_removeGetNitroButton();
       init_sendMessage();
       init_settings13();
-      patches11 = [];
+      patches12 = [];
       fakenitro_default = definePlugin({
         name: "FakeNitro",
         description: "Gives you Client-Side Nitro",
@@ -20813,15 +21365,15 @@ ${pendingInsertLink}` : pendingInsertLink;
         id: "fakenitro",
         version: "1.1.0",
         start() {
-          patches11.push(...getPatches2());
-          patches11.push(...getPatches5());
-          patches11.push(...getPatches());
-          patches11.push(...getPatches3());
-          patches11.push(...getPatches4());
+          patches12.push(...getPatches2());
+          patches12.push(...getPatches5());
+          patches12.push(...getPatches());
+          patches12.push(...getPatches3());
+          patches12.push(...getPatches4());
         },
         stop() {
-          for (var unpatch6 of patches11) unpatch6();
-          patches11.length = 0;
+          for (var unpatch6 of patches12) unpatch6();
+          patches12.length = 0;
         },
         settings: settings_default5
       });
@@ -20847,18 +21399,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         showOtherColors: true,
         registryUrl: "https://profilecolors-registry.songspotlight.workers.dev",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "profilecolor-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/profilecolor.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       profilecolorSettings = new Proxy({}, {
@@ -21140,7 +21692,7 @@ ${pendingInsertLink}` : pendingInsertLink;
                 store.updateSettings({
                   shareColors: v2
                 });
-                var myId = UserStore11?.getCurrentUser?.()?.id;
+                var myId = UserStore12?.getCurrentUser?.()?.id;
                 if (!v2) {
                   if (myId) {
                     unpublishFromRegistry(myId).then((ok) => {
@@ -21164,7 +21716,7 @@ ${pendingInsertLink}` : pendingInsertLink;
                   showToast("Set a primary color first", findAssetId2("XIcon"));
                   return;
                 }
-                var myId = UserStore11?.getCurrentUser?.()?.id;
+                var myId = UserStore12?.getCurrentUser?.()?.id;
                 if (!myId) {
                   showToast("Not logged in", findAssetId2("XIcon"));
                   return;
@@ -21196,7 +21748,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var import_react23, TableRow3, TableSwitchRow4, TableRowGroup6, Card5, TextInput3, View30, UserStore11;
+  var import_react23, TableRow3, TableSwitchRow4, TableRowGroup6, Card5, TextInput3, View30, UserStore12;
   var init_settings14 = __esm({
     "src/plugins/fakeprofilecolors/settings.tsx"() {
       "use strict";
@@ -21215,7 +21767,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ({ Card: Card5 } = findByProps("Card"));
       ({ TextInput: TextInput3 } = findByProps("TextInput"));
       ({ View: View30 } = findByProps("View"));
-      UserStore11 = findByStoreName("UserStore");
+      UserStore12 = findByStoreName("UserStore");
     }
   });
 
@@ -21226,8 +21778,8 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
   function ensureRegistryColors(userId) {
     if (resolvedColors.has(userId) || pendingFetches.has(userId)) return;
-    var state = useProfileColorStore.getState();
-    if (!state.showOtherColors || !state.registryUrl) return;
+    var state2 = useProfileColorStore.getState();
+    if (!state2.showOtherColors || !state2.registryUrl) return;
     pendingFetches.add(userId);
     fetchRegistryColors(userId).then((colors) => {
       resolvedColors.set(userId, colors);
@@ -21254,15 +21806,15 @@ ${pendingInsertLink}` : pendingInsertLink;
       if (userId !== currentUser.id) {
         return profileTheme;
       }
-      var state = useProfileColorStore.getState();
-      if (state.enabled && (state.primary !== null || state.accent !== null)) {
-        if (state.primary !== null) {
-          profileTheme.primaryColor = state.primary;
-          profileTheme.secondaryColor = state.accent ?? state.primary;
+      var state2 = useProfileColorStore.getState();
+      if (state2.enabled && (state2.primary !== null || state2.accent !== null)) {
+        if (state2.primary !== null) {
+          profileTheme.primaryColor = state2.primary;
+          profileTheme.secondaryColor = state2.accent ?? state2.primary;
           profileTheme.theme = profileTheme.theme;
-        } else if (state.accent !== null) {
-          profileTheme.primaryColor = state.accent;
-          profileTheme.secondaryColor = state.accent;
+        } else if (state2.accent !== null) {
+          profileTheme.primaryColor = state2.accent;
+          profileTheme.secondaryColor = state2.accent;
           profileTheme.theme = profileTheme.theme;
         }
       }
@@ -21280,8 +21832,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       if (!currentUser) {
         return profile;
       }
-      var state = useProfileColorStore.getState();
-      if (!state._hasHydrated) {
+      var state2 = useProfileColorStore.getState();
+      if (!state2._hasHydrated) {
         return profile;
       }
       var userId = profile.id;
@@ -21298,9 +21850,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         return parseInt(hex, 16);
       }
       if (userId === currentUser.id) {
-        var primary = safeHex(state.primary);
-        var accent = safeHex(state.accent);
-        if (state.enabled && (primary !== null || accent !== null)) {
+        var primary = safeHex(state2.primary);
+        var accent = safeHex(state2.accent);
+        if (state2.enabled && (primary !== null || accent !== null)) {
           profile.themeColors = [
             primary ?? accent,
             accent ?? primary ?? accent
@@ -21309,7 +21861,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         } else {
         }
       } else {
-        if (state.showOtherColors) {
+        if (state2.showOtherColors) {
           var regColors = resolvedColors.get(userId);
           if (regColors) {
             profile.themeColors = [
@@ -21321,7 +21873,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           }
           ensureRegistryColors(userId);
         }
-        if (state.bannerFallback && (!profile.premiumType || profile.premiumType === 0) && profile.bannerColor) {
+        if (state2.bannerFallback && (!profile.premiumType || profile.premiumType === 0) && profile.bannerColor) {
           var color2 = profile.bannerColor;
           if (typeof color2 === "number") color2 = `#${color2.toString(16).padStart(6, "0")}`;
           if (!/^#?[0-9a-fA-F]{6}$/.test(color2)) {
@@ -21666,18 +22218,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         mods: false,
         customs: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "globalbadges-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/globalbadges.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       customBadgesSettings = new Proxy({}, {
@@ -21777,7 +22329,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       }
     })();
   }
-  var useBadgesModule2, customBadgesCache, pendingRequests2, badgeProps2, patches12, globalbadges_default;
+  var useBadgesModule2, customBadgesCache, pendingRequests2, badgeProps2, patches13, globalbadges_default;
   var init_globalbadges = __esm({
     "src/plugins/globalbadges/index.ts"() {
       "use strict";
@@ -21797,7 +22349,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       customBadgesCache = /* @__PURE__ */ new Map();
       pendingRequests2 = /* @__PURE__ */ new Set();
       badgeProps2 = /* @__PURE__ */ new Map();
-      patches12 = [];
+      patches13 = [];
       globalbadges_default = definePlugin({
         name: "GlobalBadges",
         description: "Display custom badges from various Discord mod clients",
@@ -21859,7 +22411,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               });
             });
           };
-          patches12.push(after("default", useBadgesModule2, ([user], result) => {
+          patches13.push(after("default", useBadgesModule2, ([user], result) => {
             if (!user) return;
             var { userId } = user;
             var cached = customBadgesCache.get(userId);
@@ -21918,10 +22470,10 @@ ${pendingInsertLink}` : pendingInsertLink;
           }));
         },
         stop() {
-          for (var unpatch6 of patches12) {
+          for (var unpatch6 of patches13) {
             if (typeof unpatch6 === "function") unpatch6();
           }
-          patches12 = [];
+          patches13 = [];
           badgeProps2.clear();
         },
         settings: CustomBadgesSettings
@@ -22072,18 +22624,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         showIcon: true,
         showPopup: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "hiddenchannels-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hiddenchannels.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       hiddenChannelsSettings = new Proxy({}, {
@@ -22283,18 +22835,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         ignored: true,
         removeReplies: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "hideblockedandignoredmessages-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hideblockedandignored.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       hideblockedandignoredmessagesSettings = new Proxy({}, {
@@ -22424,7 +22976,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(hideblockedandignoredmessages_exports, {
     default: () => hideblockedandignoredmessages_default
   });
-  var patches13, hideblockedandignoredmessages_default;
+  var patches14, hideblockedandignoredmessages_default;
   var init_hideblockedandignoredmessages = __esm({
     "src/plugins/hideblockedandignoredmessages/index.ts"() {
       "use strict";
@@ -22434,7 +22986,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_Developers();
       init_hidemessages();
       init_settings17();
-      patches13 = [];
+      patches14 = [];
       hideblockedandignoredmessages_default = definePlugin({
         name: "HideBlockedAndIgnoredMessages",
         description: "A plugin that removes the `X blocked or ignored message/s` prompt and replies to the blocked or ignored messages from chat.",
@@ -22446,11 +22998,11 @@ ${pendingInsertLink}` : pendingInsertLink;
         id: "hideblockedandignoredmessages",
         version: "1.0.0",
         start() {
-          patches13.push(...getPatches6());
+          patches14.push(...getPatches6());
         },
         stop() {
-          for (var unpatch6 of patches13) unpatch6();
-          patches13.length = 0;
+          for (var unpatch6 of patches14) unpatch6();
+          patches14.length = 0;
         },
         settings: Settings5
       });
@@ -22524,18 +23076,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         dmHideVideoButton: true,
         hideVCVideoButton: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "hidecallbuttons-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hidecallbuttons.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       hidecallbuttonsSettings = new Proxy({}, {
@@ -22660,7 +23212,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(hidecallbuttons_exports, {
     default: () => hidecallbuttons_default
   });
-  var patches14, find, hidecallbuttons_default;
+  var patches15, find, hidecallbuttons_default;
   var init_hidecallbuttons = __esm({
     "src/plugins/hidecallbuttons/index.ts"() {
       "use strict";
@@ -22677,7 +23229,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_Developers();
       init_settings18();
       init_storage19();
-      patches14 = [];
+      patches15 = [];
       find = (filter) => {
         return metro_exports.findExports(metro_exports.factories.createSimpleFilter(filter, cyrb64Hash(new Error().stack)));
       };
@@ -22706,7 +23258,7 @@ ${pendingInsertLink}` : pendingInsertLink;
             var PrivateChannelButtons = find((x2) => x2?.type?.name === "PrivateChannelButtons");
             var VideoButton = findByName("VideoButton", false);
             if (UserProfileActions !== void 0) {
-              patches14.push(after("default", UserProfileActions, (_2, component) => {
+              patches15.push(after("default", UserProfileActions, (_2, component) => {
                 if (!hidecallbuttonsSettings.upHideVideoButton && !hidecallbuttonsSettings.upHideVoiceButton) return;
                 var buttons = component?.props?.children?.props?.children[1]?.props?.children;
                 if (buttons === void 0) buttons = component?.props?.children[1]?.props?.children;
@@ -22729,17 +23281,17 @@ ${pendingInsertLink}` : pendingInsertLink;
                 }
               }));
             }
-            patches14.push(after("default", SimplifiedUserProfileContactButtons, (_2, component) => {
+            patches15.push(after("default", SimplifiedUserProfileContactButtons, (_2, component) => {
               var buttons = component?.props?.children;
               if (buttons === void 0) return;
               if (hidecallbuttonsSettings.upHideVoiceButton) delete buttons[1];
               if (hidecallbuttonsSettings.upHideVideoButton) delete buttons[2];
             }));
-            patches14.push(instead("default", VideoButton, (args, orig) => {
+            patches15.push(instead("default", VideoButton, (args, orig) => {
               if (hidecallbuttonsSettings.hideVCVideoButton) return;
               return orig.apply(this, args);
             }));
-            patches14.push(after("type", PrivateChannelButtons, (_2, component) => {
+            patches15.push(after("type", PrivateChannelButtons, (_2, component) => {
               if (!hidecallbuttonsSettings.dmHideCallButton && !hidecallbuttonsSettings.dmHideVideoButton) return;
               var buttons = component?.props?.children;
               if (buttons === void 0) return;
@@ -22758,7 +23310,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           }).call(this);
         },
         stop() {
-          for (var unpatch6 of patches14) unpatch6();
+          for (var unpatch6 of patches15) unpatch6();
         },
         settings: settings_default6
       });
@@ -22784,9 +23336,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       };
       useLetItRainSettings = create2()(persist((set) => ({
         settings: DEFAULT_SETTINGS2,
-        updateSetting: (key, value) => set((state) => ({
+        updateSetting: (key, value) => set((state2) => ({
           settings: {
-            ...state.settings,
+            ...state2.settings,
             [key]: value
           }
         }))
@@ -22989,7 +23541,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(letitrain_exports, {
     default: () => letitrain_default
   });
-  var patches15, letitrain_default;
+  var patches16, letitrain_default;
   var init_letitrain = __esm({
     "src/plugins/letitrain/index.tsx"() {
       "use strict";
@@ -23001,7 +23553,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_Developers();
       init_RainOverlay();
       init_settings19();
-      patches15 = [];
+      patches16 = [];
       letitrain_default = definePlugin({
         name: "LetItRain",
         description: "rain tomorrow btw",
@@ -23025,11 +23577,11 @@ ${pendingInsertLink}` : pendingInsertLink;
           };
           onJsxCreate("App", injectRain);
           onJsxCreate("SafeAreaProvider", injectRain);
-          patches15.push(() => {
+          patches16.push(() => {
           });
         },
         stop() {
-          for (var unpatch6 of patches15) unpatch6();
+          for (var unpatch6 of patches16) unpatch6();
         },
         settings: LetItRainSettings
       });
@@ -23062,18 +23614,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         },
         databaseLogging: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "messagelogger-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/messagelogger.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
     }
@@ -23295,10 +23847,10 @@ ${pendingInsertLink}` : pendingInsertLink;
           if (event.otherPluginBypass) return args;
           var storage3 = useMessageLoggerSettings.getState();
           if (!storage3.deleted?.enabled) return args;
-          if (!UserStore12) UserStore12 = findByStoreName("UserStore");
+          if (!UserStore13) UserStore13 = findByStoreName("UserStore");
           if (!MessageStore) MessageStore = findByStoreName("MessageStore");
-          if (!UserStore12 || !MessageStore) return args;
-          var currentUserId2 = UserStore12.getCurrentUser?.()?.id;
+          if (!UserStore13 || !MessageStore) return args;
+          var currentUserId2 = UserStore13.getCurrentUser?.()?.id;
           var { id, channelId } = event;
           var message = MessageStore.getMessage?.(channelId, id);
           if (!message) return args;
@@ -23500,7 +24052,7 @@ ${separator2}
       };
     }
   }
-  var patches16, selfDeletedMessages, MessageStore, UserStore12, deleteable, dbStorage, messagelogger_default;
+  var patches17, selfDeletedMessages, MessageStore, UserStore13, deleteable, dbStorage, messagelogger_default;
   var init_messagelogger = __esm({
     "src/plugins/messagelogger/index.ts"() {
       "use strict";
@@ -23515,7 +24067,7 @@ ${separator2}
       init_Developers();
       init_settings20();
       init_storage21();
-      patches16 = [];
+      patches17 = [];
       selfDeletedMessages = /* @__PURE__ */ new Set();
       deleteable = [];
       dbStorage = createFileStorage("public/message_logs.json");
@@ -23530,20 +24082,20 @@ ${separator2}
         version: "2.0.0",
         settings: MessageLoggerSettings,
         start() {
-          patches16.push(patchDeleteAction());
-          patches16.push(patchMessageDeleteHandler());
-          patches16.push(patchMessageEditHandler());
-          patches16.push(patchRowManager());
+          patches17.push(patchDeleteAction());
+          patches17.push(patchMessageDeleteHandler());
+          patches17.push(patchMessageEditHandler());
+          patches17.push(patchRowManager());
         },
         stop() {
-          for (var unpatch6 of patches16) {
+          for (var unpatch6 of patches17) {
             try {
               unpatch6();
             } catch (e) {
               console.error("[MessageLogger] Error unpatching:", e);
             }
           }
-          patches16 = [];
+          patches17 = [];
           selfDeletedMessages.clear();
           deleteable.length = 0;
         }
@@ -23559,8 +24111,8 @@ ${separator2}
           resolve();
           return;
         }
-        var unsubscribe2 = useMoreCommandsSettings.subscribe((state) => {
-          if (state._hasHydrated) {
+        var unsubscribe2 = useMoreCommandsSettings.subscribe((state2) => {
+          if (state2._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -23652,41 +24204,41 @@ ${separator2}
         sortdefs: true,
         nsfwwarn: true,
         _hasHydrated: false,
-        updateFactSettings: (newSettings) => set((state) => ({
+        updateFactSettings: (newSettings) => set((state2) => ({
           factSettings: {
-            ...state.factSettings,
+            ...state2.factSettings,
             ...newSettings
           }
         })),
-        updateGarySettings: (newSettings) => set((state) => ({
+        updateGarySettings: (newSettings) => set((state2) => ({
           garySettings: {
-            ...state.garySettings,
+            ...state2.garySettings,
             ...newSettings
           }
         })),
-        updateEnabledCommands: (newCommands) => set((state) => ({
+        updateEnabledCommands: (newCommands) => set((state2) => ({
           enabledCommands: {
-            ...state.enabledCommands,
+            ...state2.enabledCommands,
             ...newCommands
           }
         })),
-        updateHiddenSettings: (newSettings) => set((state) => ({
+        updateHiddenSettings: (newSettings) => set((state2) => ({
           hiddenSettings: {
-            ...state.hiddenSettings,
+            ...state2.hiddenSettings,
             ...newSettings
           }
         })),
         setPendingRestart: (pending) => set({
           pendingRestart: pending
         }),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "morecommands-settings",
         storage: createJSONStorage(() => createFileStorage2("plugins/morecommands.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       storage = new Proxy({}, {
@@ -23694,15 +24246,15 @@ ${separator2}
           return useMoreCommandsSettings.getState()[prop];
         },
         set(target, prop, value) {
-          var state = useMoreCommandsSettings.getState();
+          var state2 = useMoreCommandsSettings.getState();
           if (prop === "factSettings") {
-            state.updateFactSettings(value);
+            state2.updateFactSettings(value);
           } else if (prop === "garySettings") {
-            state.updateGarySettings(value);
+            state2.updateGarySettings(value);
           } else if (prop === "enabledCommands") {
-            state.updateEnabledCommands(value);
+            state2.updateEnabledCommands(value);
           } else if (prop === "hiddenSettings") {
-            state.updateHiddenSettings(value);
+            state2.updateHiddenSettings(value);
           }
           return true;
         }
@@ -26101,7 +26653,7 @@ ${formattedData}
   });
 
   // src/plugins/morecommands/src/commands/petpet.ts
-  var UserStore13, MessageActions8, petPetCommand;
+  var UserStore14, MessageActions8, petPetCommand;
   var init_petpet = __esm({
     "src/plugins/morecommands/src/commands/petpet.ts"() {
       "use strict";
@@ -26110,7 +26662,7 @@ ${formattedData}
       init_async_to_generator();
       init_metro();
       init_api5();
-      UserStore13 = findByStoreName("UserStore");
+      UserStore14 = findByStoreName("UserStore");
       MessageActions8 = findByProps("sendMessage");
       petPetCommand = {
         name: "petpet",
@@ -26129,7 +26681,7 @@ ${formattedData}
         ],
         execute: (args, ctx) => _async_to_generator(function* () {
           try {
-            var user = yield UserStore13.getUser(args[0].value);
+            var user = yield UserStore14.getUser(args[0].value);
             var image = user.getAvatarURL(512);
             var data4 = yield getPetPetData(image);
             var fixNonce = Date.now().toString();
@@ -26558,7 +27110,7 @@ ${formattedData}
   __export(moreconfirm_exports, {
     default: () => moreconfirm_default
   });
-  var dialog, relationshipManager, callManager, actionSheetManager, UserStore14, patches17, moreconfirm_default;
+  var dialog, relationshipManager, callManager, actionSheetManager, UserStore15, patches18, moreconfirm_default;
   var init_moreconfirm = __esm({
     "src/plugins/moreconfirm/index.ts"() {
       "use strict";
@@ -26573,8 +27125,8 @@ ${formattedData}
       relationshipManager = findByProps("addRelationship");
       callManager = findByProps("handleStartCall");
       actionSheetManager = findByProps("hideActionSheet");
-      UserStore14 = findByStoreName("UserStore");
-      patches17 = [];
+      UserStore15 = findByStoreName("UserStore");
+      patches18 = [];
       moreconfirm_default = definePlugin({
         name: "MoreConfirm",
         description: "Prompts confirmations before making irreversible actions.",
@@ -26585,7 +27137,7 @@ ${formattedData}
         id: "moreconfirm",
         version: "1.0.0",
         start() {
-          patches17.push(patcher_default.instead("handleStartCall", callManager, (args, orig) => {
+          patches18.push(patcher_default.instead("handleStartCall", callManager, (args, orig) => {
             var [{ rawRecipients: [{ username, discriminator }, multiple] }, isVideo] = args;
             var action = isVideo ? "video call" : "call";
             dialog.show({
@@ -26603,9 +27155,9 @@ ${formattedData}
               }
             });
           }));
-          patches17.push(patcher_default.instead("addRelationship", relationshipManager, (args, orig) => {
+          patches18.push(patcher_default.instead("addRelationship", relationshipManager, (args, orig) => {
             if (typeof args[0] !== "object" || !args[0].userId) return orig.apply(this, args);
-            var { username, discriminator } = UserStore14.getUser(args[0].userId);
+            var { username, discriminator } = UserStore15.getUser(args[0].userId);
             var hideASInterval = setInterval(() => actionSheetManager.hideActionSheet(), 100);
             setTimeout(() => clearInterval(hideASInterval), 3e3);
             var block = args[0].type === 2;
@@ -26631,7 +27183,7 @@ ${formattedData}
           }));
         },
         stop() {
-          for (var unpatch6 of patches17) unpatch6();
+          for (var unpatch6 of patches18) unpatch6();
         }
       });
     }
@@ -26649,8 +27201,8 @@ ${formattedData}
       init_middleware();
       useMoyaiSettings = create2()(persist((set) => ({
         allowReactions: true,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         }))
       }), {
@@ -26835,18 +27387,18 @@ ${formattedData}
       useMultiScrobblerSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS3,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "multiscrobbler-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/multiscrobbler.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       multiScrobblerSettings = new Proxy({}, {
@@ -26899,8 +27451,8 @@ ${formattedData}
   });
 
   // src/plugins/multiscrobbler/constants.ts
-  var Constants, constants_default;
-  var init_constants3 = __esm({
+  var Constants, constants_default2;
+  var init_constants4 = __esm({
     "src/plugins/multiscrobbler/constants.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -26960,12 +27512,12 @@ ${formattedData}
           29: "Rate limit exceeded"
         }
       };
-      constants_default = Constants;
+      constants_default2 = Constants;
     }
   });
 
   // src/plugins/multiscrobbler/modules.ts
-  var SET_ACTIVITY, AssetManager, SelfPresenceStore2, UserStore15;
+  var SET_ACTIVITY, AssetManager, SelfPresenceStore2, UserStore16;
   var init_modules4 = __esm({
     "src/plugins/multiscrobbler/modules.ts"() {
       "use strict";
@@ -26975,7 +27527,7 @@ ${formattedData}
       ({ SET_ACTIVITY } = findByProps("SET_ACTIVITY"));
       AssetManager = findByProps("getAssetIds");
       SelfPresenceStore2 = findByStoreName("SelfPresenceStore");
-      UserStore15 = findByStoreName("UserStore");
+      UserStore16 = findByStoreName("UserStore");
     }
   });
 
@@ -27040,7 +27592,7 @@ ${formattedData}
       init_create_class();
       init_define_property();
       init_logger();
-      init_constants3();
+      init_constants4();
       init_storage24();
       init_debug3();
       BaseService = /* @__PURE__ */ (function() {
@@ -27084,8 +27636,8 @@ ${formattedData}
           {
             key: "getErrorMessage",
             value: function getErrorMessage(error) {
-              if (error.error && constants_default.API_ERROR_CODES[error.error]) {
-                return constants_default.API_ERROR_CODES[error.error];
+              if (error.error && constants_default2.API_ERROR_CODES[error.error]) {
+                return constants_default2.API_ERROR_CODES[error.error];
               }
               return error.message || error.toString() || "Unknown error";
             }
@@ -27117,13 +27669,13 @@ ${formattedData}
                   return data4;
                 }).catch((error) => {
                   this.retryCount++;
-                  if (this.retryCount > constants_default.MAX_RETRY_ATTEMPTS) {
+                  if (this.retryCount > constants_default2.MAX_RETRY_ATTEMPTS) {
                     this.retryCount = 0;
                     recordServiceError(this.getServiceName().toLowerCase(), `Max retries exceeded: ${error.message}`);
                     this.handleError(error);
                   } else {
-                    this.logVerbose(`Request failed, retrying (${this.retryCount}/${constants_default.MAX_RETRY_ATTEMPTS})`);
-                    return new Promise((resolve) => setTimeout(resolve, constants_default.RETRY_DELAY)).then(() => this.makeRequest(url2, options));
+                    this.logVerbose(`Request failed, retrying (${this.retryCount}/${constants_default2.MAX_RETRY_ATTEMPTS})`);
+                    return new Promise((resolve) => setTimeout(resolve, constants_default2.RETRY_DELAY)).then(() => this.makeRequest(url2, options));
                   }
                 });
               }).apply(this, arguments);
@@ -27133,7 +27685,7 @@ ${formattedData}
             key: "isDefaultCover",
             value: function isDefaultCover(cover) {
               if (!cover) return true;
-              return constants_default.DEFAULT_COVER_HASHES.some((hash) => cover.includes(hash));
+              return constants_default2.DEFAULT_COVER_HASHES.some((hash) => cover.includes(hash));
             }
           },
           {
@@ -27176,7 +27728,7 @@ ${formattedData}
       init_create_class();
       init_inherits();
       init_logger();
-      init_constants3();
+      init_constants4();
       init_storage24();
       init_BaseService();
       LastFmService = /* @__PURE__ */ (function(BaseService2) {
@@ -27215,7 +27767,7 @@ ${formattedData}
                     api_key: currentSettings.apiKey,
                     format: "json"
                   });
-                  var url2 = `${constants_default.SERVICES.lastfm.baseUrl}?${params}`;
+                  var url2 = `${constants_default2.SERVICES.lastfm.baseUrl}?${params}`;
                   this.makeRequest(url2);
                   this.log("Credentials validation successful");
                   return true;
@@ -27242,7 +27794,7 @@ ${formattedData}
                   extended: "1",
                   format: "json"
                 });
-                var url2 = `${constants_default.SERVICES.lastfm.baseUrl}?${params}`;
+                var url2 = `${constants_default2.SERVICES.lastfm.baseUrl}?${params}`;
                 return this.makeRequest(url2).then((data4) => {
                   var lastTrack = data4?.recenttracks?.track?.[0];
                   if (!lastTrack) {
@@ -27261,7 +27813,7 @@ ${formattedData}
                       api_key: currentSettings.apiKey,
                       format: "json"
                     });
-                    var trackInfoUrl = `${constants_default.SERVICES.lastfm.baseUrl}?${trackInfoParams}`;
+                    var trackInfoUrl = `${constants_default2.SERVICES.lastfm.baseUrl}?${trackInfoParams}`;
                     return this.makeRequest(trackInfoUrl).then((trackInfo) => {
                       if (trackInfo?.track?.duration) {
                         duration = parseInt(trackInfo.track.duration);
@@ -27324,7 +27876,7 @@ ${formattedData}
       init_create_class();
       init_inherits();
       init_logger();
-      init_constants3();
+      init_constants4();
       init_storage24();
       init_BaseService();
       LibreFmService = /* @__PURE__ */ (function(BaseService2) {
@@ -27365,7 +27917,7 @@ ${formattedData}
                     api_key: apiKey,
                     format: "json"
                   });
-                  var url2 = `${constants_default.SERVICES.librefm.baseUrl}?${params}`;
+                  var url2 = `${constants_default2.SERVICES.librefm.baseUrl}?${params}`;
                   this.makeRequest(url2);
                   this.log("Credentials validation successful");
                   return true;
@@ -27394,7 +27946,7 @@ ${formattedData}
                   extended: "1",
                   format: "json"
                 });
-                var url2 = `${constants_default.SERVICES.librefm.baseUrl}?${params}`;
+                var url2 = `${constants_default2.SERVICES.librefm.baseUrl}?${params}`;
                 return this.makeRequest(url2).then((data4) => {
                   var lastTrack = data4?.recenttracks?.track?.[0];
                   if (!lastTrack) {
@@ -27413,7 +27965,7 @@ ${formattedData}
                       api_key: apiKey,
                       format: "json"
                     });
-                    var trackInfoUrl = `${constants_default.SERVICES.librefm.baseUrl}?${trackInfoParams}`;
+                    var trackInfoUrl = `${constants_default2.SERVICES.librefm.baseUrl}?${trackInfoParams}`;
                     return this.makeRequest(trackInfoUrl).then((trackInfo) => {
                       if (trackInfo?.track?.duration) {
                         duration = parseInt(trackInfo.track.duration);
@@ -27476,7 +28028,7 @@ ${formattedData}
       init_create_class();
       init_inherits();
       init_logger();
-      init_constants3();
+      init_constants4();
       init_storage24();
       init_BaseService();
       ListenBrainzService = /* @__PURE__ */ (function(BaseService2) {
@@ -27511,7 +28063,7 @@ ${formattedData}
                   if (!username) {
                     throw new Error("Username not set for ListenBrainz");
                   }
-                  var url2 = `${constants_default.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/listens?count=1`;
+                  var url2 = `${constants_default2.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/listens?count=1`;
                   var headers = {};
                   if (token) {
                     headers.Authorization = `Token ${token}`;
@@ -27548,7 +28100,7 @@ ${formattedData}
                     return void 0;
                   };
                   try {
-                    var playingNowUrl = `${constants_default.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/playing-now`;
+                    var playingNowUrl = `${constants_default2.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/playing-now`;
                     var headers = {};
                     if (token) {
                       headers.Authorization = `Token ${token}`;
@@ -27569,7 +28121,7 @@ ${formattedData}
                     latestListen = currentlyPlaying;
                     this.logVerbose("Using currently playing track");
                   } else {
-                    var url2 = `${constants_default.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/listens?count=1`;
+                    var url2 = `${constants_default2.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/listens?count=1`;
                     var headers1 = {};
                     if (token) {
                       headers1.Authorization = `Token ${token}`;
@@ -27793,7 +28345,7 @@ ${formattedData}
     });
   }
   function fetchAsset(_0) {
-    return _async_to_generator(function* (asset, appId = constants_default.APPLICATION_ID) {
+    return _async_to_generator(function* (asset, appId = constants_default2.APPLICATION_ID) {
       if (!asset?.length) return [];
       try {
         return AssetManager.fetchAssetIds(appId, asset);
@@ -27811,7 +28363,7 @@ ${formattedData}
       init_async_to_generator();
       init_logger();
       init_common();
-      init_constants3();
+      init_constants4();
       init_manager();
       init_modules4();
       init_storage24();
@@ -27860,7 +28412,7 @@ ${formattedData}
       init_create_class();
       init_define_property();
       init_logger();
-      init_constants3();
+      init_constants4();
       init_modules4();
       init_ServiceFactory();
       init_storage24();
@@ -27965,13 +28517,13 @@ ${formattedData}
                     }
                     logVerbose(`Preparing RPC update for: ${lastTrack.artist} - ${lastTrack.name}`);
                     var activity = {
-                      name: currentSettings.appName || constants_default.DEFAULT_APP_NAME,
+                      name: currentSettings.appName || constants_default2.DEFAULT_APP_NAME,
                       flags: 0,
                       type: currentSettings.listeningTo ? 2 : 0,
                       details: lastTrack.name,
                       state: `${lastTrack.artist}`,
                       status_display_type: 1,
-                      application_id: constants_default.APPLICATION_ID
+                      application_id: constants_default2.APPLICATION_ID
                     };
                     if (activity.name.includes("{{")) {
                       var variables = {
@@ -28066,8 +28618,8 @@ ${formattedData}
             value: function handleError(error) {
               this.consecutiveFailures++;
               setDebugInfo("lastError", error);
-              logError2(`Failure ${this.consecutiveFailures}/${constants_default.MAX_RETRY_ATTEMPTS}:`, error.message);
-              if (this.consecutiveFailures >= constants_default.MAX_RETRY_ATTEMPTS) {
+              logError2(`Failure ${this.consecutiveFailures}/${constants_default2.MAX_RETRY_ATTEMPTS}:`, error.message);
+              if (this.consecutiveFailures >= constants_default2.MAX_RETRY_ATTEMPTS) {
                 logError2("Max retry attempts reached, initiating reconnection...");
                 this.startReconnection();
               }
@@ -28088,7 +28640,7 @@ ${formattedData}
                 }).catch((error) => {
                   logError2("Reconnection attempt failed:", error.message);
                 });
-              }, constants_default.RETRY_DELAY);
+              }, constants_default2.RETRY_DELAY);
             }
           },
           {
@@ -28151,7 +28703,7 @@ ${formattedData}
                     logVerbose("Could not fetch initial track:", error);
                   });
                 }).then(() => {
-                  var interval = Math.max((Number(currentSettings.timeInterval) || constants_default.DEFAULT_SETTINGS.timeInterval) * 1e3, constants_default.MIN_UPDATE_INTERVAL * 1e3);
+                  var interval = Math.max((Number(currentSettings.timeInterval) || constants_default2.DEFAULT_SETTINGS.timeInterval) * 1e3, constants_default2.MIN_UPDATE_INTERVAL * 1e3);
                   this.updateTimer = setInterval(() => this.updateActivity(), interval);
                   logger.verbose(`Update timer started with interval: ${interval}ms (${interval / 1e3}s)`);
                 }).catch((error) => {
@@ -28283,17 +28835,17 @@ ${formattedData}
               spacing: 4,
               children: [
                 /* @__PURE__ */ jsx(TextInput5, {
-                  placeholder: `App Name (Default: ${constants_default.DEFAULT_SETTINGS.appName})`,
+                  placeholder: `App Name (Default: ${constants_default2.DEFAULT_SETTINGS.appName})`,
                   value: settings4.appName,
                   onChange: (v2) => setStorage("appName", v2),
                   isClearable: true
                 }),
                 /* @__PURE__ */ jsx(TextInput5, {
-                  placeholder: `Update Interval (Default: ${constants_default.DEFAULT_SETTINGS.timeInterval}s)`,
+                  placeholder: `Update Interval (Default: ${constants_default2.DEFAULT_SETTINGS.timeInterval}s)`,
                   value: String(settings4.timeInterval),
                   onChange: (v2) => {
                     var interval = Number(v2);
-                    if (interval >= constants_default.MIN_UPDATE_INTERVAL) {
+                    if (interval >= constants_default2.MIN_UPDATE_INTERVAL) {
                       setStorage("timeInterval", interval);
                     }
                   },
@@ -28316,7 +28868,7 @@ ${formattedData}
               }),
               /* @__PURE__ */ jsx(TableRow5, {
                 label: "Minimum Interval",
-                subLabel: `The plugin will never check more frequently than ${constants_default.MIN_UPDATE_INTERVAL} seconds`
+                subLabel: `The plugin will never check more frequently than ${constants_default2.MIN_UPDATE_INTERVAL} seconds`
               })
             ]
           })
@@ -28330,7 +28882,7 @@ ${formattedData}
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
-      init_constants3();
+      init_constants4();
       init_storage24();
       init_Settings3();
       init_TableComponents();
@@ -29580,11 +30132,11 @@ ${formattedData}
         return;
       }
       logger.verbose(`[Multi-Scrobbler] Starting with ${serviceName}...`);
-      if (UserStore15.getCurrentUser()) {
+      if (UserStore16.getCurrentUser()) {
         tryInitialize();
       } else {
         var waitForUser = () => {
-          if (UserStore15.getCurrentUser()) {
+          if (UserStore16.getCurrentUser()) {
             tryInitialize();
             FluxDispatcher.unsubscribe("CONNECTION_OPEN", waitForUser);
           }
@@ -29725,7 +30277,7 @@ ${formattedData}
   __export(picturelinks_exports, {
     default: () => picturelinks_default
   });
-  var patches18, picturelinks_default;
+  var patches19, picturelinks_default;
   var init_picturelinks2 = __esm({
     "src/plugins/picturelinks/index.ts"() {
       "use strict";
@@ -29734,7 +30286,7 @@ ${formattedData}
       init_plugins3();
       init_picturelinks();
       init_Developers();
-      patches18 = [];
+      patches19 = [];
       picturelinks_default = definePlugin({
         name: "PictureLinks",
         description: "Allows you to click on profile pictures and banners.",
@@ -29746,11 +30298,11 @@ ${formattedData}
         id: "picturelinks",
         version: "1.0.0",
         start() {
-          patches18.push(unpatchAvatar());
-          patches18.push(unpatchBanner());
+          patches19.push(unpatchAvatar());
+          patches19.push(unpatchBanner());
         },
         stop() {
-          for (var unpatch6 of patches18) unpatch6();
+          for (var unpatch6 of patches19) unpatch6();
         }
       });
     }
@@ -29803,18 +30355,18 @@ ${formattedData}
         removeDefaultMobile: true,
         useThemeColors: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "platformindicator-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/platformindicator.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       platformIndicatorSettings = new Proxy({}, {
@@ -29986,7 +30538,7 @@ ${formattedData}
   function getUserStatuses(userId) {
     var statuses;
     if (!currentUserId) {
-      currentUserId = UserStore16.getCurrentUser()?.id;
+      currentUserId = UserStore17.getCurrentUser()?.id;
     }
     if (userId === currentUserId) {
       var sessions = SessionsStore.getSessions();
@@ -30012,7 +30564,7 @@ ${formattedData}
       }))
     });
   }
-  var PresenceStore, SessionsStore, UserStore16, statusCache, statusCacheHits, statusCacheTimeout, currentUserId;
+  var PresenceStore, SessionsStore, UserStore17, statusCache, statusCacheHits, statusCacheTimeout, currentUserId;
   var init_StatusIcons = __esm({
     "src/plugins/platformindicators/StatusIcons.tsx"() {
       "use strict";
@@ -30025,7 +30577,7 @@ ${formattedData}
       init_storage25();
       PresenceStore = findByStoreName("PresenceStore");
       SessionsStore = findByStoreName("SessionsStore");
-      UserStore16 = findByStoreName("UserStore");
+      UserStore17 = findByStoreName("UserStore");
       statusCacheHits = 0;
     }
   });
@@ -30152,8 +30704,8 @@ ${formattedData}
                 userId: user.id
               }));
             }));
-            var Status = findByName("Status", false);
-            unpatches5.push(before("default", Status, (args) => {
+            var Status2 = findByName("Status", false);
+            unpatches5.push(before("default", Status2, (args) => {
               if (!args) return;
               if (!args[0]) return;
               if (!platformIndicatorSettings.removeDefaultMobile) return;
@@ -30263,18 +30815,18 @@ ${formattedData}
         autoConfirmMessage: true,
         autoConfirmEmbed: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "quickdelete-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/quickdelete.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       quickDeleteSettings = new Proxy({}, {
@@ -30446,18 +30998,18 @@ ${formattedData}
         authToken: "",
         useThemedSend: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "reviewdb-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/reviewdb.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       reviewdbSettings = new Proxy({}, {
@@ -30476,7 +31028,7 @@ ${formattedData}
 
   // src/plugins/reviewdb/lib/constants.ts
   var CLIENT_ID2, BASE_URL2, API_URL2;
-  var init_constants4 = __esm({
+  var init_constants5 = __esm({
     "src/plugins/reviewdb/lib/constants.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -30541,7 +31093,7 @@ ${formattedData}
       init_promiseAllSettled();
       init_async_to_generator();
       init_storage27();
-      init_constants4();
+      init_constants5();
       init_utils5();
       getReviews = (userId) => _async_to_generator(function* () {
         return (yield jsonFetch(API_URL2 + `/users/${userId}/reviews`)).reviews;
@@ -31245,7 +31797,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_logger();
       init_metro();
       init_storage27();
-      init_constants4();
+      init_constants5();
       init_utils5();
       ({ pushModal: pushModal3, popModal: popModal3 } = findByProps("pushModal"));
       OAuth2AuthorizeModal3 = findByName("OAuth2AuthorizeModal");
@@ -31373,7 +31925,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     admins: () => admins,
     default: () => reviewdb_default
   });
-  var patches19, admins, reviewdb_default;
+  var patches20, admins, reviewdb_default;
   var init_reviewdb = __esm({
     "src/plugins/reviewdb/index.ts"() {
       "use strict";
@@ -31390,7 +31942,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_patchSimplifiedProfile();
       init_Settings5();
       init_storage27();
-      patches19 = [];
+      patches20 = [];
       admins = [];
       reviewdb_default = definePlugin({
         name: "ReviewDB",
@@ -31404,15 +31956,15 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         start() {
           return _async_to_generator(function* () {
             waitForHydration(useReviewDBSettings);
-            patches19.push(patchProfile_default());
-            patches19.push(patchSimplifiedProfile_default());
-            patches19.push(patchServer_default());
-            patches19.push(patchContextMenu_default());
+            patches20.push(patchProfile_default());
+            patches20.push(patchSimplifiedProfile_default());
+            patches20.push(patchServer_default());
+            patches20.push(patchContextMenu_default());
             getAdmins().then((i) => admins.push(...i));
           })();
         },
         stop() {
-          for (var unpatch6 of patches19) unpatch6();
+          for (var unpatch6 of patches20) unpatch6();
         },
         settings: Settings_default
       });
@@ -31473,7 +32025,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(showimagelinks_exports, {
     default: () => showimagelinks_default
   });
-  var patches20, showimagelinks_default;
+  var patches21, showimagelinks_default;
   var init_showimagelinks2 = __esm({
     "src/plugins/showimagelinks/index.ts"() {
       "use strict";
@@ -31482,7 +32034,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_Developers();
       init_showimagelinks();
-      patches20 = [];
+      patches21 = [];
       showimagelinks_default = definePlugin({
         name: "ShowImageLinks",
         description: "Shows image links if the message is just a linked image.",
@@ -31493,10 +32045,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "showimagelinks",
         version: "1.0.0",
         start() {
-          patches20.push(onLoad());
+          patches21.push(onLoad());
         },
         stop() {
-          for (var unpatch6 of patches20) unpatch6();
+          for (var unpatch6 of patches21) unpatch6();
         }
       });
     }
@@ -31507,7 +32059,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(silenttyping_exports, {
     default: () => silenttyping_default
   });
-  var Typing, patches21, silenttyping_default;
+  var Typing, patches22, silenttyping_default;
   var init_silenttyping = __esm({
     "src/plugins/silenttyping/index.ts"() {
       "use strict";
@@ -31518,7 +32070,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_Developers();
       Typing = findByProps("startTyping", "stopTyping");
-      patches21 = [];
+      patches22 = [];
       silenttyping_default = definePlugin({
         name: "SilentTyping",
         description: "Hides your typing status from others",
@@ -31528,13 +32080,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "silenttyping",
         version: "1.0.0",
         start() {
-          patches21.push(instead("startTyping", Typing, () => {
+          patches22.push(instead("startTyping", Typing, () => {
           }), instead("stopTyping", Typing, () => {
           }));
         },
         stop() {
-          for (var unpatch6 of patches21) unpatch6();
-          patches21.length = 0;
+          for (var unpatch6 of patches22) unpatch6();
+          patches22.length = 0;
         }
       });
     }
@@ -31578,21 +32130,21 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       useSongSpotlightSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS4,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "songspotlight-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/songspotlight.json")),
-        onRehydrateStorage: () => (state) => {
-          if (state && typeof state.albumGridView === "undefined") {
-            Object.assign(state, DEFAULT_SETTINGS4);
+        onRehydrateStorage: () => (state2) => {
+          if (state2 && typeof state2.albumGridView === "undefined") {
+            Object.assign(state2, DEFAULT_SETTINGS4);
           }
-          state?.setHasHydrated(true);
+          state2?.setHasHydrated(true);
         }
       }));
       songSpotlightSettings = new Proxy({}, {
@@ -32217,7 +32769,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var [userInfo, setUserInfo] = React.useState(null);
     var [favorites, setFavorites] = React.useState([]);
     var [favoritesLoading, setFavoritesLoading] = React.useState(true);
-    var isOwnProfile = userId === UserStore17.getCurrentUser()?.id;
+    var isOwnProfile = userId === UserStore18.getCurrentUser()?.id;
     var displayProfile = getDisplayProfile2?.(userId);
     var themeColors = displayProfile?.themeColors;
     var hasThemeColors = themeColors !== void 0;
@@ -32609,7 +33161,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var UserStore17, UserProfileCard2, getDisplayProfile2;
+  var UserStore18, UserProfileCard2, getDisplayProfile2;
   var init_SongSection = __esm({
     "src/plugins/songspotlight/components/SongSection.tsx"() {
       "use strict";
@@ -32625,7 +33177,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_api7();
       init_storage28();
       init_SongRow();
-      UserStore17 = findByStoreName("UserStore");
+      UserStore18 = findByStoreName("UserStore");
       UserProfileCard2 = findByName("UserProfileCard");
       ({ getDisplayProfile: getDisplayProfile2 } = findByProps("getDisplayProfile"));
     }
@@ -32758,8 +33310,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             favoriteSongs: updated
           });
           try {
-            var UserStore20 = findByStoreName("UserStore");
-            var myId = UserStore20?.getCurrentUser?.()?.id;
+            var UserStore21 = findByStoreName("UserStore");
+            var myId = UserStore21?.getCurrentUser?.()?.id;
             if (myId && settings4.shareUsername) {
               publishFavoritesToRegistry(myId, updated);
             }
@@ -32783,8 +33335,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       });
       showToast("Removed favorite", findAssetId2("CheckIcon"));
       try {
-        var UserStore20 = findByStoreName("UserStore");
-        var myId = UserStore20?.getCurrentUser?.()?.id;
+        var UserStore21 = findByStoreName("UserStore");
+        var myId = UserStore21?.getCurrentUser?.()?.id;
         if (myId && settings4.shareUsername) {
           publishFavoritesToRegistry(myId, updated);
         }
@@ -32804,8 +33356,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       });
       showToast("Moved up", findAssetId2("CheckIcon"));
       try {
-        var UserStore20 = findByStoreName("UserStore");
-        var myId = UserStore20?.getCurrentUser?.()?.id;
+        var UserStore21 = findByStoreName("UserStore");
+        var myId = UserStore21?.getCurrentUser?.()?.id;
         if (myId && settings4.shareUsername) publishFavoritesToRegistry(myId, list);
       } catch (unused) {
       }
@@ -32824,8 +33376,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       });
       showToast("Moved down", findAssetId2("CheckIcon"));
       try {
-        var UserStore20 = findByStoreName("UserStore");
-        var myId = UserStore20?.getCurrentUser?.()?.id;
+        var UserStore21 = findByStoreName("UserStore");
+        var myId = UserStore21?.getCurrentUser?.()?.id;
         if (myId && settings4.shareUsername) publishFavoritesToRegistry(myId, list);
       } catch (unused) {
       }
@@ -33349,7 +33901,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                   settings4.updateSettings({
                     shareUsername: value
                   });
-                  var myId = UserStore18?.getCurrentUser?.()?.id;
+                  var myId = UserStore19?.getCurrentUser?.()?.id;
                   if (!value) {
                     if (myId) {
                       unpublishFromRegistry2(myId).then((ok) => {
@@ -33374,7 +33926,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                     showToast("Set your Last.fm username first", findAssetId2("XIcon"));
                     return;
                   }
-                  var myId = UserStore18?.getCurrentUser?.()?.id;
+                  var myId = UserStore19?.getCurrentUser?.()?.id;
                   if (!myId) {
                     showToast("Not logged in", findAssetId2("XIcon"));
                     return;
@@ -33398,8 +33950,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             title: "Preview",
             children: /* @__PURE__ */ jsx(Stack15, {
               spacing: 0,
-              children: UserStore18?.getCurrentUser?.()?.id ? /* @__PURE__ */ jsx(SongSection, {
-                userId: UserStore18.getCurrentUser().id
+              children: UserStore19?.getCurrentUser?.()?.id ? /* @__PURE__ */ jsx(SongSection, {
+                userId: UserStore19.getCurrentUser().id
               }) : /* @__PURE__ */ jsx(Text, {
                 variant: "text-sm/medium",
                 style: {
@@ -33414,7 +33966,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView33, TableSwitchRow11, TableRowGroup18, TableRow11, Stack15, UserStore18;
+  var ScrollView33, TableSwitchRow11, TableRowGroup18, TableRow11, Stack15, UserStore19;
   var init_Settings6 = __esm({
     "src/plugins/songspotlight/Settings.tsx"() {
       "use strict";
@@ -33433,7 +33985,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_storage28();
       ({ ScrollView: ScrollView33 } = findByProps("ScrollView"));
       ({ TableSwitchRow: TableSwitchRow11, TableRowGroup: TableRowGroup18, TableRow: TableRow11, Stack: Stack15 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      UserStore18 = findByStoreName("UserStore");
+      UserStore19 = findByStoreName("UserStore");
     }
   });
 
@@ -33442,7 +33994,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(songspotlight_exports, {
     default: () => songspotlight_default
   });
-  var patches22, songspotlight_default;
+  var patches23, songspotlight_default;
   var init_songspotlight = __esm({
     "src/plugins/songspotlight/index.ts"() {
       "use strict";
@@ -33456,7 +34008,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_patchSimplifiedProfile2();
       init_Settings6();
       init_storage28();
-      patches22 = [];
+      patches23 = [];
       songspotlight_default = definePlugin({
         name: "SongSpotlight",
         description: "Show your top Last.fm tracks on your Discord profile.",
@@ -33468,13 +34020,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         start() {
           return _async_to_generator(function* () {
             yield waitForHydration(useSongSpotlightSettings);
-            patches22.push(patchProfile_default2());
-            patches22.push(patchSimplifiedProfile_default2());
+            patches23.push(patchProfile_default2());
+            patches23.push(patchSimplifiedProfile_default2());
           })();
         },
         stop() {
-          for (var unpatch6 of patches22) unpatch6();
-          patches22.length = 0;
+          for (var unpatch6 of patches23) unpatch6();
+          patches23.length = 0;
         },
         settings: Settings9
       });
@@ -33494,18 +34046,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       useStaffTagsSettings = create2()(persist((set) => ({
         useRoleColor: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "stafftags-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/stafftags.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       storage2 = new Proxy({}, {
@@ -33714,9 +34266,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         }
       };
       details_default = (() => {
-        var patches27 = [];
-        findByTypeNameAll("UserRow").forEach((UserRow) => patches27.push(after("type", UserRow, (args, res) => rowPatch(args, res))));
-        return () => patches27.forEach((unpatch6) => unpatch6());
+        var patches28 = [];
+        findByTypeNameAll("UserRow").forEach((UserRow) => patches28.push(after("type", UserRow, (args, res) => rowPatch(args, res))));
+        return () => patches28.forEach((unpatch6) => unpatch6());
       });
     }
   });
@@ -33740,14 +34292,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       GuildStore4 = findByStoreName("GuildStore");
       ChannelStore4 = findByStoreName("ChannelStore");
       name_default = (() => {
-        var patches27 = [];
+        var patches28 = [];
         if (HeaderName) {
-          patches27.push(after("default", HeaderName, ([{ channelId }], ret) => {
+          patches28.push(after("default", HeaderName, ([{ channelId }], ret) => {
             ret.props.channelId = channelId;
           }));
         }
         if (DisplayName) {
-          patches27.push(after("default", DisplayName, ([{ guildId, channelId, user }], ret) => {
+          patches28.push(after("default", DisplayName, ([{ guildId, channelId, user }], ret) => {
             var tagComponent = findInReactTree(ret, (c2) => c2?.type?.Types);
             var labelText = getBotLabel2?.(tagComponent?.props?.type);
             if (!tagComponent || labelText && !BUILT_IN_TAGS.includes(labelText)) {
@@ -33779,7 +34331,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             }
           }));
         }
-        return () => patches27.forEach((unpatch6) => unpatch6());
+        return () => patches28.forEach((unpatch6) => unpatch6());
       });
     }
   });
@@ -33854,7 +34406,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(stafftags_exports, {
     default: () => stafftags_default
   });
-  var patches23, stafftags_default;
+  var patches24, stafftags_default;
   var init_stafftags = __esm({
     "src/plugins/stafftags/index.ts"() {
       "use strict";
@@ -33867,7 +34419,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_name();
       init_tag();
       init_Settings7();
-      patches23 = [];
+      patches24 = [];
       stafftags_default = definePlugin({
         name: "StaffTags",
         description: "Shows extra tags for staff members.",
@@ -33879,14 +34431,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "stafftags",
         version: "1.0.0",
         start() {
-          patches23.push(chat_default());
-          patches23.push(tag_default());
-          patches23.push(name_default());
-          patches23.push(details_default());
+          patches24.push(chat_default());
+          patches24.push(tag_default());
+          patches24.push(name_default());
+          patches24.push(details_default());
         },
         stop() {
-          for (var unpatch6 of patches23) unpatch6();
-          patches23.length = 0;
+          for (var unpatch6 of patches24) unpatch6();
+          patches24.length = 0;
         },
         settings: Settings10
       });
@@ -33916,18 +34468,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         delay: "300",
         debugMode: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "taptap-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/taptap.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       taptapSettings = new Proxy({}, {
@@ -34086,11 +34638,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       if (taptapSettings.debugMode) logger.error("TapTap: openKeyboard error", e);
     }
   }
-  function doubleTapState(state, nativeEvent) {
+  function doubleTapState(state2, nativeEvent) {
     try {
       if (taptapSettings.debugMode) {
         logger.log("TapTap: DoubleTapState", {
-          state,
+          state: state2,
           data: nativeEvent
         });
       }
@@ -34112,7 +34664,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             var channel = ChannelStore5?.getChannel?.(channelId);
             var message = MessageStore2?.getMessage?.(channelId, messageId);
             if (!message) return;
-            var currentUser = UserStore19?.getCurrentUser?.();
+            var currentUser = UserStore20?.getCurrentUser?.();
             var isAuthor = !!(currentUser && message.author && message.author.id === currentUser.id);
             if (isAuthor && taptapSettings.userEdit) {
               Messages2?.startEditMessage?.(channelId, messageId, message.content ?? "");
@@ -34129,7 +34681,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             logger.error("TapTap: handleDoubleTapMessage error", e);
           }
         });
-        patches24.push(un);
+        patches25.push(un);
       }
       if (handlers.handleTapUsername) {
         var un1 = instead("handleTapUsername", handlers, (args, orig) => {
@@ -34150,7 +34702,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return orig.apply(handlers, args);
           }
         });
-        patches24.push(un1);
+        patches25.push(un1);
       }
       if (handlers.handleTapMessage) {
         var un2 = after("handleTapMessage", handlers, (args) => {
@@ -34174,7 +34726,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             if (!Number.isNaN(parsed) && parsed >= 200) delayMs = parsed;
             if (timeoutTap) clearTimeout(timeoutTap);
             timeoutTap = setTimeout(() => resetTapState(), delayMs);
-            var currentUser = UserStore19?.getCurrentUser?.();
+            var currentUser = UserStore20?.getCurrentUser?.();
             var isAuthor = !!(currentUser && message.author && message.author.id === currentUser.id);
             var enriched = {
               ...nativeEvent,
@@ -34213,17 +34765,17 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             resetTapState();
           }
         });
-        patches24.push(un2);
+        patches25.push(un2);
       }
       unpatchHandlers = () => {
         try {
-          patches24.forEach((u) => {
+          patches25.forEach((u) => {
             try {
               u?.();
             } catch (unused) {
             }
           });
-          patches24 = [];
+          patches25 = [];
           handlerInstances = /* @__PURE__ */ new WeakSet();
         } catch (e) {
           logger.error("TapTap: unpatchHandlers error", e);
@@ -34280,7 +34832,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   function resolveRuntimeModules() {
     ChannelStore5 = findByStoreName("ChannelStore");
     MessageStore2 = findByStoreName("MessageStore");
-    UserStore19 = findByStoreName("UserStore");
+    UserStore20 = findByStoreName("UserStore");
     Messages2 = findByProps("sendMessage", "startEditMessage");
     ReplyManager = findByProps("createPendingReply");
     ChatInputRef = findByProps("insertText");
@@ -34288,7 +34840,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var mhModule = findByProps("MessagesHandlers");
     MessagesHandlers = mhModule?.MessagesHandlers ?? null;
   }
-  var ChannelStore5, MessageStore2, UserStore19, Messages2, ReplyManager, ChatInputRef, MessagesHandlers, getChatInputRef2, unpatchGetter, unpatchHandlers, currentTapIndex, currentMessageID, timeoutTap, handlerInstances, patches24, taptap_default;
+  var ChannelStore5, MessageStore2, UserStore20, Messages2, ReplyManager, ChatInputRef, MessagesHandlers, getChatInputRef2, unpatchGetter, unpatchHandlers, currentTapIndex, currentMessageID, timeoutTap, handlerInstances, patches25, taptap_default;
   var init_taptap = __esm({
     "src/plugins/taptap/index.ts"() {
       "use strict";
@@ -34310,7 +34862,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       currentMessageID = null;
       timeoutTap = null;
       handlerInstances = /* @__PURE__ */ new WeakSet();
-      patches24 = [];
+      patches25 = [];
       taptap_default = definePlugin({
         name: "TapTap",
         description: "Double-tap others to reply, Double-tap self to edit",
@@ -34348,13 +34900,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             clearTimeout(timeoutTap);
             timeoutTap = null;
           }
-          patches24.forEach((u) => {
+          patches25.forEach((u) => {
             try {
               u?.();
             } catch (unused) {
             }
           });
-          patches24 = [];
+          patches25 = [];
           handlerInstances = /* @__PURE__ */ new WeakSet();
         },
         settings() {
@@ -34664,18 +35216,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         translator: 1,
         immersive_enabled: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "translator-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/translator.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       settings3 = new Proxy({}, {
@@ -35002,7 +35554,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(translator_exports, {
     default: () => translator_default
   });
-  var patches25, translator_default;
+  var patches26, translator_default;
   var init_translator = __esm({
     "src/plugins/translator/index.ts"() {
       "use strict";
@@ -35016,7 +35568,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       settings3.target_lang ??= "en";
       settings3.translator ??= 1;
       settings3.immersive_enabled ??= true;
-      patches25 = [];
+      patches26 = [];
       translator_default = definePlugin({
         name: "Translator",
         description: "Translate messages using DeepL or Google Translate",
@@ -35030,10 +35582,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "translator",
         version: "1.0.0",
         start() {
-          patches25.push(ActionSheet_default());
+          patches26.push(ActionSheet_default());
         },
         stop() {
-          for (var unpatch6 of patches25) unpatch6();
+          for (var unpatch6 of patches26) unpatch6();
         },
         settings: Settings11
       });
@@ -35250,12 +35802,12 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       dataURL = "https://userpfp.github.io/UserPFP/source/data.json";
       pluginEnabled2 = false;
       patcher_default2 = (() => {
-        var patches27 = [];
+        var patches28 = [];
         fetchData2();
         var avatarStuff = findByProps("getUserAvatarURL", "getUserAvatarSource");
-        var UserStore20 = findByStoreName("UserStore");
+        var UserStore21 = findByStoreName("UserStore");
         dataInterval = setInterval(() => fetchData2(), 1e3 * 60 * 60);
-        patches27.push(instead("getUser", UserStore20, (args, orig) => {
+        patches28.push(instead("getUser", UserStore21, (args, orig) => {
           var ret = orig(...args);
           if (!pluginEnabled2 || !data3?.avatars?.[args[0]]) return ret;
           var ext = data3.avatars[args[0]] && urlExt(data3.avatars[args[0]]);
@@ -35265,11 +35817,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           }
           return ret;
         }));
-        patches27.push(instead("getUserAvatarURL", avatarStuff, (args, orig) => {
+        patches28.push(instead("getUserAvatarURL", avatarStuff, (args, orig) => {
           var custom = pluginEnabled2 ? getCustomAvatar(args[0].id, !args[1]) : void 0;
           return custom ?? orig(...args);
         }));
-        patches27.push(instead("getUserAvatarSource", avatarStuff, (args, orig) => {
+        patches28.push(instead("getUserAvatarSource", avatarStuff, (args, orig) => {
           if (!pluginEnabled2) return orig(...args);
           var custom = getCustomAvatar(args[0].id, !args[1]);
           if (!custom) return orig(...args);
@@ -35278,7 +35830,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           };
         }));
         return () => {
-          for (var x2 of patches27) {
+          for (var x2 of patches28) {
             x2();
           }
           if (dataInterval) {
@@ -35533,7 +36085,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(viewraw_exports, {
     default: () => viewraw_default2
   });
-  var patches26, viewraw_default2;
+  var patches27, viewraw_default2;
   var init_viewraw2 = __esm({
     "src/plugins/viewraw/index.ts"() {
       "use strict";
@@ -35542,7 +36094,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_viewraw();
       init_Developers();
-      patches26 = [];
+      patches27 = [];
       viewraw_default2 = definePlugin({
         name: "ViewRaw",
         description: "View raw message data",
@@ -35555,10 +36107,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "viewraw",
         version: "1.0.0",
         start() {
-          patches26.push(...viewraw_default());
+          patches27.push(...viewraw_default());
         },
         stop() {
-          for (var unpatch6 of patches26) unpatch6();
+          for (var unpatch6 of patches27) unpatch6();
         }
       });
     }
@@ -36055,9 +36607,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         settings: {},
         _hasHydrated: false,
         updatePluginSetting: (id, enabled) => {
-          set((state) => ({
+          set((state2) => ({
             settings: {
-              ...state.settings,
+              ...state2.settings,
               [id]: {
                 enabled
               }
@@ -36065,14 +36617,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           }));
         },
         getPluginSetting: (id) => get().settings[id],
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "plugin-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/settings.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       pluginSettings = new Proxy({}, {
@@ -36127,6 +36679,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         core.forEach((f) => {
           if (f !== void 0) unload.push(f);
         });
+        initDebugger();
       })());
     }
   });
