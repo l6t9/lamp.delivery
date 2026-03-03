@@ -7746,9 +7746,9 @@
       var clr = parseColor(rawPatches[key]);
       if (clr) raw[key] = clr;
     }
-    if (raw["PRIMARY_700"]) {
-      raw["PLUM_23"] = raw["PRIMARY_700"];
-      raw["PLUM_24"] = raw["PRIMARY_700"];
+    if (raw.PRIMARY_700) {
+      raw.PLUM_23 = raw.PRIMARY_700;
+      raw.PLUM_24 = raw.PRIMARY_700;
     }
     for (var key1 of Object.keys(patches27.semantic.both)) {
       var clr1 = parseColor(rawPatches[key1]);
@@ -7775,77 +7775,77 @@
     var semanticDefaults = {
       dark: {
         // Classic backgrounds
-        "BACKGROUND_PRIMARY": raw["PRIMARY_600"],
-        "BACKGROUND_SECONDARY": raw["PRIMARY_630"],
-        "BACKGROUND_SECONDARY_ALT": raw["PRIMARY_700"],
-        "BACKGROUND_TERTIARY": raw["PRIMARY_630"],
-        "BACKGROUND_FLOATING": raw["PRIMARY_600"],
-        "BACKGROUND_NESTED_FLOATING": raw["PRIMARY_600"],
-        "BACKGROUND_MOBILE_PRIMARY": raw["PRIMARY_600"],
-        "BACKGROUND_MOBILE_SECONDARY": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_ACCENT": raw["PRIMARY_660"],
-        "BACKGROUND_MODIFIER_ACTIVE": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_HOVER": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_SELECTED": raw["PRIMARY_630"],
+        "BACKGROUND_PRIMARY": raw.PRIMARY_600,
+        "BACKGROUND_SECONDARY": raw.PRIMARY_630,
+        "BACKGROUND_SECONDARY_ALT": raw.PRIMARY_700,
+        "BACKGROUND_TERTIARY": raw.PRIMARY_630,
+        "BACKGROUND_FLOATING": raw.PRIMARY_600,
+        "BACKGROUND_NESTED_FLOATING": raw.PRIMARY_600,
+        "BACKGROUND_MOBILE_PRIMARY": raw.PRIMARY_600,
+        "BACKGROUND_MOBILE_SECONDARY": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_ACCENT": raw.PRIMARY_660,
+        "BACKGROUND_MODIFIER_ACTIVE": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_HOVER": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_SELECTED": raw.PRIMARY_630,
         // New base backgrounds
-        "BG_BASE_PRIMARY": raw["PRIMARY_600"],
-        "BG_BASE_SECONDARY": raw["PRIMARY_700"],
-        "BG_BASE_TERTIARY": raw["PRIMARY_660"],
-        "BG_SURFACE_RAISED": raw["PRIMARY_630"],
+        "BG_BASE_PRIMARY": raw.PRIMARY_600,
+        "BG_BASE_SECONDARY": raw.PRIMARY_700,
+        "BG_BASE_TERTIARY": raw.PRIMARY_660,
+        "BG_SURFACE_RAISED": raw.PRIMARY_630,
         // Modifiers
-        "BG_MOD_FAINT": raw["PRIMARY_460"],
-        "BG_MOD_STRONG": raw["PRIMARY_530"],
-        "BG_MOD_SUBTLE": raw["PRIMARY_630"],
+        "BG_MOD_FAINT": raw.PRIMARY_460,
+        "BG_MOD_STRONG": raw.PRIMARY_530,
+        "BG_MOD_SUBTLE": raw.PRIMARY_630,
         // Input / search bar
-        "CHANNELTEXTAREA_BACKGROUND": raw["PRIMARY_660"],
-        "REDESIGN_CHAT_INPUT_BACKGROUND": raw["PRIMARY_660"],
-        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw["PRIMARY_700"],
-        "CHAT_INPUT_CONTAINER_BACKGROUND": raw["PRIMARY_700"],
-        "INPUT_BACKGROUND": raw["PRIMARY_700"],
+        "CHANNELTEXTAREA_BACKGROUND": raw.PRIMARY_660,
+        "REDESIGN_CHAT_INPUT_BACKGROUND": raw.PRIMARY_660,
+        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw.PRIMARY_700,
+        "CHAT_INPUT_CONTAINER_BACKGROUND": raw.PRIMARY_700,
+        "INPUT_BACKGROUND": raw.PRIMARY_700,
         // Chat
-        "CHAT_BACKGROUND": raw["PRIMARY_600"],
+        "CHAT_BACKGROUND": raw.PRIMARY_600,
         // Cards
-        "CARD_PRIMARY_BG": raw["PRIMARY_630"],
-        "CARD_SECONDARY_BG": raw["PRIMARY_630"],
+        "CARD_PRIMARY_BG": raw.PRIMARY_630,
+        "CARD_SECONDARY_BG": raw.PRIMARY_630,
         // Buttons
-        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw["PRIMARY_630"],
-        "REDESIGN_BUTTON_SECONDARY_BORDER": raw["PRIMARY_530"],
-        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw["PRIMARY_700"],
+        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw.PRIMARY_630,
+        "REDESIGN_BUTTON_SECONDARY_BORDER": raw.PRIMARY_530,
+        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw.PRIMARY_700,
         // Activity cards
-        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw["PRIMARY_630"]
+        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw.PRIMARY_630
       },
       light: {
-        "BACKGROUND_PRIMARY": raw["PRIMARY_600"],
-        "BACKGROUND_SECONDARY": raw["PRIMARY_630"],
-        "BACKGROUND_SECONDARY_ALT": raw["PRIMARY_700"],
-        "BACKGROUND_TERTIARY": raw["PRIMARY_630"],
-        "BACKGROUND_FLOATING": raw["PRIMARY_600"],
-        "BACKGROUND_NESTED_FLOATING": raw["PRIMARY_600"],
-        "BACKGROUND_MOBILE_PRIMARY": raw["PRIMARY_600"],
-        "BACKGROUND_MOBILE_SECONDARY": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_ACCENT": raw["PRIMARY_660"],
-        "BACKGROUND_MODIFIER_ACTIVE": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_HOVER": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_SELECTED": raw["PRIMARY_630"],
-        "BG_BASE_PRIMARY": raw["PRIMARY_600"],
-        "BG_BASE_SECONDARY": raw["PRIMARY_700"],
-        "BG_BASE_TERTIARY": raw["PRIMARY_660"],
-        "BG_SURFACE_RAISED": raw["PRIMARY_630"],
-        "BG_MOD_FAINT": raw["PRIMARY_460"],
-        "BG_MOD_STRONG": raw["PRIMARY_530"],
-        "BG_MOD_SUBTLE": raw["PRIMARY_630"],
-        "CHANNELTEXTAREA_BACKGROUND": raw["PRIMARY_660"],
-        "REDESIGN_CHAT_INPUT_BACKGROUND": raw["PRIMARY_660"],
-        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw["PRIMARY_700"],
-        "CHAT_INPUT_CONTAINER_BACKGROUND": raw["PRIMARY_700"],
-        "INPUT_BACKGROUND": raw["PRIMARY_700"],
-        "CHAT_BACKGROUND": raw["PRIMARY_600"],
-        "CARD_PRIMARY_BG": raw["PRIMARY_630"],
-        "CARD_SECONDARY_BG": raw["PRIMARY_630"],
-        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw["PRIMARY_630"],
-        "REDESIGN_BUTTON_SECONDARY_BORDER": raw["PRIMARY_530"],
-        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw["PRIMARY_700"],
-        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw["PRIMARY_630"]
+        "BACKGROUND_PRIMARY": raw.PRIMARY_600,
+        "BACKGROUND_SECONDARY": raw.PRIMARY_630,
+        "BACKGROUND_SECONDARY_ALT": raw.PRIMARY_700,
+        "BACKGROUND_TERTIARY": raw.PRIMARY_630,
+        "BACKGROUND_FLOATING": raw.PRIMARY_600,
+        "BACKGROUND_NESTED_FLOATING": raw.PRIMARY_600,
+        "BACKGROUND_MOBILE_PRIMARY": raw.PRIMARY_600,
+        "BACKGROUND_MOBILE_SECONDARY": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_ACCENT": raw.PRIMARY_660,
+        "BACKGROUND_MODIFIER_ACTIVE": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_HOVER": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_SELECTED": raw.PRIMARY_630,
+        "BG_BASE_PRIMARY": raw.PRIMARY_600,
+        "BG_BASE_SECONDARY": raw.PRIMARY_700,
+        "BG_BASE_TERTIARY": raw.PRIMARY_660,
+        "BG_SURFACE_RAISED": raw.PRIMARY_630,
+        "BG_MOD_FAINT": raw.PRIMARY_460,
+        "BG_MOD_STRONG": raw.PRIMARY_530,
+        "BG_MOD_SUBTLE": raw.PRIMARY_630,
+        "CHANNELTEXTAREA_BACKGROUND": raw.PRIMARY_660,
+        "REDESIGN_CHAT_INPUT_BACKGROUND": raw.PRIMARY_660,
+        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw.PRIMARY_700,
+        "CHAT_INPUT_CONTAINER_BACKGROUND": raw.PRIMARY_700,
+        "INPUT_BACKGROUND": raw.PRIMARY_700,
+        "CHAT_BACKGROUND": raw.PRIMARY_600,
+        "CARD_PRIMARY_BG": raw.PRIMARY_630,
+        "CARD_SECONDARY_BG": raw.PRIMARY_630,
+        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw.PRIMARY_630,
+        "REDESIGN_BUTTON_SECONDARY_BORDER": raw.PRIMARY_530,
+        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw.PRIMARY_700,
+        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw.PRIMARY_630
       }
     };
     var defaults = semanticDefaults[style] ?? {};
@@ -11016,17 +11016,17 @@
       init_async_to_generator();
       init_jsxRuntime();
       init_assets();
-      init_styles();
       init_color();
+      init_styles();
       init_toasts();
       init_logger();
       init_common();
       init_components();
-      init_storage4();
-      init_buildTheme();
       init_Color();
       init_usePatches();
       init_monet();
+      init_storage4();
+      init_buildTheme();
       logger3 = new LoggerClass("MonetTheme");
       useStyles3 = createStyles({
         pill: {
@@ -11112,12 +11112,12 @@
       init_assets();
       init_toasts();
       init_common();
-      init_themes();
       init_AddonCard();
+      init_themes();
+      init_usePatches();
       init_monet();
       init_Settings();
       init_buildTheme();
-      init_usePatches();
     }
   });
 
@@ -11830,10 +11830,10 @@
       init_i18n();
       init_common();
       init_components();
+      init_MonetCard();
       init_themes();
       init_preferences();
       init_updater();
-      init_MonetCard();
       init_AddonPage();
       init_Themes();
       import_react_native25 = __toESM(require_react_native());
@@ -32733,7 +32733,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       return _async_to_generator(function* () {
         setError(null);
         if (!input) return;
-        var m2 = input.match(/last\.fm\/music\/([^\/]+)(?:\/_\/|\/)([^\/?#]+)/i);
+        var m2 = input.match(/last\.fm\/music\/([^/]+)(?:\/_\/|\/)([^?#]+)/i);
         if (!m2) {
           setError("Invalid Last.fm track URL");
           return;
@@ -32937,15 +32937,15 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_promiseAllSettled();
       init_async_to_generator();
       init_jsxRuntime();
-      import_react29 = __toESM(require_react());
-      init_metro();
-      init_components();
-      init_common();
-      init_toasts();
       init_assets();
-      init_storage28();
+      init_toasts();
+      init_metro();
+      init_common();
+      init_components();
+      import_react29 = __toESM(require_react());
       init_api7();
       init_SongRow();
+      init_storage28();
       ({ ScrollView: ScrollView30 } = findByProps("ScrollView"));
       ({ TableRowGroup: TableRowGroup15, TableRow: TableRow8, Stack: Stack12, TextInput: TextInput7, Text: Text8, Button: Button3 } = findByProps("TableRowGroup", "TableRow", "Stack", "TextInput", "Text", "Button"));
     }
@@ -33189,8 +33189,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_assets();
       init_toasts();
       init_metro();
-      init_api7();
       init_common();
+      init_api7();
       init_storage28();
       ({ ScrollView: ScrollView31 } = findByProps("ScrollView"));
       ({ TableSwitchRow: TableSwitchRow10, TableRowGroup: TableRowGroup16, TableRow: TableRow9, TableRadioRow: TableRadioRow5, TableRadioGroup: TableRadioGroup5, Stack: Stack13 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
