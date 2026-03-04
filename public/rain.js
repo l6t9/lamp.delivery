@@ -11597,9 +11597,11 @@
     var navigation2 = NavigationNative.useNavigation();
     var isMonetActive = hasMonetTheme();
     var { patches: patches28 } = usePatches_default();
-    var hasUrlTheme = useThemes(React2.useCallback((state2) => Object.values(state2.themes).some((t) => t.selected), []));
+    var hasUrlTheme = useThemes((state2) => Object.values(state2.themes).some((t) => t.selected));
     var isSelected = isMonetActive && !hasUrlTheme;
     if (ReactNative.Platform.OS !== "android") return null;
+    var [version, setVersion] = React2.useState(0);
+    var forceUpdate = () => setVersion((v2) => v2 + 1);
     return /* @__PURE__ */ jsx(AddonCard, {
       headerLabel: "Material You",
       headerSublabel: "by LampDelivery & nexpid",
@@ -11613,11 +11615,9 @@
         if (!v2) {
           applyMonetTheme(null);
         } else {
-          if (hasUrlTheme) {
-            yield useThemes.getState().selectTheme(null);
-          }
+          yield useThemes.getState().selectTheme(null);
           if (!patches28) {
-            showToast("Patches not loaded yet, try again", findAssetId2("CircleXIcon-primary"));
+            showToast("Patches not loaded yet", findAssetId2("CircleXIcon-primary"));
             return;
           }
           try {
@@ -11627,13 +11627,14 @@
             showToast("Failed to build theme", findAssetId2("CircleXIcon-primary"));
           }
         }
+        forceUpdate();
       })(),
       actions: [
         {
           icon: "SettingsIcon",
           onPress: () => {
             navigation2.push("RAIN_CUSTOM_PAGE", {
-              title: "Material You",
+              title: "MaterialYou",
               render: Settings
             });
           }
@@ -12181,6 +12182,9 @@
   function selectAndApply(value, theme) {
     return _async_to_generator(function* () {
       try {
+        if (value) {
+          applyMonetTheme(null);
+        }
         yield useThemes.getState().selectTheme(value ? theme.id : null);
       } catch (e) {
         console.error("Error while selectAndApply,", e);
@@ -12234,6 +12238,7 @@
       init_settings();
       init_sheets();
       init_common();
+      init_monet();
       init_themes();
       init_AddonCard();
       React8 = __toESM(require_react());
