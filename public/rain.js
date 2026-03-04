@@ -5192,7 +5192,9 @@
         key: `rain-theme-${++_inc}`,
         lastSetDiscordTheme: !ThemeStore3.theme.startsWith("rain-theme-") ? ThemeStore3.theme : _colorRef.lastSetDiscordTheme
       });
-      yield initPlus();
+      if (useColorsPref.getState().iconsEnabled) {
+        yield initPlus();
+      }
       if (internalDef != null) {
         tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
         FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
@@ -5219,6 +5221,7 @@
       init_metro();
       init_loader2();
       init_parser();
+      init_preferences();
       tokenRef2 = findByProps("SemanticColor");
       origRawColor = {
         ...tokenRef2.RawColor
