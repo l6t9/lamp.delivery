@@ -4993,10 +4993,11 @@
       if (import_react_native7.Platform.OS === "android") applyAndroidAlphaKeys(manifest.main.raw);
       return {
         spec: 3,
-        reference: resolveType(manifest.type),
+        reference: resolveType(manifest.main.type),
         semantic: semanticColorDefinitions,
         raw: manifest.main.raw ?? {},
-        background: manifest.main.background
+        background: manifest.main.background,
+        display: manifest.display
       };
     }
     if (manifest.spec === 2) {
@@ -5507,6 +5508,11 @@
     })();
   }
   function processData(data4) {
+    if (data4.spec === 3 && data4.display) {
+      data4.name = data4.display.name;
+      data4.description = data4.display.description;
+      data4.authors = data4.display.authors;
+    }
     if (data4.semanticColors) {
       var { semanticColors: semanticColors2 } = data4;
       for (var key in semanticColors2) {
@@ -10708,37 +10714,6 @@
     }
   });
 
-  // src/rain/pages/Plugins/usePluginCardStyles.ts
-  var usePluginCardStyles;
-  var init_usePluginCardStyles = __esm({
-    "src/rain/pages/Plugins/usePluginCardStyles.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_styles();
-      init_common();
-      usePluginCardStyles = createStyles({
-        smallIcon: {
-          tintColor: tokens.colors.LOGO_PRIMARY,
-          height: 18,
-          width: 18
-        },
-        badgeIcon: {
-          tintColor: tokens.colors.LOGO_PRIMARY,
-          height: 12,
-          width: 12
-        },
-        badgesContainer: {
-          flexWrap: "wrap",
-          flexDirection: "row",
-          gap: 6,
-          borderRadius: 6,
-          padding: 4
-        }
-      });
-    }
-  });
-
   // src/rain/pages/Plugins/components/PluginCard.tsx
   function getHighlightColor() {
     return (0, import_chroma_js4.default)(tokens.unsafe_rawColors.YELLOW_300).alpha(0.3).hex();
@@ -10767,7 +10742,6 @@
   }
   function Authors() {
     var { plugin, result } = useCardContext();
-    var styles5 = usePluginCardStyles();
     var allAuthors = [
       ...plugin.developers ?? [],
       ...plugin.contributors ?? []
@@ -10937,7 +10911,6 @@
       init_common();
       init_components();
       init_plugins3();
-      init_usePluginCardStyles();
       import_chroma_js4 = __toESM(require_chroma_js());
       import_react5 = __toESM(require_react());
       import_react_native21 = __toESM(require_react_native());
@@ -11242,7 +11215,7 @@
         },
         headerSubtitle: {
           ...TextStyleSheet["text-sm/semibold"],
-          color: "text-muted"
+          color: semanticColors.TEXT_MUTED
         },
         descriptionLabel: {
           ...TextStyleSheet["text-md/semibold"],
@@ -12205,7 +12178,6 @@
       headerSublabel: authors ? `by ${authors.map((i) => i.name).join(", ")}` : "",
       headerLabelVariant: "heading-lg/semibold",
       headerSublabelVariant: "text-sm/semibold",
-      headerSublabelColor: "text-muted",
       descriptionLabel: theme.data.description ?? "No description.",
       toggleType: !safeModeEnabled ? "radio" : void 0,
       toggleValue: () => isSelected,
@@ -19728,7 +19700,6 @@ ${pendingInsertLink}` : pendingInsertLink;
     var [presets, setPresets] = React.useState([]);
     var { decorations, selectedDecoration, fetch: fetchUserDecorations, clear: clearUserDecorations, select: selectDecoration } = useCurrentUserDecorationsStore();
     var { isAuthorized } = useAuthorizationStore2();
-    var styles5 = useStyles11();
     React.useEffect(() => {
       if (isAuthorized()) {
         getPresets().then(setPresets).catch(() => void 0);
@@ -19742,7 +19713,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       isAuthorized
     ]);
     var navigation2 = NavigationNative.useNavigation();
+    var styles5 = useStyles11();
     var isDisabled = !isAuthorized() || loading === null;
+    var personalDecorations = decorations.filter((d) => d.presetId === null || d.presetId === void 0);
     var hasPendingDecoration = decorations.some((d) => d.reviewed === false);
     var decorPreset = presets && selectedDecoration ? presets.find((p) => p.id === selectedDecoration.presetId) : null;
     var loadingTrailing = loading ? () => /* @__PURE__ */ jsx(ActivityIndicator2, {
@@ -19751,11 +19724,72 @@ ${pendingInsertLink}` : pendingInsertLink;
       source: findAssetId2("ic_warning_24px"),
       variant: "danger"
     }) : void 0;
-    return /* @__PURE__ */ jsxs(Stack5, {
-      spacing: 24,
+    return /* @__PURE__ */ jsxs(View27, {
+      style: {
+        gap: 24
+      },
       children: [
         /* @__PURE__ */ jsx(AvatarDecorationPreviews, {
           pendingAvatarDecoration: selectedDecoration ? discordifyDecoration_default(selectedDecoration) : null
+        }),
+        selectedDecoration && /* @__PURE__ */ jsxs(View27, {
+          style: styles5.selectedMetaContainer,
+          children: [
+            /* @__PURE__ */ jsx(Text5, {
+              style: TextStyleSheet3["text-lg/semibold"],
+              children: selectedDecoration.alt
+            }),
+            decorPreset && /* @__PURE__ */ jsxs(Text5, {
+              style: [
+                TextStyleSheet3["eyebrow"],
+                styles5.presetLabel
+              ],
+              children: [
+                "Part of the ",
+                decorPreset.name,
+                " Preset"
+              ]
+            }),
+            /* @__PURE__ */ jsxs(Text5, {
+              style: TextStyleSheet3["text-md/normal"],
+              children: [
+                "Created by ",
+                /* @__PURE__ */ jsx(Pressable4, {
+                  onPress: () => UserStore10.getUser(selectedDecoration.authorId) ? showUserProfile({
+                    userId: selectedDecoration.authorId
+                  }) : UserUtils2.getUser(selectedDecoration.authorId).then(() => showUserProfile({
+                    userId: selectedDecoration.authorId
+                  })),
+                  pointerEvents: "box-only",
+                  style: styles5.authorContainer,
+                  children: Parser2.parse(`<@${selectedDecoration.authorId}>`, true)
+                })
+              ]
+            })
+          ]
+        }),
+        personalDecorations.length > 0 && /* @__PURE__ */ jsx(TableRowGroup, {
+          title: "Your Decorations",
+          children: personalDecorations.map((decoration) => {
+            var isSelected = selectedDecoration?.hash === decoration.hash;
+            return /* @__PURE__ */ jsx(TableRow, {
+              label: decoration.alt,
+              icon: /* @__PURE__ */ jsx(TableRow.Icon, {
+                source: findAssetId2("ic_reaction_smile")
+              }),
+              disabled: isDisabled,
+              onPress: () => selectDecoration(isSelected ? null : decoration),
+              trailing: isSelected ? () => /* @__PURE__ */ jsx(Text5, {
+                style: [
+                  TextStyleSheet3["text-sm/normal"],
+                  {
+                    color: semanticColors.TEXT_MUTED
+                  }
+                ],
+                children: "Active"
+              }) : TableRow.Arrow
+            }, decoration.hash);
+          })
         }),
         /* @__PURE__ */ jsxs(TableRowGroup, {
           title: "Decoration Actions",
@@ -19811,7 +19845,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var FlatList4, View27, ActivityIndicator2, Pressable4, Stack5, TextStyleSheet3, Text5, UserStore10, Parser2, showUserProfile, UserUtils2, useStyles11;
+  var View27, ActivityIndicator2, Pressable4, TextStyleSheet3, Text5, UserStore10, Parser2, showUserProfile, UserUtils2, useStyles11;
   var init_DecorationPicker = __esm({
     "src/plugins/decor/ui/components/DecorationPicker.tsx"() {
       "use strict";
@@ -19831,8 +19865,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_CreateDecoration();
       init_Presets();
       init_AvatarDecorationPreviews();
-      ({ FlatList: FlatList4, View: View27, ActivityIndicator: ActivityIndicator2, Pressable: Pressable4 } = ReactNative);
-      ({ Stack: Stack5 } = findByProps("Stack"));
+      ({ View: View27, ActivityIndicator: ActivityIndicator2, Pressable: Pressable4 } = ReactNative);
       ({ TextStyleSheet: TextStyleSheet3, Text: Text5 } = findByProps("TextStyleSheet"));
       UserStore10 = findByStoreName("UserStore");
       Parser2 = findByProps("parse", "parseToAST");
@@ -19866,10 +19899,12 @@ ${pendingInsertLink}` : pendingInsertLink;
   function Settings3() {
     var isAuthorized = useAuthorizationStore2((state2) => !!state2.token);
     var setToken = useAuthorizationStore2((state2) => state2.setToken);
-    var styles5 = useStyles12();
-    return /* @__PURE__ */ jsxs(import_react_native43.View, {
+    return /* @__PURE__ */ jsxs(import_react_native43.ScrollView, {
       style: {
-        flex: 1,
+        flex: 1
+      },
+      contentContainerStyle: {
+        paddingBottom: 40,
         paddingVertical: 24,
         paddingHorizontal: 12,
         gap: 24
@@ -19886,7 +19921,6 @@ ${pendingInsertLink}` : pendingInsertLink;
               }),
               onPress: showAuthorizationModal_default
             }),
-            " ",
             isAuthorized && /* @__PURE__ */ jsxs(Fragment, {
               children: [
                 /* @__PURE__ */ jsx(TableRow, {
@@ -19914,7 +19948,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var import_react_native43, useStyles12;
+  var import_react_native43;
   var init_Settings2 = __esm({
     "src/plugins/decor/ui/pages/Settings.tsx"() {
       "use strict";
@@ -19922,22 +19956,11 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_promiseAllSettled();
       init_jsxRuntime();
       init_assets();
-      init_color();
-      init_styles();
       init_components();
       import_react_native43 = __toESM(require_react_native());
       init_AuthorizationStore2();
       init_showAuthorizationModal();
       init_DecorationPicker();
-      useStyles12 = createStyles((_2) => ({
-        versionText: {
-          fontSize: 15,
-          color: semanticColors.TEXT_NORMAL,
-          textAlign: "center",
-          fontWeight: "600",
-          lineHeight: 22
-        }
-      }));
     }
   });
 
@@ -21249,7 +21272,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/fakenitro/settings.tsx
-  var import_react_native45, TableSwitchRow3, TableRadioGroup3, TableRadioRow3, TableRowGroup5, Stack6, sizeOptions, previewUri, settings_default5;
+  var import_react_native45, TableSwitchRow3, TableRadioGroup3, TableRadioRow3, TableRowGroup5, Stack5, sizeOptions, previewUri, settings_default5;
   var init_settings13 = __esm({
     "src/plugins/fakenitro/settings.tsx"() {
       "use strict";
@@ -21261,7 +21284,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       import_react_native45 = __toESM(require_react_native());
       init_storage14();
       ({ TableSwitchRow: TableSwitchRow3, TableRadioGroup: TableRadioGroup3, TableRadioRow: TableRadioRow3, TableRowGroup: TableRowGroup5 } = findByProps("TableRow"));
-      ({ Stack: Stack6 } = findByProps("Stack"));
+      ({ Stack: Stack5 } = findByProps("Stack"));
       sizeOptions = {
         Tiny: 16,
         Small: 32,
@@ -21278,7 +21301,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           style: {
             flex: 1
           },
-          children: /* @__PURE__ */ jsxs(Stack6, {
+          children: /* @__PURE__ */ jsxs(Stack5, {
             style: {
               paddingVertical: 24,
               paddingHorizontal: 12
@@ -21612,7 +21635,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         }
       }
     }
-    return /* @__PURE__ */ jsxs(View30, {
+    return /* @__PURE__ */ jsxs(View29, {
       style: {
         flex: 1,
         paddingVertical: 24,
@@ -21756,7 +21779,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var import_react23, TableRow3, TableSwitchRow4, TableRowGroup6, Card5, TextInput3, View30, UserStore12;
+  var import_react23, TableRow3, TableSwitchRow4, TableRowGroup6, Card5, TextInput3, View29, UserStore12;
   var init_settings14 = __esm({
     "src/plugins/fakeprofilecolors/settings.tsx"() {
       "use strict";
@@ -21774,7 +21797,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ({ TableRow: TableRow3, TableSwitchRow: TableSwitchRow4, TableRowGroup: TableRowGroup6 } = findByProps("TableRow"));
       ({ Card: Card5 } = findByProps("Card"));
       ({ TextInput: TextInput3 } = findByProps("TextInput"));
-      ({ View: View30 } = findByProps("View"));
+      ({ View: View29 } = findByProps("View"));
       UserStore12 = findByStoreName("UserStore");
     }
   });
@@ -23113,7 +23136,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/hidecallbuttons/settings.tsx
-  var TableRow4, TableSwitchRow5, TableRowGroup7, Stack7, settings_default6;
+  var TableRow4, TableSwitchRow5, TableRowGroup7, Stack6, settings_default6;
   var init_settings18 = __esm({
     "src/plugins/hidecallbuttons/settings.tsx"() {
       "use strict";
@@ -23124,10 +23147,10 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_metro();
       init_storage19();
       ({ TableRow: TableRow4, TableSwitchRow: TableSwitchRow5, TableRowGroup: TableRowGroup7 } = findByProps("TableRow"));
-      ({ Stack: Stack7 } = findByProps("Stack"));
+      ({ Stack: Stack6 } = findByProps("Stack"));
       settings_default6 = (() => {
         var hidecallbuttonsSettings2 = useHideCallButtonsSettings();
-        return /* @__PURE__ */ jsxs(Stack7, {
+        return /* @__PURE__ */ jsxs(Stack6, {
           style: {
             paddingVertical: 24,
             paddingHorizontal: 12
@@ -27238,7 +27261,7 @@ ${formattedData}
       style: {
         flex: 1
       },
-      children: /* @__PURE__ */ jsx(Stack8, {
+      children: /* @__PURE__ */ jsx(Stack7, {
         style: {
           paddingVertical: 24,
           paddingHorizontal: 12
@@ -27259,7 +27282,7 @@ ${formattedData}
       })
     });
   }
-  var import_react_native56, TableSwitchRow6, TableRowGroup9, Stack8;
+  var import_react_native56, TableSwitchRow6, TableRowGroup9, Stack7;
   var init_settings22 = __esm({
     "src/plugins/moyai/settings.tsx"() {
       "use strict";
@@ -27270,7 +27293,7 @@ ${formattedData}
       import_react_native56 = __toESM(require_react_native());
       init_storage23();
       ({ TableSwitchRow: TableSwitchRow6, TableRowGroup: TableRowGroup9 } = findByProps("TableRow"));
-      ({ Stack: Stack8 } = findByProps("Stack"));
+      ({ Stack: Stack7 } = findByProps("Stack"));
     }
   });
 
@@ -28811,15 +28834,15 @@ ${formattedData}
   });
 
   // src/plugins/multiscrobbler/ui/pages/pages/components/TableComponents.tsx
-  var ScrollView28, TableRowGroup10, TableSwitchRow7, TableCheckboxRow2, TableRadioRow4, TableRadioGroup4, Stack9, TableRow5, TextInput5;
+  var ScrollView29, TableRowGroup10, TableSwitchRow7, TableCheckboxRow2, TableRadioRow4, TableRadioGroup4, Stack8, TableRow5, TextInput5;
   var init_TableComponents = __esm({
     "src/plugins/multiscrobbler/ui/pages/pages/components/TableComponents.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_metro();
-      ({ ScrollView: ScrollView28 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup10, TableSwitchRow: TableSwitchRow7, TableCheckboxRow: TableCheckboxRow2, TableRadioRow: TableRadioRow4, TableRadioGroup: TableRadioGroup4, Stack: Stack9, TableRow: TableRow5 } = findByProps("TableSwitchRow", "TableCheckboxRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ ScrollView: ScrollView29 } = findByProps("ScrollView"));
+      ({ TableRowGroup: TableRowGroup10, TableSwitchRow: TableSwitchRow7, TableCheckboxRow: TableCheckboxRow2, TableRadioRow: TableRadioRow4, TableRadioGroup: TableRadioGroup4, Stack: Stack8, TableRow: TableRow5 } = findByProps("TableSwitchRow", "TableCheckboxRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
       ({ TextInput: TextInput5 } = findByProps("TextInput"));
     }
   });
@@ -28827,19 +28850,19 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/DisplaySettingsPage.tsx
   function DisplaySettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView29, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup10, {
             title: "Activity Display",
-            children: /* @__PURE__ */ jsxs(Stack9, {
+            children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
                 /* @__PURE__ */ jsx(TextInput5, {
@@ -28937,19 +28960,19 @@ ${formattedData}
       showToast("App removed from ignore list", findAssetId2("Check"));
       triggerImmediateUpdate();
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView29, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup10, {
             title: "Add App to Ignore",
-            children: /* @__PURE__ */ jsx(Stack9, {
+            children: /* @__PURE__ */ jsx(Stack8, {
               spacing: 4,
               children: /* @__PURE__ */ jsx(TextInput5, {
                 placeholder: "Enter app name",
@@ -29046,19 +29069,19 @@ ${formattedData}
         showToast("\u274C Connection error", findAssetId2("XIcon"));
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView29, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup10, {
             title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack9, {
+            children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
                 /* @__PURE__ */ jsx(TextInput5, {
@@ -29133,19 +29156,19 @@ ${formattedData}
         showToast("\u274C Connection error", findAssetId2("XIcon"));
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView29, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup10, {
             title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack9, {
+            children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
                 /* @__PURE__ */ jsx(TextInput5, {
@@ -29220,19 +29243,19 @@ ${formattedData}
         showToast("\u274C Connection error", findAssetId2("XIcon"));
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView29, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup10, {
             title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack9, {
+            children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
                 /* @__PURE__ */ jsx(TextInput5, {
@@ -29295,14 +29318,14 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/LoggingSettingsPage.tsx
   function LoggingSettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView29, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup10, {
@@ -29793,7 +29816,7 @@ ${formattedData}
       if (!settings4.listeningTo) return;
       setStorage("showTimestamp", !settings4.showTimestamp);
     };
-    return /* @__PURE__ */ jsxs(ScrollView28, {
+    return /* @__PURE__ */ jsxs(ScrollView29, {
       style: {
         flex: 1
       },
@@ -29802,7 +29825,7 @@ ${formattedData}
       },
       children: [
         /* @__PURE__ */ jsx(RPCPreview, {}),
-        /* @__PURE__ */ jsx(Stack9, {
+        /* @__PURE__ */ jsx(Stack8, {
           spacing: 8,
           children: /* @__PURE__ */ jsxs(TableRowGroup10, {
             title: "RPC Display Options",
@@ -29885,14 +29908,14 @@ ${formattedData}
           return "\u2753 Unknown";
       }
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView29, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRadioGroup4, {
@@ -30394,7 +30417,7 @@ ${formattedData}
   // src/plugins/platformindicators/settings.tsx
   function Settings8() {
     var settings4 = usePlatformIndicatorSettings();
-    return /* @__PURE__ */ jsx(Stack10, {
+    return /* @__PURE__ */ jsx(Stack9, {
       style: {
         paddingVertical: 24,
         paddingHorizontal: 12
@@ -30442,7 +30465,7 @@ ${formattedData}
       })
     });
   }
-  var TableSwitchRow8, TableRowGroup11, Stack10;
+  var TableSwitchRow8, TableRowGroup11, Stack9;
   var init_settings23 = __esm({
     "src/plugins/platformindicators/settings.tsx"() {
       "use strict";
@@ -30452,7 +30475,7 @@ ${formattedData}
       init_metro();
       init_storage25();
       ({ TableSwitchRow: TableSwitchRow8, TableRowGroup: TableRowGroup11 } = findByProps("TableSwitchRow"));
-      ({ Stack: Stack10 } = findByProps("Stack"));
+      ({ Stack: Stack9 } = findByProps("Stack"));
     }
   });
 
@@ -30495,7 +30518,7 @@ ${formattedData}
     var iconSize = props.iconSize ?? 16;
     var path = IconPaths[platform];
     if (!Svg || !path) return null;
-    return /* @__PURE__ */ jsx(View34, {
+    return /* @__PURE__ */ jsx(View33, {
       children: /* @__PURE__ */ jsx(Svg, {
         width: iconSize,
         height: iconSize,
@@ -30507,7 +30530,7 @@ ${formattedData}
       })
     });
   }
-  var View34, Svg, Path, IconPaths;
+  var View33, Svg, Path, IconPaths;
   var init_StatusIcon = __esm({
     "src/plugins/platformindicators/StatusIcon.tsx"() {
       "use strict";
@@ -30516,7 +30539,7 @@ ${formattedData}
       init_jsxRuntime();
       init_metro();
       init_common();
-      ({ View: View34 } = ReactNative);
+      ({ View: View33 } = ReactNative);
       Svg = findByName("Svg", false)?.default;
       Path = findByName("Svg", false)?.Path;
       IconPaths = {
@@ -30595,7 +30618,7 @@ ${formattedData}
   __export(platformindicators_exports, {
     default: () => platformindicators_default
   });
-  var View35, Text7, unpatches5, platformindicators_default;
+  var View34, Text7, unpatches5, platformindicators_default;
   var init_platformindicators = __esm({
     "src/plugins/platformindicators/index.tsx"() {
       "use strict";
@@ -30615,7 +30638,7 @@ ${formattedData}
       init_settings23();
       init_StatusIcons();
       init_storage25();
-      ({ View: View35, Text: Text7 } = ReactNative);
+      ({ View: View34, Text: Text7 } = ReactNative);
       unpatches5 = [];
       platformindicators_default = definePlugin({
         name: "PlatformIndicators",
@@ -30657,13 +30680,13 @@ ${formattedData}
                     } else {
                       var arrowId = findAssetId2("arrow-right");
                       var container1 = findInReactTree(dmTopBar, (m2) => m2.props?.children[1]?.props?.source === arrowId);
-                      container1?.props?.children?.push(/* @__PURE__ */ jsx(View35, {
+                      container1?.props?.children?.push(/* @__PURE__ */ jsx(View34, {
                         style: {
                           flexDirection: "row",
                           justifyContent: "center",
                           alignContent: "flex-start"
                         },
-                        children: /* @__PURE__ */ jsx(View35, {
+                        children: /* @__PURE__ */ jsx(View34, {
                           style: {
                             flexDirection: "row"
                           }
@@ -30728,7 +30751,7 @@ ${formattedData}
                 if (!statusIconsView) {
                   var row = findInReactTree(res, (c2) => c2.props?.style?.flexDirection === "row");
                   if (row) {
-                    row.props.children.splice(2, 0, /* @__PURE__ */ jsx(View35, {
+                    row.props.children.splice(2, 0, /* @__PURE__ */ jsx(View34, {
                       style: {
                         flexDirection: "row"
                       },
@@ -30748,14 +30771,14 @@ ${formattedData}
               if (!platformIndicatorSettings.userList) return;
               var modifiedStatusIcons = findInReactTree(res?.props?.label, (c2) => c2.key === "TabsV2MemberListStatusIconsView");
               if (!modifiedStatusIcons) {
-                res.props.label = /* @__PURE__ */ jsxs(View35, {
+                res.props.label = /* @__PURE__ */ jsxs(View34, {
                   style: {
                     flexDirection: "row",
                     alignItems: "center"
                   },
                   children: [
                     res.props.label,
-                    /* @__PURE__ */ jsx(View35, {
+                    /* @__PURE__ */ jsx(View34, {
                       style: {
                         flexDirection: "row"
                       },
@@ -30785,7 +30808,7 @@ ${formattedData}
                 var userId = channel.recipients[0];
                 var textContainer = findInReactTree(res, (m2) => m2.props?.children?.[0]?.props?.variant === "redesign/channel-title/semibold");
                 if (textContainer) {
-                  textContainer.props.children.push(/* @__PURE__ */ jsx(View35, {
+                  textContainer.props.children.push(/* @__PURE__ */ jsx(View34, {
                     style: {
                       flexDirection: "row"
                     },
@@ -31214,7 +31237,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
 
   // src/plugins/reviewdb/components/ReviewInput.tsx
   function ReviewInput({ userId, shouldEdit, refetch: refetch2 }) {
-    var styles5 = useStyles13();
+    var styles5 = useStyles12();
     var reviewdbSettings2 = useReviewDBSettings();
     var [reviewText, setReviewText] = React.useState("");
     var disableTextArea = !reviewdbSettings2.authToken;
@@ -31297,7 +31320,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       ]
     });
   }
-  var useStyles13, useThemeContext3;
+  var useStyles12, useThemeContext3;
   var init_ReviewInput = __esm({
     "src/plugins/reviewdb/components/ReviewInput.tsx"() {
       "use strict";
@@ -31314,7 +31337,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_redesign2();
       init_utils5();
       init_storage27();
-      useStyles13 = createStyles({
+      useStyles12 = createStyles({
         container: {
           flex: 1,
           flexDirection: "row",
@@ -31449,7 +31472,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/reviewdb/components/ReviewUsername.tsx
-  var useStyles14, FormLabel, ReviewUsername_default;
+  var useStyles13, FormLabel, ReviewUsername_default;
   var init_ReviewUsername = __esm({
     "src/plugins/reviewdb/components/ReviewUsername.tsx"() {
       "use strict";
@@ -31461,7 +31484,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_components();
       init_utils5();
       init_ReviewBadge();
-      useStyles14 = createStyles({
+      useStyles13 = createStyles({
         row: {
           flexDirection: "row",
           alignItems: "center"
@@ -31469,7 +31492,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       });
       ({ FormLabel } = Forms);
       ReviewUsername_default = (({ username, badges }) => {
-        var styles5 = useStyles14();
+        var styles5 = useStyles13();
         return /* @__PURE__ */ jsxs(ReactNative.View, {
           style: styles5.row,
           children: [
@@ -31492,7 +31515,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/reviewdb/components/ReviewRow.tsx
-  var useStyles15, FormRow2, FormSubLabel, TableRowGroup12, ReviewRow_default;
+  var useStyles14, FormRow2, FormSubLabel, TableRowGroup12, ReviewRow_default;
   var init_ReviewRow = __esm({
     "src/plugins/reviewdb/components/ReviewRow.tsx"() {
       "use strict";
@@ -31507,7 +31530,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_showReviewActionSheet();
       init_utils5();
       init_ReviewUsername();
-      useStyles15 = createStyles({
+      useStyles14 = createStyles({
         avatar: {
           height: 36,
           width: 36,
@@ -31520,7 +31543,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       ({ FormRow: FormRow2, FormSubLabel } = Forms);
       ({ TableRowGroup: TableRowGroup12 } = findByProps("TableRow"));
       ReviewRow_default = (({ review, style }) => {
-        var styles5 = useStyles15();
+        var styles5 = useStyles14();
         return /* @__PURE__ */ jsx(TableRowGroup12, {
           style: [
             style
@@ -31561,7 +31584,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     React.useEffect(fetchReviews, []);
     var hasExistingReview = reviews.filter((i) => i.sender.discordID === getCurrentUser5()?.id).length !== 0;
     var themeColors = getDisplayProfile?.(userId)?.themeColors;
-    var useStyles16 = createStyles({
+    var useStyles15 = createStyles({
       avatar: {
         height: 36,
         width: 36,
@@ -31576,7 +31599,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         backgroundColor: themeColors === void 0 ? semanticColors.CARD_SECONDARY_BG : "#00000083"
       }
     });
-    var styles5 = useStyles16();
+    var styles5 = useStyles15();
     return /* @__PURE__ */ jsx(ErrorBoundary, {
       children: /* @__PURE__ */ jsx(ReactNative.View, {
         style: [
@@ -31857,7 +31880,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/reviewdb/Settings.tsx
-  var TableRow7, TableSwitchRow9, TableRowGroup14, Stack11, Settings_default;
+  var TableRow7, TableSwitchRow9, TableRowGroup14, Stack10, Settings_default;
   var init_Settings5 = __esm({
     "src/plugins/reviewdb/Settings.tsx"() {
       "use strict";
@@ -31869,11 +31892,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_showAuthModal2();
       init_storage27();
       ({ TableRow: TableRow7, TableSwitchRow: TableSwitchRow9, TableRowGroup: TableRowGroup14 } = findByProps("TableRow"));
-      ({ Stack: Stack11 } = findByProps("Stack"));
+      ({ Stack: Stack10 } = findByProps("Stack"));
       Settings_default = (() => {
         var reviewdbSettings2 = useReviewDBSettings();
         var isAuthenticated = reviewdbSettings2.authToken.length !== 0;
-        return /* @__PURE__ */ jsxs(Stack11, {
+        return /* @__PURE__ */ jsxs(Stack10, {
           style: {
             paddingVertical: 24,
             paddingHorizontal: 12
@@ -32591,7 +32614,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   function SongRow({ track, style, showAlbumArt, showPlayCount, showAlbumName = true, showRankNumbers = true, hasThemeColors, colorfulCards, cardOpacity = 40, trailing }) {
     var showBlur = colorfulCards && !!track.albumArt;
     var overlayOpacity = cardOpacity / 100;
-    var useStyles16 = createStyles({
+    var useStyles15 = createStyles({
       outerClip: {
         borderRadius: 8,
         overflow: "hidden"
@@ -32652,7 +32675,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         justifyContent: "center"
       }
     });
-    var styles5 = useStyles16();
+    var styles5 = useStyles15();
     var handlePress = () => {
       if (track.url) {
         ReactNative.Linking.openURL(track.url);
@@ -32806,7 +32829,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       }
     };
     var hSize = headerSizes[settings4.headerSize] || headerSizes.small;
-    var useStyles16 = createStyles({
+    var useStyles15 = createStyles({
       card: {
         backgroundColor: hasThemeColors ? "#00000073" : semanticColors.CARD_PRIMARY_BG,
         borderRadius: 16,
@@ -32872,7 +32895,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         color: hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
       }
     });
-    var styles5 = useStyles16();
+    var styles5 = useStyles15();
     var sectionTitle = settings4.sectionTitle?.trim() || "Song Spotlight";
     var favoriteSongs = settings4.favoriteSongs ?? [];
     var autofillTracks = tracks.slice(0, Math.max(0, Math.min(settings4.trackCount || 0, 5)));
@@ -33390,14 +33413,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       } catch (unused) {
       }
     }
-    return /* @__PURE__ */ jsx(ScrollView30, {
+    return /* @__PURE__ */ jsx(ScrollView31, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack12, {
+      children: /* @__PURE__ */ jsxs(Stack11, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsxs(TableRowGroup15, {
@@ -33489,7 +33512,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react29, ScrollView30, TableRowGroup15, TableRow8, Stack12, TextInput7, Text8, Button3;
+  var import_react29, ScrollView31, TableRowGroup15, TableRow8, Stack11, TextInput7, Text8, Button3;
   var init_FavoriteSongsSettingsPage = __esm({
     "src/plugins/songspotlight/pages/FavoriteSongsSettingsPage.tsx"() {
       "use strict";
@@ -33506,8 +33529,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_api7();
       init_SongRow();
       init_storage28();
-      ({ ScrollView: ScrollView30 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup15, TableRow: TableRow8, Stack: Stack12, TextInput: TextInput7, Text: Text8, Button: Button3 } = findByProps("TableRowGroup", "TableRow", "Stack", "TextInput", "Text", "Button"));
+      ({ ScrollView: ScrollView31 } = findByProps("ScrollView"));
+      ({ TableRowGroup: TableRowGroup15, TableRow: TableRow8, Stack: Stack11, TextInput: TextInput7, Text: Text8, Button: Button3 } = findByProps("TableRowGroup", "TableRow", "Stack", "TextInput", "Text", "Button"));
     }
   });
 
@@ -33516,14 +33539,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var settings4 = useSongSpotlightSettings();
     var albumGridValue = settings4.albumGridView ?? false;
     var navigation2 = NavigationNative.useNavigation();
-    return /* @__PURE__ */ jsx(ScrollView31, {
+    return /* @__PURE__ */ jsx(ScrollView32, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack13, {
+      children: /* @__PURE__ */ jsxs(Stack12, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup16, {
@@ -33702,7 +33725,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             ]
           }),
           /* @__PURE__ */ jsx(TableRowGroup16, {
-            children: /* @__PURE__ */ jsxs(Stack13, {
+            children: /* @__PURE__ */ jsxs(Stack12, {
               spacing: 4,
               children: [
                 /* @__PURE__ */ jsx(TextInput8, {
@@ -33739,7 +33762,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView31, TableSwitchRow10, TableRowGroup16, TableRow9, TableRadioRow5, TableRadioGroup5, Stack13, TextInput8;
+  var ScrollView32, TableSwitchRow10, TableRowGroup16, TableRow9, TableRadioRow5, TableRadioGroup5, Stack12, TextInput8;
   var init_DisplaySettingsPage2 = __esm({
     "src/plugins/songspotlight/pages/DisplaySettingsPage.tsx"() {
       "use strict";
@@ -33752,8 +33775,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_common();
       init_api7();
       init_storage28();
-      ({ ScrollView: ScrollView31 } = findByProps("ScrollView"));
-      ({ TableSwitchRow: TableSwitchRow10, TableRowGroup: TableRowGroup16, TableRow: TableRow9, TableRadioRow: TableRadioRow5, TableRadioGroup: TableRadioGroup5, Stack: Stack13 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ ScrollView: ScrollView32 } = findByProps("ScrollView"));
+      ({ TableSwitchRow: TableSwitchRow10, TableRowGroup: TableRowGroup16, TableRow: TableRow9, TableRadioRow: TableRadioRow5, TableRadioGroup: TableRadioGroup5, Stack: Stack12 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
       ({ TextInput: TextInput8 } = findByProps("TextInput"));
     }
   });
@@ -33773,19 +33796,19 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         showToast("\u274C Connection error", findAssetId2("XIcon"));
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView32, {
+    return /* @__PURE__ */ jsx(ScrollView33, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack14, {
+      children: /* @__PURE__ */ jsxs(Stack13, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup17, {
             title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack14, {
+            children: /* @__PURE__ */ jsxs(Stack13, {
               spacing: 4,
               children: [
                 /* @__PURE__ */ jsx(TextInput9, {
@@ -33842,7 +33865,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native61, ScrollView32, TableRowGroup17, TableRow10, Stack14, TextInput9;
+  var import_react_native61, ScrollView33, TableRowGroup17, TableRow10, Stack13, TextInput9;
   var init_LastFmCredentialsPage = __esm({
     "src/plugins/songspotlight/pages/LastFmCredentialsPage.tsx"() {
       "use strict";
@@ -33855,8 +33878,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       import_react_native61 = __toESM(require_react_native());
       init_api7();
       init_storage28();
-      ({ ScrollView: ScrollView32 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup17, TableRow: TableRow10, Stack: Stack14 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ ScrollView: ScrollView33 } = findByProps("ScrollView"));
+      ({ TableRowGroup: TableRowGroup17, TableRow: TableRow10, Stack: Stack13 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
       ({ TextInput: TextInput9 } = findByProps("TextInput"));
     }
   });
@@ -33866,14 +33889,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var settings4 = useSongSpotlightSettings();
     var navigation2 = NavigationNative.useNavigation();
     var credentialStatus = settings4.username && settings4.apiKey ? "\u2705 Authenticated" : "\u274C Missing credentials";
-    return /* @__PURE__ */ jsx(ScrollView33, {
+    return /* @__PURE__ */ jsx(ScrollView34, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack15, {
+      children: /* @__PURE__ */ jsxs(Stack14, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRowGroup18, {
@@ -33956,7 +33979,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           }),
           /* @__PURE__ */ jsx(TableRowGroup18, {
             title: "Preview",
-            children: /* @__PURE__ */ jsx(Stack15, {
+            children: /* @__PURE__ */ jsx(Stack14, {
               spacing: 0,
               children: UserStore19?.getCurrentUser?.()?.id ? /* @__PURE__ */ jsx(SongSection, {
                 userId: UserStore19.getCurrentUser().id
@@ -33974,7 +33997,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView33, TableSwitchRow11, TableRowGroup18, TableRow11, Stack15, UserStore19;
+  var ScrollView34, TableSwitchRow11, TableRowGroup18, TableRow11, Stack14, UserStore19;
   var init_Settings6 = __esm({
     "src/plugins/songspotlight/Settings.tsx"() {
       "use strict";
@@ -33991,8 +34014,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_DisplaySettingsPage2();
       init_LastFmCredentialsPage();
       init_storage28();
-      ({ ScrollView: ScrollView33 } = findByProps("ScrollView"));
-      ({ TableSwitchRow: TableSwitchRow11, TableRowGroup: TableRowGroup18, TableRow: TableRow11, Stack: Stack15 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ ScrollView: ScrollView34 } = findByProps("ScrollView"));
+      ({ TableSwitchRow: TableSwitchRow11, TableRowGroup: TableRowGroup18, TableRow: TableRow11, Stack: Stack14 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
       UserStore19 = findByStoreName("UserStore");
     }
   });
@@ -35398,7 +35421,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var [query, setQuery] = React2.useState("");
     var langs = settings4.translator === 0 ? DeepLLangs : GTranslateLangs;
     var filteredLangs = Object.entries(langs).filter(([key]) => key.toLowerCase().includes(query.toLowerCase()));
-    return /* @__PURE__ */ jsxs(ScrollView34, {
+    return /* @__PURE__ */ jsxs(ScrollView35, {
       style: {
         flex: 1
       },
@@ -35437,7 +35460,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       ]
     });
   }
-  var ScrollView34;
+  var ScrollView35;
   var init_TargetLang = __esm({
     "src/plugins/translator/settings/TargetLang.tsx"() {
       "use strict";
@@ -35449,7 +35472,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_components();
       init_lang();
       init_storage31();
-      ({ ScrollView: ScrollView34 } = ReactNative);
+      ({ ScrollView: ScrollView35 } = ReactNative);
     }
   });
 
@@ -35485,7 +35508,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         ]
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView35, {
+    return /* @__PURE__ */ jsx(ScrollView36, {
       style: {
         flex: 1
       },
@@ -35538,7 +35561,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView35, Text9, showSimpleActionSheet6, hideActionSheet9;
+  var ScrollView36, Text9, showSimpleActionSheet6, hideActionSheet9;
   var init_settings25 = __esm({
     "src/plugins/translator/settings/index.tsx"() {
       "use strict";
@@ -35551,7 +35574,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_components();
       init_storage31();
       init_TargetLang();
-      ({ ScrollView: ScrollView35, Text: Text9 } = ReactNative);
+      ({ ScrollView: ScrollView36, Text: Text9 } = ReactNative);
       ({ showSimpleActionSheet: showSimpleActionSheet6 } = findByProps("showSimpleActionSheet"));
       ({ hideActionSheet: hideActionSheet9 } = findByProps("openLazy", "hideActionSheet"));
     }
@@ -35927,7 +35950,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       message.id
     ]);
     return /* @__PURE__ */ jsx(Fragment, {
-      children: /* @__PURE__ */ jsx(ScrollView38, {
+      children: /* @__PURE__ */ jsx(ScrollView39, {
         style: {
           flex: 1,
           marginVertical: 10
@@ -35977,7 +36000,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView38;
+  var ScrollView39;
   var init_RawPage = __esm({
     "src/plugins/viewraw/patches/RawPage.tsx"() {
       "use strict";
@@ -35990,7 +36013,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_common();
       init_components();
       init_cleanmessage();
-      ({ ScrollView: ScrollView38 } = ReactNative);
+      ({ ScrollView: ScrollView39 } = ReactNative);
     }
   });
 
