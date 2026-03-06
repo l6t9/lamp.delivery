@@ -2911,6 +2911,7 @@
       init_lazy();
       init_common();
       init_wrappers();
+      init_i18n();
       ({ uuid4 } = lazyDestructure(() => findByProps("uuid4")));
       showToast = (content, asset) => toasts.open({
         key: `rain-toast-${uuid4()}`,
@@ -2918,7 +2919,7 @@
         source: asset,
         icon: asset
       });
-      showToast.showCopyToClipboard = (message = "Strings.COPIED_TO_CLIPBOARD") => {
+      showToast.showCopyToClipboard = (message = Strings.COPIED_TO_CLIPBOARD) => {
         showToast(message, findAssetId2("toast_copy_link"));
       };
     }
@@ -4957,6 +4958,7 @@
   // src/plugins/_core/painter/themes/parser.ts
   function parseColorManifest(manifest) {
     var resolveType = (type2 = "dark") => (colorsPref.type ?? type2) === "dark" ? "darker" : "light";
+    var rainManifest = manifest;
     if (manifest.spec === 3) {
       var semanticColorDefinitions = {};
       for (var [semanticColorKey, semanticColorValue] of Object.entries(manifest.main.semantic ?? {})) {
@@ -4990,14 +4992,14 @@
           throw new Error(`Invalid semantic definitions: ${semanticColorValue}`);
         }
       }
-      if (import_react_native7.Platform.OS === "android") applyAndroidAlphaKeys(manifest.main.raw);
+      if (import_react_native7.Platform.OS === "android") applyAndroidAlphaKeys(rainManifest.main.raw);
       return {
         spec: 3,
-        reference: resolveType(manifest.main.type),
+        reference: rainManifest.main.type === "light" ? "light" : "darker",
         semantic: semanticColorDefinitions,
-        raw: manifest.main.raw ?? {},
-        background: manifest.main.background,
-        display: manifest.display
+        raw: rainManifest.main.raw ?? {},
+        background: rainManifest.main.background,
+        display: rainManifest.display
       };
     }
     if (manifest.spec === 2) {
