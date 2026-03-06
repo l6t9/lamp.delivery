@@ -5310,16 +5310,20 @@
     var callback = ([theme]) => theme === _colorRef.key ? [
       _colorRef.current.reference
     ] : void 0;
-    Object.defineProperty(themeTypes, "DARKER", {
-      configurable: true,
-      enumerable: true,
-      get: () => _colorRef.current?.reference === "darker" ? _colorRef.key : origDarker
-    });
-    Object.defineProperty(themeTypes, "LIGHT", {
-      configurable: true,
-      enumerable: true,
-      get: () => _colorRef.current?.reference === "light" ? _colorRef.key : origLight
-    });
+    if (themeTypes) {
+      origDarker = themeTypes?.DARKER;
+      origLight = themeTypes?.LIGHT;
+      Object.defineProperty(themeTypes, "DARKER", {
+        configurable: true,
+        enumerable: true,
+        get: () => _colorRef.current?.reference === "darker" ? _colorRef.key : origDarker
+      });
+      Object.defineProperty(themeTypes, "LIGHT", {
+        configurable: true,
+        enumerable: true,
+        get: () => _colorRef.current?.reference === "light" ? _colorRef.key : origLight
+      });
+    }
     Object.keys(tokenReference.RawColor).forEach((key) => {
       Object.defineProperty(tokenReference.RawColor, key, {
         configurable: true,
@@ -5327,7 +5331,7 @@
         get: () => {
           var ret = _colorRef.current?.raw[key];
           if (ret) return ret;
-          return origRawColor2[key];
+          return _colorRef.current?.raw[key] || origRawColor2[key];
         }
       });
     });
@@ -5352,16 +5356,18 @@
         return orig(...args);
       }),
       () => {
-        Object.defineProperty(themeTypes, "DARKER", {
-          configurable: true,
-          writable: true,
-          value: origDarker
-        });
-        Object.defineProperty(themeTypes, "LIGHT", {
-          configurable: true,
-          writable: true,
-          value: origLight
-        });
+        if (themeTypes) {
+          Object.defineProperty(themeTypes, "DARKER", {
+            configurable: true,
+            writable: true,
+            value: origDarker
+          });
+          Object.defineProperty(themeTypes, "LIGHT", {
+            configurable: true,
+            writable: true,
+            value: origLight
+          });
+        }
         Object.defineProperty(tokenReference, "RawColor", {
           configurable: true,
           writable: true,
@@ -5395,8 +5401,6 @@
       origRawColor2 = {
         ...tokenReference.RawColor
       };
-      origDarker = themeTypes.DARKER;
-      origLight = themeTypes.LIGHT;
       SEMANTIC_FALLBACK_MAP = {
         "BG_BACKDROP": "BACKGROUND_FLOATING",
         "BG_BASE_PRIMARY": "BACKGROUND_PRIMARY",
@@ -30959,12 +30963,12 @@ ${formattedData}
         start() {
           if (intl && intlMap) {
             autoConfirmMessages = {
-              embed: intl.string(intlMap[KEYS.embed.hash]) || "Delete embed",
+              embed: intl.string(intlMap[KEYS.embed.hash]) || "Remove All Embeds",
               message: intl.string(intlMap[KEYS.message.hash]) || "Delete Message"
             };
           } else {
             autoConfirmMessages = {
-              embed: "Delete embed",
+              embed: "Remove All Embeds",
               message: "Delete Message"
             };
           }
@@ -30973,14 +30977,19 @@ ${formattedData}
           unpatch3 = instead("show", Popup, (args, fn) => {
             var popup = args?.[0];
             var title = popup?.title;
-            var body = popup?.children?.props?.message?.content;
+            var confirmText = popup?.confirmText;
+            var body = popup?.children?.props?.message?.content ?? "";
             if (!popup?.onConfirm || typeof popup.onConfirm !== "function" || typeof title !== "string" && typeof body !== "string") {
               return fn(...args);
             }
             var shouldConfirm = (type) => {
               var matcher = autoConfirmMessages[type];
               if (!matcher) return false;
-              var match = title?.includes(matcher) || body?.includes(matcher);
+              var titleLower = title?.toLowerCase();
+              var confirmLower = confirmText?.toLowerCase();
+              var bodyLower = body?.toLowerCase();
+              var matcherLower = matcher.toLowerCase();
+              var match = titleLower?.includes(matcherLower) || confirmLower?.includes(matcherLower) || bodyLower?.includes(matcherLower);
               return quickDeleteSettings[KEYS[type].storage] && match;
             };
             var result = shouldConfirm("message") || shouldConfirm("embed");
