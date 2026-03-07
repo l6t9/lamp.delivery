@@ -43,6 +43,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | "/api" | "/api/" | "/api/now-playing" | "/api/now-playing/" | "/api/posts" | "/api/posts/" | "/blog" | "/blog/" | `/blog/${string}` & {} | `/blog/${string}/` & {} | "/other-stuff" | "/other-stuff/" | "/projects" | "/projects/";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/articleAssets/example/image.webp" | "/images/ado-1.jpg" | "/images/ado-2.png" | "/images/ado-3.png" | "/images/ado.jpg" | "/images/blood-cultures-1.png" | "/images/blood-cultures-2.png" | "/images/blood-cultures.jpg" | "/images/lumibot-preview.jpg" | "/images/raincord-banner.png" | "/rain.js" | "/robots.txt" | "/test.txt" | string & {};
+		Asset(): "/.well-known/discord" | "/articleAssets/example/image.webp" | "/images/ado-1.jpg" | "/images/ado-2.png" | "/images/ado-3.png" | "/images/ado.jpg" | "/images/blood-cultures-1.png" | "/images/blood-cultures-2.png" | "/images/blood-cultures.jpg" | "/images/lumibot-preview.jpg" | "/images/raincord-banner.png" | "/rain.js" | "/robots.txt" | "/test.txt" | string & {};
 	}
 }
