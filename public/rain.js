@@ -22103,151 +22103,162 @@ ${pendingInsertLink}` : pendingInsertLink;
         }
       }
     }
-    return /* @__PURE__ */ jsxs(View33, {
+    return /* @__PURE__ */ jsx(ReactNative.ScrollView, {
       style: {
-        flex: 1,
-        paddingVertical: 24,
-        paddingHorizontal: 12
+        flex: 1
       },
-      children: [
-        /* @__PURE__ */ jsx(TableRowGroup6, {
-          title: "Settings",
-          children: /* @__PURE__ */ jsx(TableSwitchRow4, {
-            label: "Enable Profile Colors",
-            value: store.enabled,
-            onValueChange: (v2) => store.updateSettings({
-              enabled: v2
+      children: /* @__PURE__ */ jsxs(ReactNative.View, {
+        style: {
+          paddingVertical: 24,
+          paddingHorizontal: 12,
+          gap: 24
+        },
+        children: [
+          /* @__PURE__ */ jsx(TableRowGroup6, {
+            title: "Settings",
+            children: /* @__PURE__ */ jsx(TableSwitchRow4, {
+              label: "Enable Profile Colors",
+              value: store.enabled,
+              onValueChange: (v2) => store.updateSettings({
+                enabled: v2
+              })
             })
-          })
-        }),
-        /* @__PURE__ */ jsx(TableRowGroup6, {
-          title: "Colors",
-          children: /* @__PURE__ */ jsxs(Card5, {
+          }),
+          /* @__PURE__ */ jsx(TableRowGroup6, {
+            title: "Colors",
+            children: /* @__PURE__ */ jsxs(Card5, {
+              style: {
+                marginBottom: 16,
+                backgroundColor: semanticColors.CARD_PRIMARY_BG
+              },
+              children: [
+                /* @__PURE__ */ jsx(SettingsTextInput, {
+                  placeholder: "#000000",
+                  value: primaryInput,
+                  onChange: handlePrimaryChange,
+                  isClearable: true
+                }),
+                /* @__PURE__ */ jsx(SettingsTextInput, {
+                  placeholder: "#000000",
+                  value: accentInput,
+                  onChange: handleAccentChange,
+                  isClearable: true
+                })
+              ]
+            })
+          }),
+          /* @__PURE__ */ jsx(ReactNative.View, {
             style: {
-              marginBottom: 16,
-              backgroundColor: semanticColors.CARD_PRIMARY_BG
+              marginVertical: -24,
+              marginBottom: 12
             },
+            children: /* @__PURE__ */ jsx(TableRowGroup6, {
+              children: /* @__PURE__ */ jsx(TableRow3, {
+                label: "Reset Colors",
+                variant: "danger",
+                arrow: false,
+                onPress: () => {
+                  setPrimaryInput("");
+                  setAccentInput("");
+                  store.updateSettings({
+                    primary: null,
+                    accent: null,
+                    enabled: false
+                  });
+                }
+              })
+            })
+          }),
+          /* @__PURE__ */ jsxs(TableRowGroup6, {
+            title: "Other Users",
             children: [
-              /* @__PURE__ */ jsx(SettingsTextInput, {
-                placeholder: "#000000",
-                value: primaryInput,
-                onChange: handlePrimaryChange,
-                isClearable: true
+              /* @__PURE__ */ jsx(TableSwitchRow4, {
+                label: "Show other users' colors",
+                subLabel: "Apply profile colors shared by other Rain users via the registry",
+                value: store.showOtherColors,
+                onValueChange: (v2) => store.updateSettings({
+                  showOtherColors: v2
+                })
               }),
-              /* @__PURE__ */ jsx(SettingsTextInput, {
-                placeholder: "#000000",
-                value: accentInput,
-                onChange: handleAccentChange,
-                isClearable: true
+              /* @__PURE__ */ jsx(TableSwitchRow4, {
+                label: "Banner color fallback",
+                subLabel: "Use banner color as profile theme for non-Nitro users",
+                value: store.bannerFallback,
+                onValueChange: (v2) => store.updateSettings({
+                  bannerFallback: v2
+                })
+              })
+            ]
+          }),
+          /* @__PURE__ */ jsxs(TableRowGroup6, {
+            title: "Sharing",
+            children: [
+              /* @__PURE__ */ jsx(TableSwitchRow4, {
+                label: "Share my profile colors",
+                subLabel: "Allow other Rain users to see your custom profile colors. Your Discord ID and color values will be stored in a public registry.",
+                value: store.shareColors,
+                onValueChange: (v2) => {
+                  store.updateSettings({
+                    shareColors: v2
+                  });
+                  var myId = UserStore12?.getCurrentUser?.()?.id;
+                  if (!v2) {
+                    if (myId) {
+                      unpublishFromRegistry(myId).then((ok) => {
+                        if (ok) showToast("Removed from registry", findAssetId2("CheckIcon"));
+                      });
+                    }
+                  } else if (store.primary !== null && myId) {
+                    publishToRegistry(myId, store.primary, store.accent ?? store.primary).then((ok) => {
+                      if (ok) showToast("Published colors!", findAssetId2("CheckIcon"));
+                      else showToast("Failed to publish", findAssetId2("XIcon"));
+                    });
+                  }
+                }
+              }),
+              /* @__PURE__ */ jsx(TableRow3, {
+                label: "Publish Now",
+                subLabel: "Manually sync your current colors to the registry",
+                trailing: /* @__PURE__ */ jsx(TableRow3.Arrow, {}),
+                onPress: () => {
+                  if (store.primary === null) {
+                    showToast("Set a primary color first", findAssetId2("XIcon"));
+                    return;
+                  }
+                  var myId = UserStore12?.getCurrentUser?.()?.id;
+                  if (!myId) {
+                    showToast("Not logged in", findAssetId2("XIcon"));
+                    return;
+                  }
+                  showToast("Publishing...", findAssetId2("ClockIcon"));
+                  publishToRegistry(myId, store.primary, store.accent ?? store.primary).then((ok) => {
+                    if (ok) {
+                      store.updateSettings({
+                        shareColors: true
+                      });
+                      showToast("Published colors!", findAssetId2("CheckIcon"));
+                    } else {
+                      showToast("Failed to publish", findAssetId2("XIcon"));
+                    }
+                  });
+                }
+              }),
+              /* @__PURE__ */ jsx(TableRow3, {
+                label: "Clear Color Cache",
+                subLabel: "Force re-fetch other users' colors from the registry",
+                trailing: /* @__PURE__ */ jsx(TableRow3.Arrow, {}),
+                onPress: () => {
+                  clearColorCache();
+                  showToast("Color cache cleared", findAssetId2("CheckIcon"));
+                }
               })
             ]
           })
-        }),
-        /* @__PURE__ */ jsx(TableRowGroup6, {
-          children: /* @__PURE__ */ jsx(TableRow3, {
-            label: "Reset Colors",
-            variant: "danger",
-            arrow: false,
-            onPress: () => {
-              setPrimaryInput("");
-              setAccentInput("");
-              store.updateSettings({
-                primary: null,
-                accent: null,
-                enabled: false
-              });
-            }
-          })
-        }),
-        /* @__PURE__ */ jsxs(TableRowGroup6, {
-          title: "Other Users",
-          children: [
-            /* @__PURE__ */ jsx(TableSwitchRow4, {
-              label: "Show other users' colors",
-              subLabel: "Apply profile colors shared by other Rain users via the registry",
-              value: store.showOtherColors,
-              onValueChange: (v2) => store.updateSettings({
-                showOtherColors: v2
-              })
-            }),
-            /* @__PURE__ */ jsx(TableSwitchRow4, {
-              label: "Banner color fallback",
-              subLabel: "Use banner color as profile theme for non-Nitro users",
-              value: store.bannerFallback,
-              onValueChange: (v2) => store.updateSettings({
-                bannerFallback: v2
-              })
-            })
-          ]
-        }),
-        /* @__PURE__ */ jsxs(TableRowGroup6, {
-          title: "Sharing",
-          children: [
-            /* @__PURE__ */ jsx(TableSwitchRow4, {
-              label: "Share my profile colors",
-              subLabel: "Allow other Rain users to see your custom profile colors. Your Discord ID and color values will be stored in a public registry.",
-              value: store.shareColors,
-              onValueChange: (v2) => {
-                store.updateSettings({
-                  shareColors: v2
-                });
-                var myId = UserStore12?.getCurrentUser?.()?.id;
-                if (!v2) {
-                  if (myId) {
-                    unpublishFromRegistry(myId).then((ok) => {
-                      if (ok) showToast("Removed from registry", findAssetId2("CheckIcon"));
-                    });
-                  }
-                } else if (store.primary !== null && myId) {
-                  publishToRegistry(myId, store.primary, store.accent ?? store.primary).then((ok) => {
-                    if (ok) showToast("Published colors!", findAssetId2("CheckIcon"));
-                    else showToast("Failed to publish", findAssetId2("XIcon"));
-                  });
-                }
-              }
-            }),
-            /* @__PURE__ */ jsx(TableRow3, {
-              label: "Publish Now",
-              subLabel: "Manually sync your current colors to the registry",
-              trailing: /* @__PURE__ */ jsx(TableRow3.Arrow, {}),
-              onPress: () => {
-                if (store.primary === null) {
-                  showToast("Set a primary color first", findAssetId2("XIcon"));
-                  return;
-                }
-                var myId = UserStore12?.getCurrentUser?.()?.id;
-                if (!myId) {
-                  showToast("Not logged in", findAssetId2("XIcon"));
-                  return;
-                }
-                showToast("Publishing...", findAssetId2("ClockIcon"));
-                publishToRegistry(myId, store.primary, store.accent ?? store.primary).then((ok) => {
-                  if (ok) {
-                    store.updateSettings({
-                      shareColors: true
-                    });
-                    showToast("Published colors!", findAssetId2("CheckIcon"));
-                  } else {
-                    showToast("Failed to publish", findAssetId2("XIcon"));
-                  }
-                });
-              }
-            }),
-            /* @__PURE__ */ jsx(TableRow3, {
-              label: "Clear Color Cache",
-              subLabel: "Force re-fetch other users' colors from the registry",
-              trailing: /* @__PURE__ */ jsx(TableRow3.Arrow, {}),
-              onPress: () => {
-                clearColorCache();
-                showToast("Color cache cleared", findAssetId2("CheckIcon"));
-              }
-            })
-          ]
-        })
-      ]
+        ]
+      })
     });
   }
-  var import_react25, TableRow3, TableSwitchRow4, TableRowGroup6, Card5, TextInput3, View33, UserStore12;
+  var import_react25, TableRow3, TableSwitchRow4, TableRowGroup6, Card5, UserStore12;
   var init_settings14 = __esm({
     "src/plugins/fakeprofilecolors/settings.tsx"() {
       "use strict";
@@ -22259,13 +22270,12 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_SettingsTextInput();
       init_toasts();
       init_metro();
+      init_common();
       import_react25 = __toESM(require_react());
       init_api4();
       init_storage15();
       ({ TableRow: TableRow3, TableSwitchRow: TableSwitchRow4, TableRowGroup: TableRowGroup6 } = findByProps("TableRow"));
       ({ Card: Card5 } = findByProps("Card"));
-      ({ TextInput: TextInput3 } = findByProps("TextInput"));
-      ({ View: View33 } = findByProps("View"));
       UserStore12 = findByStoreName("UserStore");
     }
   });
@@ -23978,7 +23988,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         children: [
           /* @__PURE__ */ jsx(TableRowGroup8, {
             title: "Rain Amount",
-            children: /* @__PURE__ */ jsx(TextInput4, {
+            children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "50",
               value: String(settings4.amount),
               onChange: (v2) => updateSetting("amount", parseInt(v2) || 0),
@@ -23988,7 +23998,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           }),
           /* @__PURE__ */ jsx(TableRowGroup8, {
             title: "Raindrop Size",
-            children: /* @__PURE__ */ jsx(TextInput4, {
+            children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "1",
               value: String(settings4.size),
               onChange: (v2) => updateSetting("size", parseFloat(v2) || 1),
@@ -23998,7 +24008,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           }),
           /* @__PURE__ */ jsx(TableRowGroup8, {
             title: "Transparency",
-            children: /* @__PURE__ */ jsx(TextInput4, {
+            children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "0.8",
               value: String(settings4.transparency),
               onChange: (v2) => updateSetting("transparency", parseFloat(v2) || 0.8),
@@ -24008,7 +24018,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           }),
           /* @__PURE__ */ jsx(TableRowGroup8, {
             title: "Speed Multiplier",
-            children: /* @__PURE__ */ jsx(TextInput4, {
+            children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "1",
               value: String(settings4.speed),
               onChange: (v2) => updateSetting("speed", parseFloat(v2) || 1),
@@ -24020,7 +24030,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react_native53, TextInput4, TableRowGroup8;
+  var import_react_native53, TextInput3, TableRowGroup8;
   var init_settings19 = __esm({
     "src/plugins/letitrain/settings.tsx"() {
       "use strict";
@@ -24031,7 +24041,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_components();
       import_react_native53 = __toESM(require_react_native());
       init_storage20();
-      ({ TextInput: TextInput4, TableRowGroup: TableRowGroup8 } = findByProps("TextInput"));
+      ({ TextInput: TextInput3, TableRowGroup: TableRowGroup8 } = findByProps("TextInput"));
     }
   });
 
@@ -29302,7 +29312,7 @@ ${formattedData}
   });
 
   // src/plugins/multiscrobbler/ui/pages/pages/components/TableComponents.tsx
-  var ScrollView30, TableRowGroup10, TableSwitchRow7, TableCheckboxRow2, TableRadioRow4, TableRadioGroup4, Stack8, TableRow5, TextInput5;
+  var ScrollView30, TableRowGroup10, TableSwitchRow7, TableCheckboxRow2, TableRadioRow4, TableRadioGroup4, Stack8, TableRow5, TextInput4;
   var init_TableComponents = __esm({
     "src/plugins/multiscrobbler/ui/pages/pages/components/TableComponents.tsx"() {
       "use strict";
@@ -29311,7 +29321,7 @@ ${formattedData}
       init_metro();
       ({ ScrollView: ScrollView30 } = findByProps("ScrollView"));
       ({ TableRowGroup: TableRowGroup10, TableSwitchRow: TableSwitchRow7, TableCheckboxRow: TableCheckboxRow2, TableRadioRow: TableRadioRow4, TableRadioGroup: TableRadioGroup4, Stack: Stack8, TableRow: TableRow5 } = findByProps("TableSwitchRow", "TableCheckboxRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput5 } = findByProps("TextInput"));
+      ({ TextInput: TextInput4 } = findByProps("TextInput"));
     }
   });
 
@@ -29333,13 +29343,13 @@ ${formattedData}
             children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: `App Name (Default: ${constants_default2.DEFAULT_SETTINGS.appName})`,
                   value: settings4.appName,
                   onChange: (v2) => setStorage("appName", v2),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: `Update Interval (Default: ${constants_default2.DEFAULT_SETTINGS.timeInterval}s)`,
                   value: String(settings4.timeInterval),
                   onChange: (v2) => {
@@ -29442,7 +29452,7 @@ ${formattedData}
             title: "Add App to Ignore",
             children: /* @__PURE__ */ jsx(Stack8, {
               spacing: 4,
-              children: /* @__PURE__ */ jsx(TextInput5, {
+              children: /* @__PURE__ */ jsx(TextInput4, {
                 placeholder: "Enter app name",
                 value: newAppName,
                 onChange: setNewAppName,
@@ -29552,13 +29562,13 @@ ${formattedData}
             children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "Last.fm Username",
                   value: settings4.username,
                   onChange: (v2) => setStorage("username", v2),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "Last.fm API Key",
                   value: settings4.apiKey,
                   onChange: (v2) => setStorage("apiKey", v2),
@@ -29639,13 +29649,13 @@ ${formattedData}
             children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "Libre.fm Username",
                   value: settings4.librefmUsername,
                   onChange: (v2) => setStorage("librefmUsername", v2),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "Libre.fm API Key",
                   value: settings4.librefmApiKey,
                   onChange: (v2) => setStorage("librefmApiKey", v2),
@@ -29726,13 +29736,13 @@ ${formattedData}
             children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "ListenBrainz Username",
                   value: settings4.listenbrainzUsername,
                   onChange: (v2) => setStorage("listenbrainzUsername", v2),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "ListenBrainz Token",
                   value: settings4.listenbrainzToken,
                   onChange: (v2) => setStorage("listenbrainzToken", v2),
@@ -30986,7 +30996,7 @@ ${formattedData}
     var iconSize = props.iconSize ?? 16;
     var path = IconPaths[platform];
     if (!Svg || !path) return null;
-    return /* @__PURE__ */ jsx(View37, {
+    return /* @__PURE__ */ jsx(View36, {
       children: /* @__PURE__ */ jsx(Svg, {
         width: iconSize,
         height: iconSize,
@@ -30998,7 +31008,7 @@ ${formattedData}
       })
     });
   }
-  var View37, Svg, Path, IconPaths;
+  var View36, Svg, Path, IconPaths;
   var init_StatusIcon = __esm({
     "src/plugins/platformindicators/StatusIcon.tsx"() {
       "use strict";
@@ -31007,7 +31017,7 @@ ${formattedData}
       init_jsxRuntime();
       init_metro();
       init_common();
-      ({ View: View37 } = ReactNative);
+      ({ View: View36 } = ReactNative);
       Svg = findByName("Svg", false)?.default;
       Path = findByName("Svg", false)?.Path;
       IconPaths = {
@@ -31086,7 +31096,7 @@ ${formattedData}
   __export(platformindicators_exports, {
     default: () => platformindicators_default
   });
-  var View38, Text7, unpatches5, platformindicators_default;
+  var View37, Text7, unpatches5, platformindicators_default;
   var init_platformindicators = __esm({
     "src/plugins/platformindicators/index.tsx"() {
       "use strict";
@@ -31106,7 +31116,7 @@ ${formattedData}
       init_settings23();
       init_StatusIcons();
       init_storage25();
-      ({ View: View38, Text: Text7 } = ReactNative);
+      ({ View: View37, Text: Text7 } = ReactNative);
       unpatches5 = [];
       platformindicators_default = definePlugin({
         name: "PlatformIndicators",
@@ -31148,13 +31158,13 @@ ${formattedData}
                     } else {
                       var arrowId = findAssetId2("arrow-right");
                       var container1 = findInReactTree(dmTopBar, (m2) => m2.props?.children[1]?.props?.source === arrowId);
-                      container1?.props?.children?.push(/* @__PURE__ */ jsx(View38, {
+                      container1?.props?.children?.push(/* @__PURE__ */ jsx(View37, {
                         style: {
                           flexDirection: "row",
                           justifyContent: "center",
                           alignContent: "flex-start"
                         },
-                        children: /* @__PURE__ */ jsx(View38, {
+                        children: /* @__PURE__ */ jsx(View37, {
                           style: {
                             flexDirection: "row"
                           }
@@ -31219,7 +31229,7 @@ ${formattedData}
                 if (!statusIconsView) {
                   var row = findInReactTree(res, (c2) => c2.props?.style?.flexDirection === "row");
                   if (row) {
-                    row.props.children.splice(2, 0, /* @__PURE__ */ jsx(View38, {
+                    row.props.children.splice(2, 0, /* @__PURE__ */ jsx(View37, {
                       style: {
                         flexDirection: "row"
                       },
@@ -31239,14 +31249,14 @@ ${formattedData}
               if (!platformIndicatorSettings.userList) return;
               var modifiedStatusIcons = findInReactTree(res?.props?.label, (c2) => c2.key === "TabsV2MemberListStatusIconsView");
               if (!modifiedStatusIcons) {
-                res.props.label = /* @__PURE__ */ jsxs(View38, {
+                res.props.label = /* @__PURE__ */ jsxs(View37, {
                   style: {
                     flexDirection: "row",
                     alignItems: "center"
                   },
                   children: [
                     res.props.label,
-                    /* @__PURE__ */ jsx(View38, {
+                    /* @__PURE__ */ jsx(View37, {
                       style: {
                         flexDirection: "row"
                       },
@@ -31276,7 +31286,7 @@ ${formattedData}
                 var userId = channel.recipients[0];
                 var textContainer = findInReactTree(res, (m2) => m2.props?.children?.[0]?.props?.variant === "redesign/channel-title/semibold");
                 if (textContainer) {
-                  textContainer.props.children.push(/* @__PURE__ */ jsx(View38, {
+                  textContainer.props.children.push(/* @__PURE__ */ jsx(View37, {
                     style: {
                       flexDirection: "row"
                     },
@@ -31682,7 +31692,7 @@ ${formattedData}
   });
 
   // src/plugins/reviewdb/lib/redesign.ts
-  var rain, NotFound, findProp2, findPropPolyfill, TextInput6, Button2;
+  var rain, NotFound, findProp2, findPropPolyfill, TextInput5, Button2;
   var init_redesign2 = __esm({
     "src/plugins/reviewdb/lib/redesign.ts"() {
       "use strict";
@@ -31703,7 +31713,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       };
       findProp2 = (...props) => findByProps(...props)?.[props[0]];
       findPropPolyfill = (isFunction, ...props) => findProp2(...props) ?? NotFound(props[0], isFunction);
-      TextInput6 = findPropPolyfill(false, "TextInput");
+      TextInput5 = findPropPolyfill(false, "TextInput");
       Button2 = findPropPolyfill(false, "Button");
     }
   });
@@ -31715,10 +31725,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var [reviewText, setReviewText] = React.useState("");
     var disableTextArea = !reviewdbSettings2.authToken;
     var disableButton = !reviewdbSettings2.authToken || reviewText.length === 0;
-    if (TextInput6) {
+    if (TextInput5) {
       return /* @__PURE__ */ jsxs(ReactNative.View, {
         children: [
-          /* @__PURE__ */ jsx(TextInput6, {
+          /* @__PURE__ */ jsx(TextInput5, {
             style: {
               ...styles5.textInput,
               color: useThemedColor("TEXT_NORMAL")
@@ -33899,7 +33909,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           /* @__PURE__ */ jsxs(TableRowGroup15, {
             title: "Add songs with Last.fm links",
             children: [
-              /* @__PURE__ */ jsx(TextInput7, {
+              /* @__PURE__ */ jsx(TextInput6, {
                 placeholder: "https://www.last.fm/music/Artist/_/Track",
                 value: input,
                 onChange: setInput,
@@ -33985,7 +33995,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react31, ScrollView32, TableRowGroup15, TableRow8, Stack11, TextInput7, Text8, Button3;
+  var import_react31, ScrollView32, TableRowGroup15, TableRow8, Stack11, TextInput6, Text8, Button3;
   var init_FavoriteSongsSettingsPage = __esm({
     "src/plugins/songspotlight/pages/FavoriteSongsSettingsPage.tsx"() {
       "use strict";
@@ -34003,7 +34013,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_SongRow();
       init_storage28();
       ({ ScrollView: ScrollView32 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup15, TableRow: TableRow8, Stack: Stack11, TextInput: TextInput7, Text: Text8, Button: Button3 } = findByProps("TableRowGroup", "TableRow", "Stack", "TextInput", "Text", "Button"));
+      ({ TableRowGroup: TableRowGroup15, TableRow: TableRow8, Stack: Stack11, TextInput: TextInput6, Text: Text8, Button: Button3 } = findByProps("TableRowGroup", "TableRow", "Stack", "TextInput", "Text", "Button"));
     }
   });
 
@@ -34201,7 +34211,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             children: /* @__PURE__ */ jsxs(Stack12, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput8, {
+                /* @__PURE__ */ jsx(TextInput7, {
                   placeholder: "Section Title (default: Song Spotlight)",
                   value: settings4.sectionTitle,
                   onChange: (v2) => settings4.updateSettings({
@@ -34209,7 +34219,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                   }),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput8, {
+                /* @__PURE__ */ jsx(TextInput7, {
                   placeholder: "Card Opacity % (default: 40)",
                   value: settings4.cardOpacity === 40 ? "" : String(settings4.cardOpacity),
                   onChange: (v2) => {
@@ -34235,7 +34245,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView33, TableSwitchRow10, TableRowGroup16, TableRow9, TableRadioRow5, TableRadioGroup5, Stack12, TextInput8;
+  var ScrollView33, TableSwitchRow10, TableRowGroup16, TableRow9, TableRadioRow5, TableRadioGroup5, Stack12, TextInput7;
   var init_DisplaySettingsPage2 = __esm({
     "src/plugins/songspotlight/pages/DisplaySettingsPage.tsx"() {
       "use strict";
@@ -34250,7 +34260,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_storage28();
       ({ ScrollView: ScrollView33 } = findByProps("ScrollView"));
       ({ TableSwitchRow: TableSwitchRow10, TableRowGroup: TableRowGroup16, TableRow: TableRow9, TableRadioRow: TableRadioRow5, TableRadioGroup: TableRadioGroup5, Stack: Stack12 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput8 } = findByProps("TextInput"));
+      ({ TextInput: TextInput7 } = findByProps("TextInput"));
     }
   });
 
@@ -34284,7 +34294,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             children: /* @__PURE__ */ jsxs(Stack13, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput9, {
+                /* @__PURE__ */ jsx(TextInput8, {
                   placeholder: "Last.fm Username",
                   value: settings4.username,
                   onChange: (v2) => settings4.updateSettings({
@@ -34292,7 +34302,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                   }),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput9, {
+                /* @__PURE__ */ jsx(TextInput8, {
                   placeholder: "Last.fm API Key",
                   value: settings4.apiKey,
                   onChange: (v2) => settings4.updateSettings({
@@ -34338,7 +34348,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native64, ScrollView34, TableRowGroup17, TableRow10, Stack13, TextInput9;
+  var import_react_native64, ScrollView34, TableRowGroup17, TableRow10, Stack13, TextInput8;
   var init_LastFmCredentialsPage = __esm({
     "src/plugins/songspotlight/pages/LastFmCredentialsPage.tsx"() {
       "use strict";
@@ -34353,7 +34363,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_storage28();
       ({ ScrollView: ScrollView34 } = findByProps("ScrollView"));
       ({ TableRowGroup: TableRowGroup17, TableRow: TableRow10, Stack: Stack13 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput9 } = findByProps("TextInput"));
+      ({ TextInput: TextInput8 } = findByProps("TextInput"));
     }
   });
 
