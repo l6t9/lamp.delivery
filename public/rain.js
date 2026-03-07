@@ -2974,11 +2974,11 @@
         return ret;
       }
     };
-    var patches28 = [
+    var patches27 = [
       after("jsx", jsxRuntime, callback),
       after("jsxs", jsxRuntime, callback)
     ];
-    return () => patches28.forEach((unpatch6) => unpatch6());
+    return () => patches27.forEach((unpatch6) => unpatch6());
   }
   var callbacks, jsxRuntime;
   var init_jsx = __esm({
@@ -5202,7 +5202,7 @@
   }
   function patchChatBackground() {
     try {
-      var patches28 = [
+      var patches27 = [
         after("render", Messages, (_2, ret) => {
           if (!_colorRef.current || !_colorRef.current.background?.url) return;
           var messagesComponent = findInReactTree(ret, (x2) => x2 && "HACK_fixModalInteraction" in x2.props && x2?.props?.style);
@@ -5221,7 +5221,7 @@
           });
         })
       ];
-      return () => patches28.forEach((x2) => x2());
+      return () => patches27.forEach((x2) => x2());
     } catch (e) {
       logger.error("Failed to patch chat background.", e);
       return () => {
@@ -5364,7 +5364,7 @@
       "ThemeStore",
       "SelectivelySyncedUserSettingsStore"
     ]);
-    var patches28 = [
+    var patches27 = [
       after("get", mmkvStorage, ([key], ret) => {
         if (!_colorRef.current || !patchedKeys.has(key)) return;
         var state2 = findInTree(ret._state, (s) => typeof s.theme === "string");
@@ -5381,7 +5381,7 @@
         ];
       })
     ];
-    return () => patches28.forEach((p) => p());
+    return () => patches27.forEach((p) => p());
   }
   var mmkvStorage;
   var init_storage3 = __esm({
@@ -5407,12 +5407,12 @@
     if (manifest) updateColor(manifest, {
       update: false
     });
-    var patches28 = [
+    var patches27 = [
       patchStorage(),
       patchDefinitionAndResolver(),
       patchChatBackground()
     ];
-    return () => patches28.forEach((p) => p());
+    return () => patches27.forEach((p) => p());
   }
   var init_colors = __esm({
     "src/plugins/_core/painter/themes/colors.ts"() {
@@ -7626,7 +7626,7 @@
       refetch = () => _async_to_generator(function* () {
         var settings4 = useMonetSettings.getState();
         var url2 = settings4.patches.from === "local" ? devPatchesURL : getPatchesURL();
-        var patches28 = yield safeFetch(url2, {
+        var patches27 = yield safeFetch(url2, {
           cache: "no-store"
         }).then((x2) => x2.text().then((text) => {
           try {
@@ -7641,20 +7641,20 @@
           console.error("usePatches refetch error (fetch)", err);
           return null;
         });
-        data.patches = patches28;
+        data.patches = patches27;
         data.canRefetch = Date.now() + refetchTimeout;
-        for (var fnc of uponRevalidate) fnc(patches28);
+        for (var fnc of uponRevalidate) fnc(patches27);
       })();
       usePatches = () => {
-        var [patches28, setPatches] = React2.useState(data.patches);
+        var [patches27, setPatches] = React2.useState(data.patches);
         var revalFunc = (data4) => setPatches(data4);
         React2.useEffect(() => {
           uponRevalidate.add(revalFunc);
           return () => void uponRevalidate.delete(revalFunc);
         });
-        React2.useEffect(() => void ((!patches28 || data.canRefetch >= Date.now()) && refetch()), []);
+        React2.useEffect(() => void ((!patches27 || data.canRefetch >= Date.now()) && refetch()), []);
         return {
-          patches: patches28,
+          patches: patches27,
           revalidate: () => _async_to_generator(function* () {
             if (canRevalidate < Date.now()) return;
             canRevalidate = Number.NaN;
@@ -8690,7 +8690,7 @@
     }
     return "dark";
   }
-  function build(patches28) {
+  function build(patches27) {
     var raw = {};
     var semantic = {};
     var settings4 = useMonetSettings.getState();
@@ -8723,7 +8723,7 @@
       }
       return shouldPut;
     };
-    if (patches28.version === 3) {
+    if (patches27.version === 3) {
       var _loop2 = function(x3, y3) {
         var clr4 = parseColor(y3.color);
         if (!clr4) return "continue";
@@ -8734,9 +8734,9 @@
           raw[c2] = getLABShade(clr4, y3.base ? useShade + (500 - y3.base) : useShade, y3.ratio);
         }
       };
-      for (var [x2, y2] of entries(get(patches28.replacers))) _loop2(x2, y2);
+      for (var [x2, y2] of entries(get(patches27.replacers))) _loop2(x2, y2);
     }
-    var rawPatches = get(patches28.raw);
+    var rawPatches = get(patches27.raw);
     for (var key of Object.keys(rawPatches)) {
       var clr = parseColor(rawPatches[key]);
       if (clr) raw[key] = clr;
@@ -8745,21 +8745,21 @@
       raw.PLUM_23 = raw.PRIMARY_700;
       raw.PLUM_24 = raw.PRIMARY_700;
     }
-    for (var key1 of Object.keys(patches28.semantic.both)) {
+    for (var key1 of Object.keys(patches27.semantic.both)) {
       var clr1 = parseColor(rawPatches[key1]);
       if (clr1) semantic[key1] = [
         clr1,
         clr1
       ];
     }
-    for (var key2 of Object.keys(patches28.semantic.dark)) {
+    for (var key2 of Object.keys(patches27.semantic.dark)) {
       var clr2 = parseColor(rawPatches[key2]);
       if (semantic[key2] && clr2) semantic[key2][0] = clr2;
       else if (clr2) semantic[key2] = [
         clr2
       ];
     }
-    for (var key3 of Object.keys(patches28.semantic.light)) {
+    for (var key3 of Object.keys(patches27.semantic.light)) {
       var clr3 = parseColor(rawPatches[key3]);
       if (semantic[key3] && clr3) semantic[key3][1] = clr3;
       else if (clr3) semantic[key3] = [
@@ -8860,14 +8860,14 @@
         alpha: 1
       };
     }
-    if (patches28.version === 3 && patches28.plus) {
+    if (patches27.version === 3 && patches27.plus) {
       theme.plus = {
         customOverlays: true,
         version: 0,
         icons: {}
       };
       var icons = {};
-      for (var key5 of Object.keys(get(patches28.plus.icons))) {
+      for (var key5 of Object.keys(get(patches27.plus.icons))) {
         icons[key5] = parseColor(key5);
       }
       theme.plus.icons = icons;
@@ -9057,7 +9057,7 @@
         name: Strings.PLUGIN__CORE_PAINTER,
         description: Strings.PLUGIN__CORE_PAINTER_DESC,
         author: [
-          Developers.LampDelivery,
+          Developers.cocobo1,
           Contributors.nexpid
         ],
         id: "painter",
@@ -11749,7 +11749,7 @@
     var colors = useMonetSettings((s) => s.colors);
     var patchConfig = useMonetSettings((s) => s.patches);
     var updateSettings = useMonetSettings((s) => s.updateSettings);
-    var { patches: patches28, revalidate: revalidatePatches } = usePatches_default();
+    var { patches: patches27, revalidate: revalidatePatches } = usePatches_default();
     var [isLoadedTheme, setIsLoadedTheme] = React2.useState(hasMonetTheme());
     var [syscolors, setSyscolors] = React2.useState(getMonetSysColors());
     var [sysColorsLoading, setSysColorsLoading] = React2.useState(!syscolors);
@@ -11885,7 +11885,7 @@
               ]
             })
           }),
-          !patches28 ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
+          !patches27 ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
             size: "small"
           }) : /* @__PURE__ */ jsxs(TableRowGroup, {
             title: "Theme Actions",
@@ -11909,7 +11909,7 @@
                 onPress: () => _async_to_generator(function* () {
                   var theme;
                   try {
-                    theme = build(patches28);
+                    theme = build(patches27);
                   } catch (e) {
                     var err = e instanceof Error ? e : new Error(String(e));
                     logger3.error("Error during applying theme", err.stack);
@@ -11921,7 +11921,7 @@
               }),
               /* @__PURE__ */ jsx(TableRow, {
                 label: "Reload Theme Patches",
-                subLabel: `Patch v${patches28.version ?? "?"} (${patchConfig.from === "local" ? "from a local source" : "from GitHub"})`,
+                subLabel: `Patch v${patches27.version ?? "?"} (${patchConfig.from === "local" ? "from a local source" : "from GitHub"})`,
                 icon: /* @__PURE__ */ jsx(TableRow.Icon, {
                   source: findAssetId2("ActivitiesIcon")
                 }),
@@ -11983,7 +11983,7 @@
   function MonetCard() {
     var navigation2 = NavigationNative.useNavigation();
     var isMonetActive = hasMonetTheme();
-    var { patches: patches28 } = usePatches_default();
+    var { patches: patches27 } = usePatches_default();
     var hasUrlTheme = useThemes((state2) => Object.values(state2.themes).some((t) => t.selected));
     var isSelected = isMonetActive && !hasUrlTheme;
     if (ReactNative.Platform.OS !== "android") return null;
@@ -12003,12 +12003,12 @@
           applyMonetTheme(null);
         } else {
           yield useThemes.getState().selectTheme(null);
-          if (!patches28) {
+          if (!patches27) {
             showToast("Patches not loaded yet", findAssetId2("CircleXIcon-primary"));
             return;
           }
           try {
-            var theme = build(patches28);
+            var theme = build(patches27);
             applyMonetTheme(theme);
           } catch (e) {
             showToast("Failed to build theme", findAssetId2("CircleXIcon-primary"));
@@ -16931,22 +16931,22 @@ ${pendingInsertLink}` : pendingInsertLink;
     }
   }
   function setupPatches() {
-    var patches28 = [];
+    var patches27 = [];
     try {
       var Messages3 = findByProps("sendMessage", "editMessage", "startEditMessage");
       if (Messages3?.sendMessage) {
-        patches28.push(before("sendMessage", Messages3, (args) => {
+        patches27.push(before("sendMessage", Messages3, (args) => {
           handleMessage(args[1]);
         }));
       }
       if (Messages3?.editMessage) {
-        patches28.push(before("editMessage", Messages3, (args) => {
+        patches27.push(before("editMessage", Messages3, (args) => {
           handleMessage(args[2]);
         }));
       }
     } catch (e) {
     }
-    return patches28;
+    return patches27;
   }
   var HTTP_REGEX_MULTI;
   var init_patcher2 = __esm({
@@ -17381,9 +17381,9 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/clearmenus/patches/SettingsSections.ts
   function patchSettingsSections() {
-    var patches28 = [];
+    var patches27 = [];
     var createListModule2 = findByPropsLazy("createList");
-    if (!createListModule2) return patches28;
+    if (!createListModule2) return patches27;
     var unpatch6 = after("createList", createListModule2, function(args, ret) {
       var [config] = args;
       if (!config?.sections || !Array.isArray(config.sections)) {
@@ -17505,8 +17505,8 @@ ${pendingInsertLink}` : pendingInsertLink;
         for (var i1 = sectionData.length - 1; i1 >= 0; i1--) _loop2(i1);
       }
     });
-    patches28.push(unpatch6);
-    return patches28;
+    patches27.push(unpatch6);
+    return patches27;
   }
   var BILLING_ITEMS, RAIN_CATEGORIES;
   var init_SettingsSections = __esm({
@@ -18978,9 +18978,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         start() {
           try {
             unpatch2 = patchMessageActionSheet();
-            var patches28 = patchSettingsSections();
-            if (Array.isArray(patches28)) {
-              unpatchSettingsSections = () => patches28.forEach((fn) => fn());
+            var patches27 = patchSettingsSections();
+            if (Array.isArray(patches27)) {
+              unpatchSettingsSections = () => patches27.forEach((fn) => fn());
             }
           } catch (error) {
           }
@@ -21007,7 +21007,7 @@ ${pendingInsertLink}` : pendingInsertLink;
     var LazyActionSheet8 = findByProps("openLazy", "hideActionSheet");
     if (!LazyActionSheet8) return () => {
     };
-    var patches28 = [];
+    var patches27 = [];
     var unpatchLazy = before("openLazy", LazyActionSheet8, ([lazySheet, name]) => {
       if (![
         "MessageEmojiActionSheet",
@@ -21015,14 +21015,14 @@ ${pendingInsertLink}` : pendingInsertLink;
       ].includes(name)) return;
       unpatchLazy();
       lazySheet.then((module) => {
-        patches28.push(after("default", module, (_2, res) => {
-          patches28.push(patchSheet("type", res, true));
+        patches27.push(after("default", module, (_2, res) => {
+          patches27.push(patchSheet("type", res, true));
         }));
       });
     });
     return () => {
       unpatchLazy();
-      patches28.forEach((p) => p?.());
+      patches27.forEach((p) => p?.());
     };
   }
   var init_patchMessageEmojiActionSheet = __esm({
@@ -21440,7 +21440,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         var LazyActionSheet8 = findByProps("openLazy", "hideActionSheet");
         if (!LazyActionSheet8) return () => {
         };
-        var patches28 = [];
+        var patches27 = [];
         var unpatchLazy = before("openLazy", LazyActionSheet8, ([lazySheet, name]) => {
           if (![
             "MessageEmojiActionSheet",
@@ -21448,14 +21448,14 @@ ${pendingInsertLink}` : pendingInsertLink;
           ].includes(name)) return;
           unpatchLazy();
           lazySheet.then((module) => {
-            patches28.push(after("default", module, (_2, res) => {
-              patches28.push(patchSheet2("type", res, true));
+            patches27.push(after("default", module, (_2, res) => {
+              patches27.push(patchSheet2("type", res, true));
             }));
           });
         });
         return () => {
           unpatchLazy();
-          patches28.forEach((p) => p?.());
+          patches27.forEach((p) => p?.());
         };
       })()
     ];
@@ -21574,7 +21574,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/fakenitro/patches/sendMessage.ts
   function getPatches5() {
-    var patches28 = [
+    var patches27 = [
       before("sendMessage", messageModule, (args) => {
         if (getCurrentUser2?.().premiumType === null) modifyIfNeeded(args[1]);
       }),
@@ -21595,11 +21595,11 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     ];
     if (uploadModule?.uploadLocalFiles !== void 0) {
-      patches28.push(before("uploadLocalFiles", uploadModule, (args) => {
+      patches27.push(before("uploadLocalFiles", uploadModule, (args) => {
         if (getCurrentUser2?.().premiumType === null) modifyIfNeeded(args[0].parsedMessage);
       }));
     }
-    return patches28;
+    return patches27;
   }
   var messageModule, uploadModule, getCurrentUser2, getStickerById2, ChannelStore2;
   var init_sendMessage = __esm({
@@ -21756,581 +21756,6 @@ ${pendingInsertLink}` : pendingInsertLink;
           patches12.length = 0;
         },
         settings: settings_default5
-      });
-    }
-  });
-
-  // src/plugins/fakeprofilecolors/storage.ts
-  var useProfileColorStore, profilecolorSettings;
-  var init_storage15 = __esm({
-    "src/plugins/fakeprofilecolors/storage.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_storage();
-      init_esm();
-      init_middleware();
-      useProfileColorStore = create2()(persist((set) => ({
-        primary: null,
-        accent: null,
-        enabled: false,
-        bannerFallback: false,
-        shareColors: false,
-        showOtherColors: true,
-        registryUrl: "https://profilecolors-registry.songspotlight.workers.dev",
-        _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
-          ...newSettings
-        })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
-        })
-      }), {
-        name: "profilecolor-settings",
-        storage: createJSONStorage(() => createFileStorage("plugins/profilecolor.json")),
-        onRehydrateStorage: () => (state2) => {
-          state2?.setHasHydrated(true);
-        }
-      }));
-      profilecolorSettings = new Proxy({}, {
-        get(target, prop) {
-          return useProfileColorStore.getState()[prop];
-        },
-        set(target, prop, value) {
-          useProfileColorStore.getState().updateSettings({
-            [prop]: value
-          });
-          return true;
-        }
-      });
-    }
-  });
-
-  // src/plugins/fakeprofilecolors/api.ts
-  function fetchRegistryColors(userId) {
-    return _async_to_generator(function* () {
-      var cached = colorCache.get(userId);
-      if (cached && Date.now() - cached.fetchedAt < CACHE_TTL) {
-        return cached.colors;
-      }
-      var registryUrl = profilecolorSettings.registryUrl;
-      if (!registryUrl) return null;
-      try {
-        var res = yield fetch(`${registryUrl}/lookup/${userId}`);
-        if (!res.ok) {
-          colorCache.set(userId, {
-            colors: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var data4 = yield res.json();
-        var primary = data4?.primary;
-        var accent = data4?.accent;
-        if (!primary || !accent) {
-          colorCache.set(userId, {
-            colors: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var primaryNum = parseInt(primary.replace("#", ""), 16);
-        var accentNum = parseInt(accent.replace("#", ""), 16);
-        if (isNaN(primaryNum) || isNaN(accentNum)) {
-          colorCache.set(userId, {
-            colors: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var result = {
-          primary: primaryNum,
-          accent: accentNum
-        };
-        colorCache.set(userId, {
-          colors: result,
-          fetchedAt: Date.now()
-        });
-        return result;
-      } catch (e) {
-        logger.error("FakeProfileColors", "Failed to fetch registry colors", e);
-        colorCache.set(userId, {
-          colors: null,
-          fetchedAt: Date.now()
-        });
-        return null;
-      }
-    })();
-  }
-  function publishToRegistry(discordId, primary, accent) {
-    return _async_to_generator(function* () {
-      var registryUrl = profilecolorSettings.registryUrl;
-      if (!registryUrl || !discordId) return false;
-      var primaryHex = `#${primary.toString(16).padStart(6, "0")}`;
-      var accentHex = `#${accent.toString(16).padStart(6, "0")}`;
-      try {
-        var res = yield fetch(`${registryUrl}/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId,
-            primary: primaryHex,
-            accent: accentHex
-          })
-        });
-        if (res.ok) {
-          colorCache.set(discordId, {
-            colors: {
-              primary,
-              accent
-            },
-            fetchedAt: Date.now()
-          });
-        }
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function unpublishFromRegistry(discordId) {
-    return _async_to_generator(function* () {
-      var registryUrl = profilecolorSettings.registryUrl;
-      if (!registryUrl || !discordId) return false;
-      try {
-        var res = yield fetch(`${registryUrl}/register`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId
-          })
-        });
-        if (res.ok) {
-          colorCache.delete(discordId);
-        }
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function clearColorCache() {
-    colorCache.clear();
-  }
-  var colorCache, CACHE_TTL;
-  var init_api4 = __esm({
-    "src/plugins/fakeprofilecolors/api.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_logger();
-      init_storage15();
-      colorCache = /* @__PURE__ */ new Map();
-      CACHE_TTL = 10 * 60 * 1e3;
-    }
-  });
-
-  // src/plugins/fakeprofilecolors/settings.tsx
-  function ProfileColorSettings() {
-    var store = useProfileColorStore();
-    var [primaryInput, setPrimaryInput] = import_react25.default.useState(store.primary !== null ? `#${store.primary.toString(16)}` : "");
-    var [accentInput, setAccentInput] = import_react25.default.useState(store.accent !== null ? `#${store.accent.toString(16)}` : "");
-    function isValidHex(hex) {
-      return /^#?[0-9a-fA-F]{6}$/.test(hex);
-    }
-    function handlePrimaryChange(value) {
-      setPrimaryInput(value);
-      if (value === "") {
-        store.updateSettings({
-          primary: null
-        });
-      } else {
-        var hex = value.replace(/^#/, "");
-        if (isValidHex(value)) {
-          var num = parseInt(hex, 16);
-          store.updateSettings({
-            primary: num
-          });
-        } else {
-          store.updateSettings({
-            primary: null
-          });
-        }
-      }
-    }
-    function handleAccentChange(value) {
-      setAccentInput(value);
-      if (value === "") {
-        store.updateSettings({
-          accent: null
-        });
-      } else {
-        var hex = value.replace(/^#/, "");
-        if (isValidHex(value)) {
-          var num = parseInt(hex, 16);
-          store.updateSettings({
-            accent: num
-          });
-        } else {
-          store.updateSettings({
-            accent: null
-          });
-        }
-      }
-    }
-    return /* @__PURE__ */ jsx(ReactNative.ScrollView, {
-      style: {
-        flex: 1
-      },
-      children: /* @__PURE__ */ jsxs(ReactNative.View, {
-        style: {
-          paddingVertical: 24,
-          paddingHorizontal: 12,
-          gap: 24
-        },
-        children: [
-          /* @__PURE__ */ jsx(TableRowGroup6, {
-            title: "Settings",
-            children: /* @__PURE__ */ jsx(TableSwitchRow4, {
-              label: "Enable Profile Colors",
-              value: store.enabled,
-              onValueChange: (v2) => store.updateSettings({
-                enabled: v2
-              })
-            })
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup6, {
-            title: "Colors",
-            children: /* @__PURE__ */ jsxs(Card5, {
-              style: {
-                marginBottom: 16,
-                backgroundColor: semanticColors.CARD_PRIMARY_BG
-              },
-              children: [
-                /* @__PURE__ */ jsx(SettingsTextInput, {
-                  placeholder: "#000000",
-                  value: primaryInput,
-                  onChange: handlePrimaryChange,
-                  isClearable: true
-                }),
-                /* @__PURE__ */ jsx(SettingsTextInput, {
-                  placeholder: "#000000",
-                  value: accentInput,
-                  onChange: handleAccentChange,
-                  isClearable: true
-                })
-              ]
-            })
-          }),
-          /* @__PURE__ */ jsx(ReactNative.View, {
-            style: {
-              marginVertical: -24,
-              marginBottom: 12
-            },
-            children: /* @__PURE__ */ jsx(TableRowGroup6, {
-              children: /* @__PURE__ */ jsx(TableRow3, {
-                label: "Reset Colors",
-                variant: "danger",
-                arrow: false,
-                onPress: () => {
-                  setPrimaryInput("");
-                  setAccentInput("");
-                  store.updateSettings({
-                    primary: null,
-                    accent: null,
-                    enabled: false
-                  });
-                }
-              })
-            })
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup6, {
-            title: "Other Users",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow4, {
-                label: "Show other users' colors",
-                subLabel: "Apply profile colors shared by other Rain users via the registry",
-                value: store.showOtherColors,
-                onValueChange: (v2) => store.updateSettings({
-                  showOtherColors: v2
-                })
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow4, {
-                label: "Banner color fallback",
-                subLabel: "Use banner color as profile theme for non-Nitro users",
-                value: store.bannerFallback,
-                onValueChange: (v2) => store.updateSettings({
-                  bannerFallback: v2
-                })
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup6, {
-            title: "Sharing",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow4, {
-                label: "Share my profile colors",
-                subLabel: "Allow other Rain users to see your custom profile colors. Your Discord ID and color values will be stored in a public registry.",
-                value: store.shareColors,
-                onValueChange: (v2) => {
-                  store.updateSettings({
-                    shareColors: v2
-                  });
-                  var myId = UserStore12?.getCurrentUser?.()?.id;
-                  if (!v2) {
-                    if (myId) {
-                      unpublishFromRegistry(myId).then((ok) => {
-                        if (ok) showToast("Removed from registry", findAssetId2("CheckIcon"));
-                      });
-                    }
-                  } else if (store.primary !== null && myId) {
-                    publishToRegistry(myId, store.primary, store.accent ?? store.primary).then((ok) => {
-                      if (ok) showToast("Published colors!", findAssetId2("CheckIcon"));
-                      else showToast("Failed to publish", findAssetId2("XIcon"));
-                    });
-                  }
-                }
-              }),
-              /* @__PURE__ */ jsx(TableRow3, {
-                label: "Publish Now",
-                subLabel: "Manually sync your current colors to the registry",
-                trailing: /* @__PURE__ */ jsx(TableRow3.Arrow, {}),
-                onPress: () => {
-                  if (store.primary === null) {
-                    showToast("Set a primary color first", findAssetId2("XIcon"));
-                    return;
-                  }
-                  var myId = UserStore12?.getCurrentUser?.()?.id;
-                  if (!myId) {
-                    showToast("Not logged in", findAssetId2("XIcon"));
-                    return;
-                  }
-                  showToast("Publishing...", findAssetId2("ClockIcon"));
-                  publishToRegistry(myId, store.primary, store.accent ?? store.primary).then((ok) => {
-                    if (ok) {
-                      store.updateSettings({
-                        shareColors: true
-                      });
-                      showToast("Published colors!", findAssetId2("CheckIcon"));
-                    } else {
-                      showToast("Failed to publish", findAssetId2("XIcon"));
-                    }
-                  });
-                }
-              }),
-              /* @__PURE__ */ jsx(TableRow3, {
-                label: "Clear Color Cache",
-                subLabel: "Force re-fetch other users' colors from the registry",
-                trailing: /* @__PURE__ */ jsx(TableRow3.Arrow, {}),
-                onPress: () => {
-                  clearColorCache();
-                  showToast("Color cache cleared", findAssetId2("CheckIcon"));
-                }
-              })
-            ]
-          })
-        ]
-      })
-    });
-  }
-  var import_react25, TableRow3, TableSwitchRow4, TableRowGroup6, Card5, UserStore12;
-  var init_settings14 = __esm({
-    "src/plugins/fakeprofilecolors/settings.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_color();
-      init_SettingsTextInput();
-      init_toasts();
-      init_metro();
-      init_common();
-      import_react25 = __toESM(require_react());
-      init_api4();
-      init_storage15();
-      ({ TableRow: TableRow3, TableSwitchRow: TableSwitchRow4, TableRowGroup: TableRowGroup6 } = findByProps("TableRow"));
-      ({ Card: Card5 } = findByProps("Card"));
-      UserStore12 = findByStoreName("UserStore");
-    }
-  });
-
-  // src/plugins/fakeprofilecolors/index.ts
-  var fakeprofilecolors_exports = {};
-  __export(fakeprofilecolors_exports, {
-    default: () => fakeprofilecolors_default
-  });
-  function ensureRegistryColors(userId) {
-    if (resolvedColors.has(userId) || pendingFetches.has(userId)) return;
-    var state2 = useProfileColorStore.getState();
-    if (!state2.showOtherColors || !state2.registryUrl) return;
-    pendingFetches.add(userId);
-    fetchRegistryColors(userId).then((colors) => {
-      resolvedColors.set(userId, colors);
-      try {
-        var UserProfileStore = findByStoreName("UserProfileStore");
-        UserProfileStore?.emitChange?.();
-      } catch (unused) {
-      }
-    }).catch(() => {
-      resolvedColors.set(userId, null);
-    }).finally(() => {
-      pendingFetches.delete(userId);
-    });
-  }
-  function patchUseProfileTheme() {
-    var funcParent = findByName("useProfileTheme", false);
-    if (!funcParent) return;
-    after("default", funcParent, ([options], profileTheme) => {
-      var currentUser = UserStore?.getCurrentUser?.();
-      if (!currentUser) {
-        return profileTheme;
-      }
-      var userId = options?.userId || profileTheme?.userId || profileTheme?.id;
-      if (userId !== currentUser.id) {
-        return profileTheme;
-      }
-      var state2 = useProfileColorStore.getState();
-      if (state2.enabled && (state2.primary !== null || state2.accent !== null)) {
-        if (state2.primary !== null) {
-          profileTheme.primaryColor = state2.primary;
-          profileTheme.secondaryColor = state2.accent ?? state2.primary;
-          profileTheme.theme = profileTheme.theme;
-        } else if (state2.accent !== null) {
-          profileTheme.primaryColor = state2.accent;
-          profileTheme.secondaryColor = state2.accent;
-          profileTheme.theme = profileTheme.theme;
-        }
-      }
-      return profileTheme;
-    });
-  }
-  function patchGetUserProfile() {
-    var UserProfileStore = findByStoreName("UserProfileStore");
-    if (!UserProfileStore) return;
-    after("getUserProfile", UserProfileStore, (_args, profile) => {
-      if (!profile) {
-        return profile;
-      }
-      var currentUser = UserStore?.getCurrentUser?.();
-      if (!currentUser) {
-        return profile;
-      }
-      var state2 = useProfileColorStore.getState();
-      if (!state2._hasHydrated) {
-        return profile;
-      }
-      var userId = profile.id;
-      if (!userId) {
-        userId = profile.userId || profile.user_id || profile?.user?.id;
-      }
-      if (!userId) {
-        return profile;
-      }
-      function safeHex(num) {
-        if (typeof num !== "number" || isNaN(num)) return null;
-        var hex = num.toString(16).padStart(6, "0");
-        if (!/^([0-9a-fA-F]{6})$/.test(hex)) return null;
-        return parseInt(hex, 16);
-      }
-      if (userId === currentUser.id) {
-        var primary = safeHex(state2.primary);
-        var accent = safeHex(state2.accent);
-        if (state2.enabled && (primary !== null || accent !== null)) {
-          profile.themeColors = [
-            primary ?? accent,
-            accent ?? primary ?? accent
-          ];
-          profile.premiumType = 2;
-        } else {
-        }
-      } else {
-        if (state2.showOtherColors) {
-          var regColors = resolvedColors.get(userId);
-          if (regColors) {
-            profile.themeColors = [
-              regColors.primary,
-              regColors.accent
-            ];
-            profile.premiumType = 2;
-            return profile;
-          }
-          ensureRegistryColors(userId);
-        }
-        if (state2.bannerFallback && (!profile.premiumType || profile.premiumType === 0) && profile.bannerColor) {
-          var color2 = profile.bannerColor;
-          if (typeof color2 === "number") color2 = `#${color2.toString(16).padStart(6, "0")}`;
-          if (!/^#?[0-9a-fA-F]{6}$/.test(color2)) {
-            return profile;
-          }
-          profile.themeColors = [
-            color2,
-            color2
-          ];
-        } else {
-        }
-      }
-      return profile;
-    });
-  }
-  function patchUserProfileEditForm() {
-    var UserProfileEditForm = findByName("UserProfileEditForm", false);
-    if (!UserProfileEditForm) return;
-    after("default", UserProfileEditForm, (_args, tree) => {
-      function removeNitroCards(node) {
-        if (!node) return null;
-        if (node.type && node.type.name === "UserProfilePremiumUpsellCard") return null;
-        if (node.props?.children) {
-          var children = node.props.children;
-          if (!Array.isArray(children)) children = [
-            children
-          ];
-          var filteredChildren = children.map(removeNitroCards).filter((child) => child !== null);
-          node.props.children = filteredChildren.length === 1 ? filteredChildren[0] : filteredChildren;
-        }
-        return node;
-      }
-      return removeNitroCards(tree) || tree;
-    });
-  }
-  var resolvedColors, pendingFetches, fakeprofilecolors_default;
-  var init_fakeprofilecolors = __esm({
-    "src/plugins/fakeprofilecolors/index.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_patcher();
-      init_stores();
-      init_wrappers();
-      init_plugins3();
-      init_api4();
-      init_storage15();
-      init_Developers();
-      init_settings14();
-      resolvedColors = /* @__PURE__ */ new Map();
-      pendingFetches = /* @__PURE__ */ new Set();
-      fakeprofilecolors_default = definePlugin({
-        name: "FakeProfileColors",
-        description: "Set fake profile colors for yourself",
-        id: "fakeprofilecolors",
-        version: "1.0.0",
-        author: [
-          Developers.LampDelivery
-        ],
-        start() {
-          patchUseProfileTheme();
-          patchGetUserProfile();
-          patchUserProfileEditForm();
-        },
-        stop() {
-        },
-        settings: ProfileColorSettings
       });
     }
   });
@@ -22595,7 +22020,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/globalbadges/storage.ts
   var useCustomBadgesSettings, customBadgesSettings;
-  var init_storage16 = __esm({
+  var init_storage15 = __esm({
     "src/plugins/globalbadges/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -22689,8 +22114,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react26, import_react_native49;
-  var init_settings15 = __esm({
+  var import_react25, import_react_native49;
+  var init_settings14 = __esm({
     "src/plugins/globalbadges/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -22698,9 +22123,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_common();
       init_components();
-      import_react26 = __toESM(require_react());
+      import_react25 = __toESM(require_react());
       import_react_native49 = __toESM(require_react_native());
-      init_storage16();
+      init_storage15();
     }
   });
 
@@ -22733,8 +22158,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       init_badgeGroups();
-      init_settings15();
-      init_storage16();
+      init_settings14();
+      init_storage15();
       useBadgesModule2 = findByNameLazy("useBadges", false);
       customBadgesCache = /* @__PURE__ */ new Map();
       pendingRequests2 = /* @__PURE__ */ new Set();
@@ -23002,7 +22427,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/hiddenchannels/storage.ts
   var useHiddenChannelsSettings, hiddenChannelsSettings;
-  var init_storage17 = __esm({
+  var init_storage16 = __esm({
     "src/plugins/hiddenchannels/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23080,7 +22505,7 @@ ${pendingInsertLink}` : pendingInsertLink;
     });
   }
   var import_react_native50;
-  var init_settings16 = __esm({
+  var init_settings15 = __esm({
     "src/plugins/hiddenchannels/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23088,7 +22513,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_components();
       import_react_native50 = __toESM(require_react_native());
-      init_storage17();
+      init_storage16();
     }
   });
 
@@ -23120,8 +22545,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       init_AlertContent();
-      init_settings16();
-      init_storage17();
+      init_settings15();
+      init_storage16();
       Permissions = findByProps("getChannelPermissions", "can");
       ({ ChannelTypes } = findByProps("ChannelTypes"));
       ({ getChannel } = findByProps("getChannel") || findByName("getChannel", false));
@@ -23212,7 +22637,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/hideblockedandignoredmessages/storage.ts
   var useHideBlockedAndIgnoredMessagesSettings, hideblockedandignoredmessagesSettings;
-  var init_storage18 = __esm({
+  var init_storage17 = __esm({
     "src/plugins/hideblockedandignoredmessages/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23291,7 +22716,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_patcher();
       init_metro();
       init_common();
-      init_storage18();
+      init_storage17();
       RowManager3 = findByName("RowManager");
       ({ isBlocked, isIgnored } = findByProps("isBlocked", "isIgnored"));
       isFilteredUser = (id) => {
@@ -23349,7 +22774,7 @@ ${pendingInsertLink}` : pendingInsertLink;
     });
   }
   var import_react_native51;
-  var init_settings17 = __esm({
+  var init_settings16 = __esm({
     "src/plugins/hideblockedandignoredmessages/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23357,7 +22782,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_components();
       import_react_native51 = __toESM(require_react_native());
-      init_storage18();
+      init_storage17();
     }
   });
 
@@ -23375,7 +22800,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       init_hidemessages();
-      init_settings17();
+      init_settings16();
       patches14 = [];
       hideblockedandignoredmessages_default = definePlugin({
         name: "HideBlockedAndIgnoredMessages",
@@ -23443,7 +22868,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/hidecallbuttons/storage.ts
   var useHideCallButtonsSettings, hidecallbuttonsSettings;
-  var init_storage19 = __esm({
+  var init_storage18 = __esm({
     "src/plugins/hidecallbuttons/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23487,8 +22912,8 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/hidecallbuttons/settings.tsx
-  var TableRow4, TableSwitchRow5, TableRowGroup7, Stack6, settings_default6;
-  var init_settings18 = __esm({
+  var TableRow3, TableSwitchRow4, TableRowGroup6, Stack6, settings_default6;
+  var init_settings17 = __esm({
     "src/plugins/hidecallbuttons/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23496,8 +22921,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_assets();
       init_metro();
-      init_storage19();
-      ({ TableRow: TableRow4, TableSwitchRow: TableSwitchRow5, TableRowGroup: TableRowGroup7 } = findByProps("TableRow"));
+      init_storage18();
+      ({ TableRow: TableRow3, TableSwitchRow: TableSwitchRow4, TableRowGroup: TableRowGroup6 } = findByProps("TableRow"));
       ({ Stack: Stack6 } = findByProps("Stack"));
       settings_default6 = (() => {
         var hidecallbuttonsSettings2 = useHideCallButtonsSettings();
@@ -23508,12 +22933,12 @@ ${pendingInsertLink}` : pendingInsertLink;
           },
           spacing: 24,
           children: [
-            /* @__PURE__ */ jsxs(TableRowGroup7, {
+            /* @__PURE__ */ jsxs(TableRowGroup6, {
               title: "User Profile",
               children: [
-                /* @__PURE__ */ jsx(TableSwitchRow5, {
+                /* @__PURE__ */ jsx(TableSwitchRow4, {
                   label: "Hide call button",
-                  icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                     source: findAssetId2("PhoneCallIcon")
                   }),
                   onValueChange: (v2) => {
@@ -23523,9 +22948,9 @@ ${pendingInsertLink}` : pendingInsertLink;
                   },
                   value: hidecallbuttonsSettings2.upHideVoiceButton
                 }),
-                /* @__PURE__ */ jsx(TableSwitchRow5, {
+                /* @__PURE__ */ jsx(TableSwitchRow4, {
                   label: "Hide video button",
-                  icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                     source: findAssetId2("VideoIcon")
                   }),
                   onValueChange: (v2) => {
@@ -23537,13 +22962,13 @@ ${pendingInsertLink}` : pendingInsertLink;
                 })
               ]
             }),
-            /* @__PURE__ */ jsxs(TableRowGroup7, {
+            /* @__PURE__ */ jsxs(TableRowGroup6, {
               title: "DMs",
               titleStyleType: "no_border",
               children: [
-                /* @__PURE__ */ jsx(TableSwitchRow5, {
+                /* @__PURE__ */ jsx(TableSwitchRow4, {
                   label: "Hide call button",
-                  icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                     source: findAssetId2("PhoneCallIcon")
                   }),
                   onValueChange: (v2) => {
@@ -23553,9 +22978,9 @@ ${pendingInsertLink}` : pendingInsertLink;
                   },
                   value: hidecallbuttonsSettings2.dmHideCallButton
                 }),
-                /* @__PURE__ */ jsx(TableSwitchRow5, {
+                /* @__PURE__ */ jsx(TableSwitchRow4, {
                   label: "Hide video button",
-                  icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                     source: findAssetId2("VideoIcon")
                   }),
                   onValueChange: (v2) => {
@@ -23567,12 +22992,12 @@ ${pendingInsertLink}` : pendingInsertLink;
                 })
               ]
             }),
-            /* @__PURE__ */ jsx(TableRowGroup7, {
+            /* @__PURE__ */ jsx(TableRowGroup6, {
               title: "Other",
               titleStyleType: "no_border",
-              children: /* @__PURE__ */ jsx(TableSwitchRow5, {
+              children: /* @__PURE__ */ jsx(TableSwitchRow4, {
                 label: "Hide video button in VC",
-                icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                   source: findAssetId2("VideoIcon")
                 }),
                 onValueChange: (v2) => {
@@ -23609,8 +23034,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_metro();
       init_plugins3();
       init_Developers();
-      init_settings18();
-      init_storage19();
+      init_settings17();
+      init_storage18();
       patches15 = [];
       find = (filter) => {
         return metro_exports.findExports(metro_exports.factories.createSimpleFilter(filter, cyrb64Hash(new Error().stack)));
@@ -23701,7 +23126,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/letitrain/storage.ts
   var DEFAULT_SETTINGS2, useLetItRainSettings;
-  var init_storage20 = __esm({
+  var init_storage19 = __esm({
     "src/plugins/letitrain/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23734,9 +23159,9 @@ ${pendingInsertLink}` : pendingInsertLink;
   // src/plugins/letitrain/RainOverlay.tsx
   function RainOverlay() {
     var { settings: settings4 } = useLetItRainSettings();
-    var [rainDrops, setRainDrops] = (0, import_react27.useState)([]);
-    var animationRef = (0, import_react27.useRef)({});
-    (0, import_react27.useEffect)(() => {
+    var [rainDrops, setRainDrops] = (0, import_react26.useState)([]);
+    var animationRef = (0, import_react26.useRef)({});
+    (0, import_react26.useEffect)(() => {
       var _loop2 = function(i2) {
         var drop = createDrop(i2);
         newDrops.push(drop);
@@ -23817,16 +23242,16 @@ ${pendingInsertLink}` : pendingInsertLink;
       }, drop.id))
     });
   }
-  var import_react27, import_react_native52, SCREEN_WIDTH, SCREEN_HEIGHT, styles2;
+  var import_react26, import_react_native52, SCREEN_WIDTH, SCREEN_HEIGHT, styles2;
   var init_RainOverlay = __esm({
     "src/plugins/letitrain/RainOverlay.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
-      import_react27 = __toESM(require_react());
+      import_react26 = __toESM(require_react());
       import_react_native52 = __toESM(require_react_native());
-      init_storage20();
+      init_storage19();
       ({ width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = import_react_native52.Dimensions.get("window"));
       styles2 = import_react_native52.StyleSheet.create({
         container: {
@@ -23859,7 +23284,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       children: /* @__PURE__ */ jsxs(Stack, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup8, {
+          /* @__PURE__ */ jsx(TableRowGroup7, {
             title: "Rain Amount",
             children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "50",
@@ -23869,7 +23294,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               isClearable: true
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup8, {
+          /* @__PURE__ */ jsx(TableRowGroup7, {
             title: "Raindrop Size",
             children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "1",
@@ -23879,7 +23304,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               isClearable: true
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup8, {
+          /* @__PURE__ */ jsx(TableRowGroup7, {
             title: "Transparency",
             children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "0.8",
@@ -23889,7 +23314,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               isClearable: true
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup8, {
+          /* @__PURE__ */ jsx(TableRowGroup7, {
             title: "Speed Multiplier",
             children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "1",
@@ -23903,8 +23328,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react_native53, TextInput3, TableRowGroup8;
-  var init_settings19 = __esm({
+  var import_react_native53, TextInput3, TableRowGroup7;
+  var init_settings18 = __esm({
     "src/plugins/letitrain/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23913,8 +23338,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_metro();
       init_components();
       import_react_native53 = __toESM(require_react_native());
-      init_storage20();
-      ({ TextInput: TextInput3, TableRowGroup: TableRowGroup8 } = findByProps("TextInput"));
+      init_storage19();
+      ({ TextInput: TextInput3, TableRowGroup: TableRowGroup7 } = findByProps("TextInput"));
     }
   });
 
@@ -23934,7 +23359,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       init_RainOverlay();
-      init_settings19();
+      init_settings18();
       patches16 = [];
       letitrain_default = definePlugin({
         name: "LetItRain",
@@ -23972,7 +23397,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/messagelogger/storage.ts
   var useMessageLoggerSettings;
-  var init_storage21 = __esm({
+  var init_storage20 = __esm({
     "src/plugins/messagelogger/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -24140,17 +23565,17 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react28, import_react_native54;
-  var init_settings20 = __esm({
+  var import_react27, import_react_native54;
+  var init_settings19 = __esm({
     "src/plugins/messagelogger/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react28 = __toESM(require_react());
+      import_react27 = __toESM(require_react());
       import_react_native54 = __toESM(require_react_native());
-      init_storage21();
+      init_storage20();
     }
   });
 
@@ -24229,10 +23654,10 @@ ${pendingInsertLink}` : pendingInsertLink;
           if (event.otherPluginBypass) return args;
           var storage3 = useMessageLoggerSettings.getState();
           if (!storage3.deleted?.enabled) return args;
-          if (!UserStore13) UserStore13 = findByStoreName("UserStore");
+          if (!UserStore12) UserStore12 = findByStoreName("UserStore");
           if (!MessageStore) MessageStore = findByStoreName("MessageStore");
-          if (!UserStore13 || !MessageStore) return args;
-          var currentUserId2 = UserStore13.getCurrentUser?.()?.id;
+          if (!UserStore12 || !MessageStore) return args;
+          var currentUserId2 = UserStore12.getCurrentUser?.()?.id;
           var { id, channelId } = event;
           var message = MessageStore.getMessage?.(channelId, id);
           if (!message) return args;
@@ -24360,14 +23785,14 @@ ${separator2}
           if (storage3.edited?.enabled && typeof msg.content === "string" && msg.content.includes(EDIT_HISTORY_SEPARATOR)) {
             var separator2 = new RegExp(EDIT_HISTORY_SEPARATOR, "gmi");
             if (separator2.test(msg.content) && data4.buttons) {
-              var React26 = require_react();
+              var React24 = require_react();
               var ActionSheet3 = findByName("ActionSheet");
               var FormRow4 = findByName("FormRow");
               var getAssetIDByName = findByProps("getAssetIDByName")?.getAssetIDByName;
               var FluxDispatcher2 = findByProps("dispatch", "_subscriptions");
-              data4.buttons.push(React26.createElement(FormRow4, {
+              data4.buttons.push(React24.createElement(FormRow4, {
                 label: "Remove Edit History",
-                leading: React26.createElement("img", {
+                leading: React24.createElement("img", {
                   style: {
                     opacity: 1
                   },
@@ -24434,7 +23859,7 @@ ${separator2}
       };
     }
   }
-  var patches17, selfDeletedMessages, MessageStore, UserStore13, deleteable, dbStorage, messagelogger_default;
+  var patches17, selfDeletedMessages, MessageStore, UserStore12, deleteable, dbStorage, messagelogger_default;
   var init_messagelogger = __esm({
     "src/plugins/messagelogger/index.ts"() {
       "use strict";
@@ -24447,8 +23872,8 @@ ${separator2}
       init_metro();
       init_plugins3();
       init_Developers();
-      init_settings20();
-      init_storage21();
+      init_settings19();
+      init_storage20();
       patches17 = [];
       selfDeletedMessages = /* @__PURE__ */ new Set();
       deleteable = [];
@@ -24507,7 +23932,7 @@ ${separator2}
     })();
   }
   var createFileStorage2, useMoreCommandsSettings, storage;
-  var init_storage22 = __esm({
+  var init_storage21 = __esm({
     "src/plugins/morecommands/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -24821,7 +24246,7 @@ ${separator2}
       init_metro();
       init_common();
       import_react_native55 = __toESM(require_react_native());
-      init_storage22();
+      init_storage21();
       init_Text();
     }
   });
@@ -25027,7 +24452,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
       init_NekosLifeCategoriesPage();
     }
   });
@@ -25265,7 +24690,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
     }
   });
 
@@ -25355,7 +24780,7 @@ ${separator2}
       init_assets();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
       init_Text();
     }
   });
@@ -25488,7 +24913,7 @@ ${separator2}
       init_alerts();
       init_toasts();
       init_components();
-      init_storage22();
+      init_storage21();
       init_Text();
     }
   });
@@ -25572,7 +24997,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
     }
   });
 
@@ -25686,7 +25111,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
     }
   });
 
@@ -25786,7 +25211,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
       init_Text();
     }
   });
@@ -25946,7 +25371,7 @@ ${separator2}
     });
   }
   var import_react_native58;
-  var init_settings21 = __esm({
+  var init_settings20 = __esm({
     "src/plugins/morecommands/settings/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -25957,7 +25382,7 @@ ${separator2}
       init_common();
       init_components();
       import_react_native58 = __toESM(require_react_native());
-      init_storage22();
+      init_storage21();
       init_Header();
       init_AliucordPage();
       init_CreditsPage();
@@ -25972,7 +25397,7 @@ ${separator2}
 
   // src/plugins/morecommands/src/utils/api.ts
   var uselessFact, dogFact, catFact, getPetPetData, getGaryUrl;
-  var init_api5 = __esm({
+  var init_api4 = __esm({
     "src/plugins/morecommands/src/utils/api.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -26048,8 +25473,8 @@ ${separator2}
       init_async_to_generator();
       init_toasts();
       init_metro();
-      init_storage22();
-      init_api5();
+      init_storage21();
+      init_api4();
       MessageActions = findByProps("sendMessage");
       formatFactResponse = (fact) => {
         var response = fact.text;
@@ -26378,8 +25803,8 @@ ${friendInviteList.join("\n")}`);
       init_promiseAllSettled();
       init_async_to_generator();
       init_metro();
-      init_storage22();
-      init_api5();
+      init_storage21();
+      init_api4();
       MessageActions3 = findByProps("sendMessage");
       garyCommand = {
         name: "gary",
@@ -26566,7 +25991,7 @@ ${formattedData}
       init_async_to_generator();
       init_alerts();
       init_metro();
-      init_storage22();
+      init_storage21();
       MessageActions5 = findByProps("sendMessage");
       messageUtil3 = findByProps("sendBotMessage", "sendMessage", "receiveMessage");
       fetchImage = (isNSFW) => _async_to_generator(function* () {
@@ -26714,7 +26139,7 @@ ${formattedData}
       init_async_to_generator();
       init_alerts();
       init_metro();
-      init_storage22();
+      init_storage21();
       MessageActions6 = findByProps("sendMessage", "receiveMessage");
       Channels = findByProps("getLastSelectedChannelId");
       BotMessage = findByProps("createBotMessage");
@@ -27035,7 +26460,7 @@ ${formattedData}
   });
 
   // src/plugins/morecommands/src/commands/petpet.ts
-  var UserStore14, MessageActions8, petPetCommand;
+  var UserStore13, MessageActions8, petPetCommand;
   var init_petpet = __esm({
     "src/plugins/morecommands/src/commands/petpet.ts"() {
       "use strict";
@@ -27043,8 +26468,8 @@ ${formattedData}
       init_promiseAllSettled();
       init_async_to_generator();
       init_metro();
-      init_api5();
-      UserStore14 = findByStoreName("UserStore");
+      init_api4();
+      UserStore13 = findByStoreName("UserStore");
       MessageActions8 = findByProps("sendMessage");
       petPetCommand = {
         name: "petpet",
@@ -27063,7 +26488,7 @@ ${formattedData}
         ],
         execute: (args, ctx) => _async_to_generator(function* () {
           try {
-            var user = yield UserStore14.getUser(args[0].value);
+            var user = yield UserStore13.getUser(args[0].value);
             var image = user.getAvatarURL(512);
             var data4 = yield getPetPetData(image);
             var fixNonce = Date.now().toString();
@@ -27146,7 +26571,7 @@ ${formattedData}
       init_promiseAllSettled();
       init_async_to_generator();
       init_metro();
-      init_storage22();
+      init_storage21();
       MessageActions9 = findByProps("sendMessage", "receiveMessage");
       SpotifyStore = findByStoreName("SpotifyStore");
       spotifyTrackCommand = {
@@ -27354,7 +26779,7 @@ ${formattedData}
       init_debug();
       init_metro();
       init_common();
-      init_storage22();
+      init_storage21();
       MessageActions10 = findByProps("sendMessage");
       messageUtil5 = findByProps("sendBotMessage", "sendMessage", "receiveMessage");
       categories = [
@@ -27415,7 +26840,7 @@ ${formattedData}
       init_commands();
       init_plugins3();
       init_Developers();
-      init_settings21();
+      init_settings20();
       init_facts();
       init_firstmessage();
       init_friendinvites();
@@ -27427,7 +26852,7 @@ ${formattedData}
       init_petpet();
       init_spotify();
       init_sysinfo();
-      init_storage22();
+      init_storage21();
       commandMap = {
         catfact: catFactCommand,
         dogfact: dogFactCommand,
@@ -27492,7 +26917,7 @@ ${formattedData}
   __export(moreconfirm_exports, {
     default: () => moreconfirm_default
   });
-  var dialog, relationshipManager, callManager, actionSheetManager, UserStore15, patches18, moreconfirm_default;
+  var dialog, relationshipManager, callManager, actionSheetManager, UserStore14, patches18, moreconfirm_default;
   var init_moreconfirm = __esm({
     "src/plugins/moreconfirm/index.ts"() {
       "use strict";
@@ -27507,7 +26932,7 @@ ${formattedData}
       relationshipManager = findByProps("addRelationship");
       callManager = findByProps("handleStartCall");
       actionSheetManager = findByProps("hideActionSheet");
-      UserStore15 = findByStoreName("UserStore");
+      UserStore14 = findByStoreName("UserStore");
       patches18 = [];
       moreconfirm_default = definePlugin({
         name: "MoreConfirm",
@@ -27539,7 +26964,7 @@ ${formattedData}
           }));
           patches18.push(patcher_default.instead("addRelationship", relationshipManager, (args, orig) => {
             if (typeof args[0] !== "object" || !args[0].userId) return orig.apply(this, args);
-            var { username, discriminator } = UserStore15.getUser(args[0].userId);
+            var { username, discriminator } = UserStore14.getUser(args[0].userId);
             var hideASInterval = setInterval(() => actionSheetManager.hideActionSheet(), 100);
             setTimeout(() => clearInterval(hideASInterval), 3e3);
             var block = args[0].type === 2;
@@ -27573,7 +26998,7 @@ ${formattedData}
 
   // src/plugins/moyai/storage.ts
   var useMoyaiSettings, moyaiSettings;
-  var init_storage23 = __esm({
+  var init_storage22 = __esm({
     "src/plugins/moyai/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -27618,9 +27043,9 @@ ${formattedData}
           paddingHorizontal: 12
         },
         spacing: 24,
-        children: /* @__PURE__ */ jsx(TableRowGroup9, {
+        children: /* @__PURE__ */ jsx(TableRowGroup8, {
           title: "Behavior",
-          children: /* @__PURE__ */ jsx(TableSwitchRow6, {
+          children: /* @__PURE__ */ jsx(TableSwitchRow5, {
             label: "Play on reactions",
             onValueChange: (value) => {
               settings4.updateSettings({
@@ -27633,8 +27058,8 @@ ${formattedData}
       })
     });
   }
-  var import_react_native59, TableSwitchRow6, TableRowGroup9, Stack7;
-  var init_settings22 = __esm({
+  var import_react_native59, TableSwitchRow5, TableRowGroup8, Stack7;
+  var init_settings21 = __esm({
     "src/plugins/moyai/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -27642,8 +27067,8 @@ ${formattedData}
       init_jsxRuntime();
       init_metro();
       import_react_native59 = __toESM(require_react_native());
-      init_storage23();
-      ({ TableSwitchRow: TableSwitchRow6, TableRowGroup: TableRowGroup9 } = findByProps("TableRow"));
+      init_storage22();
+      ({ TableSwitchRow: TableSwitchRow5, TableRowGroup: TableRowGroup8 } = findByProps("TableRow"));
       ({ Stack: Stack7 } = findByProps("Stack"));
     }
   });
@@ -27697,8 +27122,8 @@ ${formattedData}
       init_common();
       init_plugins3();
       init_Developers();
-      init_settings22();
-      init_storage23();
+      init_settings21();
+      init_storage22();
       ({ DCDSoundManager } = ReactNative.NativeModules);
       SelectedChannelStore3 = findByStoreName("SelectedChannelStore");
       THUD_URL = "https://raw.githubusercontent.com/Metastruct/garrysmod-chatsounds/master/sound/chatsounds/autoadd/memes/overused%20thud.ogg";
@@ -27738,7 +27163,7 @@ ${formattedData}
 
   // src/plugins/multiscrobbler/storage.ts
   var DEFAULT_SETTINGS3, useMultiScrobblerSettings, multiScrobblerSettings, currentSettings, pluginState, debugInfo;
-  var init_storage24 = __esm({
+  var init_storage23 = __esm({
     "src/plugins/multiscrobbler/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -27839,7 +27264,7 @@ ${formattedData}
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
-      init_storage24();
+      init_storage23();
       Constants = {
         DEFAULT_APP_NAME: "Music",
         DEFAULT_TIME_INTERVAL: 5,
@@ -27899,7 +27324,7 @@ ${formattedData}
   });
 
   // src/plugins/multiscrobbler/modules.ts
-  var SET_ACTIVITY, AssetManager, SelfPresenceStore2, UserStore16;
+  var SET_ACTIVITY, AssetManager, SelfPresenceStore2, UserStore15;
   var init_modules4 = __esm({
     "src/plugins/multiscrobbler/modules.ts"() {
       "use strict";
@@ -27909,7 +27334,7 @@ ${formattedData}
       ({ SET_ACTIVITY } = findByProps("SET_ACTIVITY"));
       AssetManager = findByProps("getAssetIds");
       SelfPresenceStore2 = findByStoreName("SelfPresenceStore");
-      UserStore16 = findByStoreName("UserStore");
+      UserStore15 = findByStoreName("UserStore");
     }
   });
 
@@ -27948,15 +27373,15 @@ ${formattedData}
     log("Successful update recorded at:", debugInfo.lastSuccessfulUpdate);
     __forceUpdate?.();
   }
-  var import_react29, __forceUpdate, log, logError;
+  var import_react28, __forceUpdate, log, logError;
   var init_debug3 = __esm({
     "src/plugins/multiscrobbler/utils/debug.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_logger();
-      import_react29 = __toESM(require_react());
-      init_storage24();
+      import_react28 = __toESM(require_react());
+      init_storage23();
       log = (...args) => logger.verbose("[Scrobbler Debug]", ...args);
       logError = (...args) => logger.error("[Scrobbler Debug] Error:", ...args);
     }
@@ -27975,7 +27400,7 @@ ${formattedData}
       init_define_property();
       init_logger();
       init_constants4();
-      init_storage24();
+      init_storage23();
       init_debug3();
       BaseService = /* @__PURE__ */ (function() {
         "use strict";
@@ -28111,7 +27536,7 @@ ${formattedData}
       init_inherits();
       init_logger();
       init_constants4();
-      init_storage24();
+      init_storage23();
       init_BaseService();
       LastFmService = /* @__PURE__ */ (function(BaseService2) {
         "use strict";
@@ -28259,7 +27684,7 @@ ${formattedData}
       init_inherits();
       init_logger();
       init_constants4();
-      init_storage24();
+      init_storage23();
       init_BaseService();
       LibreFmService = /* @__PURE__ */ (function(BaseService2) {
         "use strict";
@@ -28411,7 +27836,7 @@ ${formattedData}
       init_inherits();
       init_logger();
       init_constants4();
-      init_storage24();
+      init_storage23();
       init_BaseService();
       ListenBrainzService = /* @__PURE__ */ (function(BaseService2) {
         "use strict";
@@ -28595,7 +28020,7 @@ ${formattedData}
       init_create_class();
       init_define_property();
       init_logger();
-      init_storage24();
+      init_storage23();
       init_LastFmService();
       init_LibreFmService();
       init_ListenBrainzService();
@@ -28748,7 +28173,7 @@ ${formattedData}
       init_constants4();
       init_manager();
       init_modules4();
-      init_storage24();
+      init_storage23();
     }
   });
 
@@ -28797,7 +28222,7 @@ ${formattedData}
       init_constants4();
       init_modules4();
       init_ServiceFactory();
-      init_storage24();
+      init_storage23();
       init_activity();
       init_debug3();
       init_time();
@@ -29185,7 +28610,7 @@ ${formattedData}
   });
 
   // src/plugins/multiscrobbler/ui/pages/pages/components/TableComponents.tsx
-  var ScrollView30, TableRowGroup10, TableSwitchRow7, TableCheckboxRow2, TableRadioRow4, TableRadioGroup4, Stack8, TableRow5, TextInput4;
+  var ScrollView30, TableRowGroup9, TableSwitchRow6, TableCheckboxRow2, TableRadioRow4, TableRadioGroup4, Stack8, TableRow4, TextInput4;
   var init_TableComponents = __esm({
     "src/plugins/multiscrobbler/ui/pages/pages/components/TableComponents.tsx"() {
       "use strict";
@@ -29193,7 +28618,7 @@ ${formattedData}
       init_promiseAllSettled();
       init_metro();
       ({ ScrollView: ScrollView30 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup10, TableSwitchRow: TableSwitchRow7, TableCheckboxRow: TableCheckboxRow2, TableRadioRow: TableRadioRow4, TableRadioGroup: TableRadioGroup4, Stack: Stack8, TableRow: TableRow5 } = findByProps("TableSwitchRow", "TableCheckboxRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ TableRowGroup: TableRowGroup9, TableSwitchRow: TableSwitchRow6, TableCheckboxRow: TableCheckboxRow2, TableRadioRow: TableRadioRow4, TableRadioGroup: TableRadioGroup4, Stack: Stack8, TableRow: TableRow4 } = findByProps("TableSwitchRow", "TableCheckboxRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
       ({ TextInput: TextInput4 } = findByProps("TextInput"));
     }
   });
@@ -29211,7 +28636,7 @@ ${formattedData}
       children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Activity Display",
             children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
@@ -29237,18 +28662,18 @@ ${formattedData}
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "About Display Settings",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "App Name",
                 subLabel: "The name shown in Discord for your activity"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Update Interval",
                 subLabel: "How often the plugin checks for new tracks (in seconds)"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Minimum Interval",
                 subLabel: `The plugin will never check more frequently than ${constants_default2.MIN_UPDATE_INTERVAL} seconds`
               })
@@ -29265,7 +28690,7 @@ ${formattedData}
       init_promiseAllSettled();
       init_jsxRuntime();
       init_constants4();
-      init_storage24();
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -29321,7 +28746,7 @@ ${formattedData}
       children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Add App to Ignore",
             children: /* @__PURE__ */ jsx(Stack8, {
               spacing: 4,
@@ -29335,17 +28760,17 @@ ${formattedData}
               })
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup10, {
-            children: /* @__PURE__ */ jsx(TableRow5, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
+            children: /* @__PURE__ */ jsx(TableRow4, {
               label: "Add to Ignore List",
               subLabel: "Add the current app name to your ignore list",
-              trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+              trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
               onPress: addAppToIgnoreList
             })
           }),
-          settings4.ignoreList.length > 0 && /* @__PURE__ */ jsx(TableRowGroup10, {
+          settings4.ignoreList.length > 0 && /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Ignored Apps",
-            children: settings4.ignoreList.map((appName, index) => /* @__PURE__ */ jsx(TableRow5, {
+            children: settings4.ignoreList.map((appName, index) => /* @__PURE__ */ jsx(TableRow4, {
               label: appName,
               trailing: /* @__PURE__ */ jsx(ReactNative.TouchableOpacity, {
                 onPress: () => removeAppFromIgnoreList(appName),
@@ -29367,18 +28792,18 @@ ${formattedData}
               })
             }, index))
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "About Ignore List",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "How it Works",
                 subLabel: "When any app in your ignore list is active, your music status will be hidden"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Detection",
                 subLabel: "Apps are detected by their Discord activity name"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Examples",
                 subLabel: "Spotify, YouTube Music, Kizzy, Metrolist, echo"
               })
@@ -29398,7 +28823,7 @@ ${formattedData}
       init_toasts();
       init_common();
       init_modules4();
-      init_storage24();
+      init_storage23();
       init_activity();
       init_Settings3();
       init_TableComponents();
@@ -29408,7 +28833,7 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/LastFmSettingsPage.tsx
   function LastFmSettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    var testConnection2 = () => {
+    var testConnection = () => {
       showToast("Testing Last.fm connection...", findAssetId2("ClockIcon"));
       serviceFactory2.testService("lastfm").then((isValid) => {
         if (isValid) {
@@ -29430,7 +28855,7 @@ ${formattedData}
       children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Credentials",
             children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
@@ -29451,19 +28876,19 @@ ${formattedData}
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Actions",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Test Connection",
                 subLabel: "Verify your Last.fm credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
-                onPress: testConnection2
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
+                onPress: testConnection
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Get API Key",
                 subLabel: "Create a Last.fm API key at last.fm/api/account/create",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => {
                   import_react_native60.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
                     showToast("Failed to open web browser. Please visit: https://www.last.fm/api/account/create", findAssetId2("XIcon"));
@@ -29486,7 +28911,7 @@ ${formattedData}
       init_assets();
       init_toasts();
       import_react_native60 = __toESM(require_react_native());
-      init_storage24();
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -29495,7 +28920,7 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/LibreFmSettingsPage.tsx
   function LibreFmSettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    var testConnection2 = () => {
+    var testConnection = () => {
       showToast("Testing Libre.fm connection...", findAssetId2("ClockIcon"));
       serviceFactory2.testService("librefm").then((isValid) => {
         if (isValid) {
@@ -29517,7 +28942,7 @@ ${formattedData}
       children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Credentials",
             children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
@@ -29538,19 +28963,19 @@ ${formattedData}
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Actions",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Test Connection",
                 subLabel: "Verify your Libre.fm credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
-                onPress: testConnection2
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
+                onPress: testConnection
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Get API Key",
                 subLabel: "Create a Last.fm API key (compatible with Libre.fm)",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => {
                   import_react_native61.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
                     showToast("Failed to open web browser. Please visit: https://www.last.fm/api/account/create", findAssetId2("XIcon"));
@@ -29573,7 +28998,7 @@ ${formattedData}
       init_assets();
       init_toasts();
       import_react_native61 = __toESM(require_react_native());
-      init_storage24();
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -29582,7 +29007,7 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/ListenBrainzSettingsPage.tsx
   function ListenBrainzSettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    var testConnection2 = () => {
+    var testConnection = () => {
       showToast("Testing ListenBrainz connection...", findAssetId2("ClockIcon"));
       serviceFactory2.testService("listenbrainz").then((isValid) => {
         if (isValid) {
@@ -29604,7 +29029,7 @@ ${formattedData}
       children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Credentials",
             children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
@@ -29625,19 +29050,19 @@ ${formattedData}
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Actions",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Test Connection",
                 subLabel: "Verify your ListenBrainz credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
-                onPress: testConnection2
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
+                onPress: testConnection
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Get User Token",
                 subLabel: "Get your ListenBrainz user token at listenbrainz.org/settings/",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => {
                   import_react_native62.Linking.openURL("https://listenbrainz.org/settings/").catch(() => {
                     showToast("Failed to open web browser. Please visit: https://listenbrainz.org/settings/", findAssetId2("XIcon"));
@@ -29660,7 +29085,7 @@ ${formattedData}
       init_assets();
       init_toasts();
       import_react_native62 = __toESM(require_react_native());
-      init_storage24();
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -29679,9 +29104,9 @@ ${formattedData}
       children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Logging Options",
-            children: /* @__PURE__ */ jsx(TableSwitchRow7, {
+            children: /* @__PURE__ */ jsx(TableSwitchRow6, {
               label: "Verbose Logging",
               subLabel: "Enable detailed console logging for debugging",
               value: settings4.verboseLogging,
@@ -29690,31 +29115,31 @@ ${formattedData}
               }
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Debug Information",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Console Logging",
                 subLabel: "Logs are written to the browser/app console when verbose is enabled"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Error Tracking",
                 subLabel: "Connection errors and API failures are automatically logged"
               })
             ]
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Log Information",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "API Calls",
                 subLabel: "All API requests are logged when verbose is enabled"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Track Updates",
                 subLabel: "Song changes and RPC updates are logged"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Error Details",
                 subLabel: "Connection errors and retries are logged"
               })
@@ -29730,7 +29155,7 @@ ${formattedData}
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
-      init_storage24();
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -30010,7 +29435,7 @@ ${formattedData}
       init_jsxRuntime();
       init_logger();
       init_common();
-      init_storage24();
+      init_storage23();
       styles3 = ReactNative.StyleSheet.create({
         container: {
           backgroundColor: "#1e1f22",
@@ -30178,7 +29603,7 @@ ${formattedData}
         /* @__PURE__ */ jsx(RPCPreview, {}),
         /* @__PURE__ */ jsx(Stack8, {
           spacing: 8,
-          children: /* @__PURE__ */ jsxs(TableRowGroup10, {
+          children: /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "RPC Display Options",
             children: [
               /* @__PURE__ */ jsx(TableCheckboxRow2, {
@@ -30193,7 +29618,7 @@ ${formattedData}
                 checked: settings4.showLargeText,
                 onPress: () => setStorage("showLargeText", !settings4.showLargeText)
               }),
-              !settings4.listeningTo && /* @__PURE__ */ jsx(TableRow5, {
+              !settings4.listeningTo && /* @__PURE__ */ jsx(TableRow4, {
                 label: "Timestamp Unavailable",
                 subLabel: "Enable 'Show as Listening' to use timestamp feature",
                 disabled: true,
@@ -30230,7 +29655,7 @@ ${formattedData}
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
-      init_storage24();
+      init_storage23();
       init_Settings3();
       init_RPCPreview();
       init_TableComponents();
@@ -30283,31 +29708,31 @@ ${formattedData}
               value: service
             }, service))
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Service Configuration",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Last.fm Settings",
                 subLabel: "Configure Last.fm credentials and options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Last.fm Settings",
                   render: LastFmSettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Libre.fm Settings",
                 subLabel: "Configure Libre.fm credentials and options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Libre.fm Settings",
                   render: LibreFmSettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "ListenBrainz Settings",
                 subLabel: "Configure ListenBrainz credentials and options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "ListenBrainz Settings",
                   render: ListenBrainzSettingsPage
@@ -30315,40 +29740,40 @@ ${formattedData}
               })
             ]
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Plugin Configuration",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Display Settings",
                 subLabel: "Customize app name and update interval",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Display Settings",
                   render: DisplaySettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "RPC Customization",
                 subLabel: "Customize Discord rich presence display options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "RPC Customization",
                   render: RPCCustomizationSettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Ignore List",
                 subLabel: "Configure apps that should hide your status",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Ignore List Settings",
                   render: IgnoreListSettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Logging Settings",
                 subLabel: "Configure logging and debugging options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Logging Settings",
                   render: LoggingSettingsPage
@@ -30370,7 +29795,7 @@ ${formattedData}
       init_create_class();
       init_jsxRuntime();
       init_common();
-      init_storage24();
+      init_storage23();
       init_TableComponents();
       init_DisplaySettingsPage();
       init_IgnoreListSettingsPage();
@@ -30497,28 +29922,28 @@ ${formattedData}
         logger.error("[Multi-Scrobbler] Failed to determine current service name:", e);
       }
       var service = currentSettings.service;
-      var hasCredentials2 = false;
+      var hasCredentials = false;
       switch (service) {
         case "lastfm":
-          hasCredentials2 = !!(currentSettings.username && currentSettings.apiKey);
+          hasCredentials = !!(currentSettings.username && currentSettings.apiKey);
           break;
         case "librefm":
-          hasCredentials2 = !!(currentSettings.librefmUsername && currentSettings.librefmApiKey);
+          hasCredentials = !!(currentSettings.librefmUsername && currentSettings.librefmApiKey);
           break;
         case "listenbrainz":
-          hasCredentials2 = !!currentSettings.listenbrainzUsername;
+          hasCredentials = !!currentSettings.listenbrainzUsername;
           break;
       }
-      if (!hasCredentials2) {
+      if (!hasCredentials) {
         logger.error(`[Multi-Scrobbler] Missing credentials for ${serviceName}. Please configure in settings.`);
         return;
       }
       logger.verbose(`[Multi-Scrobbler] Starting with ${serviceName}...`);
-      if (UserStore16.getCurrentUser()) {
+      if (UserStore15.getCurrentUser()) {
         tryInitialize();
       } else {
         var waitForUser = () => {
-          if (UserStore16.getCurrentUser()) {
+          if (UserStore15.getCurrentUser()) {
             tryInitialize();
             FluxDispatcher.unsubscribe("CONNECTION_OPEN", waitForUser);
           }
@@ -30542,7 +29967,7 @@ ${formattedData}
       init_manager();
       init_modules4();
       init_ServiceFactory();
-      init_storage24();
+      init_storage23();
       init_Settings3();
       connectionAttempts = 0;
       MAX_CONNECTION_ATTEMPTS = 3;
@@ -30691,17 +30116,17 @@ ${formattedData}
   });
 
   // src/plugins/platformindicators/PresenceUpdatedContainer.tsx
-  var import_react30, PresenceUpdatedContainer, PresenceUpdatedContainer_default;
+  var import_react29, PresenceUpdatedContainer, PresenceUpdatedContainer_default;
   var init_PresenceUpdatedContainer = __esm({
     "src/plugins/platformindicators/PresenceUpdatedContainer.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_common();
-      import_react30 = __toESM(require_react());
+      import_react29 = __toESM(require_react());
       PresenceUpdatedContainer = ({ children }) => {
-        var [counter, setCounter] = (0, import_react30.useState)(0);
-        (0, import_react30.useEffect)(() => {
+        var [counter, setCounter] = (0, import_react29.useState)(0);
+        (0, import_react29.useEffect)(() => {
           var presenceUpdate = () => {
             setCounter((prevCounter) => prevCounter + 1);
           };
@@ -30710,8 +30135,8 @@ ${formattedData}
             FluxDispatcher.unsubscribe("PRESENCE_UPDATES", presenceUpdate);
           };
         }, []);
-        return import_react30.default.Children.map(children, (child, index) => {
-          return /* @__PURE__ */ import_react30.default.cloneElement(child, {
+        return import_react29.default.Children.map(children, (child, index) => {
+          return /* @__PURE__ */ import_react29.default.cloneElement(child, {
             key: `${index}-${counter}`
           });
         });
@@ -30722,7 +30147,7 @@ ${formattedData}
 
   // src/plugins/platformindicators/storage.ts
   var usePlatformIndicatorSettings, platformIndicatorSettings;
-  var init_storage25 = __esm({
+  var init_storage24 = __esm({
     "src/plugins/platformindicators/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -30774,38 +30199,38 @@ ${formattedData}
         paddingHorizontal: 12
       },
       spacing: 24,
-      children: /* @__PURE__ */ jsxs(TableRowGroup11, {
+      children: /* @__PURE__ */ jsxs(TableRowGroup10, {
         title: "Platform Indicator",
         children: [
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Show icons on the dm top bar",
             value: settings4.dmTopBar ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
               dmTopBar: v2
             })
           }),
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Show icons on the users and DMs list",
             value: settings4.userList ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
               userList: v2
             })
           }),
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Show icons on user profiles",
             value: settings4.profileUsername ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
               profileUsername: v2
             })
           }),
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Hide mobile status from the normal indicator",
             value: settings4.removeDefaultMobile ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
               removeDefaultMobile: v2
             })
           }),
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Theme compatibility mode",
             value: settings4.useThemeColors ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
@@ -30816,16 +30241,16 @@ ${formattedData}
       })
     });
   }
-  var TableSwitchRow8, TableRowGroup11, Stack9;
-  var init_settings23 = __esm({
+  var TableSwitchRow7, TableRowGroup10, Stack9;
+  var init_settings22 = __esm({
     "src/plugins/platformindicators/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_metro();
-      init_storage25();
-      ({ TableSwitchRow: TableSwitchRow8, TableRowGroup: TableRowGroup11 } = findByProps("TableSwitchRow"));
+      init_storage24();
+      ({ TableSwitchRow: TableSwitchRow7, TableRowGroup: TableRowGroup10 } = findByProps("TableSwitchRow"));
       ({ Stack: Stack9 } = findByProps("Stack"));
     }
   });
@@ -30920,7 +30345,7 @@ ${formattedData}
   function getUserStatuses(userId) {
     var statuses;
     if (!currentUserId) {
-      currentUserId = UserStore17.getCurrentUser()?.id;
+      currentUserId = UserStore16.getCurrentUser()?.id;
     }
     if (userId === currentUserId) {
       var sessions = SessionsStore.getSessions();
@@ -30946,7 +30371,7 @@ ${formattedData}
       }))
     });
   }
-  var PresenceStore, SessionsStore, UserStore17, statusCache, statusCacheHits, statusCacheTimeout, currentUserId;
+  var PresenceStore, SessionsStore, UserStore16, statusCache, statusCacheHits, statusCacheTimeout, currentUserId;
   var init_StatusIcons = __esm({
     "src/plugins/platformindicators/StatusIcons.tsx"() {
       "use strict";
@@ -30956,10 +30381,10 @@ ${formattedData}
       init_metro();
       init_colors3();
       init_StatusIcon();
-      init_storage25();
+      init_storage24();
       PresenceStore = findByStoreName("PresenceStore");
       SessionsStore = findByStoreName("SessionsStore");
-      UserStore17 = findByStoreName("UserStore");
+      UserStore16 = findByStoreName("UserStore");
       statusCacheHits = 0;
     }
   });
@@ -30986,9 +30411,9 @@ ${formattedData}
       init_plugins3();
       init_Developers();
       init_PresenceUpdatedContainer();
-      init_settings23();
+      init_settings22();
       init_StatusIcons();
-      init_storage25();
+      init_storage24();
       ({ View: View37, Text: Text7 } = ReactNative);
       unpatches5 = [];
       platformindicators_default = definePlugin({
@@ -31185,7 +30610,7 @@ ${formattedData}
 
   // src/plugins/quickdelete/storage.ts
   var useQuickDeleteSettings, quickDeleteSettings;
-  var init_storage26 = __esm({
+  var init_storage25 = __esm({
     "src/plugins/quickdelete/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -31269,7 +30694,7 @@ ${formattedData}
       init_assets();
       init_components();
       import_react_native63 = __toESM(require_react_native());
-      init_storage26();
+      init_storage25();
       settings2 = [
         {
           label: "Messages",
@@ -31303,7 +30728,7 @@ ${formattedData}
       init_plugins3();
       init_Developers();
       init_Settings4();
-      init_storage26();
+      init_storage25();
       ({ intl, t: intlMap } = findByProps("intl"));
       KEYS = {
         message: {
@@ -31373,7 +30798,7 @@ ${formattedData}
 
   // src/plugins/reviewdb/storage.ts
   var useReviewDBSettings, reviewdbSettings;
-  var init_storage27 = __esm({
+  var init_storage26 = __esm({
     "src/plugins/reviewdb/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -31473,13 +30898,13 @@ ${formattedData}
 
   // src/plugins/reviewdb/lib/api.ts
   var getReviews, getAdmins, addReview, deleteReview, reportReview;
-  var init_api6 = __esm({
+  var init_api5 = __esm({
     "src/plugins/reviewdb/lib/api.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_async_to_generator();
-      init_storage27();
+      init_storage26();
       init_constants5();
       init_utils5();
       getReviews = (userId) => _async_to_generator(function* () {
@@ -31689,10 +31114,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_toasts();
       init_metro();
       init_common();
-      init_api6();
+      init_api5();
       init_redesign2();
       init_utils5();
-      init_storage27();
+      init_storage26();
       useStyles13 = createStyles({
         container: {
           flex: 1,
@@ -31741,8 +31166,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_toasts();
       init_metro();
       init_common();
-      init_storage27();
-      init_api6();
+      init_storage26();
+      init_api5();
       init_utils5();
       ({ hideActionSheet: hideActionSheet8 } = findByProps("openLazy", "hideActionSheet"));
       ({ showSimpleActionSheet: showSimpleActionSheet5 } = findByProps("showSimpleActionSheet"));
@@ -31871,7 +31296,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/reviewdb/components/ReviewRow.tsx
-  var useStyles15, FormRow2, FormSubLabel, TableRowGroup12, ReviewRow_default;
+  var useStyles15, FormRow2, FormSubLabel, TableRowGroup11, ReviewRow_default;
   var init_ReviewRow = __esm({
     "src/plugins/reviewdb/components/ReviewRow.tsx"() {
       "use strict";
@@ -31897,10 +31322,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         }
       });
       ({ FormRow: FormRow2, FormSubLabel } = Forms);
-      ({ TableRowGroup: TableRowGroup12 } = findByProps("TableRow"));
+      ({ TableRowGroup: TableRowGroup11 } = findByProps("TableRow"));
       ReviewRow_default = (({ review, style }) => {
         var styles5 = useStyles15();
-        return /* @__PURE__ */ jsx(TableRowGroup12, {
+        return /* @__PURE__ */ jsx(TableRowGroup11, {
           style: [
             style
           ],
@@ -32004,7 +31429,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_styles();
       init_metro();
       init_common();
-      init_api6();
+      init_api5();
       init_ReviewInput();
       init_ReviewRow();
       ({ getCurrentUser: getCurrentUser5 } = findByStoreName("UserStore"));
@@ -32097,8 +31522,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   // src/plugins/reviewdb/components/ReviewCard.tsx
   function ReviewCard({ userId }) {
     return /* @__PURE__ */ jsx(ErrorBoundary, {
-      children: /* @__PURE__ */ jsx(TableRowGroup13, {
-        children: /* @__PURE__ */ jsx(TableRow6, {
+      children: /* @__PURE__ */ jsx(TableRowGroup12, {
+        children: /* @__PURE__ */ jsx(TableRow5, {
           label: "Reviews",
           onPress: () => {
             ActionSheet2.open(ReviewActionSheet, {
@@ -32109,7 +31534,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var TableRow6, TableRowGroup13;
+  var TableRow5, TableRowGroup12;
   var init_ReviewCard = __esm({
     "src/plugins/reviewdb/components/ReviewCard.tsx"() {
       "use strict";
@@ -32120,7 +31545,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_metro();
       init_ActionSheet2();
       init_ReviewActionSheet();
-      ({ TableRow: TableRow6, TableRowGroup: TableRowGroup13 } = findByProps("TableRow"));
+      ({ TableRow: TableRow5, TableRowGroup: TableRowGroup12 } = findByProps("TableRow"));
     }
   });
 
@@ -32183,7 +31608,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_toasts();
       init_logger();
       init_metro();
-      init_storage27();
+      init_storage26();
       init_constants5();
       init_utils5();
       ({ pushModal: pushModal3, popModal: popModal3 } = findByProps("pushModal"));
@@ -32236,7 +31661,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/reviewdb/Settings.tsx
-  var TableRow7, TableSwitchRow9, TableRowGroup14, Stack10, Settings_default;
+  var TableRow6, TableSwitchRow8, TableRowGroup13, Stack10, Settings_default;
   var init_Settings5 = __esm({
     "src/plugins/reviewdb/Settings.tsx"() {
       "use strict";
@@ -32246,8 +31671,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_assets();
       init_metro();
       init_showAuthModal2();
-      init_storage27();
-      ({ TableRow: TableRow7, TableSwitchRow: TableSwitchRow9, TableRowGroup: TableRowGroup14 } = findByProps("TableRow"));
+      init_storage26();
+      ({ TableRow: TableRow6, TableSwitchRow: TableSwitchRow8, TableRowGroup: TableRowGroup13 } = findByProps("TableRow"));
       ({ Stack: Stack10 } = findByProps("Stack"));
       Settings_default = (() => {
         var reviewdbSettings2 = useReviewDBSettings();
@@ -32259,23 +31684,23 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           },
           spacing: 24,
           children: [
-            /* @__PURE__ */ jsxs(TableRowGroup14, {
+            /* @__PURE__ */ jsxs(TableRowGroup13, {
               title: "Authentication",
               children: [
-                /* @__PURE__ */ jsx(TableRow7, {
+                /* @__PURE__ */ jsx(TableRow6, {
                   label: "Authenticate with ReviewDB",
-                  icon: /* @__PURE__ */ jsx(TableRow7.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow6.Icon, {
                     source: findAssetId2("copy")
                   }),
                   arrow: true,
                   disabled: isAuthenticated,
                   onPress: showAuthModal_default2
                 }),
-                /* @__PURE__ */ jsx(TableRow7, {
+                /* @__PURE__ */ jsx(TableRow6, {
                   variant: isAuthenticated ? "danger" : void 0,
                   label: "Log out of ReviewDB",
                   subLabel: "Note that this does not remove ReviewDB from your Authorized Apps page in Discord.",
-                  icon: /* @__PURE__ */ jsx(TableRow7.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow6.Icon, {
                     variant: isAuthenticated ? "danger" : void 0,
                     source: findAssetId2("ic_leave_24px")
                   }),
@@ -32286,12 +31711,12 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                 })
               ]
             }),
-            /* @__PURE__ */ jsx(TableRowGroup14, {
+            /* @__PURE__ */ jsx(TableRowGroup13, {
               title: "Settings",
-              children: /* @__PURE__ */ jsx(TableSwitchRow9, {
+              children: /* @__PURE__ */ jsx(TableSwitchRow8, {
                 label: "Use profile-themed send button",
                 subLabel: "Controls whether the review send button should attempt to match the user's profile colors.",
-                icon: /* @__PURE__ */ jsx(TableRow7.Icon, {
+                icon: /* @__PURE__ */ jsx(TableRow6.Icon, {
                   source: findAssetId2("ic_paint_brush")
                 }),
                 value: reviewdbSettings2.useThemedSend,
@@ -32322,13 +31747,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_storage();
       init_plugins3();
       init_Developers();
-      init_api6();
+      init_api5();
       init_patchContextMenu();
       init_patchProfile();
       init_patchServer();
       init_patchSimplifiedProfile();
       init_Settings5();
-      init_storage27();
+      init_storage26();
       patches20 = [];
       admins = [];
       reviewdb_default = definePlugin({
@@ -32479,1950 +31904,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     }
   });
 
-  // src/plugins/songspotlight/storage.ts
-  var DEFAULT_SETTINGS4, useSongSpotlightSettings, songSpotlightSettings;
-  var init_storage28 = __esm({
-    "src/plugins/songspotlight/storage.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_storage();
-      init_esm();
-      init_middleware();
-      DEFAULT_SETTINGS4 = {
-        username: "",
-        apiKey: "",
-        trackCount: 5,
-        period: "7day",
-        displayMode: "top",
-        displaySource: "lastfm",
-        showAlbumArt: true,
-        showPlayCount: true,
-        showAlbumName: true,
-        colorfulCards: true,
-        showOnOwnProfile: true,
-        showOnOtherProfiles: true,
-        showLastFmHeader: true,
-        headerSize: "small",
-        sectionTitle: "",
-        showRankNumbers: true,
-        cardOpacity: 40,
-        shareUsername: false,
-        registryUrl: "https://songspotlight-registry.songspotlight.workers.dev",
-        favoritesRegistryUrl: "https://songspotlight-favorites.songspotlight.workers.dev",
-        displayPosition: "aboveBio",
-        favoriteSongs: [],
-        albumGridView: false
-      };
-      useSongSpotlightSettings = create2()(persist((set) => ({
-        ...DEFAULT_SETTINGS4,
-        _hasHydrated: false,
-        updateSettings: (newSettings) => set((state2) => ({
-          ...state2,
-          ...newSettings
-        })),
-        setHasHydrated: (state2) => set({
-          _hasHydrated: state2
-        })
-      }), {
-        name: "songspotlight-settings",
-        storage: createJSONStorage(() => createFileStorage("plugins/songspotlight.json")),
-        onRehydrateStorage: () => (state2) => {
-          if (state2 && typeof state2.albumGridView === "undefined") {
-            Object.assign(state2, DEFAULT_SETTINGS4);
-          }
-          state2?.setHasHydrated(true);
-        }
-      }));
-      songSpotlightSettings = new Proxy({}, {
-        get(_target, prop) {
-          return useSongSpotlightSettings.getState()[prop];
-        },
-        set(_target, prop, value) {
-          useSongSpotlightSettings.getState().updateSettings({
-            [prop]: value
-          });
-          return true;
-        }
-      });
-    }
-  });
-
-  // src/plugins/songspotlight/api.ts
-  function getCredentials() {
-    var { username, apiKey } = songSpotlightSettings;
-    if (username && apiKey) {
-      return {
-        username,
-        apiKey
-      };
-    }
-    return null;
-  }
-  function hasCredentials() {
-    return getCredentials() !== null;
-  }
-  function getUsername() {
-    return getCredentials()?.username ?? null;
-  }
-  function parseLastFmFromBio(bio) {
-    if (!bio) return null;
-    var match = bio.match(/(?:(?:www\.)?last\.?fm\.com?\/user\/|last\.fm\/user\/)([\w-]+)/i);
-    return match?.[1] ?? null;
-  }
-  function fetchRegistryUsername(userId) {
-    return _async_to_generator(function* () {
-      var cached = registryCache.get(userId);
-      if (cached && Date.now() - cached.fetchedAt < REGISTRY_CACHE_TTL) {
-        return cached.username;
-      }
-      var registryUrl = songSpotlightSettings.registryUrl;
-      if (!registryUrl) return null;
-      try {
-        var res = yield fetch(`${registryUrl}/lookup/${userId}`);
-        if (!res.ok) {
-          registryCache.set(userId, {
-            username: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var data4 = yield res.json();
-        var username = data4?.lastfm || null;
-        registryCache.set(userId, {
-          username,
-          fetchedAt: Date.now()
-        });
-        return username;
-      } catch (unused) {
-        registryCache.set(userId, {
-          username: null,
-          fetchedAt: Date.now()
-        });
-        return null;
-      }
-    })();
-  }
-  function publishToRegistry2(discordId) {
-    return _async_to_generator(function* () {
-      var registryUrl = songSpotlightSettings.registryUrl;
-      var username = songSpotlightSettings.username;
-      if (!registryUrl || !username || !discordId) return false;
-      try {
-        var res = yield fetch(`${registryUrl}/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId,
-            lastfm: username
-          })
-        });
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function unpublishFromRegistry2(discordId) {
-    return _async_to_generator(function* () {
-      var registryUrl = songSpotlightSettings.registryUrl;
-      if (!registryUrl || !discordId) return false;
-      try {
-        var res = yield fetch(`${registryUrl}/register`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId
-          })
-        });
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function publishFavoritesToRegistry(discordId, favorites) {
-    return _async_to_generator(function* () {
-      var favoritesRegistryUrl = songSpotlightSettings.favoritesRegistryUrl;
-      if (!favoritesRegistryUrl || !discordId) return false;
-      try {
-        var res = yield fetch(`${favoritesRegistryUrl}/favorites/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId,
-            favorites
-          })
-        });
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function fetchFavoritesFromRegistry(userId) {
-    return _async_to_generator(function* () {
-      var favoritesRegistryUrl = songSpotlightSettings.favoritesRegistryUrl;
-      if (!favoritesRegistryUrl || !userId) return null;
-      try {
-        var res = yield fetch(`${favoritesRegistryUrl}/favorites/lookup/${userId}`);
-        if (!res.ok) return null;
-        var data4 = yield res.json();
-        return data4?.favorites ?? null;
-      } catch (unused) {
-        return null;
-      }
-    })();
-  }
-  function resolveLastFmUsername(userId, isOwnProfile, bio) {
-    return _async_to_generator(function* () {
-      if (isOwnProfile) return getUsername();
-      var registryUsername = yield fetchRegistryUsername(userId);
-      if (registryUsername) return registryUsername;
-      var bioUsername = parseLastFmFromBio(bio);
-      if (bioUsername) return bioUsername;
-      return null;
-    })();
-  }
-  function testConnection() {
-    return _async_to_generator(function* () {
-      var creds = getCredentials();
-      if (!creds) return false;
-      try {
-        var params = new URLSearchParams({
-          method: "user.getinfo",
-          user: creds.username,
-          api_key: creds.apiKey,
-          format: "json"
-        });
-        var res = yield fetch(`${LASTFM_BASE_URL}?${params}`);
-        var data4 = yield res.json();
-        return !data4.error;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function fetchLastFmUserInfo(lastFmUsername) {
-    return _async_to_generator(function* () {
-      var cached = userInfoCache.get(lastFmUsername);
-      if (cached && Date.now() - cached.fetchedAt < USER_INFO_CACHE_TTL) {
-        return cached.info;
-      }
-      var creds = getCredentials();
-      if (!creds) return null;
-      try {
-        var params = new URLSearchParams({
-          method: "user.getinfo",
-          user: lastFmUsername,
-          api_key: creds.apiKey,
-          format: "json"
-        });
-        var res = yield fetch(`${LASTFM_BASE_URL}?${params}`);
-        var data4 = yield res.json();
-        if (data4.error || !data4.user) {
-          userInfoCache.set(lastFmUsername, {
-            info: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var images = data4.user.image;
-        var avatar = null;
-        if (Array.isArray(images)) {
-          var _loop2 = function(size2) {
-            var img = images.find((i) => i.size === size2);
-            if (img?.["#text"]) {
-              avatar = img["#text"];
-              return "break";
-            }
-          };
-          for (var size of [
-            "extralarge",
-            "large",
-            "medium",
-            "small"
-          ]) {
-            var _ret = _loop2(size);
-            if (_ret === "break") break;
-          }
-        }
-        var info = {
-          name: data4.user.name || lastFmUsername,
-          url: data4.user.url || `https://www.last.fm/user/${lastFmUsername}`,
-          avatar
-        };
-        userInfoCache.set(lastFmUsername, {
-          info,
-          fetchedAt: Date.now()
-        });
-        return info;
-      } catch (unused) {
-        userInfoCache.set(lastFmUsername, {
-          info: null,
-          fetchedAt: Date.now()
-        });
-        return null;
-      }
-    })();
-  }
-  function fetchITunesInfo(artist, track) {
-    return _async_to_generator(function* () {
-      var _loop2 = function* (query2) {
-        try {
-          var params = new URLSearchParams({
-            term: query2,
-            entity: "song",
-            limit: "10"
-          });
-          var res = yield fetch(`https://itunes.apple.com/search?${params}`);
-          var data4 = yield res.json();
-          var results = data4?.results;
-          if (!results?.length) return "continue";
-          var artistLower = artist.toLowerCase();
-          var trackLower = track.toLowerCase();
-          var match = results.find((r) => r.artistName?.toLowerCase().includes(artistLower) && r.trackName?.toLowerCase().includes(trackLower)) || // Partial: artist matches
-          results.find((r) => r.artistName?.toLowerCase().includes(artistLower)) || // Partial: track name matches
-          results.find((r) => r.trackName?.toLowerCase().includes(trackLower)) || results[0];
-          if (match) {
-            return {
-              v: {
-                art: match.artworkUrl100?.replace("100x100", "600x600") ?? null,
-                album: match.collectionName || ""
-              }
-            };
-          }
-        } catch (unused) {
-          return "continue";
-        }
-      };
-      var attempts = [
-        `${track} ${artist}`,
-        `${artist} ${track}`,
-        track.length <= 4 ? `${artist} - ${track}` : null
-      ].filter(Boolean);
-      for (var query of attempts) {
-        var _ret = yield* _loop2(query);
-        if (_type_of(_ret) === "object") return _ret.v;
-      }
-      return {
-        art: null,
-        album: ""
-      };
-    })();
-  }
-  function fetchTrackInfo(artist, track) {
-    return _async_to_generator(function* () {
-      return fetchITunesInfo(artist, track);
-    })();
-  }
-  function clearTrackCache() {
-    trackCache.clear();
-  }
-  function fetchTopTracks(username, period, limit) {
-    return _async_to_generator(function* () {
-      var creds = getCredentials();
-      if (!creds) {
-        throw new Error("No Last.fm credentials configured. Add your username and API key in Song Spotlight settings.");
-      }
-      var resolvedUsername = username || creds.username;
-      var resolvedPeriod = period || songSpotlightSettings.period;
-      var resolvedLimit = limit || songSpotlightSettings.trackCount;
-      var cacheKey = `${resolvedUsername}:${resolvedPeriod}:${resolvedLimit}`;
-      var cached = trackCache.get(cacheKey);
-      if (cached && Date.now() - cached.fetchedAt < CACHE_TTL2) {
-        return cached.tracks;
-      }
-      var params = new URLSearchParams({
-        method: "user.getTopTracks",
-        user: resolvedUsername,
-        api_key: creds.apiKey,
-        period: resolvedPeriod,
-        limit: String(resolvedLimit),
-        format: "json"
-      });
-      var url2 = `${LASTFM_BASE_URL}?${params}`;
-      try {
-        var response = yield fetch(url2);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        var data4 = yield response.json();
-        if (data4.error) {
-          throw new Error(`Last.fm API Error ${data4.error}: ${data4.message}`);
-        }
-        if (!data4.toptracks?.track?.length) {
-          return [];
-        }
-        var rawTracks = data4.toptracks.track;
-        var tracks = rawTracks.map((track) => ({
-          name: track.name,
-          artist: track.artist.name,
-          album: "",
-          playCount: parseInt(track.playcount) || 0,
-          url: track.url,
-          albumArt: null,
-          rank: parseInt(track["@attr"]?.rank) || 0
-        }));
-        yield allSettled(tracks.map((t) => _async_to_generator(function* () {
-          var info = yield fetchITunesInfo(t.artist, t.name);
-          t.albumArt = info.art;
-          if (!t.album) t.album = info.album;
-        })()));
-        trackCache.set(cacheKey, {
-          tracks,
-          fetchedAt: Date.now()
-        });
-        return tracks;
-      } catch (error) {
-        logger.error("[SongSpotlight] Failed to fetch top tracks:", error);
-        throw error;
-      }
-    })();
-  }
-  function fetchRecentTracks(username, limit = 5) {
-    return _async_to_generator(function* () {
-      var creds = getCredentials();
-      if (!creds) {
-        throw new Error("No Last.fm credentials available.");
-      }
-      var resolvedUsername = username || creds.username;
-      var cacheKey = `recent:${resolvedUsername}:${limit}`;
-      var cached = trackCache.get(cacheKey);
-      if (cached && Date.now() - cached.fetchedAt < CACHE_TTL2) {
-        return cached.tracks;
-      }
-      var params = new URLSearchParams({
-        method: "user.getRecentTracks",
-        user: resolvedUsername,
-        api_key: creds.apiKey,
-        limit: String(limit),
-        format: "json"
-      });
-      var url2 = `${LASTFM_BASE_URL}?${params}`;
-      try {
-        var response = yield fetch(url2);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        var data4 = yield response.json();
-        if (data4.error) {
-          throw new Error(`Last.fm API Error ${data4.error}: ${data4.message}`);
-        }
-        if (!data4.recenttracks?.track?.length) {
-          return [];
-        }
-        var tracks = data4.recenttracks.track.filter((t) => t.name).map((track, index) => ({
-          name: track.name,
-          artist: track.artist?.["#text"] || track.artist?.name || "Unknown",
-          album: track.album?.["#text"] || "",
-          playCount: 0,
-          url: track.url || "",
-          albumArt: null,
-          rank: index + 1
-        }));
-        yield allSettled(tracks.map((t) => _async_to_generator(function* () {
-          var info = yield fetchITunesInfo(t.artist, t.name);
-          t.albumArt = info.art;
-          if (!t.album) t.album = info.album;
-        })()));
-        trackCache.set(cacheKey, {
-          tracks,
-          fetchedAt: Date.now()
-        });
-        return tracks;
-      } catch (error) {
-        logger.error("[SongSpotlight] Failed to fetch recent tracks:", error);
-        throw error;
-      }
-    })();
-  }
-  var LASTFM_BASE_URL, registryCache, REGISTRY_CACHE_TTL, userInfoCache, USER_INFO_CACHE_TTL, trackCache, CACHE_TTL2;
-  var init_api7 = __esm({
-    "src/plugins/songspotlight/api.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_type_of();
-      init_logger();
-      init_storage28();
-      LASTFM_BASE_URL = "https://ws.audioscrobbler.com/2.0";
-      registryCache = /* @__PURE__ */ new Map();
-      REGISTRY_CACHE_TTL = 10 * 60 * 1e3;
-      userInfoCache = /* @__PURE__ */ new Map();
-      USER_INFO_CACHE_TTL = 30 * 60 * 1e3;
-      trackCache = /* @__PURE__ */ new Map();
-      CACHE_TTL2 = 5 * 60 * 1e3;
-    }
-  });
-
-  // src/plugins/songspotlight/components/SongRow.tsx
-  function getBlurSource(artUrl) {
-    return artUrl.replace(/\d+x\d+/, "100x100");
-  }
-  function SongRow({ track, style, showAlbumArt, showPlayCount, showAlbumName = true, showRankNumbers = true, hasThemeColors, colorfulCards, cardOpacity = 40, trailing }) {
-    var showBlur = colorfulCards && !!track.albumArt;
-    var overlayOpacity = cardOpacity / 100;
-    var useStyles16 = createStyles({
-      outerClip: {
-        borderRadius: 8,
-        overflow: "hidden"
-      },
-      container: {
-        flexDirection: "row",
-        alignItems: "center",
-        padding: 8
-      },
-      blurBackground: {
-        position: "absolute",
-        top: -20,
-        left: -20,
-        right: -20,
-        bottom: -20
-      },
-      blurOverlay: {
-        ...ReactNative.StyleSheet.absoluteFillObject,
-        backgroundColor: hasThemeColors ? `rgba(0,0,0,${Math.min(overlayOpacity + 0.05, 1)})` : `rgba(0,0,0,${overlayOpacity})`
-      },
-      rankContainer: {
-        width: 24,
-        alignItems: "center",
-        justifyContent: "center"
-      },
-      rankText: {
-        color: showBlur || hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
-      },
-      thumbnail: {
-        width: 44,
-        height: 44,
-        borderRadius: 6,
-        backgroundColor: showBlur || hasThemeColors ? "#FFFFFF1A" : semanticColors.BACKGROUND_TERTIARY
-      },
-      infoContainer: {
-        flex: 1,
-        marginLeft: 10,
-        justifyContent: "center"
-      },
-      trackName: {
-        color: showBlur || hasThemeColors ? "#FFFFFF" : semanticColors.TEXT_NORMAL
-      },
-      subText: {
-        color: showBlur || hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
-      },
-      albumSubText: {
-        color: showBlur || hasThemeColors ? "#FFFFFF60" : semanticColors.TEXT_MUTED,
-        opacity: 0.7
-      },
-      playCountContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginTop: 2
-      },
-      trailingContainer: {
-        marginLeft: 8,
-        alignItems: "flex-end",
-        justifyContent: "center"
-      }
-    });
-    var styles5 = useStyles16();
-    var handlePress = () => {
-      if (track.url) {
-        ReactNative.Linking.openURL(track.url);
-      }
-    };
-    return /* @__PURE__ */ jsx(PressableScale, {
-      onPress: handlePress,
-      children: /* @__PURE__ */ jsxs(ReactNative.View, {
-        style: [
-          styles5.outerClip,
-          style,
-          showBlur && {
-            backgroundColor: "transparent"
-          }
-        ],
-        children: [
-          showBlur && /* @__PURE__ */ jsxs(Fragment, {
-            children: [
-              /* @__PURE__ */ jsx(ReactNative.Image, {
-                source: {
-                  uri: getBlurSource(track.albumArt)
-                },
-                style: styles5.blurBackground,
-                blurRadius: 30,
-                resizeMode: "cover"
-              }),
-              /* @__PURE__ */ jsx(ReactNative.View, {
-                style: styles5.blurOverlay
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsxs(ReactNative.View, {
-            style: styles5.container,
-            children: [
-              showRankNumbers && /* @__PURE__ */ jsx(ReactNative.View, {
-                style: styles5.rankContainer,
-                children: /* @__PURE__ */ jsx(Text, {
-                  variant: "text-md/bold",
-                  style: styles5.rankText,
-                  children: track.rank
-                })
-              }),
-              showAlbumArt && (track.albumArt ? /* @__PURE__ */ jsx(ReactNative.Image, {
-                source: {
-                  uri: track.albumArt
-                },
-                style: styles5.thumbnail
-              }) : /* @__PURE__ */ jsx(ReactNative.View, {
-                style: styles5.thumbnail,
-                children: /* @__PURE__ */ jsx(ReactNative.View, {
-                  style: {
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "center"
-                  },
-                  children: /* @__PURE__ */ jsx(Text, {
-                    variant: "text-lg/bold",
-                    style: styles5.rankText,
-                    children: "\u266A"
-                  })
-                })
-              })),
-              /* @__PURE__ */ jsxs(ReactNative.View, {
-                style: styles5.infoContainer,
-                children: [
-                  /* @__PURE__ */ jsx(Text, {
-                    variant: "text-sm/semibold",
-                    style: styles5.trackName,
-                    numberOfLines: 1,
-                    children: track.name
-                  }),
-                  /* @__PURE__ */ jsx(ReactNative.View, {
-                    style: styles5.playCountContainer,
-                    children: /* @__PURE__ */ jsxs(Text, {
-                      variant: "text-xs/normal",
-                      style: styles5.subText,
-                      numberOfLines: 1,
-                      children: [
-                        track.artist,
-                        showPlayCount && track.playCount > 0 ? ` \xB7 ${track.playCount.toLocaleString()} plays` : "",
-                        showAlbumName && track.album ? /* @__PURE__ */ jsx(Text, {
-                          variant: "text-xs/normal",
-                          style: styles5.albumSubText,
-                          children: ` \xB7 ${track.album}`
-                        }) : null
-                      ]
-                    })
-                  })
-                ]
-              }),
-              trailing ? /* @__PURE__ */ jsx(ReactNative.View, {
-                style: styles5.trailingContainer,
-                children: trailing
-              }) : null
-            ]
-          })
-        ]
-      })
-    });
-  }
-  var init_SongRow = __esm({
-    "src/plugins/songspotlight/components/SongRow.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_color();
-      init_styles();
-      init_common();
-      init_components();
-    }
-  });
-
-  // src/plugins/songspotlight/components/SongSection.tsx
-  function SongSection({ userId }) {
-    var settings4 = useSongSpotlightSettings();
-    var [tracks, setTracks] = React.useState([]);
-    var [loading, setLoading] = React.useState(true);
-    var [error, setError] = React.useState(null);
-    var [lastFmUsername, setLastFmUsername] = React.useState(null);
-    var [resolving, setResolving] = React.useState(true);
-    var [userInfo, setUserInfo] = React.useState(null);
-    var [favorites, setFavorites] = React.useState([]);
-    var [favoritesLoading, setFavoritesLoading] = React.useState(true);
-    var isOwnProfile = userId === UserStore18.getCurrentUser()?.id;
-    var displayProfile = getDisplayProfile2?.(userId);
-    var themeColors = displayProfile?.themeColors;
-    var hasThemeColors = themeColors !== void 0;
-    var bio = displayProfile?.bio ?? null;
-    var headerSizes = {
-      small: {
-        avatar: 24,
-        radius: 12,
-        textVariant: "text-xs/semibold",
-        arrowVariant: "text-xs/normal",
-        padding: 8
-      },
-      medium: {
-        avatar: 32,
-        radius: 16,
-        textVariant: "text-sm/semibold",
-        arrowVariant: "text-sm/normal",
-        padding: 10
-      },
-      big: {
-        avatar: 44,
-        radius: 22,
-        textVariant: "text-md/semibold",
-        arrowVariant: "text-md/normal",
-        padding: 12
-      }
-    };
-    var hSize = headerSizes[settings4.headerSize] || headerSizes.small;
-    var useStyles16 = createStyles({
-      card: {
-        backgroundColor: hasThemeColors ? "#00000073" : semanticColors.CARD_PRIMARY_BG,
-        borderRadius: 16,
-        padding: 12
-      },
-      trackCard: {
-        backgroundColor: hasThemeColors ? "#00000083" : semanticColors.CARD_SECONDARY_BG
-      },
-      grid: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "flex-start"
-      },
-      gridItem: {
-        width: 89,
-        height: 89,
-        margin: 6,
-        borderRadius: 10,
-        overflow: "hidden",
-        alignItems: "center",
-        justifyContent: "center",
-        borderWidth: 4,
-        borderColor: "transparent"
-      },
-      gridImage: {
-        width: 89,
-        height: 89,
-        borderRadius: 10
-      },
-      gridText: {
-        position: "absolute",
-        bottom: 4,
-        left: 4,
-        right: 4,
-        color: "#fff",
-        fontSize: 12,
-        textShadowColor: "#000",
-        textShadowOffset: {
-          width: 0,
-          height: 1
-        },
-        textShadowRadius: 2
-      },
-      emptyText: {
-        textAlign: "center",
-        paddingVertical: 16,
-        color: hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
-      },
-      headerRow: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: 4,
-        paddingBottom: hSize.padding
-      },
-      headerAvatar: {
-        width: hSize.avatar,
-        height: hSize.avatar,
-        borderRadius: hSize.radius,
-        marginRight: 8,
-        backgroundColor: hasThemeColors ? "#FFFFFF1A" : semanticColors.BACKGROUND_TERTIARY
-      },
-      headerText: {
-        color: hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
-      }
-    });
-    var styles5 = useStyles16();
-    var sectionTitle = settings4.sectionTitle?.trim() || "Song Spotlight";
-    var favoriteSongs = settings4.favoriteSongs ?? [];
-    var autofillTracks = tracks.slice(0, Math.max(0, Math.min(settings4.trackCount || 0, 5)));
-    React.useEffect(() => {
-      setResolving(true);
-      resolveLastFmUsername(userId, isOwnProfile, bio).then((username) => {
-        setLastFmUsername(username);
-        setResolving(false);
-      }).catch(() => {
-        setLastFmUsername(null);
-        setResolving(false);
-      });
-    }, [
-      userId,
-      isOwnProfile,
-      bio
-    ]);
-    React.useEffect(() => {
-      if (!lastFmUsername || !settings4.showLastFmHeader) {
-        setUserInfo(null);
-        return;
-      }
-      fetchLastFmUserInfo(lastFmUsername).then((info) => setUserInfo(info)).catch(() => setUserInfo(null));
-    }, [
-      lastFmUsername,
-      settings4.showLastFmHeader
-    ]);
-    React.useEffect(() => {
-      if (resolving) return;
-      if (settings4.displaySource === "favorites") {
-        setTracks([]);
-        setLoading(false);
-        setError(null);
-        return;
-      }
-      if (!hasCredentials()) {
-        setLoading(false);
-        setError(null);
-        return;
-      }
-      if (isOwnProfile && !settings4.showOnOwnProfile) {
-        setLoading(false);
-        return;
-      }
-      if (!isOwnProfile && !settings4.showOnOtherProfiles) {
-        setLoading(false);
-        return;
-      }
-      if (!lastFmUsername) {
-        setLoading(false);
-        return;
-      }
-      setLoading(true);
-      setError(null);
-      var fetchFn = settings4.displayMode === "recent" ? fetchRecentTracks(lastFmUsername, settings4.trackCount) : fetchTopTracks(lastFmUsername, settings4.period, settings4.trackCount);
-      fetchFn.then((result) => {
-        setTracks(result);
-        setLoading(false);
-      }).catch((e) => {
-        setError(e.message || "Failed to fetch tracks");
-        setLoading(false);
-      });
-    }, [
-      resolving,
-      lastFmUsername,
-      settings4.period,
-      settings4.trackCount,
-      settings4.displayMode,
-      settings4.showOnOwnProfile,
-      settings4.showOnOtherProfiles
-    ]);
-    React.useEffect(() => {
-      if (settings4.displaySource !== "favorites") return;
-      setFavoritesLoading(true);
-      if (isOwnProfile) {
-        setFavorites((settings4.favoriteSongs ?? []).map((song, index) => ({
-          name: song.title,
-          artist: song.artist,
-          album: song.album,
-          playCount: 0,
-          url: song.url,
-          albumArt: song.albumArt || null,
-          rank: index + 1
-        })));
-        setFavoritesLoading(false);
-      } else {
-        fetchFavoritesFromRegistry(userId).then((favs) => {
-          setFavorites((favs ?? []).map((song, index) => ({
-            name: song.title,
-            artist: song.artist,
-            album: song.album,
-            playCount: 0,
-            url: song.url,
-            albumArt: song.albumArt || null,
-            rank: index + 1
-          })));
-          setFavoritesLoading(false);
-        }).catch(() => {
-          setFavorites([]);
-          setFavoritesLoading(false);
-        });
-      }
-    }, [
-      settings4.displaySource,
-      userId,
-      isOwnProfile,
-      settings4.favoriteSongs
-    ]);
-    if (settings4.displaySource === "favorites") {
-      if (favoritesLoading) return null;
-      if (favorites.length === 0) return null;
-      if (isOwnProfile && !settings4.showOnOwnProfile) return null;
-      if (!isOwnProfile && !settings4.showOnOtherProfiles) return null;
-    } else {
-      if (!hasCredentials()) return null;
-      if (resolving) return null;
-      if (!lastFmUsername) return null;
-      if (isOwnProfile && !settings4.showOnOwnProfile) return null;
-      if (!isOwnProfile && !settings4.showOnOtherProfiles) return null;
-    }
-    var handleHeaderPress = () => {
-      var url2 = userInfo?.url || `https://www.last.fm/user/${lastFmUsername}`;
-      ReactNative.Linking.openURL(url2);
-    };
-    function getGridBorderColor(track) {
-      if (!settings4.colorfulCards || !track.albumArt) return "transparent";
-      var hash = 0;
-      for (var i = 0; i < track.albumArt.length; i++) {
-        hash = track.albumArt.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      var color2 = `hsl(${hash % 360}, 30%, 35%)`;
-      return color2;
-    }
-    function renderGrid(tracks2) {
-      return /* @__PURE__ */ jsx(ReactNative.View, {
-        style: styles5.grid,
-        children: tracks2.map((track, idx) => /* @__PURE__ */ jsx(PressableScale, {
-          onPress: () => track.url && ReactNative.Linking.openURL(track.url),
-          children: /* @__PURE__ */ jsxs(ReactNative.View, {
-            style: [
-              styles5.gridItem,
-              settings4.colorfulCards && track.albumArt ? {
-                borderColor: getGridBorderColor(track)
-              } : null
-            ],
-            children: [
-              track.albumArt ? /* @__PURE__ */ jsx(ReactNative.Image, {
-                source: {
-                  uri: track.albumArt
-                },
-                style: styles5.gridImage,
-                resizeMode: "cover"
-              }) : /* @__PURE__ */ jsx(ReactNative.View, {
-                style: [
-                  styles5.gridImage,
-                  {
-                    backgroundColor: hasThemeColors ? "#FFFFFF1A" : semanticColors.BACKGROUND_TERTIARY,
-                    alignItems: "center",
-                    justifyContent: "center"
-                  }
-                ],
-                children: /* @__PURE__ */ jsx(Text, {
-                  variant: "text-lg/bold",
-                  style: {
-                    color: hasThemeColors ? "#fff" : semanticColors.TEXT_NORMAL
-                  },
-                  children: "\u266A"
-                })
-              }),
-              /* @__PURE__ */ jsx(Text, {
-                style: styles5.gridText,
-                numberOfLines: 2,
-                children: track.name
-              })
-            ]
-          })
-        }, track.url || track.name || idx))
-      });
-    }
-    return /* @__PURE__ */ jsx(ErrorBoundary, {
-      children: /* @__PURE__ */ jsx(ReactNative.View, {
-        style: [
-          styles5.card
-        ],
-        children: /* @__PURE__ */ jsxs(UserProfileCard2, {
-          title: sectionTitle,
-          style: [
-            styles5.card
-          ],
-          children: [
-            settings4.showLastFmHeader && lastFmUsername && /* @__PURE__ */ jsx(PressableScale, {
-              onPress: handleHeaderPress,
-              children: /* @__PURE__ */ jsxs(ReactNative.View, {
-                style: styles5.headerRow,
-                children: [
-                  userInfo?.avatar ? /* @__PURE__ */ jsx(ReactNative.Image, {
-                    source: {
-                      uri: userInfo.avatar
-                    },
-                    style: styles5.headerAvatar
-                  }) : /* @__PURE__ */ jsx(ReactNative.View, {
-                    style: styles5.headerAvatar
-                  }),
-                  /* @__PURE__ */ jsx(Text, {
-                    variant: hSize.textVariant,
-                    style: styles5.headerText,
-                    children: userInfo?.name || lastFmUsername
-                  }),
-                  /* @__PURE__ */ jsx(Text, {
-                    variant: hSize.arrowVariant,
-                    style: {
-                      ...styles5.headerText,
-                      marginLeft: 4
-                    },
-                    children: "\u2197"
-                  })
-                ]
-              })
-            }),
-            settings4.albumGridView ? settings4.displaySource === "favorites" ? renderGrid(favorites) : loading ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
-              size: "small",
-              style: {
-                paddingVertical: 20
-              }
-            }) : error ? /* @__PURE__ */ jsx(Text, {
-              variant: "text-sm/medium",
-              style: styles5.emptyText,
-              children: error
-            }) : autofillTracks.length === 0 ? /* @__PURE__ */ jsx(Text, {
-              variant: "text-sm/medium",
-              style: styles5.emptyText,
-              children: settings4.displayMode === "recent" ? "No recent tracks" : "No top tracks found"
-            }) : renderGrid(autofillTracks) : settings4.displaySource === "favorites" ? /* @__PURE__ */ jsx(ReactNative.View, {
-              style: {
-                marginBottom: 10
-              },
-              children: favorites.map((song, index) => /* @__PURE__ */ jsxs(React.Fragment, {
-                children: [
-                  index > 0 && /* @__PURE__ */ jsx(ReactNative.View, {
-                    style: {
-                      height: 6
-                    }
-                  }),
-                  /* @__PURE__ */ jsx(SongRow, {
-                    track: song,
-                    style: styles5.trackCard,
-                    showAlbumArt: settings4.showAlbumArt,
-                    showPlayCount: false,
-                    showAlbumName: settings4.showAlbumName,
-                    showRankNumbers: settings4.showRankNumbers,
-                    hasThemeColors,
-                    colorfulCards: settings4.colorfulCards,
-                    cardOpacity: settings4.cardOpacity
-                  })
-                ]
-              }, song.url || song.name || index))
-            }) : loading ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
-              size: "small",
-              style: {
-                paddingVertical: 20
-              }
-            }) : error ? /* @__PURE__ */ jsx(Text, {
-              variant: "text-sm/medium",
-              style: styles5.emptyText,
-              children: error
-            }) : autofillTracks.length === 0 ? /* @__PURE__ */ jsx(Text, {
-              variant: "text-sm/medium",
-              style: styles5.emptyText,
-              children: settings4.displayMode === "recent" ? "No recent tracks" : "No top tracks found"
-            }) : /* @__PURE__ */ jsx(ReactNative.View, {
-              children: autofillTracks.map((track, index) => /* @__PURE__ */ jsxs(React.Fragment, {
-                children: [
-                  index > 0 && /* @__PURE__ */ jsx(ReactNative.View, {
-                    style: {
-                      height: 6
-                    }
-                  }),
-                  /* @__PURE__ */ jsx(SongRow, {
-                    track,
-                    style: styles5.trackCard,
-                    showAlbumArt: settings4.showAlbumArt,
-                    showPlayCount: settings4.showPlayCount,
-                    showAlbumName: settings4.showAlbumName,
-                    showRankNumbers: settings4.showRankNumbers,
-                    hasThemeColors,
-                    colorfulCards: settings4.colorfulCards,
-                    cardOpacity: settings4.cardOpacity
-                  })
-                ]
-              }, `${track.rank}-${track.name}`))
-            })
-          ]
-        })
-      })
-    });
-  }
-  var UserStore18, UserProfileCard2, getDisplayProfile2;
-  var init_SongSection = __esm({
-    "src/plugins/songspotlight/components/SongSection.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_components2();
-      init_color();
-      init_styles();
-      init_metro();
-      init_common();
-      init_components();
-      init_api7();
-      init_storage28();
-      init_SongRow();
-      UserStore18 = findByStoreName("UserStore");
-      UserProfileCard2 = findByName("UserProfileCard");
-      ({ getDisplayProfile: getDisplayProfile2 } = findByProps("getDisplayProfile"));
-    }
-  });
-
-  // src/plugins/songspotlight/patches/patchProfile.ts
-  var UserProfile2, patchProfile_default2;
-  var init_patchProfile2 = __esm({
-    "src/plugins/songspotlight/patches/patchProfile.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_patcher();
-      init_utils();
-      init_metro();
-      init_SongSection();
-      init_storage28();
-      UserProfile2 = findByTypeName("UserProfile");
-      if (UserProfile2 === void 0) UserProfile2 = findByTypeName("UserProfileContent");
-      patchProfile_default2 = (() => after("type", UserProfile2, (args, ret) => {
-        var profileSections = findInReactTree(ret, (r) => r?.type?.displayName === "View" && r?.props?.children.findIndex((i) => i?.type?.name === "UserProfileBio" || i?.type?.name === "UserProfileAboutMeCard") !== -1)?.props?.children;
-        var userId = args[0]?.userId;
-        if (userId === void 0) userId = args[0]?.user?.id;
-        if (profileSections) {
-          var displayPosition = songSpotlightSettings.displayPosition;
-          if (displayPosition === "betweenBioAndRoles") {
-            var bioIdx = profileSections.findIndex((i) => i?.type?.name === "UserProfileBio" || i?.type?.name === "UserProfileAboutMeCard");
-            var insertAt = bioIdx !== -1 ? bioIdx + 1 : 0;
-            profileSections.splice(insertAt, 0, React.createElement(SongSection, {
-              userId
-            }));
-          } else if (displayPosition === "aboveBio") {
-            var bioIdx1 = profileSections.findIndex((i) => i?.type?.name === "UserProfileBio" || i?.type?.name === "UserProfileAboutMeCard");
-            var insertAt1 = bioIdx1 !== -1 ? bioIdx1 : 0;
-            profileSections.splice(insertAt1, 0, React.createElement(SongSection, {
-              userId
-            }));
-          } else {
-            var reviewIndex = profileSections.findIndex((i) => i?.type?.name === "ReviewSection");
-            var insertAt2 = reviewIndex !== -1 ? reviewIndex : profileSections.length;
-            profileSections.splice(insertAt2, 0, React.createElement(SongSection, {
-              userId
-            }));
-          }
-        }
-      }));
-    }
-  });
-
-  // src/plugins/songspotlight/patches/patchSimplifiedProfile.ts
-  var SimplifiedUserProfileContent2, patchSimplifiedProfile_default2;
-  var init_patchSimplifiedProfile2 = __esm({
-    "src/plugins/songspotlight/patches/patchSimplifiedProfile.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_patcher();
-      init_utils();
-      init_metro();
-      init_SongSection();
-      init_storage28();
-      SimplifiedUserProfileContent2 = findByTypeName("SimplifiedUserProfileContent");
-      patchSimplifiedProfile_default2 = (() => SimplifiedUserProfileContent2 !== void 0 ? after("type", SimplifiedUserProfileContent2, (args, ret) => {
-        var profileSections = findInReactTree(ret, (r) => r?.type?.displayName === "View" && r?.props?.children.findIndex((i) => i?.type?.name === "SimplifiedUserProfileAboutMeCard") !== -1)?.props?.children;
-        var userId = args[0]?.user?.id;
-        if (profileSections) {
-          var displayPosition = songSpotlightSettings.displayPosition;
-          if (displayPosition === "betweenBioAndRoles") {
-            var bioIdx = profileSections.findIndex((i) => i?.type?.name === "SimplifiedUserProfileAboutMeCard");
-            var insertAt = bioIdx !== -1 ? bioIdx + 1 : 0;
-            profileSections.splice(insertAt, 0, React.createElement(SongSection, {
-              userId
-            }));
-          } else if (displayPosition === "aboveBio") {
-            var bioIdx1 = profileSections.findIndex((i) => i?.type?.name === "SimplifiedUserProfileAboutMeCard");
-            var insertAt1 = bioIdx1 !== -1 ? bioIdx1 : 0;
-            profileSections.splice(insertAt1, 0, React.createElement(SongSection, {
-              userId
-            }));
-          } else {
-            var reviewIndex = profileSections.findIndex((i) => i?.type?.name === "ReviewSection");
-            var insertAt2 = reviewIndex !== -1 ? reviewIndex : profileSections.length;
-            profileSections.splice(insertAt2, 0, React.createElement(SongSection, {
-              userId
-            }));
-          }
-        }
-      }) : () => {
-        return false;
-      });
-    }
-  });
-
-  // src/plugins/songspotlight/pages/FavoriteSongsSettingsPage.tsx
-  var FavoriteSongsSettingsPage_exports = {};
-  __export(FavoriteSongsSettingsPage_exports, {
-    default: () => FavoriteSongsSettingsPage
-  });
-  function FavoriteSongsSettingsPage() {
-    var settings4 = useSongSpotlightSettings();
-    var [input, setInput] = import_react31.default.useState("");
-    var [loading, setLoading] = import_react31.default.useState(false);
-    var [error, setError] = import_react31.default.useState(null);
-    function handleAdd() {
-      return _async_to_generator(function* () {
-        setError(null);
-        if (!input) return;
-        var m2 = input.match(/last\.fm\/music\/([^/]+)(?:\/_\/|\/)([^?#]+)/i);
-        if (!m2) {
-          setError("Invalid Last.fm track URL");
-          return;
-        }
-        var artist = decodeURIComponent(m2[1].replace(/\+/g, " ").trim());
-        var title = decodeURIComponent(m2[2].replace(/\+/g, " ").trim());
-        setLoading(true);
-        try {
-          var info = yield fetchTrackInfo(artist, title);
-          var newSong = {
-            title,
-            artist,
-            album: info.album || "",
-            url: input,
-            albumArt: info.art
-          };
-          var updated = [
-            ...settings4.favoriteSongs || [],
-            newSong
-          ];
-          settings4.updateSettings({
-            favoriteSongs: updated
-          });
-          try {
-            var UserStore21 = findByStoreName("UserStore");
-            var myId = UserStore21?.getCurrentUser?.()?.id;
-            if (myId && settings4.shareUsername) {
-              publishFavoritesToRegistry(myId, updated);
-            }
-          } catch (unused) {
-          }
-          setInput("");
-          showToast("Added to favorites", findAssetId2("CheckIcon"));
-        } catch (e) {
-          setError("Failed to fetch track info");
-        }
-        setLoading(false);
-      })();
-    }
-    function handleRemove(idx) {
-      var updated = [
-        ...settings4.favoriteSongs || []
-      ];
-      updated.splice(idx, 1);
-      settings4.updateSettings({
-        favoriteSongs: updated
-      });
-      showToast("Removed favorite", findAssetId2("CheckIcon"));
-      try {
-        var UserStore21 = findByStoreName("UserStore");
-        var myId = UserStore21?.getCurrentUser?.()?.id;
-        if (myId && settings4.shareUsername) {
-          publishFavoritesToRegistry(myId, updated);
-        }
-      } catch (unused) {
-      }
-    }
-    function handleMoveUp(idx) {
-      if (idx <= 0) return;
-      var list = [
-        ...settings4.favoriteSongs || []
-      ];
-      var tmp = list[idx - 1];
-      list[idx - 1] = list[idx];
-      list[idx] = tmp;
-      settings4.updateSettings({
-        favoriteSongs: list
-      });
-      showToast("Moved up", findAssetId2("CheckIcon"));
-      try {
-        var UserStore21 = findByStoreName("UserStore");
-        var myId = UserStore21?.getCurrentUser?.()?.id;
-        if (myId && settings4.shareUsername) publishFavoritesToRegistry(myId, list);
-      } catch (unused) {
-      }
-    }
-    function handleMoveDown(idx) {
-      var len = (settings4.favoriteSongs || []).length;
-      if (idx >= len - 1) return;
-      var list = [
-        ...settings4.favoriteSongs || []
-      ];
-      var tmp = list[idx + 1];
-      list[idx + 1] = list[idx];
-      list[idx] = tmp;
-      settings4.updateSettings({
-        favoriteSongs: list
-      });
-      showToast("Moved down", findAssetId2("CheckIcon"));
-      try {
-        var UserStore21 = findByStoreName("UserStore");
-        var myId = UserStore21?.getCurrentUser?.()?.id;
-        if (myId && settings4.shareUsername) publishFavoritesToRegistry(myId, list);
-      } catch (unused) {
-      }
-    }
-    return /* @__PURE__ */ jsx(ScrollView32, {
-      style: {
-        flex: 1
-      },
-      contentContainerStyle: {
-        padding: 10
-      },
-      children: /* @__PURE__ */ jsxs(Stack11, {
-        spacing: 8,
-        children: [
-          /* @__PURE__ */ jsxs(TableRowGroup15, {
-            title: "Add songs with Last.fm links",
-            children: [
-              /* @__PURE__ */ jsx(TextInput6, {
-                placeholder: "https://www.last.fm/music/Artist/_/Track",
-                value: input,
-                onChange: setInput,
-                isClearable: true,
-                editable: !loading
-              }),
-              /* @__PURE__ */ jsx(Button3, {
-                text: "Add to favorites",
-                size: "md",
-                onPress: handleAdd,
-                disabled: loading || !input,
-                style: {
-                  borderRadius: 8
-                }
-              }),
-              error && /* @__PURE__ */ jsx(Text8, {
-                style: {
-                  color: "#FF6B6B"
-                },
-                children: error
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup15, {
-            title: "Favorites",
-            children: (settings4.favoriteSongs || []).length === 0 ? /* @__PURE__ */ jsx(Text8, {
-              style: {
-                color: "#888",
-                padding: 8
-              },
-              children: "No favorites added."
-            }) : (settings4.favoriteSongs || []).map((s, idx) => /* @__PURE__ */ jsx(import_react31.default.Fragment, {
-              children: /* @__PURE__ */ jsx(SongRow, {
-                track: {
-                  name: s.title,
-                  artist: s.artist,
-                  album: s.album,
-                  playCount: 0,
-                  url: s.url,
-                  albumArt: s.albumArt || null,
-                  rank: idx + 1
-                },
-                style: {
-                  marginBottom: 6
-                },
-                showAlbumArt: true,
-                showPlayCount: false,
-                showAlbumName: true,
-                showRankNumbers: false,
-                hasThemeColors: true,
-                trailing: /* @__PURE__ */ jsxs(ReactNative.View, {
-                  style: {
-                    flexDirection: "row",
-                    gap: 6
-                  },
-                  children: [
-                    /* @__PURE__ */ jsx(IconButton, {
-                      size: "sm",
-                      icon: findAssetId2("ArrowSmallUpIcon"),
-                      onPress: () => {
-                        if (idx > 0) handleMoveUp(idx);
-                      }
-                    }),
-                    /* @__PURE__ */ jsx(IconButton, {
-                      size: "sm",
-                      icon: findAssetId2("ArrowSmallDownIcon"),
-                      onPress: () => {
-                        if (idx < (settings4.favoriteSongs || []).length - 1) handleMoveDown(idx);
-                      }
-                    }),
-                    /* @__PURE__ */ jsx(IconButton, {
-                      size: "sm",
-                      variant: "destructive",
-                      icon: findAssetId2("TrashIcon"),
-                      onPress: () => handleRemove(idx)
-                    })
-                  ]
-                })
-              })
-            }, s.url || `${s.title}-${idx}`))
-          })
-        ]
-      })
-    });
-  }
-  var import_react31, ScrollView32, TableRowGroup15, TableRow8, Stack11, TextInput6, Text8, Button3;
-  var init_FavoriteSongsSettingsPage = __esm({
-    "src/plugins/songspotlight/pages/FavoriteSongsSettingsPage.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_jsxRuntime();
-      init_assets();
-      init_toasts();
-      init_metro();
-      init_common();
-      init_components();
-      import_react31 = __toESM(require_react());
-      init_api7();
-      init_SongRow();
-      init_storage28();
-      ({ ScrollView: ScrollView32 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup15, TableRow: TableRow8, Stack: Stack11, TextInput: TextInput6, Text: Text8, Button: Button3 } = findByProps("TableRowGroup", "TableRow", "Stack", "TextInput", "Text", "Button"));
-    }
-  });
-
-  // src/plugins/songspotlight/pages/DisplaySettingsPage.tsx
-  function DisplaySettingsPage2() {
-    var settings4 = useSongSpotlightSettings();
-    var albumGridValue = settings4.albumGridView ?? false;
-    var navigation2 = NavigationNative.useNavigation();
-    return /* @__PURE__ */ jsx(ScrollView33, {
-      style: {
-        flex: 1
-      },
-      contentContainerStyle: {
-        padding: 10
-      },
-      children: /* @__PURE__ */ jsxs(Stack12, {
-        spacing: 8,
-        children: [
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Layout",
-            children: /* @__PURE__ */ jsx(TableSwitchRow10, {
-              label: "Album grid view",
-              subLabel: "Show album art in a grid instead of a list (applies to both Last.fm and Favorites)",
-              onValueChange: (value) => settings4.updateSettings({
-                albumGridView: value
-              }),
-              value: albumGridValue
-            })
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup16, {
-            title: "Track Display",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show album art",
-                subLabel: "Display album artwork thumbnails",
-                onValueChange: (value) => settings4.updateSettings({
-                  showAlbumArt: value
-                }),
-                value: settings4.showAlbumArt
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show play count",
-                subLabel: "Display number of plays next to tracks",
-                onValueChange: (value) => settings4.updateSettings({
-                  showPlayCount: value
-                }),
-                value: settings4.showPlayCount
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show album name",
-                subLabel: "Display the album name under each track",
-                onValueChange: (value) => settings4.updateSettings({
-                  showAlbumName: value
-                }),
-                value: settings4.showAlbumName
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Colorful cards",
-                subLabel: "Use blurred album art as the background for each track row",
-                onValueChange: (value) => settings4.updateSettings({
-                  colorfulCards: value
-                }),
-                value: settings4.colorfulCards
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Section Position",
-            children: /* @__PURE__ */ jsxs(TableRadioGroup5, {
-              value: settings4.displayPosition,
-              onChange: (value) => settings4.updateSettings({
-                displayPosition: value
-              }),
-              children: [
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Above Bio (default)",
-                  value: "aboveBio"
-                }),
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Below Connections",
-                  value: "aboveReviewDB"
-                }),
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Between Bio and Roles",
-                  value: "betweenBioAndRoles"
-                })
-              ]
-            })
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Source",
-            children: /* @__PURE__ */ jsxs(TableRadioGroup5, {
-              value: settings4.displaySource,
-              onChange: (value) => settings4.updateSettings({
-                displaySource: value
-              }),
-              children: [
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Last.fm stats",
-                  value: "lastfm"
-                }),
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Favorites",
-                  value: "favorites"
-                })
-              ]
-            })
-          }),
-          settings4.displaySource === "favorites" && /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Favorites",
-            children: /* @__PURE__ */ jsx(TableRow9, {
-              label: "Configure favorite songs",
-              trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
-              onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
-                title: "Favorite Songs",
-                render: (init_FavoriteSongsSettingsPage(), __toCommonJS(FavoriteSongsSettingsPage_exports)).default
-              })
-            })
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup16, {
-            title: "Visibility",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show on own profile",
-                onValueChange: (value) => settings4.updateSettings({
-                  showOnOwnProfile: value
-                }),
-                value: settings4.showOnOwnProfile
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show on other profiles",
-                subLabel: "Show stats for users who shared their Last.fm via the registry or have a last.fm link in their bio",
-                onValueChange: (value) => settings4.updateSettings({
-                  showOnOtherProfiles: value
-                }),
-                value: settings4.showOnOtherProfiles
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Last.fm Header",
-            children: /* @__PURE__ */ jsx(TableSwitchRow10, {
-              label: "Show Last.fm profile header",
-              subLabel: "Display Last.fm profiles as headers",
-              onValueChange: (value) => settings4.updateSettings({
-                showLastFmHeader: value
-              }),
-              value: settings4.showLastFmHeader
-            })
-          }),
-          settings4.showLastFmHeader && /* @__PURE__ */ jsxs(TableRadioGroup5, {
-            title: "Header Size",
-            value: settings4.headerSize,
-            onChange: (value) => settings4.updateSettings({
-              headerSize: value
-            }),
-            children: [
-              /* @__PURE__ */ jsx(TableRadioRow5, {
-                label: "Small",
-                value: "small"
-              }),
-              /* @__PURE__ */ jsx(TableRadioRow5, {
-                label: "Medium",
-                value: "medium"
-              }),
-              /* @__PURE__ */ jsx(TableRadioRow5, {
-                label: "Big",
-                value: "big"
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup16, {
-            title: "Advanced",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show rank numbers",
-                subLabel: "Display 1, 2, 3... on each track row",
-                onValueChange: (value) => settings4.updateSettings({
-                  showRankNumbers: value
-                }),
-                value: settings4.showRankNumbers
-              }),
-              /* @__PURE__ */ jsx(TableRow9, {
-                label: "Clear Track Cache",
-                subLabel: "Force refresh track data on next profile view",
-                trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
-                onPress: () => {
-                  clearTrackCache();
-                  showToast("Track cache cleared", findAssetId2("CheckIcon"));
-                }
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            children: /* @__PURE__ */ jsxs(Stack12, {
-              spacing: 4,
-              children: [
-                /* @__PURE__ */ jsx(TextInput7, {
-                  placeholder: "Section Title (default: Song Spotlight)",
-                  value: settings4.sectionTitle,
-                  onChange: (v2) => settings4.updateSettings({
-                    sectionTitle: v2
-                  }),
-                  isClearable: true
-                }),
-                /* @__PURE__ */ jsx(TextInput7, {
-                  placeholder: "Card Opacity % (default: 40)",
-                  value: settings4.cardOpacity === 40 ? "" : String(settings4.cardOpacity),
-                  onChange: (v2) => {
-                    if (v2 === "") {
-                      settings4.updateSettings({
-                        cardOpacity: 40
-                      });
-                      return;
-                    }
-                    var num = parseInt(v2);
-                    if (!isNaN(num) && num >= 0 && num <= 100) {
-                      settings4.updateSettings({
-                        cardOpacity: num
-                      });
-                    }
-                  },
-                  isClearable: true
-                })
-              ]
-            })
-          })
-        ]
-      })
-    });
-  }
-  var ScrollView33, TableSwitchRow10, TableRowGroup16, TableRow9, TableRadioRow5, TableRadioGroup5, Stack12, TextInput7;
-  var init_DisplaySettingsPage2 = __esm({
-    "src/plugins/songspotlight/pages/DisplaySettingsPage.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_toasts();
-      init_metro();
-      init_common();
-      init_api7();
-      init_storage28();
-      ({ ScrollView: ScrollView33 } = findByProps("ScrollView"));
-      ({ TableSwitchRow: TableSwitchRow10, TableRowGroup: TableRowGroup16, TableRow: TableRow9, TableRadioRow: TableRadioRow5, TableRadioGroup: TableRadioGroup5, Stack: Stack12 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput7 } = findByProps("TextInput"));
-    }
-  });
-
-  // src/plugins/songspotlight/pages/LastFmCredentialsPage.tsx
-  function LastFmCredentialsPage() {
-    var settings4 = useSongSpotlightSettings();
-    var handleTestConnection = () => {
-      showToast("Testing Last.fm connection...", findAssetId2("ClockIcon"));
-      testConnection().then((isValid) => {
-        if (isValid) {
-          showToast("\u2705 Last.fm connection successful!", findAssetId2("CheckIcon"));
-        } else {
-          showToast("\u274C Last.fm connection failed", findAssetId2("XIcon"));
-        }
-      }).catch(() => {
-        showToast("\u274C Connection error", findAssetId2("XIcon"));
-      });
-    };
-    return /* @__PURE__ */ jsx(ScrollView34, {
-      style: {
-        flex: 1
-      },
-      contentContainerStyle: {
-        padding: 10
-      },
-      children: /* @__PURE__ */ jsxs(Stack13, {
-        spacing: 8,
-        children: [
-          /* @__PURE__ */ jsx(TableRowGroup17, {
-            title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack13, {
-              spacing: 4,
-              children: [
-                /* @__PURE__ */ jsx(TextInput8, {
-                  placeholder: "Last.fm Username",
-                  value: settings4.username,
-                  onChange: (v2) => settings4.updateSettings({
-                    username: v2
-                  }),
-                  isClearable: true
-                }),
-                /* @__PURE__ */ jsx(TextInput8, {
-                  placeholder: "Last.fm API Key",
-                  value: settings4.apiKey,
-                  onChange: (v2) => settings4.updateSettings({
-                    apiKey: v2
-                  }),
-                  secureTextEntry: true,
-                  isClearable: true
-                })
-              ]
-            })
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup17, {
-            title: "Actions",
-            children: [
-              /* @__PURE__ */ jsx(TableRow10, {
-                label: "Test Connection",
-                subLabel: "Verify your Last.fm credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
-                onPress: handleTestConnection
-              }),
-              /* @__PURE__ */ jsx(TableRow10, {
-                label: "Get API Key",
-                subLabel: "Create a Last.fm API key at last.fm/api/account/create",
-                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
-                onPress: () => {
-                  import_react_native64.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
-                    showToast("Failed to open web browser. Please visit: https://www.last.fm/api/account/create", findAssetId2("XIcon"));
-                  });
-                }
-              }),
-              /* @__PURE__ */ jsx(TableRow10, {
-                label: "Clear Track Cache",
-                subLabel: "Force refresh track data on next profile view",
-                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
-                onPress: () => {
-                  clearTrackCache();
-                  showToast("Track cache cleared", findAssetId2("CheckIcon"));
-                }
-              })
-            ]
-          })
-        ]
-      })
-    });
-  }
-  var import_react_native64, ScrollView34, TableRowGroup17, TableRow10, Stack13, TextInput8;
-  var init_LastFmCredentialsPage = __esm({
-    "src/plugins/songspotlight/pages/LastFmCredentialsPage.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_toasts();
-      init_metro();
-      import_react_native64 = __toESM(require_react_native());
-      init_api7();
-      init_storage28();
-      ({ ScrollView: ScrollView34 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup17, TableRow: TableRow10, Stack: Stack13 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput8 } = findByProps("TextInput"));
-    }
-  });
-
-  // src/plugins/songspotlight/Settings.tsx
-  function Settings9() {
-    var settings4 = useSongSpotlightSettings();
-    var navigation2 = NavigationNative.useNavigation();
-    var credentialStatus = settings4.username && settings4.apiKey ? "\u2705 Authenticated" : "\u274C Missing credentials";
-    return /* @__PURE__ */ jsx(ScrollView35, {
-      style: {
-        flex: 1
-      },
-      contentContainerStyle: {
-        padding: 10
-      },
-      children: /* @__PURE__ */ jsxs(Stack14, {
-        spacing: 8,
-        children: [
-          /* @__PURE__ */ jsx(TableRowGroup18, {
-            title: "Service Configuration",
-            children: /* @__PURE__ */ jsx(TableRow11, {
-              label: "Last.fm Settings",
-              subLabel: credentialStatus,
-              trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
-              onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
-                title: "Last.fm Settings",
-                render: LastFmCredentialsPage
-              })
-            })
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup18, {
-            title: "Display",
-            children: /* @__PURE__ */ jsx(TableRow11, {
-              label: "Configure display",
-              trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
-              onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
-                title: "Display",
-                render: DisplaySettingsPage2
-              })
-            })
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup18, {
-            title: "Sharing",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow11, {
-                label: "Share my Last.fm username",
-                subLabel: "Allow other Rain users to see your top tracks on your profile. Your Discord ID and Last.fm username will be stored in a public registry.",
-                onValueChange: (value) => {
-                  settings4.updateSettings({
-                    shareUsername: value
-                  });
-                  var myId = UserStore19?.getCurrentUser?.()?.id;
-                  if (!value) {
-                    if (myId) {
-                      unpublishFromRegistry2(myId).then((ok) => {
-                        if (ok) showToast("Removed from registry", findAssetId2("CheckIcon"));
-                      });
-                    }
-                  } else if (settings4.username && myId) {
-                    publishToRegistry2(myId).then((ok) => {
-                      if (ok) showToast("Published to registry!", findAssetId2("CheckIcon"));
-                      else showToast("Failed to publish", findAssetId2("XIcon"));
-                    });
-                  }
-                },
-                value: settings4.shareUsername
-              }),
-              /* @__PURE__ */ jsx(TableRow11, {
-                label: "Publish Now",
-                subLabel: "Manually sync your Last.fm username to the registry",
-                trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
-                onPress: () => {
-                  if (!settings4.username) {
-                    showToast("Set your Last.fm username first", findAssetId2("XIcon"));
-                    return;
-                  }
-                  var myId = UserStore19?.getCurrentUser?.()?.id;
-                  if (!myId) {
-                    showToast("Not logged in", findAssetId2("XIcon"));
-                    return;
-                  }
-                  showToast("Publishing...", findAssetId2("ClockIcon"));
-                  publishToRegistry2(myId).then((ok) => {
-                    if (ok) {
-                      settings4.updateSettings({
-                        shareUsername: true
-                      });
-                      showToast("Published to registry!", findAssetId2("CheckIcon"));
-                    } else {
-                      showToast("Failed to publish", findAssetId2("XIcon"));
-                    }
-                  });
-                }
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup18, {
-            title: "Preview",
-            children: /* @__PURE__ */ jsx(Stack14, {
-              spacing: 0,
-              children: UserStore19?.getCurrentUser?.()?.id ? /* @__PURE__ */ jsx(SongSection, {
-                userId: UserStore19.getCurrentUser().id
-              }) : /* @__PURE__ */ jsx(Text, {
-                variant: "text-sm/medium",
-                style: {
-                  textAlign: "center",
-                  paddingVertical: 16
-                },
-                children: "Log in to see preview"
-              })
-            })
-          })
-        ]
-      })
-    });
-  }
-  var ScrollView35, TableSwitchRow11, TableRowGroup18, TableRow11, Stack14, UserStore19;
-  var init_Settings6 = __esm({
-    "src/plugins/songspotlight/Settings.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_toasts();
-      init_metro();
-      init_common();
-      init_components();
-      init_api7();
-      init_SongSection();
-      init_DisplaySettingsPage2();
-      init_LastFmCredentialsPage();
-      init_storage28();
-      ({ ScrollView: ScrollView35 } = findByProps("ScrollView"));
-      ({ TableSwitchRow: TableSwitchRow11, TableRowGroup: TableRowGroup18, TableRow: TableRow11, Stack: Stack14 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      UserStore19 = findByStoreName("UserStore");
-    }
-  });
-
-  // src/plugins/songspotlight/index.ts
-  var songspotlight_exports = {};
-  __export(songspotlight_exports, {
-    default: () => songspotlight_default
-  });
-  var patches23, songspotlight_default;
-  var init_songspotlight = __esm({
-    "src/plugins/songspotlight/index.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_storage();
-      init_plugins3();
-      init_Developers();
-      init_patchProfile2();
-      init_patchSimplifiedProfile2();
-      init_Settings6();
-      init_storage28();
-      patches23 = [];
-      songspotlight_default = definePlugin({
-        name: "SongSpotlight",
-        description: "Show your top Last.fm tracks on your Discord profile.",
-        author: [
-          Developers.LampDelivery
-        ],
-        id: "songspotlight",
-        version: "1.0.0",
-        start() {
-          return _async_to_generator(function* () {
-            yield waitForHydration(useSongSpotlightSettings);
-            patches23.push(patchProfile_default2());
-            patches23.push(patchSimplifiedProfile_default2());
-          })();
-        },
-        stop() {
-          for (var unpatch6 of patches23) unpatch6();
-          patches23.length = 0;
-        },
-        settings: Settings9
-      });
-    }
-  });
-
   // src/plugins/stafftags/storage.ts
   var useStaffTagsSettings, storage2;
-  var init_storage29 = __esm({
+  var init_storage27 = __esm({
     "src/plugins/stafftags/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -34503,7 +31987,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_metro();
       init_common();
       import_chroma_js5 = __toESM(require_chroma_js());
-      init_storage29();
+      init_storage27();
       ({ computePermissions } = findByProps("computePermissions", "canEveryoneRole") ?? {});
       GuildMemberStore = findByStoreName("GuildMemberStore");
       getBuiltInTags = () => [
@@ -34653,9 +32137,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         }
       };
       details_default = (() => {
-        var patches28 = [];
-        findByTypeNameAll("UserRow").forEach((UserRow) => patches28.push(after("type", UserRow, (args, res) => rowPatch(args, res))));
-        return () => patches28.forEach((unpatch6) => unpatch6());
+        var patches27 = [];
+        findByTypeNameAll("UserRow").forEach((UserRow) => patches27.push(after("type", UserRow, (args, res) => rowPatch(args, res))));
+        return () => patches27.forEach((unpatch6) => unpatch6());
       });
     }
   });
@@ -34679,14 +32163,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       GuildStore4 = findByStoreName("GuildStore");
       ChannelStore4 = findByStoreName("ChannelStore");
       name_default = (() => {
-        var patches28 = [];
+        var patches27 = [];
         if (HeaderName) {
-          patches28.push(after("default", HeaderName, ([{ channelId }], ret) => {
+          patches27.push(after("default", HeaderName, ([{ channelId }], ret) => {
             ret.props.channelId = channelId;
           }));
         }
         if (DisplayName) {
-          patches28.push(after("default", DisplayName, ([{ guildId, channelId, user }], ret) => {
+          patches27.push(after("default", DisplayName, ([{ guildId, channelId, user }], ret) => {
             var tagComponent = findInReactTree(ret, (c2) => c2?.type?.Types);
             var labelText = getBotLabel2?.(tagComponent?.props?.type);
             if (!tagComponent || labelText && !BUILT_IN_TAGS.includes(labelText)) {
@@ -34718,7 +32202,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             }
           }));
         }
-        return () => patches28.forEach((unpatch6) => unpatch6());
+        return () => patches27.forEach((unpatch6) => unpatch6());
       });
     }
   });
@@ -34753,9 +32237,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/stafftags/Settings.tsx
-  function Settings10() {
+  function Settings9() {
     var settings4 = useStaffTagsSettings();
-    return /* @__PURE__ */ jsx(import_react_native65.View, {
+    return /* @__PURE__ */ jsx(import_react_native64.View, {
       children: /* @__PURE__ */ jsx(Stack, {
         style: {
           paddingVertical: 24,
@@ -34775,16 +32259,16 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native65;
-  var init_Settings7 = __esm({
+  var import_react_native64;
+  var init_Settings6 = __esm({
     "src/plugins/stafftags/Settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react_native65 = __toESM(require_react_native());
-      init_storage29();
+      import_react_native64 = __toESM(require_react_native());
+      init_storage27();
     }
   });
 
@@ -34793,7 +32277,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(stafftags_exports, {
     default: () => stafftags_default
   });
-  var patches24, stafftags_default;
+  var patches23, stafftags_default;
   var init_stafftags = __esm({
     "src/plugins/stafftags/index.ts"() {
       "use strict";
@@ -34805,8 +32289,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_details();
       init_name();
       init_tag();
-      init_Settings7();
-      patches24 = [];
+      init_Settings6();
+      patches23 = [];
       stafftags_default = definePlugin({
         name: "StaffTags",
         description: "Shows extra tags for staff members.",
@@ -34818,23 +32302,23 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "stafftags",
         version: "1.0.0",
         start() {
-          patches24.push(chat_default());
-          patches24.push(tag_default());
-          patches24.push(name_default());
-          patches24.push(details_default());
+          patches23.push(chat_default());
+          patches23.push(tag_default());
+          patches23.push(name_default());
+          patches23.push(details_default());
         },
         stop() {
-          for (var unpatch6 of patches24) unpatch6();
-          patches24.length = 0;
+          for (var unpatch6 of patches23) unpatch6();
+          patches23.length = 0;
         },
-        settings: Settings10
+        settings: Settings9
       });
     }
   });
 
   // src/plugins/taptap/storage.ts
   var useTapTapSettings, taptapSettings;
-  var init_storage30 = __esm({
+  var init_storage28 = __esm({
     "src/plugins/taptap/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -34887,13 +32371,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   function TapTapSettings() {
     var { developerSettings } = useSettings();
     var taptapSettings2 = useTapTapSettings();
-    var [delayStr, setDelayStr] = import_react32.default.useState(taptapSettings2.delay ?? "300");
-    import_react32.default.useEffect(() => {
+    var [delayStr, setDelayStr] = import_react30.default.useState(taptapSettings2.delay ?? "300");
+    import_react30.default.useEffect(() => {
       setDelayStr(taptapSettings2.delay ?? "300");
     }, [
       taptapSettings2.delay
     ]);
-    var applyDelay = import_react32.default.useCallback((val) => {
+    var applyDelay = import_react30.default.useCallback((val) => {
       var parsed = parseInt(val, 10);
       if (!Number.isNaN(parsed)) {
         var clamped = Math.max(150, parsed);
@@ -34902,7 +32386,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         });
       }
     }, []);
-    return /* @__PURE__ */ jsx(import_react_native66.View, {
+    return /* @__PURE__ */ jsx(import_react_native65.View, {
       children: /* @__PURE__ */ jsxs(Stack, {
         style: {
           paddingVertical: 24,
@@ -34961,8 +32445,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react32, import_react_native66;
-  var init_settings24 = __esm({
+  var import_react30, import_react_native65;
+  var init_settings23 = __esm({
     "src/plugins/taptap/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -34971,9 +32455,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_settings();
       init_common();
       init_components();
-      import_react32 = __toESM(require_react());
-      import_react_native66 = __toESM(require_react_native());
-      init_storage30();
+      import_react30 = __toESM(require_react());
+      import_react_native65 = __toESM(require_react_native());
+      init_storage28();
     }
   });
 
@@ -35051,7 +32535,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             var channel = ChannelStore5?.getChannel?.(channelId);
             var message = MessageStore2?.getMessage?.(channelId, messageId);
             if (!message) return;
-            var currentUser = UserStore20?.getCurrentUser?.();
+            var currentUser = UserStore17?.getCurrentUser?.();
             var isAuthor = !!(currentUser && message.author && message.author.id === currentUser.id);
             if (isAuthor && taptapSettings.userEdit) {
               Messages2?.startEditMessage?.(channelId, messageId, message.content ?? "");
@@ -35068,7 +32552,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             logger.error("TapTap: handleDoubleTapMessage error", e);
           }
         });
-        patches25.push(un);
+        patches24.push(un);
       }
       if (handlers.handleTapUsername) {
         var un1 = instead("handleTapUsername", handlers, (args, orig) => {
@@ -35089,7 +32573,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return orig.apply(handlers, args);
           }
         });
-        patches25.push(un1);
+        patches24.push(un1);
       }
       if (handlers.handleTapMessage) {
         var un2 = after("handleTapMessage", handlers, (args) => {
@@ -35113,7 +32597,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             if (!Number.isNaN(parsed) && parsed >= 200) delayMs = parsed;
             if (timeoutTap) clearTimeout(timeoutTap);
             timeoutTap = setTimeout(() => resetTapState(), delayMs);
-            var currentUser = UserStore20?.getCurrentUser?.();
+            var currentUser = UserStore17?.getCurrentUser?.();
             var isAuthor = !!(currentUser && message.author && message.author.id === currentUser.id);
             var enriched = {
               ...nativeEvent,
@@ -35152,17 +32636,17 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             resetTapState();
           }
         });
-        patches25.push(un2);
+        patches24.push(un2);
       }
       unpatchHandlers = () => {
         try {
-          patches25.forEach((u) => {
+          patches24.forEach((u) => {
             try {
               u?.();
             } catch (unused) {
             }
           });
-          patches25 = [];
+          patches24 = [];
           handlerInstances = /* @__PURE__ */ new WeakSet();
         } catch (e) {
           logger.error("TapTap: unpatchHandlers error", e);
@@ -35219,7 +32703,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   function resolveRuntimeModules() {
     ChannelStore5 = findByStoreName("ChannelStore");
     MessageStore2 = findByStoreName("MessageStore");
-    UserStore20 = findByStoreName("UserStore");
+    UserStore17 = findByStoreName("UserStore");
     Messages2 = findByProps("sendMessage", "startEditMessage");
     ReplyManager = findByProps("createPendingReply");
     ChatInputRef = findByProps("insertText");
@@ -35227,7 +32711,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var mhModule = findByProps("MessagesHandlers");
     MessagesHandlers = mhModule?.MessagesHandlers ?? null;
   }
-  var ChannelStore5, MessageStore2, UserStore20, Messages2, ReplyManager, ChatInputRef, MessagesHandlers, getChatInputRef2, unpatchGetter, unpatchHandlers, currentTapIndex, currentMessageID, timeoutTap, handlerInstances, patches25, taptap_default;
+  var ChannelStore5, MessageStore2, UserStore17, Messages2, ReplyManager, ChatInputRef, MessagesHandlers, getChatInputRef2, unpatchGetter, unpatchHandlers, currentTapIndex, currentMessageID, timeoutTap, handlerInstances, patches24, taptap_default;
   var init_taptap = __esm({
     "src/plugins/taptap/index.ts"() {
       "use strict";
@@ -35241,15 +32725,15 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_wrappers();
       init_plugins3();
       init_Developers();
-      init_settings24();
-      init_storage30();
+      init_settings23();
+      init_storage28();
       unpatchGetter = null;
       unpatchHandlers = null;
       currentTapIndex = 0;
       currentMessageID = null;
       timeoutTap = null;
       handlerInstances = /* @__PURE__ */ new WeakSet();
-      patches25 = [];
+      patches24 = [];
       taptap_default = definePlugin({
         name: "TapTap",
         description: "Double-tap others to reply, Double-tap self to edit",
@@ -35287,13 +32771,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             clearTimeout(timeoutTap);
             timeoutTap = null;
           }
-          patches25.forEach((u) => {
+          patches24.forEach((u) => {
             try {
               u?.();
             } catch (unused) {
             }
           });
-          patches25 = [];
+          patches24 = [];
           handlerInstances = /* @__PURE__ */ new WeakSet();
         },
         settings() {
@@ -35387,7 +32871,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/translator/api/index.ts
-  var init_api8 = __esm({
+  var init_api6 = __esm({
     "src/plugins/translator/api/index.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -35590,7 +33074,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
 
   // src/plugins/translator/storage.ts
   var useTranslatorSettings, settings3;
-  var init_storage31 = __esm({
+  var init_storage29 = __esm({
     "src/plugins/translator/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -35648,9 +33132,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_logger();
       init_common();
       init_wrappers();
-      init_api8();
+      init_api6();
       init_lang();
-      init_storage31();
+      init_storage29();
       LazyActionSheet6 = findByProps("openLazy", "hideActionSheet");
       MessageStore3 = findByStoreName("MessageStore");
       ChannelStore6 = findByStoreName("ChannelStore");
@@ -35777,7 +33261,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var [query, setQuery] = React2.useState("");
     var langs = settings4.translator === 0 ? DeepLLangs : GTranslateLangs;
     var filteredLangs = Object.entries(langs).filter(([key]) => key.toLowerCase().includes(query.toLowerCase()));
-    return /* @__PURE__ */ jsxs(ScrollView36, {
+    return /* @__PURE__ */ jsxs(ScrollView32, {
       style: {
         flex: 1
       },
@@ -35816,7 +33300,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       ]
     });
   }
-  var ScrollView36;
+  var ScrollView32;
   var init_TargetLang = __esm({
     "src/plugins/translator/settings/TargetLang.tsx"() {
       "use strict";
@@ -35827,13 +33311,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_common();
       init_components();
       init_lang();
-      init_storage31();
-      ({ ScrollView: ScrollView36 } = ReactNative);
+      init_storage29();
+      ({ ScrollView: ScrollView32 } = ReactNative);
     }
   });
 
   // src/plugins/translator/settings/index.tsx
-  function Settings11() {
+  function Settings10() {
     var navigation2 = NavigationNative.useNavigation();
     var settings4 = useTranslatorSettings();
     var showTranslatorSheet = () => {
@@ -35864,7 +33348,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         ]
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView37, {
+    return /* @__PURE__ */ jsx(ScrollView33, {
       style: {
         flex: 1
       },
@@ -35917,8 +33401,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView37, Text9, showSimpleActionSheet6, hideActionSheet9;
-  var init_settings25 = __esm({
+  var ScrollView33, Text8, showSimpleActionSheet6, hideActionSheet9;
+  var init_settings24 = __esm({
     "src/plugins/translator/settings/index.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -35928,9 +33412,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_metro();
       init_common();
       init_components();
-      init_storage31();
+      init_storage29();
       init_TargetLang();
-      ({ ScrollView: ScrollView37, Text: Text9 } = ReactNative);
+      ({ ScrollView: ScrollView33, Text: Text8 } = ReactNative);
       ({ showSimpleActionSheet: showSimpleActionSheet6 } = findByProps("showSimpleActionSheet"));
       ({ hideActionSheet: hideActionSheet9 } = findByProps("openLazy", "hideActionSheet"));
     }
@@ -35941,7 +33425,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(translator_exports, {
     default: () => translator_default
   });
-  var patches26, translator_default;
+  var patches25, translator_default;
   var init_translator = __esm({
     "src/plugins/translator/index.ts"() {
       "use strict";
@@ -35950,12 +33434,12 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_Developers();
       init_ActionSheet3();
-      init_settings25();
-      init_storage31();
+      init_settings24();
+      init_storage29();
       settings3.target_lang ??= "en";
       settings3.translator ??= 1;
       settings3.immersive_enabled ??= true;
-      patches26 = [];
+      patches25 = [];
       translator_default = definePlugin({
         name: "Translator",
         description: "Translate messages using DeepL or Google Translate",
@@ -35969,19 +33453,19 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "translator",
         version: "1.0.0",
         start() {
-          patches26.push(ActionSheet_default());
+          patches25.push(ActionSheet_default());
         },
         stop() {
-          for (var unpatch6 of patches26) unpatch6();
+          for (var unpatch6 of patches25) unpatch6();
         },
-        settings: Settings11
+        settings: Settings10
       });
     }
   });
 
   // src/plugins/userbg/settings.tsx
   function UserBGSettings() {
-    return /* @__PURE__ */ jsx(import_react_native67.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native66.ScrollView, {
       style: {
         flex: 1
       },
@@ -36001,8 +33485,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               }),
               trailing: TableRow.Arrow,
               onPress: () => {
-                var { Linking: Linking7 } = require_react_native();
-                Linking7.openURL("https://discord.gg/ECg96KZ3Fh");
+                var { Linking: Linking6 } = require_react_native();
+                Linking6.openURL("https://discord.gg/ECg96KZ3Fh");
               }
             }),
             /* @__PURE__ */ jsx(TableRow, {
@@ -36020,8 +33504,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native67;
-  var init_settings26 = __esm({
+  var import_react_native66;
+  var init_settings25 = __esm({
     "src/plugins/userbg/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -36030,7 +33514,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_assets();
       init_toasts();
       init_components();
-      import_react_native67 = __toESM(require_react_native());
+      import_react_native66 = __toESM(require_react_native());
       init_userbg();
     }
   });
@@ -36060,7 +33544,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_metro();
       init_plugins3();
       init_Developers();
-      init_settings26();
+      init_settings25();
       getUserBannerURL = findByProps("default", "getUserBannerURL");
       pluginEnabled = false;
       userbg_default = definePlugin({
@@ -36098,7 +33582,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
 
   // src/plugins/userpfp/settings.tsx
   function UserPFPSettings() {
-    return /* @__PURE__ */ jsx(import_react_native68.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native67.ScrollView, {
       style: {
         flex: 1
       },
@@ -36118,8 +33602,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               }),
               trailing: TableRow.Arrow,
               onPress: () => {
-                var { Linking: Linking7 } = require_react_native();
-                Linking7.openURL("https://discord.gg/userpfp-1129784704267210844");
+                var { Linking: Linking6 } = require_react_native();
+                Linking6.openURL("https://discord.gg/userpfp-1129784704267210844");
               }
             }),
             /* @__PURE__ */ jsx(TableRow, {
@@ -36137,8 +33621,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native68;
-  var init_settings27 = __esm({
+  var import_react_native67;
+  var init_settings26 = __esm({
     "src/plugins/userpfp/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -36147,7 +33631,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_assets();
       init_toasts();
       init_components();
-      import_react_native68 = __toESM(require_react_native());
+      import_react_native67 = __toESM(require_react_native());
       init_userpfp();
     }
   });
@@ -36189,12 +33673,12 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       dataURL = "https://userpfp.github.io/UserPFP/source/data.json";
       pluginEnabled2 = false;
       patcher_default2 = (() => {
-        var patches28 = [];
+        var patches27 = [];
         fetchData2();
         var avatarStuff = findByProps("getUserAvatarURL", "getUserAvatarSource");
-        var UserStore21 = findByStoreName("UserStore");
+        var UserStore18 = findByStoreName("UserStore");
         dataInterval = setInterval(() => fetchData2(), 1e3 * 60 * 60);
-        patches28.push(instead("getUser", UserStore21, (args, orig) => {
+        patches27.push(instead("getUser", UserStore18, (args, orig) => {
           var ret = orig(...args);
           if (!pluginEnabled2 || !data3?.avatars?.[args[0]]) return ret;
           var ext = data3.avatars[args[0]] && urlExt(data3.avatars[args[0]]);
@@ -36204,11 +33688,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           }
           return ret;
         }));
-        patches28.push(instead("getUserAvatarURL", avatarStuff, (args, orig) => {
+        patches27.push(instead("getUserAvatarURL", avatarStuff, (args, orig) => {
           var custom = pluginEnabled2 ? getCustomAvatar(args[0].id, !args[1]) : void 0;
           return custom ?? orig(...args);
         }));
-        patches28.push(instead("getUserAvatarSource", avatarStuff, (args, orig) => {
+        patches27.push(instead("getUserAvatarSource", avatarStuff, (args, orig) => {
           if (!pluginEnabled2) return orig(...args);
           var custom = getCustomAvatar(args[0].id, !args[1]);
           if (!custom) return orig(...args);
@@ -36217,7 +33701,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           };
         }));
         return () => {
-          for (var x2 of patches28) {
+          for (var x2 of patches27) {
             x2();
           }
           if (dataInterval) {
@@ -36245,7 +33729,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_logger();
       init_plugins3();
       init_Developers();
-      init_settings27();
+      init_settings26();
       init_patcher3();
       userpfp_default = definePlugin({
         name: "UserPFP",
@@ -36306,7 +33790,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       message.id
     ]);
     return /* @__PURE__ */ jsx(Fragment, {
-      children: /* @__PURE__ */ jsx(ScrollView40, {
+      children: /* @__PURE__ */ jsx(ScrollView36, {
         style: {
           flex: 1,
           marginVertical: 10
@@ -36356,7 +33840,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView40;
+  var ScrollView36;
   var init_RawPage = __esm({
     "src/plugins/viewraw/patches/RawPage.tsx"() {
       "use strict";
@@ -36369,7 +33853,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_common();
       init_components();
       init_cleanmessage();
-      ({ ScrollView: ScrollView40 } = ReactNative);
+      ({ ScrollView: ScrollView36 } = ReactNative);
     }
   });
 
@@ -36472,7 +33956,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(viewraw_exports, {
     default: () => viewraw_default2
   });
-  var patches27, viewraw_default2;
+  var patches26, viewraw_default2;
   var init_viewraw2 = __esm({
     "src/plugins/viewraw/index.ts"() {
       "use strict";
@@ -36481,7 +33965,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_viewraw();
       init_Developers();
-      patches27 = [];
+      patches26 = [];
       viewraw_default2 = definePlugin({
         name: "ViewRaw",
         description: "View raw message data",
@@ -36494,10 +33978,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "viewraw",
         version: "1.0.0",
         start() {
-          patches27.push(...viewraw_default());
+          patches26.push(...viewraw_default());
         },
         stop() {
-          for (var unpatch6 of patches27) unpatch6();
+          for (var unpatch6 of patches26) unpatch6();
         }
       });
     }
@@ -36768,14 +34252,6 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return null;
           }
         })(),
-        "fakeprofilecolors": (() => {
-          try {
-            return (init_fakeprofilecolors(), __toCommonJS(fakeprofilecolors_exports)).default;
-          } catch (error) {
-            console.error("[Failed to compile 'fakeprofilecolors' from './plugins/fakeprofilecolors':", error.message);
-            return null;
-          }
-        })(),
         "globalbadges": (() => {
           try {
             return (init_globalbadges(), __toCommonJS(globalbadges_exports)).default;
@@ -36901,14 +34377,6 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return (init_silenttyping(), __toCommonJS(silenttyping_exports)).default;
           } catch (error) {
             console.error("[Failed to compile 'silenttyping' from './plugins/silenttyping':", error.message);
-            return null;
-          }
-        })(),
-        "songspotlight": (() => {
-          try {
-            return (init_songspotlight(), __toCommonJS(songspotlight_exports)).default;
-          } catch (error) {
-            console.error("[Failed to compile 'songspotlight' from './plugins/songspotlight':", error.message);
             return null;
           }
         })(),
