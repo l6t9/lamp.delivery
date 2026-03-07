@@ -1594,12 +1594,6 @@
   });
 
   // src/lib/utils/lazy.ts
-  var lazy_exports = {};
-  __export(lazy_exports, {
-    getProxyFactory: () => getProxyFactory,
-    lazyDestructure: () => lazyDestructure,
-    proxyLazy: () => proxyLazy
-  });
   function proxyLazy(factory, opts = {}) {
     var cache;
     var dummy = opts.hint !== "object" ? function() {
@@ -1713,8 +1707,8 @@
   });
 
   // src/metro/lazy.ts
-  var lazy_exports2 = {};
-  __export(lazy_exports2, {
+  var lazy_exports = {};
+  __export(lazy_exports, {
     _lazyContextSymbol: () => _lazyContextSymbol,
     createLazyModule: () => createLazyModule,
     getLazyContext: () => getLazyContext
@@ -2838,13 +2832,6 @@
   });
 
   // src/api/assets/index.ts
-  var assets_exports = {};
-  __export(assets_exports, {
-    filterAssets: () => filterAssets,
-    findAsset: () => findAsset,
-    findAssetId: () => findAssetId2,
-    iterateAssets: () => iterateAssets
-  });
   function* iterateAssets() {
     var { flagsIndex } = getMetroCache();
     var yielded = /* @__PURE__ */ new Set();
@@ -2877,15 +2864,6 @@
         return asset;
       }
     }
-  }
-  function filterAssets(param) {
-    var filteredAssets = [];
-    for (var asset of iterateAssets()) {
-      if (typeof param === "string" ? asset.name === param : param(asset)) {
-        filteredAssets.push(asset);
-      }
-    }
-    return filteredAssets;
   }
   function findAssetId2(name) {
     return findAsset(name)?.id;
@@ -2960,7 +2938,7 @@
     findExports: () => findExports,
     findModule: () => findModule,
     findModuleId: () => findModuleId,
-    lazy: () => lazy_exports2
+    lazy: () => lazy_exports
   });
   var init_metro = __esm({
     "src/metro/index.ts"() {
@@ -2977,21 +2955,9 @@
   });
 
   // src/api/react/jsx.ts
-  var jsx_exports = {};
-  __export(jsx_exports, {
-    deleteJsxCreate: () => deleteJsxCreate,
-    onJsxCreate: () => onJsxCreate,
-    patchJsx: () => patchJsx
-  });
   function onJsxCreate(Component, callback) {
     if (!callbacks.has(Component)) callbacks.set(Component, []);
     callbacks.get(Component).push(callback);
-  }
-  function deleteJsxCreate(Component, callback) {
-    if (!callbacks.has(Component)) return;
-    var cbs = callbacks.get(Component);
-    cbs.splice(cbs.indexOf(callback), 1);
-    if (cbs.length === 0) callbacks.delete(Component);
   }
   function patchJsx() {
     var callback = ([Component], ret) => {
@@ -3277,12 +3243,6 @@
   });
 
   // shims/jsxRuntime.ts
-  var jsxRuntime_exports = {};
-  __export(jsxRuntime_exports, {
-    Fragment: () => Fragment,
-    jsx: () => jsx,
-    jsxs: () => jsxs
-  });
   function unproxyFirstArg(args) {
     if (!args[0]) {
       throw new Error("The first argument (Component) is falsy. Ensure that you are passing a valid component.");
@@ -4064,25 +4024,6 @@
   });
 
   // src/lib/utils/hookDefineProperty.ts
-  function hookDefineProperty(target, property, cb) {
-    var targetAsAny = target;
-    if (property in target) {
-      return void cb(targetAsAny[property]);
-    }
-    var value;
-    Object.defineProperty(targetAsAny, property, {
-      get: () => value,
-      set(v2) {
-        value = cb(v2) ?? v2;
-      },
-      configurable: true,
-      enumerable: false
-    });
-    return () => {
-      delete targetAsAny[property];
-      targetAsAny[property] = value;
-    };
-  }
   var init_hookDefineProperty = __esm({
     "src/lib/utils/hookDefineProperty.ts"() {
       "use strict";
@@ -4092,13 +4033,6 @@
   });
 
   // src/lib/utils/invariant.ts
-  function invariant(condition, message) {
-    if (condition) return;
-    var resolvedMessage = typeof message === "function" ? message() : message;
-    var prefix2 = "[Invariant Violation]";
-    var value = resolvedMessage ? `${prefix2}: ${resolvedMessage}` : prefix2;
-    throw new Error(value);
-  }
   var init_invariant = __esm({
     "src/lib/utils/invariant.ts"() {
       "use strict";
@@ -4133,16 +4067,6 @@
   });
 
   // src/lib/utils/index.ts
-  var utils_exports = {};
-  __export(utils_exports, {
-    cyrb64: () => cyrb64,
-    findInReactTree: () => findInReactTree,
-    findInTree: () => findInTree,
-    hookDefineProperty: () => hookDefineProperty,
-    invariant: () => invariant,
-    lazy: () => lazy_exports,
-    safeFetch: () => safeFetch
-  });
   var init_utils = __esm({
     "src/lib/utils/index.ts"() {
       "use strict";
@@ -5191,17 +5115,15 @@
   });
 
   // src/plugins/_core/painter/themes/updater.ts
-  function updateColor(_0, _1) {
-    return _async_to_generator(function* (colorManifest, { update = true }) {
-      var internalDef = colorManifest ? parseColorManifest(colorManifest) : null;
-      var ref = Object.assign(_colorRef, {
-        current: internalDef,
-        key: `rain-theme-${++_inc}`,
-        lastSetDiscordTheme: !ThemeStore3.theme.startsWith("rain-theme-") ? ThemeStore3.theme : _colorRef.lastSetDiscordTheme
-      });
-      if (useColorsPref.getState().iconsEnabled) {
-        yield initPlus();
-      }
+  function updateColor(colorManifest, { update = true }) {
+    var internalDef = colorManifest ? parseColorManifest(colorManifest) : null;
+    var ref = Object.assign(_colorRef, {
+      current: internalDef,
+      key: `rain-theme-${++_inc}`,
+      lastSetDiscordTheme: !ThemeStore3.theme.startsWith("rain-theme-") ? ThemeStore3.theme : _colorRef.lastSetDiscordTheme
+    });
+    if (useColorsPref.getState().iconsEnabled) {
+      initPlus();
       if (internalDef != null) {
         tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
         FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
@@ -5216,7 +5138,22 @@
         AppearanceManager.setShouldSyncAppearanceSettings(false);
         AppearanceManager.updateTheme(internalDef != null ? ref.key : ref.lastSetDiscordTheme);
       }
-    }).apply(this, arguments);
+    } else {
+      if (internalDef != null) {
+        tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
+        FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
+        Object.keys(tokenRef2.Shadow).forEach((k) => tokenRef2.Shadow[k][ref.key] = tokenRef2.Shadow[k][ref.current.reference]);
+        Object.keys(tokenRef2.SemanticColor).forEach((k) => {
+          tokenRef2.SemanticColor[k][ref.key] = {
+            ...tokenRef2.SemanticColor[k][ref.current.reference]
+          };
+        });
+      }
+      if (update) {
+        AppearanceManager.setShouldSyncAppearanceSettings(false);
+        AppearanceManager.updateTheme(internalDef != null ? ref.key : ref.lastSetDiscordTheme);
+      }
+    }
   }
   var tokenRef2, origRawColor, AppearanceManager, ThemeStore3, FormDivider, _inc, _colorRef;
   var init_updater = __esm({
@@ -5224,12 +5161,11 @@
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
-      init_async_to_generator();
       init_metro();
       init_loader2();
       init_parser();
       init_preferences();
-      tokenRef2 = findByProps("SemanticColor");
+      tokenRef2 = findByPropsLazy("SemanticColor");
       origRawColor = {
         ...tokenRef2.RawColor
       };
@@ -6246,21 +6182,6 @@
   });
 
   // src/api/debug.ts
-  var debug_exports = {};
-  __export(debug_exports, {
-    connectRdt: () => connectRdt,
-    connectToDebugger: () => connectToDebugger,
-    disconnectFromDebugger: () => disconnectFromDebugger,
-    disconnectRdt: () => disconnectRdt,
-    getDebugInfo: () => getDebugInfo,
-    initDebugger: () => initDebugger,
-    isConnectedToDebugger: () => isConnectedToDebugger,
-    patchLogHook: () => patchLogHook,
-    rdtClient: () => rdtClient,
-    rdtConnected: () => rdtConnected,
-    useIsRdtConnected: () => useIsRdtConnected,
-    versionHash: () => versionHash
-  });
   function serializeMessage(msg) {
     return JSON.stringify(msg);
   }
@@ -6437,17 +6358,6 @@
       });
     }
   }
-  function disconnectRdt() {
-    rdtClient?.close();
-  }
-  function useIsRdtConnected() {
-    var [connected, update] = React.useState(rdtConnected);
-    React.useEffect(() => {
-      changeHooks.add(update);
-      return () => void changeHooks.delete(update);
-    }, []);
-    return connected;
-  }
   function patchLogHook() {
     var unpatch6 = after("nativeLoggingHook", globalThis, (args) => {
       if (socket?.readyState === WebSocket.OPEN) {
@@ -6565,8 +6475,8 @@
   });
 
   // src/plugins/_core/corecommands/builtins/debug.ts
-  var debug_exports2 = {};
-  __export(debug_exports2, {
+  var debug_exports = {};
+  __export(debug_exports, {
     default: () => debug_default
   });
   var debug_default;
@@ -6987,7 +6897,7 @@
         start() {
           patchCommands();
           [
-            (init_debug2(), __toCommonJS(debug_exports2)),
+            (init_debug2(), __toCommonJS(debug_exports)),
             (init_plugins(), __toCommonJS(plugins_exports)),
             (init_themes2(), __toCommonJS(themes_exports))
           ].forEach((r) => registerCommand(r.default()));
@@ -8187,7 +8097,7 @@
           },
           {
             key: "intercept",
-            value: function intercept2(source, mid, target) {
+            value: function intercept(source, mid, target) {
               return (mid - source) / (target - source);
             }
           },
@@ -20519,16 +20429,10 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/flux/index.ts
-  var flux_exports = {};
-  __export(flux_exports, {
-    dispatcher: () => dispatcher,
-    injectFluxInterceptor: () => injectFluxInterceptor,
-    intercept: () => intercept
-  });
   function injectFluxInterceptor() {
     var cb = (payload) => {
-      for (var intercept2 of intercepts) {
-        var res = intercept2(payload);
+      for (var intercept of intercepts) {
+        var res = intercept(payload);
         if (res == null) {
           continue;
         } else if (!res) {
@@ -20542,12 +20446,6 @@ ${pendingInsertLink}` : pendingInsertLink;
     };
     (dispatcher._interceptors ??= []).unshift(cb);
     return () => dispatcher._interceptors &&= dispatcher._interceptors.filter((v2) => v2 !== cb);
-  }
-  function intercept(cb) {
-    intercepts.push(cb);
-    return () => {
-      intercepts = intercepts.filter((i) => i !== cb);
-    };
   }
   var blockedSym, modifiedSym, dispatcher, intercepts;
   var init_flux = __esm({
@@ -20564,10 +20462,6 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/native/index.ts
-  var native_exports = {};
-  __export(native_exports, {
-    fs: () => fs_exports
-  });
   var init_native = __esm({
     "src/api/native/index.ts"() {
       "use strict";
@@ -20578,10 +20472,6 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/react/index.ts
-  var react_exports = {};
-  __export(react_exports, {
-    jsx: () => jsx_exports
-  });
   var init_react2 = __esm({
     "src/api/react/index.ts"() {
       "use strict";
@@ -20592,15 +20482,6 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/index.ts
-  var api_exports = {};
-  __export(api_exports, {
-    assets: () => assets_exports,
-    debug: () => debug_exports,
-    flux: () => flux_exports,
-    native: () => native_exports,
-    patcher: () => patcher_exports,
-    react: () => react_exports
-  });
   var init_api3 = __esm({
     "src/api/index.ts"() {
       "use strict";
@@ -23537,14 +23418,6 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/lib/index.ts
-  var lib_exports = {};
-  __export(lib_exports, {
-    _jsx: () => jsxRuntime_exports,
-    api: () => api_exports,
-    metro: () => metro_exports,
-    unload: () => unload,
-    utils: () => utils_exports
-  });
   function unload() {
     for (var d of _disposer) if (typeof d === "function") d();
     delete globalThis.rain;
@@ -37266,8 +37139,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         var critical = yield Promise.all([
           patchLogHook(),
           patchJsx(),
-          injectFluxInterceptor(),
-          globalThis.rain = lib_exports
+          injectFluxInterceptor()
         ]);
         var core = yield Promise.all([
           initEagerPlugins(),
@@ -37295,7 +37167,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       try {
         Object.freeze = Object.seal = Object;
         yield (init_caches(), __toCommonJS(caches_exports)).initMetroCache();
-        (init_index(), __toCommonJS(index_exports)).default();
+        yield (init_index(), __toCommonJS(index_exports)).default();
       } catch (e) {
         alert(e);
       }
