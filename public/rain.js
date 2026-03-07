@@ -1594,12 +1594,6 @@
   });
 
   // src/lib/utils/lazy.ts
-  var lazy_exports = {};
-  __export(lazy_exports, {
-    getProxyFactory: () => getProxyFactory,
-    lazyDestructure: () => lazyDestructure,
-    proxyLazy: () => proxyLazy
-  });
   function proxyLazy(factory, opts = {}) {
     var cache;
     var dummy = opts.hint !== "object" ? function() {
@@ -1713,8 +1707,8 @@
   });
 
   // src/metro/lazy.ts
-  var lazy_exports2 = {};
-  __export(lazy_exports2, {
+  var lazy_exports = {};
+  __export(lazy_exports, {
     _lazyContextSymbol: () => _lazyContextSymbol,
     createLazyModule: () => createLazyModule,
     getLazyContext: () => getLazyContext
@@ -2104,6 +2098,7 @@
         COPY_URL: "Copy URL",
         COULD_NOT_FIND: "Hmmm... could not find that!",
         COULD_NOT_LOAD_PREVIEW: "Could not load preview for",
+        CUSTOMISATION: "Customisation",
         DARK: "Dark",
         DEBUGGER_URL: "Debugger URL",
         DELETE: "delete",
@@ -2186,6 +2181,8 @@
         PLUGIN__CORE_BADGES_DESC: "Adds raincord badges to raincord devs and supporters",
         PLUGIN__CORE_COMMANDS: "CoreCommands",
         PLUGIN__CORE_COMMANDS_DESC: "Provides core commands",
+        PLUGIN__CORE_ERRORBOUNDARY: "ErrorBoundary",
+        PLUGIN__CORE_ERRORBOUNDARY_DESC: "Patches ErrorBoundaries to show recovery options",
         PLUGIN__CORE_PAINTER: "Painter",
         PLUGIN__CORE_PAINTER_DESC: "Customize Discord's appearance with themes and fonts",
         PLUGIN__CORE_RAINENHANCEMENTS: "RainEnhancements",
@@ -2206,6 +2203,7 @@
         REMOVED: "Removed {name}",
         RESTART_REQUIRED_TO_TAKE_EFFECT: "Restart required to take effect",
         RETRY: "Retry",
+        RETRY_RENDER: "Retry render",
         SAFE_MODE: "Safe Mode",
         SAFE_MODE_REQUIRES_RELOAD: "You must reload for this to take effect, in safe mode all plugins/themes are disabled",
         HINT_SAFE_MODE: "You are in safemode, plugins are not running but can still be toggled",
@@ -2213,7 +2211,7 @@
         SAVE: "Save",
         SEARCH_PLACEHOLDER: "Search...",
         SETTINGS: "Settings",
-        SHOW_BACKGROUND: "Show Background",
+        SHOW_BACKGROUND: "Show Chat Background",
         SHOW_BACKGROUND_DESC: "Shows or hides the theme's background image in chat",
         SHOW_CORE: "Show Core Plugins",
         SOME_ENTRIES_ERROR: "Some font entries cannot be imported. Please modify the entries and try again.",
@@ -2225,9 +2223,12 @@
         THEME_REMOVED: "Theme removed successfully",
         THEMES: "Themes",
         THEMES_DISABLED_IN_SAFE_MODE: "Themes are disabled in safe mode",
+        UH_OH: "Uh Oh!",
         UNAPPLY: "Unapply",
         UNINSTALL: "Uninstall",
         UNKNOWN_AUTHOR: "Unknown",
+        USE_CUSTOM_ICONS: "Show custom icons",
+        USE_CUSTOM_ICONS_DESC: "Replace icons with custom ones",
         VERSIONS: "Versions"
       };
     }
@@ -2349,21 +2350,21 @@
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       createStoreImpl = (createState) => {
-        var state;
-        var listeners = /* @__PURE__ */ new Set();
+        var state2;
+        var listeners2 = /* @__PURE__ */ new Set();
         var setState = (partial, replace) => {
-          var nextState = typeof partial === "function" ? partial(state) : partial;
-          if (!Object.is(nextState, state)) {
-            var previousState = state;
-            state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
-            listeners.forEach((listener) => listener(state, previousState));
+          var nextState = typeof partial === "function" ? partial(state2) : partial;
+          if (!Object.is(nextState, state2)) {
+            var previousState = state2;
+            state2 = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state2, nextState);
+            listeners2.forEach((listener) => listener(state2, previousState));
           }
         };
-        var getState = () => state;
+        var getState = () => state2;
         var getInitialState = () => initialState;
         var subscribe = (listener) => {
-          listeners.add(listener);
-          return () => listeners.delete(listener);
+          listeners2.add(listener);
+          return () => listeners2.delete(listener);
         };
         var api = {
           setState,
@@ -2371,7 +2372,7 @@
           getInitialState,
           subscribe
         };
-        var initialState = state = createState(setState, getState, api);
+        var initialState = state2 = createState(setState, getState, api);
         return api;
       };
       createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
@@ -2467,8 +2468,8 @@
           if (optListener) {
             var equalityFn = (options == null ? void 0 : options.equalityFn) || Object.is;
             var currentSlice = selector(api.getState());
-            listener = (state) => {
-              var nextSlice = selector(state);
+            listener = (state2) => {
+              var nextSlice = selector(state2);
               if (!equalityFn(currentSlice, nextSlice)) {
                 var previousSlice = currentSlice;
                 optListener(currentSlice = nextSlice, previousSlice);
@@ -2512,7 +2513,7 @@
       persistImpl = (config, baseOptions) => (set, get, api) => {
         var options = {
           storage: createJSONStorage(() => globalThis.localStorage),
-          partialize: (state) => state,
+          partialize: (state2) => state2,
           version: 0,
           merge: (persistedState, currentState) => ({
             ...currentState,
@@ -2532,17 +2533,17 @@
           }, get, api);
         }
         var setItem = () => {
-          var state = options.partialize({
+          var state2 = options.partialize({
             ...get()
           });
           return storage3.setItem(options.name, {
-            state,
+            state: state2,
             version: options.version
           });
         };
         var savedSetState = api.setState;
-        api.setState = (state, replace) => {
-          savedSetState(state, replace);
+        api.setState = (state2, replace) => {
+          savedSetState(state2, replace);
           return setItem();
         };
         var configResult = config((...args) => {
@@ -2661,8 +2662,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = usePluginSettings2.subscribe((state) => {
-          if (state._hasHydrated) {
+        var unsubscribe2 = usePluginSettings2.subscribe((state2) => {
+          if (state2._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -2774,12 +2775,12 @@
           }
         },
         pinnedPlugins: [],
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        togglePinnedPlugin: (id) => set((state) => {
-          var pinned = state.pinnedPlugins || [];
+        togglePinnedPlugin: (id) => set((state2) => {
+          var pinned = state2.pinnedPlugins || [];
           if (pinned.includes(id)) {
             return {
               pinnedPlugins: pinned.filter((p) => p !== id)
@@ -2803,8 +2804,8 @@
           url: "http://localhost:4040/rain.js"
         },
         loadReactDevTools: false,
-        updateLoaderConfig: (newConfig) => set((state) => ({
-          ...state,
+        updateLoaderConfig: (newConfig) => set((state2) => ({
+          ...state2,
           ...newConfig
         }))
       }), {
@@ -2813,8 +2814,8 @@
       }));
       settings = () => useSettings.getState();
       useAssetBrowserSettings = () => {
-        var settings4 = useSettings((state) => state.assetBrowser);
-        var updateSettings = useSettings((state) => state.updateSettings);
+        var settings4 = useSettings((state2) => state2.assetBrowser);
+        var updateSettings = useSettings((state2) => state2.updateSettings);
         return {
           enabledFilters: settings4.enabledFilters,
           updateSettings: (newSettings) => {
@@ -2831,13 +2832,6 @@
   });
 
   // src/api/assets/index.ts
-  var assets_exports = {};
-  __export(assets_exports, {
-    filterAssets: () => filterAssets,
-    findAsset: () => findAsset,
-    findAssetId: () => findAssetId2,
-    iterateAssets: () => iterateAssets
-  });
   function* iterateAssets() {
     var { flagsIndex } = getMetroCache();
     var yielded = /* @__PURE__ */ new Set();
@@ -2871,15 +2865,6 @@
       }
     }
   }
-  function filterAssets(param) {
-    var filteredAssets = [];
-    for (var asset of iterateAssets()) {
-      if (typeof param === "string" ? asset.name === param : param(asset)) {
-        filteredAssets.push(asset);
-      }
-    }
-    return filteredAssets;
-  }
   function findAssetId2(name) {
     return findAsset(name)?.id;
   }
@@ -2908,6 +2893,7 @@
       init_lazy();
       init_common();
       init_wrappers();
+      init_i18n();
       ({ uuid4 } = lazyDestructure(() => findByProps("uuid4")));
       showToast = (content, asset) => toasts.open({
         key: `rain-toast-${uuid4()}`,
@@ -2915,7 +2901,7 @@
         source: asset,
         icon: asset
       });
-      showToast.showCopyToClipboard = (message = "Strings.COPIED_TO_CLIPBOARD") => {
+      showToast.showCopyToClipboard = (message = Strings.COPIED_TO_CLIPBOARD) => {
         showToast(message, findAssetId2("toast_copy_link"));
       };
     }
@@ -2952,7 +2938,7 @@
     findExports: () => findExports,
     findModule: () => findModule,
     findModuleId: () => findModuleId,
-    lazy: () => lazy_exports2
+    lazy: () => lazy_exports
   });
   var init_metro = __esm({
     "src/metro/index.ts"() {
@@ -2969,21 +2955,9 @@
   });
 
   // src/api/react/jsx.ts
-  var jsx_exports = {};
-  __export(jsx_exports, {
-    deleteJsxCreate: () => deleteJsxCreate,
-    onJsxCreate: () => onJsxCreate,
-    patchJsx: () => patchJsx
-  });
   function onJsxCreate(Component, callback) {
     if (!callbacks.has(Component)) callbacks.set(Component, []);
     callbacks.get(Component).push(callback);
-  }
-  function deleteJsxCreate(Component, callback) {
-    if (!callbacks.has(Component)) return;
-    var cbs = callbacks.get(Component);
-    cbs.splice(cbs.indexOf(callback), 1);
-    if (cbs.length === 0) callbacks.delete(Component);
   }
   function patchJsx() {
     var callback = ([Component], ret) => {
@@ -3269,12 +3243,6 @@
   });
 
   // shims/jsxRuntime.ts
-  var jsxRuntime_exports = {};
-  __export(jsxRuntime_exports, {
-    Fragment: () => Fragment,
-    jsx: () => jsx,
-    jsxs: () => jsxs
-  });
   function unproxyFirstArg(args) {
     if (!args[0]) {
       throw new Error("The first argument (Component) is falsy. Ensure that you are passing a valid component.");
@@ -3637,18 +3605,18 @@
         customHost: "",
         customClientId: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "cloud-sync-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       cloudSyncSettings = new Proxy({}, {
@@ -3736,19 +3704,19 @@
           }
         },
         isAuthorized: () => !!get().token,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "cloud-sync-auth",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync-auth.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-          state?.init();
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
+          state2?.init();
         }
       }));
     }
@@ -3797,19 +3765,19 @@
           }
         },
         hasData: () => !!get().data && !!get().at,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "cloud-sync-cache",
         storage: createJSONStorage(() => createFileStorage("plugins/cloud-sync-cache.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-          state?.init();
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
+          state2?.init();
         }
       }));
     }
@@ -4056,25 +4024,6 @@
   });
 
   // src/lib/utils/hookDefineProperty.ts
-  function hookDefineProperty(target, property, cb) {
-    var targetAsAny = target;
-    if (property in target) {
-      return void cb(targetAsAny[property]);
-    }
-    var value;
-    Object.defineProperty(targetAsAny, property, {
-      get: () => value,
-      set(v2) {
-        value = cb(v2) ?? v2;
-      },
-      configurable: true,
-      enumerable: false
-    });
-    return () => {
-      delete targetAsAny[property];
-      targetAsAny[property] = value;
-    };
-  }
   var init_hookDefineProperty = __esm({
     "src/lib/utils/hookDefineProperty.ts"() {
       "use strict";
@@ -4084,13 +4033,6 @@
   });
 
   // src/lib/utils/invariant.ts
-  function invariant(condition, message) {
-    if (condition) return;
-    var resolvedMessage = typeof message === "function" ? message() : message;
-    var prefix2 = "[Invariant Violation]";
-    var value = resolvedMessage ? `${prefix2}: ${resolvedMessage}` : prefix2;
-    throw new Error(value);
-  }
   var init_invariant = __esm({
     "src/lib/utils/invariant.ts"() {
       "use strict";
@@ -4125,16 +4067,6 @@
   });
 
   // src/lib/utils/index.ts
-  var utils_exports = {};
-  __export(utils_exports, {
-    cyrb64: () => cyrb64,
-    findInReactTree: () => findInReactTree,
-    findInTree: () => findInTree,
-    hookDefineProperty: () => hookDefineProperty,
-    invariant: () => invariant,
-    lazy: () => lazy_exports,
-    safeFetch: () => safeFetch
-  });
   var init_utils = __esm({
     "src/lib/utils/index.ts"() {
       "use strict";
@@ -4266,17 +4198,17 @@
         fonts: {},
         _hasHydrated: false,
         setFont: (name, font) => {
-          set((state) => ({
+          set((state2) => ({
             fonts: {
-              ...state.fonts,
+              ...state2.fonts,
               [name]: font
             }
           }));
         },
         removeFont: (name) => {
-          set((state) => {
+          set((state2) => {
             var newFonts = {
-              ...state.fonts
+              ...state2.fonts
             };
             delete newFonts[name];
             return {
@@ -4285,9 +4217,9 @@
           });
         },
         setSelected: (name) => {
-          set((state) => {
+          set((state2) => {
             var newFonts = {
-              ...state.fonts
+              ...state2.fonts
             };
             if (name) {
               newFonts.__selected = name;
@@ -4299,16 +4231,16 @@
             };
           });
         },
-        setHasHydrated: (state) => {
+        setHasHydrated: (state2) => {
           set({
-            _hasHydrated: state
+            _hasHydrated: state2
           });
         }
       }), {
         name: "rain-fonts",
         storage: createJSONStorage(() => createFileStorage("RAIN_FONTS")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       fonts = new Proxy({}, {
@@ -4354,8 +4286,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = useColorsPref.subscribe((state) => {
-          if (state._hasHydrated) {
+        var unsubscribe2 = useColorsPref.subscribe((state2) => {
+          if (state2._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -4380,6 +4312,7 @@
       useColorsPref = create2()(persist((set) => ({
         selected: null,
         customBackground: null,
+        iconsEnabled: true,
         _hasHydrated: false,
         setType: (type) => set({
           type
@@ -4390,14 +4323,17 @@
         setSelected: (selected) => set({
           selected
         }),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setIconsEnabled: (enabled) => set({
+          iconsEnabled: enabled
+        }),
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "colors-pref",
         storage: createJSONStorage(() => createFileStorage("themes/colors/preferences.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       colorsPref = new Proxy({}, {
@@ -4405,13 +4341,536 @@
           return useColorsPref.getState()[prop];
         },
         set(target, prop, value) {
-          var state = useColorsPref.getState();
-          if (prop === "type") state.setType(value);
-          else if (prop === "customBackground") state.setCustomBackground(value);
-          else if (prop === "selected") state.setSelected(value);
+          var state2 = useColorsPref.getState();
+          if (prop === "type") state2.setType(value);
+          else if (prop === "customBackground") state2.setCustomBackground(value);
+          else if (prop === "selected") state2.setSelected(value);
+          else if (prop === "iconsEnabled") state2.setIconsEnabled(value);
           return true;
         }
       });
+    }
+  });
+
+  // src/plugins/_core/painter/plus/index.ts
+  var PatchType, InactiveReason;
+  var init_plus = __esm({
+    "src/plugins/_core/painter/plus/index.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      PatchType = /* @__PURE__ */ (function(PatchType2) {
+        PatchType2["Icons"] = "icons";
+        PatchType2["CustomIconOverlays"] = "custom_icon_overlays";
+        PatchType2["MentionLineColor"] = "mention_line_color";
+        PatchType2["Iconpack"] = "iconpack";
+        return PatchType2;
+      })({});
+      InactiveReason = /* @__PURE__ */ (function(InactiveReason2) {
+        InactiveReason2["NoTheme"] = "no_theme";
+        InactiveReason2["ThemesPlusUnsupported"] = "themes_plus_unsupported";
+        InactiveReason2["NoIconpacksList"] = "no_iconpacks_list";
+        InactiveReason2["NoIconpackConfig"] = "no_iconpack_config";
+        InactiveReason2["NoIconpackFiles"] = "no_iconpack_files";
+        return InactiveReason2;
+      })({});
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/active.ts
+  function updateState() {
+    for (var x2 of listeners) x2();
+  }
+  var state, listeners;
+  var init_active = __esm({
+    "src/plugins/_core/painter/plus/stuff/active.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_common();
+      state = {
+        loading: true,
+        active: false,
+        iconpack: {
+          iconpack: void 0,
+          list: [],
+          hashes: {}
+        },
+        patches: [],
+        inactive: []
+      };
+      listeners = /* @__PURE__ */ new Set();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/resolveColor.ts
+  function matchTheme(colors) {
+    var { theme } = ThemeStore2;
+    if (theme in colors) return colors[theme];
+    if ([
+      "dark",
+      "midnight"
+    ].includes(theme)) return colors.darker;
+    return colors.light;
+  }
+  function resolveColor_default(color2) {
+    if (Array.isArray(color2)) {
+      return matchTheme({
+        darker: color2[0],
+        light: color2[1],
+        midnight: color2[2]
+      });
+    }
+    if (color2.startsWith("SC_")) {
+      return semanticColors[color2.slice(3)] ? resolveSemanticColor(semanticColors[color2.slice(3)]) : "#ffffff";
+    }
+    if (color2.startsWith("RC_")) return rawColors[color2.slice(3)] ?? "#ffffff";
+    if (color2.startsWith("#") && color2.length === 4) {
+      return `#${color2[1].repeat(2)}${color2[2].repeat(2)}${color2[3].repeat(2)}`;
+    }
+    if (color2.startsWith("#") && color2.length === 7) return color2;
+  }
+  var ThemeStore2;
+  var init_resolveColor = __esm({
+    "src/plugins/_core/painter/plus/stuff/resolveColor.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_color();
+      init_metro();
+      ThemeStore2 = findByStoreName("ThemeStore");
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/iconOverlays.tsx
+  function getIconOverlay(plus, id, style) {
+    var asset = findAsset(id);
+    if (!asset) return;
+    var overlay = plus.customOverlays?.[asset.name];
+    if (!overlay) return;
+    return {
+      replace: overlay.replace,
+      style: overlay.style,
+      children: overlay.children
+    };
+  }
+  function getIconTint(plus, source, name) {
+    var tint = plus.icons?.[name];
+    if (!tint) return;
+    return resolveColor_default(tint);
+  }
+  var init_iconOverlays = __esm({
+    "src/plugins/_core/painter/plus/stuff/iconOverlays.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_assets();
+      init_resolveColor();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/modIcons.ts
+  var modIcons_default;
+  var init_modIcons = __esm({
+    "src/plugins/_core/painter/plus/stuff/modIcons.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      modIcons_default = {
+        bunny: {
+          source: "https://raw.githubusercontent.com/bunny-mod/Bunny/main/src/assets/icons/pyoncord.png",
+          raw: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAABoBJREFUeF7lW1nIVlUUXasom80kijJKaVQzGtTUjCJteNBmeqigssnIpDIqwmw0GqhQi4iw8SEaHtKgMpNKM7SiyUZpLppoTi0rd2f9nCu36/2+79zxv/5t8MV/n333WWefffb0EQ0iM+sH4AEAowG8CGAqycVVqsgqhWeVbWavAtg/tu4vABNIPphVVih/YwAws2EAlrRQfChJgVM6NQmARwGc0GKHX5PcofTdA2gSAJ8A2KXNJueQPLpsEJoEwI8A+rTZ4GrnIAeQ/KpMEJoEwCoAm3TY3DKSezcKADPbCMDWADYEIK/9B4CVJC2LomYWwv8PgC1JCqxSqJAFmNlOAF6PAfA3ACn3MYBLSD4bqmUgABI3l+T4ULmd+IoCcDeAs9p8RI5NPDNJrminTAYAZAVbkJSlFaaiALwJYEiAFh8CuJHk7Fa8ZqaNbRAgSyzjSc4N5G3LVhQAmfiYDIosBXAGyXeSa8xMJ9orUNb7AAZm9TNpsosCMNnd/9sDlY7Y/gRwAYDZJOUzusjMfvK+JFRcX5J6OgtRUQB2B/BBDg3k8ZeQHBED4AsASoZCaTTJRaHMrfiKAqD1jwM4NqcinwE4mOTnZiYgBWgozSN5RChzJQB40x0A4KMCivwO4GQAFwI4JIMcRYa9i74GhSwgZr5XuWs8LYPyaazPAMh6ojvLeop8tywA5L0V/FSSsbXZ4Eh3DV7udgD8VdgMwK8+JC6iU5a115GcmmVBkrcUC4hdhYPcPX6+RhAWkDysMQB4SzgXwB0Zoroi+q8iKcvLTaVaQMwSZgGYWBMIfUj+nBeBSgDwljADwHk1XIdCL0FlAMRAOL/i0tsgku82zgI8AMruLgNwfV4FA9btQ/KtAL5UlkotIOYTjgdwr6o5eRVts244SWWZuagWALw1DFUGCGBwLk1bLxpG8pW8MmsDwIPQ25W+7wNwTF6FU9bJ2U7L+xLUCkDsSij5keLblASEagmjSL6XVV63AOCtQSVw3d2yytxr3JN7LUklZsHUnQAMcnUE1RRVTi+TXgIwjqSsoiN1CwBmtqvzA28A2LyjhvkYlCKr9vhcp+W1A2BmewB4AcB2nZQr+Hc1aaaQlK9pSbUC4E9eLfCynF8IRoo/JpJUMXYdqgUAM9N3RgFYGKJxDh71FK5WAwbAvgAeShRnPgWwZxoIdQFwEwCV0DfOsbmQJWPi993MZGGqMsdT5e9VdE3GC5UCYGY69ehUQjaSh0dv/5B4j0FCXJ8hrWexHMAIkj9EH6oEADNTZUjNj+MqeOaSIM0nOTb5n2amStH8FEQVNh8eWcJaAHybe7gfU9kLgEzmbd/91VCCujArXdd3hdA2M73fKobKzDTYIK+uRsel7tT75jnKnGvUUtuWpMrra8nMNG12aguZatjKMa7pAsDMtnK9tkdylKVz6lz6snsATFKPwB+M+gtppx//sBoyCyMAkuNppWtYg0CVxeT4tvfPbKcI8zHXpD2RZnaOW3RXDQo27ROrSfYSAGowylv/30iR4qYCQBFSVe9zk0Fd5GKH0QJAPfpO96XJG8mjmyJHOcHFAuA1APvlkbIerzmN5P3SXwBc7IaOblmPN5NVdaXK/RUDRACoTqcOq4KfptA37l1XuKpma0QKrlQ/2LEEJY8i+XQXAD4Q6u+uwZwKKrbtdNWYjMboNDClf0qTl+ktb5W6RsLMbDc/naZK80Cvt/YQSvruYJIr46GwanQTAJzph5Y1/Vk2aVZQCck8xR4kpUgpZGYCQDHNOK9/p6bpRSRvS02GzEx1tZGlaAbopH8DcDnJO0uS2VaMmWnzk1xz9hrXldIob9o+ldf0W+cPZiafkLvbmtDsSY3MytQ7mXUVwJiZrFozTKoK6QcZSVrXAszsSABPFVRIs4MzyjTxgvoo4TsAwCm+Yy2rEC1PswC9CAfm+KBMSsWPW0l+l2N9LUt8UfYKf8Vn/gcAM9MT82VGTeTYngBwdqeB6Ixya2FPAnCSKx4+HPhlBRJ6vsaS/DZwTePYkgCozx7SqpJXl69YmqzFNW6HHRSKxwGhc79XApgV2npqOiBxAE73/ftWOquRqbJT7mGEJoIRhcIaZVGjMm14QT+BucHVDKa7oUSlkT2KIgAUT6/zIwbXYFTmpLxZU909kiIAprhM6+bEDqf7Hy93pY09lSIAFriO7aF+k7/4aYs0i+hxOEQAqIGgNrJ+iDS5p3j4kNP6F9f7+CyBdXonAAAAAElFTkSuQmCC"
+        },
+        revenge: {
+          source: "https://raw.githubusercontent.com/revenge-mod/revenge-bundle/main/src/assets/icons/revenge.png",
+          raw: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuMWK1UgwAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAMAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAvm4AAOgDAAC+bgAA6AMAAFBhaW50Lk5FVCA1LjEuMQADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAABcs0MzPnTW7QAABiFJREFUeF7tmlmIlWUYx2emyRzTppz2Pc3QNqKijQqRQgoKSyGri4S5CLqRyIyi5SKCugmKLqK6EDNIsZKCCrKYmxYkK6gQi0Zpc8GZsdKc1HH6/c63nPOd41m+M/s35w8/vuWc877v83zv8rzPd5oaaqihhhqaxGoOjxNSg4ODrRymwYkwAw5BD/Q1Nzcf4VhVE84BGD2Fw81wI1wE58LpEDlgB2yENbClVkdMCGF8MyyCnVBJA7AV7oVjw59PfGHMLNgEtUpH3Q0TeqjnhBFt8DIchjT6Bs4LixleUbBdcgrYuBHzcljPEuiDtDoID4VFlaimRlPAMRyOAyeak+EsOB+chGZDG6yC9Uw6hzkOi6i3hYOT3iXwBlwB9egduJ+2/Rdc5lXiACr13glwAdh1ZsGc8Pps0AHtoENsYKQ/4UH4MM3MG9ang6eC9Z4COtj6LgQdfCno8Hp72XewkHbtDi7zShRIY6ZzuBOWweWgoT6BQkMr6QdYRkWbg8u8QkOjdfskOBVcwnSwhmrgmaCDdUSxg4cil8ZbadePwWVesQNoYAeHZ0Dj7er1aBC64GGwRxignAH2pOhpeu66rRN0uMvUcBlaTv/CYhzwcXCZV84BGK+3n4Xl4BMfiuz+v8JemAk6wTnCp19vFx6qbNML8DROSMxRkQNu4bAWbHBW5UNZhAO+DS4DtWC8XfA+yLLxygl8YTgXxXLsafiVuatsS1svBodiLG86/o/PXWVf54DLbSwd8A/syV1lX64+LrGxdMB++C13lX053A20YukA99C/gGt41mV8Y7AVq4VlQcN/huwkDsrL+S6xM7QHqO3QH5xmWto7m6Uwsjt2gGHrX8Fp5uUmK14KIweYSKxnJRiA9+BdcBg5oY7kXGLZ1vETuMWVtNtvA6J42Y9CYddGC7vd6xTaBreBQ8glxkDjergO5oI7PvcW9e4BNPgg7IIt8BV8GZ57z/H8EbijrFW2dQFzn20PZHgIr0BavQ9udGJxbVkzYB4sBdNYX8BuOATV5Hd2wefwEtwDc2E6JBzJ9VTYAGlkVunasIi8uLkcjviNFHoNTGaUlZ9DB1wNT8E+KKf98CRcBTOhlrJfhTQyRbY4LCKeA1Q32N3SyORGYRkloqsNQA98zeVn4LxRTo7nLr67GXr9bXC7rKw7bRjv5s+JMKfCxv8O+4LTmuU4N7FRq0xtVWqwn10WnNYkcw22Ia3m0Atythc6wHyZq0EaWfl8Cqs6yfEdw9AlUKlb+5nZX7NTFRXWOR/m5W6kk5OnQVHCAcYBxgNp5BNbAWaHy4rGuhJ0gq+zqukG6OQ3uQZWkHVad9ohoEzTmY7LiwpbYRWkla+hPoVrILHXVtxzAlwJPVCr/O5jYII0Ie7ZTuvaCNZdj/6A3NCJuy43PH8CzA1W7dJFcr12R/kBONHtBGMLx/xdYFyQ2IfXIENz1/0N8H14fRosADPX7u3TtjOSc90dTLJdiQJwwlIOq6HeF4pR4OILCMezMULhMKtHbtIOgCuCw2IogVUkV5tOHLC6uHEmDg0165UNs5EmHRybQzVeWYZlRe8Khmq88uGYoi9poOGl6eysSyf6prm12AF94PidDHIOaSt2gPlBd1qTQW7e2hMOYFIwPfYJTIbkSC4/WNwDlP+v2RScZlruYzqO5gAnwuchbVQ40eRS2F/iAIaBa7nDYCVkOV3ukr/9aD1AJ+idt8F3hkZivZClrLHB2luwo2pQwVrppsE/SxjOGjxEAY7RouGt0Z7jyWMUqUVHv+P+IMIAxN9abyGjKSd6jX+EB92bqvJwv1BogOeicRpbiE7QQYXovELcytrL/Gw0pPH27BUYX/J3mVEVzpwGr0O9O7q0Mtf4Jrj+j71oyE2wB0ZDGr8GzAMkZPcdKzmvmNIaaTmhr4NH6fb+WSqhsXTA3zDSK4vGrwcnvBLjx1R0R98bdMNIyW6/FhJvg8eNaJiprcfhAAy3NH4d+Bps/IoGtsOLUOllSVpFxrvdHf+iob7yegB8FbYXfHOjEWnph23wHJg7rEmpAqGREg22HW5PzdS6VFV6d1BO/ht0K3SHoXxDDTXUUEMNVVRT0/+M4LN4eqsYNQAAAABJRU5ErkJggg=="
+        }
+      };
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stores/CacheStore.ts
+  var useCacheStore2;
+  var init_CacheStore2 = __esm({
+    "src/plugins/_core/painter/plus/stores/CacheStore.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_storage();
+      init_esm();
+      init_middleware();
+      useCacheStore2 = create2()(persist((set) => ({
+        iconpacks: {},
+        setIconpack: (id, data4) => set((state2) => ({
+          iconpacks: {
+            ...state2.iconpacks,
+            [id]: data4
+          }
+        }))
+      }), {
+        name: "themes-plus-cache",
+        storage: createJSONStorage(() => createFileStorage("plugins/themes-plus-cache.json"))
+      }));
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/util.ts
+  function fixPath(path) {
+    return path.startsWith("../") ? `_/${path.slice(3)}` : path;
+  }
+  function cFetch(url2, init, format = "text") {
+    return _async_to_generator(function* () {
+      var cache = useCacheStore2.getState();
+      var rawUrl = typeof url2 === "string" ? url2 : url2.url;
+      var res = yield fetch(url2, init);
+      var ret;
+      if (res.status !== 200) {
+        if (cache?.isCached?.(rawUrl)) ret = cache.readCache(rawUrl);
+        else throw new Error(`Failed to fetch ${rawUrl}`);
+      } else {
+        ret = yield res.text();
+        cache?.writeCache?.(rawUrl, ret);
+      }
+      if (format === "json") return JSON.parse(ret);
+      return ret;
+    })();
+  }
+  var init_util = __esm({
+    "src/plugins/_core/painter/plus/stuff/util.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_plus();
+      init_CacheStore2();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/patches/icons.tsx
+  function patchIcons(plus, tree, config) {
+    var { iconpack } = state.iconpack;
+    if (config.biggerStatus) {
+      patches.push(before("default", Status, ([props], ...args) => [
+        {
+          ...props,
+          size: Math.floor(props.size * 1.5)
+        },
+        ...args
+      ]));
+    }
+    if (plus.icons || plus.customOverlays || iconpack) {
+      if (plus.icons) state.patches.push(PatchType.Icons);
+      if (plus.customOverlays) {
+        state.patches.push(PatchType.CustomIconOverlays);
+      }
+      if (iconpack) state.patches.push(PatchType.Iconpack);
+      patches.push(waitFor((exports) => typeof exports?.jsx === "function" && typeof exports?.jsxs === "function" ? exports : void 0, (ReactJSX) => {
+        if (!useColorsPref.getState().iconsEnabled) return;
+        function interceptJSX(args, orig) {
+          var [type, props, ...rest] = args;
+          if (!props) return orig(...args);
+          var { source } = props;
+          var isOriginalImage = type === OriginalImage;
+          if (!isOriginalImage) {
+            if (typeof source === "number" && iconpack) {
+              var asset = findAsset(source);
+              if (asset?.httpServerLocation) {
+                var assetIconpackLocation = fixPath([
+                  ...asset.httpServerLocation.split("/").slice(2),
+                  `${asset.name}${iconpack.suffix}.${asset.type}`
+                ].join("/"));
+                var useIconpack = tree.length ? tree.includes(assetIconpackLocation) : true;
+                if (useIconpack) {
+                  return orig(type, {
+                    ...props,
+                    source: {
+                      uri: iconpack.load + assetIconpackLocation,
+                      headers: {
+                        "cache-control": "public, max-age=3600"
+                      },
+                      width: asset.width,
+                      height: asset.height,
+                      original: source
+                    }
+                  }, ...rest);
+                }
+              }
+            }
+            return orig(...args);
+          }
+          var patchedProps = {
+            ...props
+          };
+          var asset1 = null;
+          var modIcon = Object.entries(modIcons_default).find(([_2, { raw }]) => source?.uri === raw);
+          if (modIcon) {
+            asset1 = {
+              httpServerLocation: "//_",
+              width: 64,
+              height: 64,
+              name: modIcon[0],
+              type: "png"
+            };
+          } else if (source && typeof source.uri === "string" && typeof source.width === "number" && typeof source.height === "number" && typeof source.file === "string" && source.allowIconTheming) {
+            var [file, ...parent] = source.file.split("/").reverse();
+            var [ext, ...base] = file.split(".").reverse();
+            asset1 = {
+              httpServerLocation: `//_/external${parent[0] ? "/" : ""}${parent.reverse().join("/")}`,
+              width: source.width,
+              height: source.height,
+              name: base.reverse().join("."),
+              type: ext
+            };
+          } else if (typeof source === "number") {
+            asset1 = findAsset(source);
+          }
+          if (!asset1?.httpServerLocation) return orig(...args);
+          var assetIconpackLocation1 = iconpack && fixPath([
+            ...asset1.httpServerLocation.split("/").slice(2),
+            `${asset1.name}${iconpack.suffix}.${asset1.type}`
+          ].join("/"));
+          var useIconpack1 = assetIconpackLocation1 && (tree.length ? tree.includes(assetIconpackLocation1) : true);
+          var overlayChildren;
+          if (plus.customOverlays && !useIconpack1 && typeof source === "number") {
+            var overlay = getIconOverlay(plus, source, patchedProps.style);
+            if (overlay) {
+              if (overlay.replace) patchedProps.source = findAsset(overlay.replace)?.id;
+              if (overlay.style) patchedProps.style = [
+                patchedProps.style,
+                overlay.style
+              ];
+              overlayChildren = overlay.children;
+            }
+          }
+          if (plus.icons) {
+            var tint = getIconTint(plus, source, asset1.name);
+            if (tint) {
+              patchedProps.style = [
+                patchedProps.style,
+                {
+                  tintColor: tint
+                }
+              ];
+            }
+          }
+          if (useIconpack1) {
+            patchedProps.source = {
+              uri: iconpack.load + assetIconpackLocation1,
+              headers: {
+                "cache-control": "public, max-age=3600"
+              },
+              width: asset1.width,
+              height: asset1.height,
+              original: patchedProps.source
+            };
+          }
+          var imageEl = orig(OriginalImage, patchedProps, ...rest);
+          return overlayChildren ? orig(RN.View, null, imageEl, overlayChildren) : imageEl;
+        }
+        patches.push(instead("jsx", ReactJSX, (args, orig) => interceptJSX(args, orig)), instead("jsxs", ReactJSX, (args, orig) => interceptJSX(args, orig)));
+      }));
+    }
+  }
+  var Status, RN, OriginalImage;
+  var init_icons = __esm({
+    "src/plugins/_core/painter/plus/patches/icons.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_assets();
+      init_patcher();
+      init_modules2();
+      init_wrappers();
+      init_preferences();
+      init_plus();
+      init_active();
+      init_iconOverlays();
+      init_loader2();
+      init_modIcons();
+      init_util();
+      Status = findByName("Status", false);
+      RN = findByProps("Image", "View");
+      OriginalImage = RN.Image;
+    }
+  });
+
+  // src/plugins/_core/painter/plus/patches/mentionLineColor.ts
+  function patchMentionLineColors(plus) {
+    if (plus.mentionLineColor) {
+      state.patches.push(PatchType.MentionLineColor);
+      patches.push(after("createBackgroundHighlight", RowGeneratorUtils, ([x2], ret) => {
+        if (!ret || !x2?.message?.mentioned) return;
+        var clr = resolveColor_default(plus.mentionLineColor);
+        if (!clr) return;
+        var hex = clr.startsWith("#") && clr.length === 9 ? `#${clr.slice(3)}` : clr;
+        var r = parseInt(hex.slice(1, 3), 16);
+        var g2 = parseInt(hex.slice(3, 5), 16);
+        var b3 = parseInt(hex.slice(5, 7), 16);
+        ret.gutterColor = 4278190080 | r << 16 | g2 << 8 | b3 | 0;
+      }));
+    }
+  }
+  var RowGeneratorUtils;
+  var init_mentionLineColor = __esm({
+    "src/plugins/_core/painter/plus/patches/mentionLineColor.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_patcher();
+      init_wrappers();
+      init_plus();
+      init_active();
+      init_loader2();
+      init_resolveColor();
+      RowGeneratorUtils = findByProps("createBackgroundHighlight");
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/constants.ts
+  var constants_default;
+  var init_constants2 = __esm({
+    "src/plugins/_core/painter/plus/stuff/constants.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      constants_default = {
+        iconpacks: {
+          list: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/list.json",
+          assets: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/assets/",
+          tree: (iconpack) => `https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/${iconpack}.txt`,
+          hashes: "https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/_hashes.txt"
+        }
+      };
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/iconpackDataGetter.ts
+  function getIconpackData(id, configUrl) {
+    return _async_to_generator(function* () {
+      var treeUrl = constants_default.iconpacks.tree(id);
+      var [config, tree] = yield allSettled([
+        configUrl ? cFetch(configUrl, void 0, "json") : new Promise((res) => res(/* @__PURE__ */ Symbol())),
+        cFetch(treeUrl).then((x2) => x2.replaceAll("\r", "").split("\n"))
+      ]);
+      return {
+        config: config.status === "fulfilled" && typeof config.value !== "symbol" ? config.value : null,
+        tree: tree.status === "fulfilled" ? tree.value : null
+      };
+    })();
+  }
+  var init_iconpackDataGetter = __esm({
+    "src/plugins/_core/painter/plus/stuff/iconpackDataGetter.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_constants2();
+      init_util();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/loader.tsx
+  function initPlus() {
+    return _async_to_generator(function* () {
+      for (var x2 of patches) {
+        x2();
+      }
+      patches.length = 0;
+      state.loading = true;
+      state.active = false;
+      state.iconpack = {
+        iconpack: void 0,
+        list: [],
+        hashes: {}
+      };
+      state.patches = [];
+      state.inactive = [];
+      updateState();
+      try {
+        state.iconpack = {
+          iconpack: void 0,
+          list: yield cFetch(constants_default.iconpacks.list, void 0, "json").then((res) => res.list),
+          hashes: yield cFetch(constants_default.iconpacks.hashes, void 0, "json")
+        };
+      } catch (unused) {
+        if (!state.iconpack.list.length || !Object.keys(state.iconpack.hashes).length) {
+          state.loading = false;
+          state.inactive.push(InactiveReason.NoIconpacksList);
+          updateState();
+          return;
+        }
+      }
+      var selectedTheme = getCurrentTheme();
+      if (!selectedTheme) {
+        state.loading = false;
+        state.inactive.push(InactiveReason.NoTheme);
+        updateState();
+        return;
+      }
+      var plusData = selectedTheme.data?.plus;
+      if (!plusData) {
+        state.loading = false;
+        state.inactive.push(InactiveReason.ThemesPlusUnsupported);
+        updateState();
+        return;
+      }
+      var useIconpack = plusData.iconpack;
+      var isCustomIconpack = false;
+      var user = UserStore2.getCurrentUser();
+      state.iconpack.iconpack = state.iconpack.list.find((x3) => useIconpack === x3.id);
+      var iconpackConfig = {
+        biggerStatus: false
+      };
+      var tree = [];
+      if (!isCustomIconpack && state.iconpack.iconpack) {
+        var dt;
+        try {
+          dt = yield getIconpackData(state.iconpack.iconpack.id, state.iconpack.iconpack.config);
+        } catch (unused) {
+          dt = {
+            config: null,
+            tree: null
+          };
+        }
+        if (dt.tree === null) {
+          state.loading = false;
+          if (dt.config === null) {
+            state.inactive.push(InactiveReason.NoIconpackConfig);
+          }
+          if (dt.tree === null) {
+            state.inactive.push(InactiveReason.NoIconpackFiles);
+          }
+          updateState();
+          return;
+        }
+        tree = dt.tree;
+        if (dt.config) iconpackConfig = dt.config;
+      }
+      state.active = true;
+      state.loading = false;
+      patchIcons(plusData, tree, iconpackConfig);
+      patchMentionLineColors(plusData);
+      updateState();
+    })();
+  }
+  var UserStore2, patches;
+  var init_loader2 = __esm({
+    "src/plugins/_core/painter/plus/stuff/loader.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_wrappers();
+      init_themes();
+      init_plus();
+      init_icons();
+      init_mentionLineColor();
+      init_active();
+      init_constants2();
+      init_iconpackDataGetter();
+      init_util();
+      UserStore2 = findByStoreName("UserStore");
+      patches = [];
     }
   });
 
@@ -4427,6 +4886,7 @@
   // src/plugins/_core/painter/themes/parser.ts
   function parseColorManifest(manifest) {
     var resolveType = (type2 = "dark") => (colorsPref.type ?? type2) === "dark" ? "darker" : "light";
+    var rainManifest = manifest;
     if (manifest.spec === 3) {
       var semanticColorDefinitions = {};
       for (var [semanticColorKey, semanticColorValue] of Object.entries(manifest.main.semantic ?? {})) {
@@ -4460,13 +4920,14 @@
           throw new Error(`Invalid semantic definitions: ${semanticColorValue}`);
         }
       }
-      if (import_react_native7.Platform.OS === "android") applyAndroidAlphaKeys(manifest.main.raw);
+      if (import_react_native7.Platform.OS === "android") applyAndroidAlphaKeys(rainManifest.main.raw);
       return {
         spec: 3,
-        reference: resolveType(manifest.type),
+        reference: rainManifest.main.type === "light" ? "light" : "darker",
         semantic: semanticColorDefinitions,
-        raw: manifest.main.raw ?? {},
-        background: manifest.main.background
+        raw: rainManifest.main.raw ?? {},
+        background: rainManifest.main.background,
+        display: rainManifest.display
       };
     }
     if (manifest.spec === 2) {
@@ -4659,37 +5120,57 @@
     var ref = Object.assign(_colorRef, {
       current: internalDef,
       key: `rain-theme-${++_inc}`,
-      lastSetDiscordTheme: !ThemeStore2.theme.startsWith("rain-theme-") ? ThemeStore2.theme : _colorRef.lastSetDiscordTheme
+      lastSetDiscordTheme: !ThemeStore3.theme.startsWith("rain-theme-") ? ThemeStore3.theme : _colorRef.lastSetDiscordTheme
     });
-    if (internalDef != null) {
-      tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
-      FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
-      Object.keys(tokenRef2.Shadow).forEach((k) => tokenRef2.Shadow[k][ref.key] = tokenRef2.Shadow[k][ref.current.reference]);
-      Object.keys(tokenRef2.SemanticColor).forEach((k) => {
-        tokenRef2.SemanticColor[k][ref.key] = {
-          ...tokenRef2.SemanticColor[k][ref.current.reference]
-        };
-      });
-    }
-    if (update) {
-      AppearanceManager.setShouldSyncAppearanceSettings(false);
-      AppearanceManager.updateTheme(internalDef != null ? ref.key : ref.lastSetDiscordTheme);
+    if (useColorsPref.getState().iconsEnabled) {
+      initPlus();
+      if (internalDef != null) {
+        tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
+        FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
+        Object.keys(tokenRef2.Shadow).forEach((k) => tokenRef2.Shadow[k][ref.key] = tokenRef2.Shadow[k][ref.current.reference]);
+        Object.keys(tokenRef2.SemanticColor).forEach((k) => {
+          tokenRef2.SemanticColor[k][ref.key] = {
+            ...tokenRef2.SemanticColor[k][ref.current.reference]
+          };
+        });
+      }
+      if (update) {
+        AppearanceManager.setShouldSyncAppearanceSettings(false);
+        AppearanceManager.updateTheme(internalDef != null ? ref.key : ref.lastSetDiscordTheme);
+      }
+    } else {
+      if (internalDef != null) {
+        tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
+        FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
+        Object.keys(tokenRef2.Shadow).forEach((k) => tokenRef2.Shadow[k][ref.key] = tokenRef2.Shadow[k][ref.current.reference]);
+        Object.keys(tokenRef2.SemanticColor).forEach((k) => {
+          tokenRef2.SemanticColor[k][ref.key] = {
+            ...tokenRef2.SemanticColor[k][ref.current.reference]
+          };
+        });
+      }
+      if (update) {
+        AppearanceManager.setShouldSyncAppearanceSettings(false);
+        AppearanceManager.updateTheme(internalDef != null ? ref.key : ref.lastSetDiscordTheme);
+      }
     }
   }
-  var tokenRef2, origRawColor, AppearanceManager, ThemeStore2, FormDivider, _inc, _colorRef;
+  var tokenRef2, origRawColor, AppearanceManager, ThemeStore3, FormDivider, _inc, _colorRef;
   var init_updater = __esm({
     "src/plugins/_core/painter/themes/updater.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_metro();
+      init_loader2();
       init_parser();
-      tokenRef2 = findByProps("SemanticColor");
+      init_preferences();
+      tokenRef2 = findByPropsLazy("SemanticColor");
       origRawColor = {
         ...tokenRef2.RawColor
       };
       AppearanceManager = findByPropsLazy("updateTheme");
-      ThemeStore2 = findByStoreNameLazy("ThemeStore");
+      ThemeStore3 = findByStoreNameLazy("ThemeStore");
       FormDivider = findByPropsLazy("DIVIDER_COLORS");
       _inc = 1;
       _colorRef = {
@@ -4703,7 +5184,7 @@
 
   // src/plugins/_core/painter/themes/patches/background.tsx
   function ThemeBackground({ children }) {
-    var customBackground = useColorsPref((state) => state.customBackground);
+    var customBackground = useColorsPref((state2) => state2.customBackground);
     if (!_colorRef.current || customBackground === "hidden" || !_colorRef.current.background?.url || _colorRef.current.background?.blur && typeof _colorRef.current.background?.blur !== "number") {
       return children;
     }
@@ -4771,6 +5252,20 @@
     var callback = ([theme]) => theme === _colorRef.key ? [
       _colorRef.current.reference
     ] : void 0;
+    if (themeTypes) {
+      origDarker = themeTypes?.DARKER;
+      origLight = themeTypes?.LIGHT;
+      Object.defineProperty(themeTypes, "DARKER", {
+        configurable: true,
+        enumerable: true,
+        get: () => _colorRef.current?.reference === "darker" ? _colorRef.key : origDarker
+      });
+      Object.defineProperty(themeTypes, "LIGHT", {
+        configurable: true,
+        enumerable: true,
+        get: () => _colorRef.current?.reference === "light" ? _colorRef.key : origLight
+      });
+    }
     Object.keys(tokenReference.RawColor).forEach((key) => {
       Object.defineProperty(tokenReference.RawColor, key, {
         configurable: true,
@@ -4778,15 +5273,11 @@
         get: () => {
           var ret = _colorRef.current?.raw[key];
           if (ret) return ret;
-          var fallback = RAW_FALLBACK_MAP[key];
-          if (fallback) return fallback;
-          return origRawColor2[key];
+          return _colorRef.current?.raw[key] || origRawColor2[key];
         }
       });
     });
     var unpatches6 = [
-      before("isThemeDark", isThemeModule, callback),
-      before("isThemeLight", isThemeModule, callback),
       before("updateTheme", NativeThemeModule, callback),
       instead("resolveSemanticColor", tokenReference.default.meta ?? tokenReference.default.internal, (args, orig) => {
         if (!_colorRef.current) return orig(...args);
@@ -4798,20 +5289,27 @@
           semanticDef = _colorRef.current.semantic[SEMANTIC_FALLBACK_MAP[name]];
         }
         if (semanticDef?.value) {
-          if (semanticDef.opacity === 1) return semanticDef.value;
-          return (0, import_chroma_js3.default)(semanticDef.value).alpha(semanticDef.opacity).hex();
+          return semanticDef.opacity === 1 ? semanticDef.value : (0, import_chroma_js3.default)(semanticDef.value).alpha(semanticDef.opacity).hex();
         }
         var rawValue = _colorRef.current.raw[colorDef.raw];
         if (rawValue) {
           return colorDef.opacity === 1 ? rawValue : (0, import_chroma_js3.default)(rawValue).alpha(colorDef.opacity).hex();
         }
-        var fallbackValue = RAW_FALLBACK_MAP[colorDef.raw];
-        if (fallbackValue) {
-          return colorDef.opacity === 1 ? fallbackValue : (0, import_chroma_js3.default)(fallbackValue).alpha(colorDef.opacity).hex();
-        }
         return orig(...args);
       }),
       () => {
+        if (themeTypes) {
+          Object.defineProperty(themeTypes, "DARKER", {
+            configurable: true,
+            writable: true,
+            value: origDarker
+          });
+          Object.defineProperty(themeTypes, "LIGHT", {
+            configurable: true,
+            writable: true,
+            value: origLight
+          });
+        }
         Object.defineProperty(tokenReference, "RawColor", {
           configurable: true,
           writable: true,
@@ -4829,7 +5327,7 @@
       colorDef[themeName]
     ];
   }
-  var import_chroma_js3, tokenReference, isThemeModule, origRawColor2, SEMANTIC_FALLBACK_MAP, RAW_FALLBACK_MAP;
+  var import_chroma_js3, tokenReference, themeTypes, origRawColor2, origDarker, origLight, SEMANTIC_FALLBACK_MAP;
   var init_resolver = __esm({
     "src/plugins/_core/painter/themes/patches/resolver.ts"() {
       "use strict";
@@ -4838,12 +5336,10 @@
       init_modules();
       init_patcher();
       init_metro();
-      init_filters();
-      init_lazy2();
       import_chroma_js3 = __toESM(require_chroma_js());
       init_updater();
       tokenReference = findByProps("SemanticColor");
-      isThemeModule = createLazyModule(byMutableProp("isThemeDark"));
+      themeTypes = findByProps("ThemeTypes")?.ThemeTypes;
       origRawColor2 = {
         ...tokenReference.RawColor
       };
@@ -4859,12 +5355,6 @@
         "BG_SURFACE_OVERLAY_TMP": "BACKGROUND_FLOATING",
         "BG_SURFACE_RAISED": "BACKGROUND_MOBILE_PRIMARY"
       };
-      RAW_FALLBACK_MAP = {
-        "PRIMARY_700": origRawColor2.PRIMARY_800 || origRawColor2.PRIMARY_600,
-        "PRIMARY_300": origRawColor2.PRIMARY_800 || origRawColor2.PRIMARY_600,
-        "PRIMARY_230": origRawColor2.PRIMARY_800 || origRawColor2.PRIMARY_600,
-        "PRIMARY_100": origRawColor2.PRIMARY_800 || origRawColor2.PRIMARY_600
-      };
     }
   });
 
@@ -4877,8 +5367,8 @@
     var patches27 = [
       after("get", mmkvStorage, ([key], ret) => {
         if (!_colorRef.current || !patchedKeys.has(key)) return;
-        var state = findInTree(ret._state, (s) => typeof s.theme === "string");
-        if (state) state.theme = _colorRef.key;
+        var state2 = findInTree(ret._state, (s) => typeof s.theme === "string");
+        if (state2) state2.theme = _colorRef.key;
       }),
       before("set", mmkvStorage, ([key, value]) => {
         if (!patchedKeys.has(key)) return;
@@ -4936,30 +5426,6 @@
     }
   });
 
-  // src/plugins/_core/painter/themes/devices.ts
-  function getBarColor() {
-    if (_colorRef.current.reference === "darker") {
-      return "light-content";
-    } else {
-      return "dark-content";
-    }
-  }
-  function fixStatusBar() {
-    setInterval(() => {
-      import_react_native9.StatusBar.setBarStyle(getBarColor(), true);
-    }, 200);
-  }
-  var import_react_native9;
-  var init_devices = __esm({
-    "src/plugins/_core/painter/themes/devices.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      import_react_native9 = __toESM(require_react_native());
-      init_updater();
-    }
-  });
-
   // src/plugins/_core/painter/themes/index.ts
   function writeThemeToNative(theme) {
     return _async_to_generator(function* () {
@@ -4969,6 +5435,11 @@
     })();
   }
   function processData(data4) {
+    if (data4.spec === 3 && data4.display) {
+      data4.name = data4.display.name;
+      data4.description = data4.display.description;
+      data4.authors = data4.display.authors;
+    }
     if (data4.semanticColors) {
       var { semanticColors: semanticColors2 } = data4;
       for (var key in semanticColors2) {
@@ -4983,7 +5454,7 @@
         var normalized = normalizeToHex(rawColors2[key1]);
         if (normalized) data4.rawColors[key1] = normalized;
       }
-      if (import_react_native10.Platform.OS === "android") applyAndroidAlphaKeys(rawColors2);
+      if (import_react_native9.Platform.OS === "android") applyAndroidAlphaKeys(rawColors2);
     }
     if (data4.spec === void 0) {
       if (!("theme_color_map" in data4)) {
@@ -5034,8 +5505,8 @@
           resolve();
           return;
         }
-        var unsubscribe2 = useThemes.subscribe((state) => {
-          if (state._hasHydrated) {
+        var unsubscribe2 = useThemes.subscribe((state2) => {
+          if (state2._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -5066,13 +5537,12 @@
           });
         }
         updateThemes().catch((e) => console.error("Failed to update themes", e));
-        fixStatusBar();
       } catch (e) {
         console.error("Failed to initialize themes", e);
       }
     })();
   }
-  var import_react_native10, useThemes, themes;
+  var import_react_native9, useThemes, themes;
   var init_themes = __esm({
     "src/plugins/_core/painter/themes/index.ts"() {
       "use strict";
@@ -5084,11 +5554,10 @@
       init_settings();
       init_storage();
       init_utils();
-      import_react_native10 = __toESM(require_react_native());
+      import_react_native9 = __toESM(require_react_native());
       init_esm();
       init_middleware();
       init_colors();
-      init_devices();
       init_parser();
       init_preferences();
       init_updater();
@@ -5096,9 +5565,9 @@
         themes: {},
         _hasHydrated: false,
         setTheme: (id, theme) => {
-          set((state) => ({
+          set((state2) => ({
             themes: {
-              ...state.themes,
+              ...state2.themes,
               [id]: theme
             }
           }));
@@ -5106,9 +5575,9 @@
         removeTheme: (id) => _async_to_generator(function* () {
           var theme = get().themes[id];
           if (theme?.selected) yield get().selectTheme(null);
-          set((state) => {
+          set((state2) => {
             var newThemes = {
-              ...state.themes
+              ...state2.themes
             };
             delete newThemes[id];
             return {
@@ -5120,9 +5589,9 @@
         selectTheme: (id, write = true) => _async_to_generator(function* () {
           var { themes: themes2 } = get();
           var theme = id ? themes2[id] : null;
-          set((state) => {
+          set((state2) => {
             var newThemes = {
-              ...state.themes
+              ...state2.themes
             };
             Object.keys(newThemes).forEach((k) => {
               newThemes[k] = {
@@ -5179,14 +5648,14 @@
           var { themes: themes2 } = get();
           yield allSettled(Object.keys(themes2).map((id) => get().fetchTheme(id, currentTheme2?.id === id)));
         })(),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "vendetta-themes",
         storage: createJSONStorage(() => createFileStorage("VENDETTA_THEMES")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       themes = new Proxy({}, {
@@ -5424,7 +5893,7 @@
       }
       setBusy(null);
     })();
-    return /* @__PURE__ */ jsx(import_react_native11.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native10.ScrollView, {
       style: {
         flex: 1
       },
@@ -5473,7 +5942,7 @@
               /* @__PURE__ */ jsx(TableRow, {
                 label: "Sync to Cloud",
                 subLabel: "Upload your current plugins, themes, and fonts.",
-                icon: isBusy === "sync" ? /* @__PURE__ */ jsx(import_react_native11.ActivityIndicator, {
+                icon: isBusy === "sync" ? /* @__PURE__ */ jsx(import_react_native10.ActivityIndicator, {
                   size: "small"
                 }) : /* @__PURE__ */ jsx(TableRow.Icon, {
                   source: findAssetId2("UploadIcon")
@@ -5483,7 +5952,7 @@
               /* @__PURE__ */ jsx(TableRow, {
                 label: "Import from Cloud",
                 subLabel: "Download and apply your saved data",
-                icon: isBusy === "import" ? /* @__PURE__ */ jsx(import_react_native11.ActivityIndicator, {
+                icon: isBusy === "import" ? /* @__PURE__ */ jsx(import_react_native10.ActivityIndicator, {
                   size: "small"
                 }) : /* @__PURE__ */ jsx(TableRow.Icon, {
                   source: findAssetId2("DownloadIcon")
@@ -5533,7 +6002,7 @@
       })
     });
   }
-  var import_react2, import_react_native11, Card2;
+  var import_react2, import_react_native10, Card2;
   var init_CloudSync = __esm({
     "src/rain/pages/CloudSync/index.tsx"() {
       "use strict";
@@ -5553,7 +6022,7 @@
       init_AuthorizationStore();
       init_CacheStore();
       import_react2 = __toESM(require_react());
-      import_react_native11 = __toESM(require_react_native());
+      import_react_native10 = __toESM(require_react_native());
       ({ Card: Card2 } = findByProps("Card"));
     }
   });
@@ -5659,7 +6128,7 @@
         return !c2.__rain?.shouldHide || !c2.__rain.shouldHide();
       }));
     });
-    patches.add(unpatchGetBuiltInCommands);
+    patches2.add(unpatchGetBuiltInCommands);
   }
   function registerCommand(command) {
     var builtInCommands;
@@ -5697,7 +6166,7 @@
     commands2.push(command);
     return () => commands2 = commands2.filter(({ id }) => id !== command.id);
   }
-  var commands2, patches;
+  var commands2, patches2;
   var init_commands = __esm({
     "src/api/commands/index.ts"() {
       "use strict";
@@ -5708,26 +6177,11 @@
       init_common();
       init_types();
       commands2 = [];
-      patches = /* @__PURE__ */ new Set();
+      patches2 = /* @__PURE__ */ new Set();
     }
   });
 
   // src/api/debug.ts
-  var debug_exports = {};
-  __export(debug_exports, {
-    connectRdt: () => connectRdt,
-    connectToDebugger: () => connectToDebugger,
-    disconnectFromDebugger: () => disconnectFromDebugger,
-    disconnectRdt: () => disconnectRdt,
-    getDebugInfo: () => getDebugInfo,
-    initDebugger: () => initDebugger,
-    isConnectedToDebugger: () => isConnectedToDebugger,
-    patchLogHook: () => patchLogHook,
-    rdtClient: () => rdtClient,
-    rdtConnected: () => rdtConnected,
-    useIsRdtConnected: () => useIsRdtConnected,
-    versionHash: () => versionHash
-  });
   function serializeMessage(msg) {
     return JSON.stringify(msg);
   }
@@ -5900,20 +6354,9 @@
     if (devTools?.connectToDevTools) {
       devTools.connectToDevTools({
         websocket: ws,
-        resolveRNStyle: import_react_native12.StyleSheet.flatten
+        resolveRNStyle: import_react_native11.StyleSheet.flatten
       });
     }
-  }
-  function disconnectRdt() {
-    rdtClient?.close();
-  }
-  function useIsRdtConnected() {
-    var [connected, update] = React.useState(rdtConnected);
-    React.useEffect(() => {
-      changeHooks.add(update);
-      return () => void changeHooks.delete(update);
-    }, []);
-    return connected;
   }
   function patchLogHook() {
     var unpatch6 = after("nativeLoggingHook", globalThis, (args) => {
@@ -5931,7 +6374,7 @@
     var hermesProps = globalThis.HermesInternal.getRuntimeProperties();
     var hermesVer = hermesProps["OSS Release Version"];
     var padding = "for RN ";
-    var PlatformConstants = import_react_native12.Platform.constants;
+    var PlatformConstants = import_react_native11.Platform.constants;
     var rnVer = PlatformConstants.reactNativeVersion;
     return {
       rain: {
@@ -5954,7 +6397,7 @@
         buildType: hermesProps.Build,
         bytecodeVersion: hermesProps["Bytecode Version"]
       },
-      ...import_react_native12.Platform.select({
+      ...import_react_native11.Platform.select({
         android: {
           os: {
             name: "Android",
@@ -5969,7 +6412,7 @@
           }
         }
       }),
-      ...import_react_native12.Platform.select({
+      ...import_react_native11.Platform.select({
         android: {
           device: {
             manufacturer: PlatformConstants.Manufacturer,
@@ -5990,24 +6433,25 @@
     };
   }
   function initDebugger() {
-    if (settings.autoDebugger) {
+    var currentSettings2 = settings();
+    if (currentSettings2.autoDebugger) {
       try {
-        connectToDebugger(settings.debuggerUrl);
+        connectToDebugger(currentSettings2.debuggerUrl);
       } catch (e) {
         logger.error("Failed to connect to Debugger during startup:", e);
       }
     }
-    if (settings.autoDevTools) {
+    if (currentSettings2.autoDevTools) {
       try {
-        if (settings.devToolsUrl) {
-          connectRdt(settings.devToolsUrl, true);
+        if (currentSettings2.devToolsUrl) {
+          connectRdt(currentSettings2.devToolsUrl, true);
         }
       } catch (e) {
         logger.error("Failed to connect to ReactDevTools during startup:", e);
       }
     }
   }
-  var import_react_native12, socket, originalConsoleLog, originalConsoleError, originalConsoleWarn, originalLoggerLog, originalLoggerError, originalLoggerWarn, VERSION, rdtPort, rdtClient, rdtConnected, changeHooks, versionHash;
+  var import_react_native11, socket, originalConsoleLog, originalConsoleError, originalConsoleWarn, originalLoggerLog, originalLoggerError, originalLoggerWarn, VERSION, rdtPort, rdtClient, rdtConnected, changeHooks, versionHash;
   var init_debug = __esm({
     "src/api/debug.ts"() {
       "use strict";
@@ -6015,7 +6459,7 @@
       init_promiseAllSettled();
       init_toasts();
       init_logger();
-      import_react_native12 = __toESM(require_react_native());
+      import_react_native11 = __toESM(require_react_native());
       init_assets();
       init_loader();
       init_modules();
@@ -6031,8 +6475,8 @@
   });
 
   // src/plugins/_core/corecommands/builtins/debug.ts
-  var debug_exports2 = {};
-  __export(debug_exports2, {
+  var debug_exports = {};
+  __export(debug_exports, {
     default: () => debug_default
   });
   var debug_default;
@@ -6074,12 +6518,12 @@
 
   // src/rain/pages/Plugins/sheets/TitleComponent.tsx
   function TitleComponent({ plugin }) {
-    return /* @__PURE__ */ jsx(import_react_native13.View, {
+    return /* @__PURE__ */ jsx(import_react_native12.View, {
       style: {
         gap: 4,
         marginLeft: 6
       },
-      children: /* @__PURE__ */ jsx(import_react_native13.View, {
+      children: /* @__PURE__ */ jsx(import_react_native12.View, {
         children: /* @__PURE__ */ jsx(Text, {
           variant: "heading-xl/semibold",
           children: plugin.name
@@ -6087,7 +6531,7 @@
       })
     });
   }
-  var import_react_native13;
+  var import_react_native12;
   var init_TitleComponent = __esm({
     "src/rain/pages/Plugins/sheets/TitleComponent.tsx"() {
       "use strict";
@@ -6095,7 +6539,7 @@
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react_native13 = __toESM(require_react_native());
+      import_react_native12 = __toESM(require_react_native());
     }
   });
 
@@ -6122,11 +6566,11 @@
           },
           children: title
         }),
-        /* @__PURE__ */ jsx(import_react_native14.View, {
+        /* @__PURE__ */ jsx(import_react_native13.View, {
           style: {
             gap: 3
           },
-          children: authors.map((author, index) => /* @__PURE__ */ jsxs(import_react_native14.View, {
+          children: authors.map((author, index) => /* @__PURE__ */ jsxs(import_react_native13.View, {
             style: {
               flexDirection: "row",
               alignItems: "center",
@@ -6159,14 +6603,14 @@
     var { pinnedPlugins, togglePinnedPlugin } = useSettings();
     var isPinned = pinnedPlugins?.includes(plugin.id);
     return /* @__PURE__ */ jsx(ActionSheet, {
-      children: /* @__PURE__ */ jsxs(import_react_native14.ScrollView, {
+      children: /* @__PURE__ */ jsxs(import_react_native13.ScrollView, {
         contentContainerStyle: {
           gap: 12,
           marginBottom: 12,
           paddingTop: 16
         },
         children: [
-          /* @__PURE__ */ jsxs(import_react_native14.View, {
+          /* @__PURE__ */ jsxs(import_react_native13.View, {
             style: {
               flexDirection: "row",
               alignItems: "flex-start",
@@ -6175,7 +6619,7 @@
               width: "100%"
             },
             children: [
-              /* @__PURE__ */ jsx(import_react_native14.View, {
+              /* @__PURE__ */ jsx(import_react_native13.View, {
                 style: {
                   flex: 1
                 },
@@ -6183,7 +6627,7 @@
                   plugin
                 })
               }),
-              /* @__PURE__ */ jsx(import_react_native14.View, {
+              /* @__PURE__ */ jsx(import_react_native13.View, {
                 style: {
                   paddingBottom: 4
                 },
@@ -6230,7 +6674,7 @@
       })
     });
   }
-  var import_react_native14, showUserProfileActionSheet, maybeFetchUser;
+  var import_react_native13, showUserProfileActionSheet, maybeFetchUser;
   var init_PluginInfoActionSheet = __esm({
     "src/rain/pages/Plugins/sheets/PluginInfoActionSheet.tsx"() {
       "use strict";
@@ -6246,7 +6690,7 @@
       init_common();
       init_components();
       init_stores();
-      import_react_native14 = __toESM(require_react_native());
+      import_react_native13 = __toESM(require_react_native());
       init_TitleComponent();
       showUserProfileActionSheet = findByNameLazy("showUserProfileActionSheet");
       ({ getUser: maybeFetchUser } = lazyDestructure(() => findByProps("getUser", "fetchProfile")));
@@ -6260,7 +6704,7 @@
   function unifyRainPlugin(manifest) {
     var developers = manifest.author?.filter(isDeveloper) ?? [];
     var contributors = manifest.author?.filter((a) => !isDeveloper(a)) ?? [];
-    var isPlatformSupported = !manifest.platforms || manifest.platforms.includes(import_react_native15.Platform.OS);
+    var isPlatformSupported = !manifest.platforms || manifest.platforms.includes(import_react_native14.Platform.OS);
     var arePredicatesMet = !manifest.predicates || manifest.predicates.every((p) => {
       try {
         return p();
@@ -6288,7 +6732,7 @@
         }
       },
       usePluginState() {
-        usePluginSettings((state) => state.settings);
+        usePluginSettings((state2) => state2.settings);
       },
       resolveSheetComponent() {
         return Promise.resolve({
@@ -6300,7 +6744,7 @@
       }
     };
   }
-  var import_react_native15;
+  var import_react_native14;
   var init_rain = __esm({
     "src/rain/pages/Plugins/models/rain.ts"() {
       "use strict";
@@ -6308,7 +6752,7 @@
       init_promiseAllSettled();
       init_plugins3();
       init_Developers();
-      import_react_native15 = __toESM(require_react_native());
+      import_react_native14 = __toESM(require_react_native());
     }
   });
 
@@ -6453,10 +6897,561 @@
         start() {
           patchCommands();
           [
-            (init_debug2(), __toCommonJS(debug_exports2)),
+            (init_debug2(), __toCommonJS(debug_exports)),
             (init_plugins(), __toCommonJS(plugins_exports)),
             (init_themes2(), __toCommonJS(themes_exports))
           ].forEach((r) => registerCommand(r.default()));
+        }
+      });
+    }
+  });
+
+  // src/plugins/_core/errorboundary/stack.ts
+  function isComponentStack(error) {
+    return "componentStack" in error && typeof error.componentStack === "string";
+  }
+  function hasStack(error) {
+    return !!error.stack;
+  }
+  function parseComponentStack(componentStack) {
+    return componentStack.split(/[\s|\n]+?in /).filter(Boolean);
+  }
+  var init_stack = __esm({
+    "src/plugins/_core/errorboundary/stack.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+    }
+  });
+
+  // src/plugins/_core/errorboundary/ErrorComponentStackCard.tsx
+  function ErrorComponentStackCard(props) {
+    var [collapsed, setCollapsed] = (0, import_react3.useState)(true);
+    var stack;
+    try {
+      stack = parseComponentStack(props.componentStack);
+      stack = collapsed ? stack.slice(0, 4) : stack;
+    } catch (unused) {
+      return;
+    }
+    return /* @__PURE__ */ jsx(Card, {
+      children: /* @__PURE__ */ jsxs(import_react_native15.View, {
+        style: {
+          gap: 8
+        },
+        children: [
+          /* @__PURE__ */ jsx(Text, {
+            variant: "heading-lg/bold",
+            children: "Component Stack"
+          }),
+          /* @__PURE__ */ jsx(import_react_native15.View, {
+            style: {
+              gap: 4
+            },
+            children: stack.map((component) => /* @__PURE__ */ jsxs(import_react_native15.View, {
+              style: {
+                flexDirection: "row"
+              },
+              children: [
+                /* @__PURE__ */ jsx(Text, {
+                  variant: "text-md/bold",
+                  color: "text-muted",
+                  children: "<"
+                }),
+                /* @__PURE__ */ jsx(Text, {
+                  variant: "text-md/bold",
+                  children: component
+                }),
+                /* @__PURE__ */ jsx(Text, {
+                  variant: "text-md/bold",
+                  color: "text-muted",
+                  children: "/>"
+                })
+              ]
+            }))
+          }),
+          collapsed && /* @__PURE__ */ jsx(Text, {
+            children: "..."
+          }),
+          /* @__PURE__ */ jsxs(import_react_native15.View, {
+            style: {
+              gap: 8,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center"
+            },
+            children: [
+              /* @__PURE__ */ jsx(Button, {
+                variant: "secondary",
+                text: `Show ${collapsed ? "more" : "less"}`,
+                icon: collapsed ? findAssetId2("down_arrow") : /* @__PURE__ */ jsx(import_react_native15.Image, {
+                  style: {
+                    transform: [
+                      {
+                        rotate: `${collapsed ? 0 : 180}deg`
+                      }
+                    ]
+                  },
+                  source: findAssetId2("down_arrow")
+                }),
+                onPress: () => setCollapsed((v2) => !v2)
+              }),
+              /* @__PURE__ */ jsx(Button, {
+                variant: "secondary",
+                text: "Copy",
+                icon: findAssetId2("CopyIcon"),
+                onPress: () => clipboard.setString(props.componentStack)
+              })
+            ]
+          })
+        ]
+      })
+    });
+  }
+  var import_react3, import_react_native15;
+  var init_ErrorComponentStackCard = __esm({
+    "src/plugins/_core/errorboundary/ErrorComponentStackCard.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_jsxRuntime();
+      init_assets();
+      init_common();
+      init_components();
+      import_react3 = __toESM(require_react());
+      import_react_native15 = __toESM(require_react_native());
+      init_stack();
+    }
+  });
+
+  // src/api/ui/sheets.ts
+  function showSheet(key, lazyImport, props) {
+    if (!("then" in lazyImport)) lazyImport = Promise.resolve({
+      default: lazyImport
+    });
+    actionSheet.openLazy(lazyImport, key, props ?? {});
+  }
+  function hideSheet(key) {
+    actionSheet.hideActionSheet(key);
+  }
+  var actionSheet;
+  var init_sheets = __esm({
+    "src/api/ui/sheets.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_wrappers();
+      actionSheet = findByPropsLazy("openLazy", "hideActionSheet");
+    }
+  });
+
+  // src/plugins/_core/errorboundary/ErrorDetailsActionSheet.tsx
+  var import_react_native16;
+  var init_ErrorDetailsActionSheet = __esm({
+    "src/plugins/_core/errorboundary/ErrorDetailsActionSheet.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_jsxRuntime();
+      init_components2();
+      init_components();
+      import_react_native16 = __toESM(require_react_native());
+      init_ErrorComponentStackCard();
+      init_ErrorStackCard();
+      init_stack();
+    }
+  });
+
+  // src/plugins/_core/errorboundary/ErrorCard.tsx
+  var INDEX_BUNDLE_FILE2;
+  var init_ErrorCard2 = __esm({
+    "src/plugins/_core/errorboundary/ErrorCard.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_jsxRuntime();
+      init_assets();
+      init_components2();
+      init_sheets();
+      init_components();
+      init_i18n();
+      init_ErrorDetailsActionSheet();
+      INDEX_BUNDLE_FILE2 = globalThis.HermesInternal.getFunctionLocation(globalThis.__r).fileName;
+    }
+  });
+
+  // src/plugins/_core/errorboundary/parseErrorStack.ts
+  function isInternalBytecodeSourceUrl(sourceUrl) {
+    return sourceUrl === "InternalBytecode.js";
+  }
+  function parseLine(line) {
+    var asFrame = line.match(RE_FRAME);
+    if (asFrame) {
+      return {
+        type: "FRAME",
+        functionName: asFrame[1],
+        location: asFrame[2] === "native" ? {
+          type: "NATIVE"
+        } : asFrame[3] === "address at " ? isInternalBytecodeSourceUrl(asFrame[4]) ? {
+          type: "INTERNAL_BYTECODE",
+          sourceUrl: asFrame[4],
+          line1Based: Number.parseInt(asFrame[5], 10),
+          virtualOffset0Based: Number.parseInt(asFrame[6], 10)
+        } : {
+          type: "BYTECODE",
+          sourceUrl: asFrame[4],
+          line1Based: Number.parseInt(asFrame[5], 10),
+          virtualOffset0Based: Number.parseInt(asFrame[6], 10)
+        } : {
+          type: "SOURCE",
+          sourceUrl: asFrame[4],
+          line1Based: Number.parseInt(asFrame[5], 10),
+          column1Based: Number.parseInt(asFrame[6], 10)
+        }
+      };
+    }
+    var asSkipped = line.match(RE_SKIPPED);
+    if (asSkipped) {
+      return {
+        type: "SKIPPED",
+        count: Number.parseInt(asSkipped[1], 10)
+      };
+    }
+  }
+  function parseHermesStack(stack) {
+    var lines = stack.split(/\n/);
+    var entries = [];
+    var lastMessageLine = -1;
+    for (var i = 0; i < lines.length; ++i) {
+      var line = lines[i];
+      if (!line) {
+        continue;
+      }
+      var entry = parseLine(line);
+      if (entry) {
+        entries.push(entry);
+        continue;
+      }
+      if (RE_COMPONENT_NO_STACK.test(line)) {
+        continue;
+      }
+      lastMessageLine = i;
+      entries = [];
+    }
+    var message = lines.slice(0, lastMessageLine + 1).join("\n");
+    return {
+      message,
+      entries
+    };
+  }
+  function convertHermesStack(stack) {
+    var frames = [];
+    for (var entry of stack.entries) {
+      if (entry.type !== "FRAME") {
+        continue;
+      }
+      var { location, functionName } = entry;
+      if (location.type === "NATIVE" || location.type === "INTERNAL_BYTECODE") {
+        continue;
+      }
+      frames.push({
+        methodName: functionName,
+        file: location.sourceUrl,
+        lineNumber: location.line1Based,
+        column: location.type === "SOURCE" ? location.column1Based - 1 : location.virtualOffset0Based
+      });
+    }
+    return frames;
+  }
+  function parseErrorStack(errorStack) {
+    if (errorStack == null) {
+      return [];
+    }
+    var parsedStack = Array.isArray(errorStack) ? errorStack : convertHermesStack(parseHermesStack(errorStack));
+    return parsedStack;
+  }
+  var RE_FRAME, RE_SKIPPED, RE_COMPONENT_NO_STACK;
+  var init_parseErrorStack = __esm({
+    "src/plugins/_core/errorboundary/parseErrorStack.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      RE_FRAME = /^ {4}at (.+?)(?: \((native)\)?| \((address at )?(.*?):(\d+):(\d+)\))$/;
+      RE_SKIPPED = /^ {4}... skipping (\d+) frames$/;
+      RE_COMPONENT_NO_STACK = /^ {4}at .*$/;
+    }
+  });
+
+  // src/plugins/_core/errorboundary/ErrorStackCard.tsx
+  function ErrorStackCard(props) {
+    var [collapsed, setCollapsed] = (0, import_react4.useState)(true);
+    var stack;
+    try {
+      var parsedErrorStack = parseErrorStack(props.error.stack);
+      stack = collapsed ? parsedErrorStack.slice(0, 4) : parsedErrorStack;
+    } catch (unused) {
+      return null;
+    }
+    return /* @__PURE__ */ jsx(Card, {
+      children: /* @__PURE__ */ jsxs(import_react_native17.View, {
+        style: {
+          gap: 12
+        },
+        children: [
+          /* @__PURE__ */ jsx(Text, {
+            variant: "heading-lg/bold",
+            children: "Call Stack"
+          }),
+          /* @__PURE__ */ jsx(import_react_native17.View, {
+            style: {
+              gap: 4
+            },
+            children: stack.map((f, id) => /* @__PURE__ */ jsx(Line, {
+              id,
+              frame: f
+            }))
+          }),
+          collapsed && /* @__PURE__ */ jsx(Text, {
+            children: "..."
+          }),
+          /* @__PURE__ */ jsxs(import_react_native17.View, {
+            style: {
+              gap: 8,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center"
+            },
+            children: [
+              /* @__PURE__ */ jsx(Button, {
+                variant: "secondary",
+                text: `Show ${collapsed ? "more" : "less"}`,
+                icon: collapsed ? findAssetId2("down_arrow") : /* @__PURE__ */ jsx(import_react_native17.Image, {
+                  style: {
+                    transform: [
+                      {
+                        rotate: `${collapsed ? 0 : 180}deg`
+                      }
+                    ]
+                  },
+                  source: findAssetId2("down_arrow")
+                }),
+                onPress: () => setCollapsed((v2) => !v2)
+              }),
+              /* @__PURE__ */ jsx(Button, {
+                variant: "secondary",
+                text: "Copy",
+                icon: findAssetId2("CopyIcon"),
+                onPress: () => clipboard.setString(props.error.stack)
+              })
+            ]
+          })
+        ]
+      })
+    });
+  }
+  function Line(props) {
+    var [collapsed, setCollapsed] = (0, import_react4.useState)(true);
+    return /* @__PURE__ */ jsxs(import_react_native17.Pressable, {
+      onPress: () => setCollapsed((v2) => !v2),
+      children: [
+        /* @__PURE__ */ jsx(Text, {
+          style: {
+            fontFamily: constants.Fonts.CODE_BOLD
+          },
+          children: props.frame.methodName
+        }),
+        /* @__PURE__ */ jsx(Text, {
+          style: {
+            fontFamily: constants.Fonts.CODE_NORMAL
+          },
+          ellipsizeMode: "middle",
+          numberOfLines: collapsed ? 1 : void 0,
+          children: /* @__PURE__ */ jsxs(Text, {
+            color: "text-muted",
+            children: [
+              props.frame.file === INDEX_BUNDLE_FILE2 ? "jsbundle" : props.frame.file,
+              ":",
+              props.frame.lineNumber,
+              ":",
+              props.frame.column
+            ]
+          })
+        })
+      ]
+    }, props.id);
+  }
+  var import_react4, import_react_native17;
+  var init_ErrorStackCard = __esm({
+    "src/plugins/_core/errorboundary/ErrorStackCard.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_jsxRuntime();
+      init_assets();
+      init_common();
+      init_components();
+      import_react4 = __toESM(require_react());
+      import_react_native17 = __toESM(require_react_native());
+      init_ErrorCard2();
+      init_parseErrorStack();
+    }
+  });
+
+  // src/plugins/_core/errorboundary/ErrorBoundaryScreen.tsx
+  function ErrorBoundaryScreen(props) {
+    var styles5 = useStyles2();
+    var debugInfo2 = getDebugInfo();
+    var { safeMode, updateSettings } = useSettings();
+    return /* @__PURE__ */ jsx(ErrorBoundary, {
+      children: /* @__PURE__ */ jsx(SafeAreaProvider, {
+        children: /* @__PURE__ */ jsxs(SafeAreaView, {
+          style: styles5.container,
+          children: [
+            /* @__PURE__ */ jsxs(import_react_native18.View, {
+              style: {
+                gap: 4
+              },
+              children: [
+                /* @__PURE__ */ jsx(Text, {
+                  variant: "display-lg",
+                  children: "Uh oh."
+                }),
+                /* @__PURE__ */ jsx(Text, {
+                  variant: "text-md/normal",
+                  children: "A crash occurred while rendering a component. This could be caused by Rain or Discord itself."
+                }),
+                /* @__PURE__ */ jsxs(Text, {
+                  variant: "text-sm/normal",
+                  color: "text-muted",
+                  children: [
+                    debugInfo2.os.name,
+                    "; ",
+                    debugInfo2.discord.build,
+                    " (",
+                    debugInfo2.discord.version,
+                    "); ",
+                    debugInfo2.rain.version
+                  ]
+                })
+              ]
+            }),
+            /* @__PURE__ */ jsxs(import_react_native18.ScrollView, {
+              fadingEdgeLength: 64,
+              contentContainerStyle: {
+                gap: 12
+              },
+              children: [
+                /* @__PURE__ */ jsx(Codeblock, {
+                  selectable: true,
+                  children: props.error.message
+                }),
+                hasStack(props.error) && /* @__PURE__ */ jsx(ErrorStackCard, {
+                  error: props.error
+                }),
+                isComponentStack(props.error) ? /* @__PURE__ */ jsx(ErrorComponentStackCard, {
+                  componentStack: props.error.componentStack
+                }) : null
+              ]
+            }),
+            /* @__PURE__ */ jsxs(Card, {
+              style: {
+                gap: 6
+              },
+              children: [
+                /* @__PURE__ */ jsx(Button, {
+                  text: "Reload Discord",
+                  onPress: () => BundleUpdaterManager.reload()
+                }),
+                !safeMode && /* @__PURE__ */ jsx(Button, {
+                  text: "Reload in Safe Mode",
+                  onPress: () => updateSettings({
+                    safeMode: true
+                  })
+                }),
+                /* @__PURE__ */ jsx(Button, {
+                  variant: "destructive",
+                  text: "Retry Render",
+                  onPress: () => props.rerender()
+                })
+              ]
+            })
+          ]
+        })
+      })
+    });
+  }
+  var import_react_native18, useStyles2;
+  var init_ErrorBoundaryScreen = __esm({
+    "src/plugins/_core/errorboundary/ErrorBoundaryScreen.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_jsxRuntime();
+      init_debug();
+      init_modules();
+      init_settings();
+      init_components2();
+      init_styles();
+      init_common();
+      init_components();
+      import_react_native18 = __toESM(require_react_native());
+      init_ErrorComponentStackCard();
+      init_ErrorStackCard();
+      init_stack();
+      useStyles2 = createStyles({
+        container: {
+          flex: 1,
+          backgroundColor: tokens.colors.BG_BASE_SECONDARY,
+          paddingHorizontal: 16,
+          height: "100%",
+          gap: 12
+        }
+      });
+    }
+  });
+
+  // src/plugins/_core/errorboundary/index.tsx
+  var errorboundary_exports = {};
+  __export(errorboundary_exports, {
+    default: () => errorboundary_default
+  });
+  function getErrorBoundaryContext() {
+    var ctxt = findByNameLazy("ErrorBoundary")[_lazyContextSymbol];
+    return new Promise((resolve) => ctxt.getExports((exp) => resolve(exp.prototype)));
+  }
+  var errorboundary_default;
+  var init_errorboundary = __esm({
+    "src/plugins/_core/errorboundary/index.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_jsxRuntime();
+      init_patcher();
+      init_lazy2();
+      init_wrappers();
+      init_plugins3();
+      init_Developers();
+      init_i18n();
+      init_ErrorBoundaryScreen();
+      errorboundary_default = definePlugin({
+        name: Strings.PLUGIN__CORE_ERRORBOUNDARY,
+        description: Strings.PLUGIN__CORE_ERRORBOUNDARY_DESC,
+        author: [
+          Developers.cocobo1
+        ],
+        id: "errorboundary",
+        version: "1.0.0",
+        start() {
+          after.await("render", getErrorBoundaryContext(), function() {
+            if (!this.state.error) return;
+            return /* @__PURE__ */ jsx(ErrorBoundaryScreen, {
+              error: this.state.error,
+              rerender: () => this.setState({
+                info: null,
+                error: null
+              })
+            });
+          });
         }
       });
     }
@@ -6563,18 +7558,18 @@
       useMonetSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "monettheme-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/monettheme.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
     }
@@ -7102,7 +8097,7 @@
           },
           {
             key: "intercept",
-            value: function intercept2(source, mid, target) {
+            value: function intercept(source, mid, target) {
               return (mid - source) / (target - source);
             }
           },
@@ -7689,7 +8684,7 @@
   // src/plugins/_core/painter/monet/stuff/buildTheme.ts
   function getDiscordTheme() {
     try {
-      var theme = ThemeStore3?.theme;
+      var theme = ThemeStore4?.theme;
       if (theme === "light") return "light";
     } catch (unused) {
     }
@@ -7746,9 +8741,9 @@
       var clr = parseColor(rawPatches[key]);
       if (clr) raw[key] = clr;
     }
-    if (raw["PRIMARY_700"]) {
-      raw["PLUM_23"] = raw["PRIMARY_700"];
-      raw["PLUM_24"] = raw["PRIMARY_700"];
+    if (raw.PRIMARY_700) {
+      raw.PLUM_23 = raw.PRIMARY_700;
+      raw.PLUM_24 = raw.PRIMARY_700;
     }
     for (var key1 of Object.keys(patches27.semantic.both)) {
       var clr1 = parseColor(rawPatches[key1]);
@@ -7775,77 +8770,77 @@
     var semanticDefaults = {
       dark: {
         // Classic backgrounds
-        "BACKGROUND_PRIMARY": raw["PRIMARY_600"],
-        "BACKGROUND_SECONDARY": raw["PRIMARY_630"],
-        "BACKGROUND_SECONDARY_ALT": raw["PRIMARY_700"],
-        "BACKGROUND_TERTIARY": raw["PRIMARY_630"],
-        "BACKGROUND_FLOATING": raw["PRIMARY_600"],
-        "BACKGROUND_NESTED_FLOATING": raw["PRIMARY_600"],
-        "BACKGROUND_MOBILE_PRIMARY": raw["PRIMARY_600"],
-        "BACKGROUND_MOBILE_SECONDARY": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_ACCENT": raw["PRIMARY_660"],
-        "BACKGROUND_MODIFIER_ACTIVE": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_HOVER": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_SELECTED": raw["PRIMARY_630"],
+        "BACKGROUND_PRIMARY": raw.PRIMARY_600,
+        "BACKGROUND_SECONDARY": raw.PRIMARY_630,
+        "BACKGROUND_SECONDARY_ALT": raw.PRIMARY_700,
+        "BACKGROUND_TERTIARY": raw.PRIMARY_630,
+        "BACKGROUND_FLOATING": raw.PRIMARY_600,
+        "BACKGROUND_NESTED_FLOATING": raw.PRIMARY_600,
+        "BACKGROUND_MOBILE_PRIMARY": raw.PRIMARY_600,
+        "BACKGROUND_MOBILE_SECONDARY": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_ACCENT": raw.PRIMARY_660,
+        "BACKGROUND_MODIFIER_ACTIVE": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_HOVER": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_SELECTED": raw.PRIMARY_630,
         // New base backgrounds
-        "BG_BASE_PRIMARY": raw["PRIMARY_600"],
-        "BG_BASE_SECONDARY": raw["PRIMARY_700"],
-        "BG_BASE_TERTIARY": raw["PRIMARY_660"],
-        "BG_SURFACE_RAISED": raw["PRIMARY_630"],
+        "BG_BASE_PRIMARY": raw.PRIMARY_600,
+        "BG_BASE_SECONDARY": raw.PRIMARY_700,
+        "BG_BASE_TERTIARY": raw.PRIMARY_660,
+        "BG_SURFACE_RAISED": raw.PRIMARY_630,
         // Modifiers
-        "BG_MOD_FAINT": raw["PRIMARY_460"],
-        "BG_MOD_STRONG": raw["PRIMARY_530"],
-        "BG_MOD_SUBTLE": raw["PRIMARY_630"],
+        "BG_MOD_FAINT": raw.PRIMARY_460,
+        "BG_MOD_STRONG": raw.PRIMARY_530,
+        "BG_MOD_SUBTLE": raw.PRIMARY_630,
         // Input / search bar
-        "CHANNELTEXTAREA_BACKGROUND": raw["PRIMARY_660"],
-        "REDESIGN_CHAT_INPUT_BACKGROUND": raw["PRIMARY_660"],
-        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw["PRIMARY_700"],
-        "CHAT_INPUT_CONTAINER_BACKGROUND": raw["PRIMARY_700"],
-        "INPUT_BACKGROUND": raw["PRIMARY_700"],
+        "CHANNELTEXTAREA_BACKGROUND": raw.PRIMARY_660,
+        "REDESIGN_CHAT_INPUT_BACKGROUND": raw.PRIMARY_660,
+        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw.PRIMARY_700,
+        "CHAT_INPUT_CONTAINER_BACKGROUND": raw.PRIMARY_700,
+        "INPUT_BACKGROUND": raw.PRIMARY_700,
         // Chat
-        "CHAT_BACKGROUND": raw["PRIMARY_600"],
+        "CHAT_BACKGROUND": raw.PRIMARY_600,
         // Cards
-        "CARD_PRIMARY_BG": raw["PRIMARY_630"],
-        "CARD_SECONDARY_BG": raw["PRIMARY_630"],
+        "CARD_PRIMARY_BG": raw.PRIMARY_630,
+        "CARD_SECONDARY_BG": raw.PRIMARY_630,
         // Buttons
-        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw["PRIMARY_630"],
-        "REDESIGN_BUTTON_SECONDARY_BORDER": raw["PRIMARY_530"],
-        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw["PRIMARY_700"],
+        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw.PRIMARY_630,
+        "REDESIGN_BUTTON_SECONDARY_BORDER": raw.PRIMARY_530,
+        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw.PRIMARY_700,
         // Activity cards
-        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw["PRIMARY_630"]
+        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw.PRIMARY_630
       },
       light: {
-        "BACKGROUND_PRIMARY": raw["PRIMARY_600"],
-        "BACKGROUND_SECONDARY": raw["PRIMARY_630"],
-        "BACKGROUND_SECONDARY_ALT": raw["PRIMARY_700"],
-        "BACKGROUND_TERTIARY": raw["PRIMARY_630"],
-        "BACKGROUND_FLOATING": raw["PRIMARY_600"],
-        "BACKGROUND_NESTED_FLOATING": raw["PRIMARY_600"],
-        "BACKGROUND_MOBILE_PRIMARY": raw["PRIMARY_600"],
-        "BACKGROUND_MOBILE_SECONDARY": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_ACCENT": raw["PRIMARY_660"],
-        "BACKGROUND_MODIFIER_ACTIVE": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_HOVER": raw["PRIMARY_630"],
-        "BACKGROUND_MODIFIER_SELECTED": raw["PRIMARY_630"],
-        "BG_BASE_PRIMARY": raw["PRIMARY_600"],
-        "BG_BASE_SECONDARY": raw["PRIMARY_700"],
-        "BG_BASE_TERTIARY": raw["PRIMARY_660"],
-        "BG_SURFACE_RAISED": raw["PRIMARY_630"],
-        "BG_MOD_FAINT": raw["PRIMARY_460"],
-        "BG_MOD_STRONG": raw["PRIMARY_530"],
-        "BG_MOD_SUBTLE": raw["PRIMARY_630"],
-        "CHANNELTEXTAREA_BACKGROUND": raw["PRIMARY_660"],
-        "REDESIGN_CHAT_INPUT_BACKGROUND": raw["PRIMARY_660"],
-        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw["PRIMARY_700"],
-        "CHAT_INPUT_CONTAINER_BACKGROUND": raw["PRIMARY_700"],
-        "INPUT_BACKGROUND": raw["PRIMARY_700"],
-        "CHAT_BACKGROUND": raw["PRIMARY_600"],
-        "CARD_PRIMARY_BG": raw["PRIMARY_630"],
-        "CARD_SECONDARY_BG": raw["PRIMARY_630"],
-        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw["PRIMARY_630"],
-        "REDESIGN_BUTTON_SECONDARY_BORDER": raw["PRIMARY_530"],
-        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw["PRIMARY_700"],
-        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw["PRIMARY_630"]
+        "BACKGROUND_PRIMARY": raw.PRIMARY_600,
+        "BACKGROUND_SECONDARY": raw.PRIMARY_630,
+        "BACKGROUND_SECONDARY_ALT": raw.PRIMARY_700,
+        "BACKGROUND_TERTIARY": raw.PRIMARY_630,
+        "BACKGROUND_FLOATING": raw.PRIMARY_600,
+        "BACKGROUND_NESTED_FLOATING": raw.PRIMARY_600,
+        "BACKGROUND_MOBILE_PRIMARY": raw.PRIMARY_600,
+        "BACKGROUND_MOBILE_SECONDARY": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_ACCENT": raw.PRIMARY_660,
+        "BACKGROUND_MODIFIER_ACTIVE": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_HOVER": raw.PRIMARY_630,
+        "BACKGROUND_MODIFIER_SELECTED": raw.PRIMARY_630,
+        "BG_BASE_PRIMARY": raw.PRIMARY_600,
+        "BG_BASE_SECONDARY": raw.PRIMARY_700,
+        "BG_BASE_TERTIARY": raw.PRIMARY_660,
+        "BG_SURFACE_RAISED": raw.PRIMARY_630,
+        "BG_MOD_FAINT": raw.PRIMARY_460,
+        "BG_MOD_STRONG": raw.PRIMARY_530,
+        "BG_MOD_SUBTLE": raw.PRIMARY_630,
+        "CHANNELTEXTAREA_BACKGROUND": raw.PRIMARY_660,
+        "REDESIGN_CHAT_INPUT_BACKGROUND": raw.PRIMARY_660,
+        "REDESIGN_ONLY_BACKGROUND_SUNKEN": raw.PRIMARY_700,
+        "CHAT_INPUT_CONTAINER_BACKGROUND": raw.PRIMARY_700,
+        "INPUT_BACKGROUND": raw.PRIMARY_700,
+        "CHAT_BACKGROUND": raw.PRIMARY_600,
+        "CARD_PRIMARY_BG": raw.PRIMARY_630,
+        "CARD_SECONDARY_BG": raw.PRIMARY_630,
+        "REDESIGN_BUTTON_SECONDARY_BACKGROUND": raw.PRIMARY_630,
+        "REDESIGN_BUTTON_SECONDARY_BORDER": raw.PRIMARY_530,
+        "REDESIGN_BUTTON_TERTIARY_BACKGROUND": raw.PRIMARY_700,
+        "REDESIGN_ACTIVITY_CARD_BACKGROUND": raw.PRIMARY_630
       }
     };
     var defaults = semanticDefaults[style] ?? {};
@@ -7881,7 +8876,7 @@
     theme.rawColors = raw;
     return JSON.parse(JSON.stringify(theme));
   }
-  var ThemeStore3;
+  var ThemeStore4;
   var init_buildTheme = __esm({
     "src/plugins/_core/painter/monet/stuff/buildTheme.ts"() {
       "use strict";
@@ -7891,7 +8886,7 @@
       init_wrappers();
       init_storage4();
       init_colors2();
-      ThemeStore3 = findByStoreNameLazy("ThemeStore");
+      ThemeStore4 = findByStoreNameLazy("ThemeStore");
     }
   });
 
@@ -8006,14 +9001,14 @@
         }
       };
       try {
-        ThemeStore4?.addChangeListener?.(onThemeChanged);
-        cleanupFns.push(() => ThemeStore4?.removeChangeListener?.(onThemeChanged));
+        ThemeStore5?.addChangeListener?.(onThemeChanged);
+        cleanupFns.push(() => ThemeStore5?.removeChangeListener?.(onThemeChanged));
       } catch (e) {
         logger2.error("Failed to add theme change listener", e);
       }
     })();
   }
-  var logger2, ThemeStore4, hasThemeKey, cachedSysColors, cleanupFns;
+  var logger2, ThemeStore5, hasThemeKey, cachedSysColors, cleanupFns;
   var init_monet = __esm({
     "src/plugins/_core/painter/monet/index.ts"() {
       "use strict";
@@ -8032,7 +9027,7 @@
       init_storage4();
       init_buildTheme();
       logger2 = new LoggerClass("MonetTheme");
-      ThemeStore4 = findByStoreNameLazy("ThemeStore");
+      ThemeStore5 = findByStoreNameLazy("ThemeStore");
       hasThemeKey = /* @__PURE__ */ Symbol.for("monettheme.isThemed");
       cachedSysColors = null;
       cleanupFns = [];
@@ -8062,7 +9057,7 @@
         name: Strings.PLUGIN__CORE_PAINTER,
         description: Strings.PLUGIN__CORE_PAINTER_DESC,
         author: [
-          Developers.LampDelivery,
+          Developers.cocobo1,
           Contributors.nexpid
         ],
         id: "painter",
@@ -8213,18 +9208,18 @@
         transformEmoji: true,
         transformSticker: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "rainenhancements-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/rainenhancements.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       rainenhancementsSettings = new Proxy({}, {
@@ -8355,7 +9350,7 @@
   });
 
   // src/plugins/_core/rainenhancements/settings.tsx
-  var import_react_native16, TableSwitchRow2, TableRowGroup2, Stack2, settings_default;
+  var import_react_native19, TableSwitchRow2, TableRowGroup2, Stack2, settings_default;
   var init_settings2 = __esm({
     "src/plugins/_core/rainenhancements/settings.tsx"() {
       "use strict";
@@ -8363,13 +9358,13 @@
       init_promiseAllSettled();
       init_jsxRuntime();
       init_metro();
-      import_react_native16 = __toESM(require_react_native());
+      import_react_native19 = __toESM(require_react_native());
       init_storage5();
       ({ TableSwitchRow: TableSwitchRow2, TableRowGroup: TableRowGroup2 } = findByProps("TableRow"));
       ({ Stack: Stack2 } = findByProps("Stack"));
       settings_default = (() => {
         var settings4 = useRainEnhancementsSettings();
-        return /* @__PURE__ */ jsx(import_react_native16.ScrollView, {
+        return /* @__PURE__ */ jsx(import_react_native19.ScrollView, {
           style: {
             flex: 1
           },
@@ -8414,7 +9409,7 @@
   __export(rainenhancements_exports, {
     default: () => rainenhancements_default
   });
-  var patches2, rainenhancements_default;
+  var patches3, rainenhancements_default;
   var init_rainenhancements = __esm({
     "src/plugins/_core/rainenhancements/index.ts"() {
       "use strict";
@@ -8427,7 +9422,7 @@
       init_transformEmoji();
       init_transformSticker();
       init_settings2();
-      patches2 = [];
+      patches3 = [];
       rainenhancements_default = definePlugin({
         name: Strings.PLUGIN__CORE_RAINENHANCEMENTS,
         description: Strings.PLUGIN__CORE_RAINENHANCEMENTS_DESC,
@@ -8440,14 +9435,14 @@
         id: "rainenhancements",
         version: "1.0.0",
         start() {
-          patches2 = [
+          patches3 = [
             patchNetwork(),
             patchConsole(),
             patchMiscellaneous(),
             patchSentry()
           ].filter(Boolean);
-          patches2.push(...transformEmoji_default);
-          patches2.push(...transformSticker_default);
+          patches3.push(...transformEmoji_default);
+          patches3.push(...transformSticker_default);
         },
         settings: settings_default
       });
@@ -8605,7 +9600,7 @@
       return ret;
     }));
   }
-  var import_react3, settingConstants, createListModule;
+  var import_react5, settingConstants, createListModule;
   var init_tabs = __esm({
     "src/plugins/_core/settings/patches/tabs.tsx"() {
       "use strict";
@@ -8616,7 +9611,7 @@
       init_settings();
       init_components();
       init_wrappers();
-      import_react3 = __toESM(require_react());
+      import_react5 = __toESM(require_react());
       init_settings4();
       init_shared();
       settingConstants = findByPropsLazy("SETTING_RENDERER_CONFIG");
@@ -8627,7 +9622,7 @@
   // src/plugins/_core/settings/settings.tsx
   function SettingsPage() {
     var { settingsPosition, pluginCard, updateSettings } = useSettings();
-    return /* @__PURE__ */ jsx(import_react_native17.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native20.ScrollView, {
       style: {
         flex: 1
       },
@@ -8671,7 +9666,7 @@
       })
     });
   }
-  var import_react_native17, Stack3, TableRadioGroup2, TableRadioRow2, SETTINGS_POSITIONS, INFO_OPTIONS;
+  var import_react_native20, Stack3, TableRadioGroup2, TableRadioRow2, SETTINGS_POSITIONS, INFO_OPTIONS;
   var init_settings3 = __esm({
     "src/plugins/_core/settings/settings.tsx"() {
       "use strict";
@@ -8680,7 +9675,7 @@
       init_jsxRuntime();
       init_settings();
       init_metro();
-      import_react_native17 = __toESM(require_react_native());
+      import_react_native20 = __toESM(require_react_native());
       ({ Stack: Stack3, TableRadioGroup: TableRadioGroup2, TableRadioRow: TableRadioRow2 } = findByProps("TableRow"));
       SETTINGS_POSITIONS = [
         {
@@ -8808,7 +9803,7 @@
         version: debugInfo2.device.manufacturer,
         icon: "WrenchIcon"
       },
-      ...import_react_native18.Platform.OS !== "ios" ? [
+      ...import_react_native21.Platform.OS !== "ios" ? [
         {
           label: Strings.BRAND,
           version: debugInfo2.device.brand,
@@ -8821,7 +9816,7 @@
         icon: "MobilePhoneIcon"
       },
       {
-        ...import_react_native18.Platform.OS === "ios" ? [
+        ...import_react_native21.Platform.OS === "ios" ? [
           {
             label: Strings.MODEL_ID,
             version: debugInfo2.device.codename,
@@ -8830,7 +9825,7 @@
         ] : []
       }
     ];
-    return /* @__PURE__ */ jsx(import_react_native18.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native21.ScrollView, {
       style: {
         flex: 1
       },
@@ -8864,7 +9859,7 @@
       })
     });
   }
-  var import_react_native18;
+  var import_react_native21;
   var init_About = __esm({
     "src/rain/pages/Rain/About.tsx"() {
       "use strict";
@@ -8875,7 +9870,7 @@
       init_assets2();
       init_i18n();
       init_components();
-      import_react_native18 = __toESM(require_react_native());
+      import_react_native21 = __toESM(require_react_native());
       init_Version();
     }
   });
@@ -8904,7 +9899,7 @@
     var debugInfo2 = getDebugInfo();
     var navigation2 = NavigationNative.useNavigation();
     var { developerSettings, safeMode, updateSettings } = useSettings();
-    return /* @__PURE__ */ jsx(import_react_native19.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native22.ScrollView, {
       style: {
         flex: 1
       },
@@ -9013,7 +10008,7 @@
                 icon: /* @__PURE__ */ jsx(TableRow.Icon, {
                   source: findAssetId2("Discord")
                 }),
-                onPress: () => import_react_native19.Linking.openURL(DISCORD_SERVER)
+                onPress: () => import_react_native22.Linking.openURL(DISCORD_SERVER)
               }),
               /* @__PURE__ */ jsx(TableRow, {
                 arrow: true,
@@ -9023,7 +10018,7 @@
                     uri: codeberg_default
                   }
                 }),
-                onPress: () => import_react_native19.Linking.openURL(CODEBERG)
+                onPress: () => import_react_native22.Linking.openURL(CODEBERG)
               }),
               /* @__PURE__ */ jsx(TableRow, {
                 arrow: true,
@@ -9031,7 +10026,7 @@
                 icon: /* @__PURE__ */ jsx(TableRow.Icon, {
                   source: findAssetId2("img_account_sync_github_white")
                 }),
-                onPress: () => import_react_native19.Linking.openURL(GITHUB)
+                onPress: () => import_react_native22.Linking.openURL(GITHUB)
               }),
               /* @__PURE__ */ jsx(TableRow, {
                 arrow: true,
@@ -9041,7 +10036,7 @@
                     uri: kofi_default
                   }
                 }),
-                onPress: () => import_react_native19.Linking.openURL(KOFI)
+                onPress: () => import_react_native22.Linking.openURL(KOFI)
               }),
               /* @__PURE__ */ jsx(TableRow, {
                 arrow: true,
@@ -9049,7 +10044,7 @@
                 icon: /* @__PURE__ */ jsx(TableRow.Icon, {
                   source: findAssetId2("CircleInformationIcon-primary")
                 }),
-                onPress: () => import_react_native19.Linking.openURL(DEVELOPERS)
+                onPress: () => import_react_native22.Linking.openURL(DEVELOPERS)
               })
             ]
           })
@@ -9057,7 +10052,7 @@
       })
     });
   }
-  var import_react_native19;
+  var import_react_native22;
   var init_Rain = __esm({
     "src/rain/pages/Rain/index.tsx"() {
       "use strict";
@@ -9075,29 +10070,8 @@
       init_info();
       init_common();
       init_components();
-      import_react_native19 = __toESM(require_react_native());
+      import_react_native22 = __toESM(require_react_native());
       init_About();
-    }
-  });
-
-  // src/api/ui/sheets.ts
-  function showSheet(key, lazyImport, props) {
-    if (!("then" in lazyImport)) lazyImport = Promise.resolve({
-      default: lazyImport
-    });
-    actionSheet.openLazy(lazyImport, key, props ?? {});
-  }
-  function hideSheet(key) {
-    actionSheet.hideActionSheet(key);
-  }
-  var actionSheet;
-  var init_sheets = __esm({
-    "src/api/ui/sheets.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_wrappers();
-      actionSheet = findByPropsLazy("openLazy", "hideActionSheet");
     }
   });
 
@@ -9873,7 +10847,7 @@
             state: error ? "error" : void 0,
             errorMessage: error || void 0
           }),
-          /* @__PURE__ */ jsx(import_react_native20.ScrollView, {
+          /* @__PURE__ */ jsx(import_react_native23.ScrollView, {
             horizontal: true,
             showsHorizontalScrollIndicator: false,
             style: {
@@ -9915,7 +10889,7 @@
     var { bottom: bottomInset } = useSafeAreaInsets();
     var { right: rightInset } = useSafeAreaInsets();
     var navigation2 = NavigationNative.useNavigation();
-    (0, import_react4.useEffect)(() => {
+    (0, import_react6.useEffect)(() => {
       if (props.OptionsActionSheetComponent) {
         navigation2.setOptions({
           headerRight: () => /* @__PURE__ */ jsx(IconButton, {
@@ -9929,7 +10903,7 @@
     }, [
       navigation2
     ]);
-    (0, import_react4.useEffect)(() => {
+    (0, import_react6.useEffect)(() => {
       var sortKey = props.defaultSortKey;
       if (props.sortOptions && sortKey && props.sortOptions[sortKey]) {
         setSortFn(() => props.sortOptions[sortKey]);
@@ -9938,7 +10912,7 @@
       props.sortOptions,
       props.defaultSortKey
     ]);
-    var results = (0, import_react4.useMemo)(() => {
+    var results = (0, import_react6.useMemo)(() => {
       var values = props.items;
       if (props.resolveItem) values = values.map(props.resolveItem).filter(isNotNil);
       var items = values.filter((i) => isNotNil(i) && typeof i === "object");
@@ -9956,7 +10930,7 @@
       filterFn,
       search
     ]);
-    var onInstallPress = (0, import_react4.useCallback)(() => {
+    var onInstallPress = (0, import_react6.useCallback)(() => {
       if (!props.installAction) return () => {
       };
       var { label, onPress, fetchFn } = props.installAction;
@@ -9971,7 +10945,7 @@
     }, [
       props.installAction
     ]);
-    var onInstallBrowserPress = (0, import_react4.useCallback)(() => {
+    var onInstallBrowserPress = (0, import_react6.useCallback)(() => {
       if (!props.installBrowserAction) return () => {
       };
       var { label, onPress, fetchFn } = props.installBrowserAction;
@@ -9987,7 +10961,7 @@
       props.installBrowserAction
     ]);
     if (results.length === 0 && !search) {
-      return /* @__PURE__ */ jsxs(import_react_native20.View, {
+      return /* @__PURE__ */ jsxs(import_react_native23.View, {
         style: {
           gap: 32,
           flexGrow: 1.5,
@@ -9995,13 +10969,13 @@
           alignItems: "center"
         },
         children: [
-          /* @__PURE__ */ jsxs(import_react_native20.View, {
+          /* @__PURE__ */ jsxs(import_react_native23.View, {
             style: {
               gap: 8,
               alignItems: "center"
             },
             children: [
-              /* @__PURE__ */ jsx(import_react_native20.Image, {
+              /* @__PURE__ */ jsx(import_react_native23.Image, {
                 source: findAssetId2("empty_quick_switcher")
               }),
               /* @__PURE__ */ jsx(Text, {
@@ -10039,12 +11013,12 @@
       ...sortOptions,
       ...filterOptions
     ];
-    var headerElement = /* @__PURE__ */ jsxs(import_react_native20.View, {
+    var headerElement = /* @__PURE__ */ jsxs(import_react_native23.View, {
       style: {
         paddingBottom: 8
       },
       children: [
-        settings4.safeMode && /* @__PURE__ */ jsxs(import_react_native20.View, {
+        settings4.safeMode && /* @__PURE__ */ jsxs(import_react_native23.View, {
           style: {
             marginBottom: 10
           },
@@ -10056,7 +11030,7 @@
             props.safeModeHint?.footer
           ]
         }),
-        /* @__PURE__ */ jsxs(import_react_native20.View, {
+        /* @__PURE__ */ jsxs(import_react_native23.View, {
           style: {
             flexDirection: "row",
             gap: 8
@@ -10094,14 +11068,14 @@
           extraData: search,
           estimatedItemSize: 36,
           ListHeaderComponent: headerElement,
-          ListEmptyComponent: () => /* @__PURE__ */ jsxs(import_react_native20.View, {
+          ListEmptyComponent: () => /* @__PURE__ */ jsxs(import_react_native23.View, {
             style: {
               gap: 12,
               padding: 12,
               alignItems: "center"
             },
             children: [
-              /* @__PURE__ */ jsx(import_react_native20.Image, {
+              /* @__PURE__ */ jsx(import_react_native23.Image, {
                 source: findAssetId2("devices_not_found")
               }),
               /* @__PURE__ */ jsx(Text, {
@@ -10116,7 +11090,7 @@
             paddingHorizontal: 12,
             paddingBottom: 90
           },
-          ItemSeparatorComponent: () => /* @__PURE__ */ jsx(import_react_native20.View, {
+          ItemSeparatorComponent: () => /* @__PURE__ */ jsx(import_react_native23.View, {
             style: {
               height: 8
             }
@@ -10141,7 +11115,7 @@
       ]
     });
   }
-  var import_fuzzysort, import_react4, React6, import_react_native20, showSimpleActionSheet, hideActionSheet;
+  var import_fuzzysort, import_react6, React6, import_react_native23, showSimpleActionSheet, hideActionSheet;
   var init_AddonPage = __esm({
     "src/rain/pages/Addon/AddonPage.tsx"() {
       "use strict";
@@ -10161,42 +11135,11 @@
       init_components();
       init_dist();
       import_fuzzysort = __toESM(require_fuzzysort());
-      import_react4 = __toESM(require_react());
+      import_react6 = __toESM(require_react());
       React6 = __toESM(require_react());
-      import_react_native20 = __toESM(require_react_native());
+      import_react_native23 = __toESM(require_react_native());
       ({ showSimpleActionSheet } = lazyDestructure(() => findByProps("showSimpleActionSheet")));
       ({ hideActionSheet } = findByProps("hideActionSheet"));
-    }
-  });
-
-  // src/rain/pages/Plugins/usePluginCardStyles.ts
-  var usePluginCardStyles;
-  var init_usePluginCardStyles = __esm({
-    "src/rain/pages/Plugins/usePluginCardStyles.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_styles();
-      init_common();
-      usePluginCardStyles = createStyles({
-        smallIcon: {
-          tintColor: tokens.colors.LOGO_PRIMARY,
-          height: 18,
-          width: 18
-        },
-        badgeIcon: {
-          tintColor: tokens.colors.LOGO_PRIMARY,
-          height: 12,
-          width: 12
-        },
-        badgesContainer: {
-          flexWrap: "wrap",
-          flexDirection: "row",
-          gap: 6,
-          borderRadius: 6,
-          padding: 4
-        }
-      });
     }
   });
 
@@ -10217,7 +11160,7 @@
       variant: "heading-lg/semibold",
       children: highlightedNode.length ? highlightedNode : plugin.name
     });
-    return /* @__PURE__ */ jsx(import_react_native21.View, {
+    return /* @__PURE__ */ jsx(import_react_native24.View, {
       style: {
         flexDirection: "row",
         alignItems: "center",
@@ -10228,7 +11171,6 @@
   }
   function Authors() {
     var { plugin, result } = useCardContext();
-    var styles5 = usePluginCardStyles();
     var allAuthors = [
       ...plugin.developers ?? [],
       ...plugin.contributors ?? []
@@ -10241,7 +11183,7 @@
       children: m2
     }, i));
     var authorText = highlightedNode.length > 0 ? highlightedNode : allAuthors.map((a) => a.name).join(", ");
-    return /* @__PURE__ */ jsx(import_react_native21.View, {
+    return /* @__PURE__ */ jsx(import_react_native24.View, {
       style: {
         flexDirection: "row",
         flexWrap: "wrap",
@@ -10273,8 +11215,8 @@
     });
   }
   function PluginCard({ result, item: plugin }) {
-    var [toggling, setToggling] = (0, import_react5.useState)(false);
-    var cardContextValue = (0, import_react5.useMemo)(() => ({
+    var [toggling, setToggling] = (0, import_react7.useState)(false);
+    var cardContextValue = (0, import_react7.useMemo)(() => ({
       plugin,
       result
     }), [
@@ -10317,7 +11259,7 @@
     var openOnPress = pluginCard?.openOnPress;
     return /* @__PURE__ */ jsx(CardContext.Provider, {
       value: cardContextValue,
-      children: /* @__PURE__ */ jsx(import_react_native21.Pressable, {
+      children: /* @__PURE__ */ jsx(import_react_native24.Pressable, {
         style: ({ pressed }) => openOnPress && pressed ? [
           {
             opacity: 0.75
@@ -10331,14 +11273,14 @@
           children: /* @__PURE__ */ jsxs(Stack, {
             spacing: 16,
             children: [
-              /* @__PURE__ */ jsxs(import_react_native21.View, {
+              /* @__PURE__ */ jsxs(import_react_native24.View, {
                 style: {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   alignItems: "center"
                 },
                 children: [
-                  /* @__PURE__ */ jsxs(import_react_native21.View, {
+                  /* @__PURE__ */ jsxs(import_react_native24.View, {
                     style: {
                       flex: 1,
                       marginRight: 8
@@ -10348,7 +11290,7 @@
                       /* @__PURE__ */ jsx(Authors, {})
                     ]
                   }),
-                  /* @__PURE__ */ jsx(import_react_native21.View, {
+                  /* @__PURE__ */ jsx(import_react_native24.View, {
                     style: {
                       flexShrink: 0,
                       minWidth: 100,
@@ -10359,7 +11301,7 @@
                       direction: "horizontal",
                       children: [
                         /* @__PURE__ */ jsx(Actions, {}),
-                        /* @__PURE__ */ jsx(import_react_native21.View, {
+                        /* @__PURE__ */ jsx(import_react_native24.View, {
                           style: core ? {
                             opacity: 0.5
                           } : void 0,
@@ -10381,7 +11323,7 @@
       })
     });
   }
-  var import_chroma_js4, import_react5, import_react_native21, CardContext, useCardContext, Actions;
+  var import_chroma_js4, import_react7, import_react_native24, CardContext, useCardContext, Actions;
   var init_PluginCard = __esm({
     "src/rain/pages/Plugins/components/PluginCard.tsx"() {
       "use strict";
@@ -10398,18 +11340,17 @@
       init_common();
       init_components();
       init_plugins3();
-      init_usePluginCardStyles();
       import_chroma_js4 = __toESM(require_chroma_js());
-      import_react5 = __toESM(require_react());
-      import_react_native21 = __toESM(require_react_native());
-      CardContext = /* @__PURE__ */ (0, import_react5.createContext)(null);
-      useCardContext = () => (0, import_react5.useContext)(CardContext);
+      import_react7 = __toESM(require_react());
+      import_react_native24 = __toESM(require_react_native());
+      CardContext = /* @__PURE__ */ (0, import_react7.createContext)(null);
+      useCardContext = () => (0, import_react7.useContext)(CardContext);
       Actions = () => {
         var { plugin } = useCardContext();
         var navigation2 = NavigationNative.useNavigation();
         var { pluginCard, pinnedPlugins, togglePinnedPlugin } = useSettings((s) => s);
         var isPinned = pinnedPlugins?.includes(plugin.id);
-        return /* @__PURE__ */ jsxs(import_react_native21.View, {
+        return /* @__PURE__ */ jsxs(import_react_native24.View, {
           style: {
             flexDirection: "row",
             gap: 6
@@ -10485,7 +11426,7 @@
         return Number(a.isEnabled()) - Number(b3.isEnabled());
       }
     };
-    var filteredItems = (0, import_react6.useMemo)(() => {
+    var filteredItems = (0, import_react8.useMemo)(() => {
       return items.filter((p) => {
         if (p.devOnly && !developerSettings) {
           return false;
@@ -10542,7 +11483,7 @@
       }
     });
   }
-  var import_react6;
+  var import_react8;
   var init_Plugins = __esm({
     "src/rain/pages/Plugins/index.tsx"() {
       "use strict";
@@ -10553,7 +11494,7 @@
       init_i18n();
       init_plugins3();
       init_AddonPage();
-      import_react6 = __toESM(require_react());
+      import_react8 = __toESM(require_react());
       init_PluginCard();
       init_rain();
     }
@@ -10561,18 +11502,18 @@
 
   // src/rain/pages/Addon/AddonCard.tsx
   function AddonCard(props) {
-    var styles5 = useStyles2();
+    var styles5 = useStyles3();
     return /* @__PURE__ */ jsx(Card, {
       children: /* @__PURE__ */ jsxs(Stack, {
         spacing: 16,
         children: [
-          /* @__PURE__ */ jsxs(import_react_native22.View, {
+          /* @__PURE__ */ jsxs(import_react_native25.View, {
             style: {
               flexDirection: "row",
               alignItems: "center"
             },
             children: [
-              /* @__PURE__ */ jsxs(import_react_native22.View, {
+              /* @__PURE__ */ jsxs(import_react_native25.View, {
                 style: styles5.headerLeading,
                 children: [
                   /* @__PURE__ */ jsx(Text, {
@@ -10596,7 +11537,7 @@
                   })
                 ]
               }),
-              /* @__PURE__ */ jsxs(import_react_native22.View, {
+              /* @__PURE__ */ jsxs(import_react_native25.View, {
                 style: [
                   styles5.headerTrailing,
                   {
@@ -10604,7 +11545,7 @@
                   }
                 ],
                 children: [
-                  /* @__PURE__ */ jsxs(import_react_native22.View, {
+                  /* @__PURE__ */ jsxs(import_react_native25.View, {
                     style: styles5.actions,
                     children: [
                       props.overflowActions && /* @__PURE__ */ jsx(IconButton, {
@@ -10641,7 +11582,7 @@
                   props.toggleType && (props.toggleType === "switch" ? /* @__PURE__ */ jsx(FormSwitch, {
                     value: props.toggleValue(),
                     onValueChange: props.onToggleChange
-                  }) : /* @__PURE__ */ jsx(import_react_native22.TouchableOpacity, {
+                  }) : /* @__PURE__ */ jsx(import_react_native25.TouchableOpacity, {
                     onPress: () => {
                       props.onToggleChange?.(!props.toggleValue());
                     },
@@ -10661,7 +11602,7 @@
       })
     });
   }
-  var import_react_native22, hideActionSheet2, showSimpleActionSheet2, useStyles2;
+  var import_react_native25, hideActionSheet2, showSimpleActionSheet2, useStyles3;
   var init_AddonCard = __esm({
     "src/rain/pages/Addon/AddonCard.tsx"() {
       "use strict";
@@ -10674,10 +11615,10 @@
       init_lazy();
       init_components();
       init_wrappers();
-      import_react_native22 = __toESM(require_react_native());
+      import_react_native25 = __toESM(require_react_native());
       ({ hideActionSheet: hideActionSheet2 } = lazyDestructure(() => findByProps("openLazy", "hideActionSheet")));
       ({ showSimpleActionSheet: showSimpleActionSheet2 } = lazyDestructure(() => findByProps("showSimpleActionSheet")));
-      useStyles2 = createStyles({
+      useStyles3 = createStyles({
         card: {
           backgroundColor: semanticColors?.CARD_SECONDARY_BG,
           borderRadius: 12,
@@ -10703,7 +11644,7 @@
         },
         headerSubtitle: {
           ...TextStyleSheet["text-sm/semibold"],
-          color: "text-muted"
+          color: semanticColors.TEXT_MUTED
         },
         descriptionLabel: {
           ...TextStyleSheet["text-md/semibold"],
@@ -10777,7 +11718,6 @@
         }),
         /* @__PURE__ */ jsx(Text, {
           variant: "text-xs/medium",
-          color: "TEXT_MUTED",
           style: {
             textAlign: "center"
           },
@@ -10805,7 +11745,7 @@
 
   // src/plugins/_core/painter/monet/Settings.tsx
   function Settings() {
-    var styles5 = useStyles3();
+    var styles5 = useStyles4();
     var colors = useMonetSettings((s) => s.colors);
     var patchConfig = useMonetSettings((s) => s.patches);
     var updateSettings = useMonetSettings((s) => s.updateSettings);
@@ -10844,23 +11784,9 @@
         },
         spacing: 24,
         children: [
-          showMessage && /* @__PURE__ */ jsxs(ReactNative.View, {
-            style: {
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center"
-            },
-            children: [
-              /* @__PURE__ */ jsx(ReactNative.Image, {
-                source: findAssetId2("CircleInformationIcon-primary"),
-                style: styles5.help
-              }),
-              /* @__PURE__ */ jsx(Text, {
-                variant: "text-md/semibold",
-                color: "TEXT_BRAND",
-                children: showMessage
-              })
-            ]
+          showMessage && /* @__PURE__ */ jsx(HelpMessage, {
+            messageType: 0,
+            children: showMessage
           }),
           /* @__PURE__ */ jsx(TableRowGroup, {
             title: "Colors",
@@ -11007,7 +11933,7 @@
       })
     });
   }
-  var logger3, useStyles3;
+  var logger3, useStyles4;
   var init_Settings = __esm({
     "src/plugins/_core/painter/monet/Settings.tsx"() {
       "use strict";
@@ -11016,19 +11942,19 @@
       init_async_to_generator();
       init_jsxRuntime();
       init_assets();
-      init_styles();
       init_color();
+      init_styles();
       init_toasts();
       init_logger();
       init_common();
       init_components();
-      init_storage4();
-      init_buildTheme();
       init_Color();
       init_usePatches();
       init_monet();
+      init_storage4();
+      init_buildTheme();
       logger3 = new LoggerClass("MonetTheme");
-      useStyles3 = createStyles({
+      useStyles4 = createStyles({
         pill: {
           flexDirection: "row",
           alignItems: "center",
@@ -11058,9 +11984,11 @@
     var navigation2 = NavigationNative.useNavigation();
     var isMonetActive = hasMonetTheme();
     var { patches: patches27 } = usePatches_default();
-    var hasUrlTheme = useThemes(React2.useCallback((state) => Object.values(state.themes).some((t) => t.selected), []));
+    var hasUrlTheme = useThemes((state2) => Object.values(state2.themes).some((t) => t.selected));
     var isSelected = isMonetActive && !hasUrlTheme;
     if (ReactNative.Platform.OS !== "android") return null;
+    var [version, setVersion] = React2.useState(0);
+    var forceUpdate = () => setVersion((v2) => v2 + 1);
     return /* @__PURE__ */ jsx(AddonCard, {
       headerLabel: "Material You",
       headerSublabel: "by LampDelivery & nexpid",
@@ -11074,11 +12002,9 @@
         if (!v2) {
           applyMonetTheme(null);
         } else {
-          if (hasUrlTheme) {
-            yield useThemes.getState().selectTheme(null);
-          }
+          yield useThemes.getState().selectTheme(null);
           if (!patches27) {
-            showToast("Patches not loaded yet, try again", findAssetId2("CircleXIcon-primary"));
+            showToast("Patches not loaded yet", findAssetId2("CircleXIcon-primary"));
             return;
           }
           try {
@@ -11088,13 +12014,14 @@
             showToast("Failed to build theme", findAssetId2("CircleXIcon-primary"));
           }
         }
+        forceUpdate();
       })(),
       actions: [
         {
           icon: "SettingsIcon",
           onPress: () => {
             navigation2.push("RAIN_CUSTOM_PAGE", {
-              title: "Material You",
+              title: "MaterialYou",
               render: Settings
             });
           }
@@ -11112,12 +12039,12 @@
       init_assets();
       init_toasts();
       init_common();
-      init_themes();
       init_AddonCard();
+      init_themes();
+      init_usePatches();
       init_monet();
       init_Settings();
       init_buildTheme();
-      init_usePatches();
     }
   });
 
@@ -11167,14 +12094,14 @@
       children: /* @__PURE__ */ jsxs(Stack, {
         spacing: 16,
         children: [
-          /* @__PURE__ */ jsxs(import_react_native23.View, {
+          /* @__PURE__ */ jsxs(import_react_native26.View, {
             style: {
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center"
             },
             children: [
-              /* @__PURE__ */ jsxs(import_react_native23.View, {
+              /* @__PURE__ */ jsxs(import_react_native26.View, {
                 style: {
                   flexShrink: 1
                 },
@@ -11194,7 +12121,7 @@
                   })
                 ]
               }),
-              /* @__PURE__ */ jsx(import_react_native23.View, {
+              /* @__PURE__ */ jsx(import_react_native26.View, {
                 children: /* @__PURE__ */ jsxs(Stack, {
                   direction: "horizontal",
                   spacing: 8,
@@ -11234,7 +12161,7 @@
     var [error, setError] = React2.useState(null);
     var [searchQuery, setSearchQuery] = React2.useState("");
     var [sort, setSort] = React2.useState("NameAZ");
-    var installedItems = useStore2((state) => type === "fonts" ? state.fonts : state.themes);
+    var installedItems = useStore2((state2) => type === "fonts" ? state2.fonts : state2.themes);
     var fetchAddons = (forceRefresh = false) => _async_to_generator(function* () {
       if (cache.data && !forceRefresh) return;
       setLoading(true);
@@ -11268,7 +12195,7 @@
       sort
     ]);
     if (error) {
-      return /* @__PURE__ */ jsxs(import_react_native23.View, {
+      return /* @__PURE__ */ jsxs(import_react_native26.View, {
         style: {
           flex: 1,
           justifyContent: "center",
@@ -11297,18 +12224,18 @@
         ]
       });
     }
-    return /* @__PURE__ */ jsxs(import_react_native23.View, {
+    return /* @__PURE__ */ jsxs(import_react_native26.View, {
       style: {
         flex: 1
       },
       children: [
-        /* @__PURE__ */ jsx(import_react_native23.View, {
+        /* @__PURE__ */ jsx(import_react_native26.View, {
           style: {
             padding: 10
           },
           children: /* @__PURE__ */ jsx(Stack, {
             spacing: 12,
-            children: /* @__PURE__ */ jsxs(import_react_native23.View, {
+            children: /* @__PURE__ */ jsxs(import_react_native26.View, {
               style: {
                 flexDirection: "row",
                 alignItems: "center",
@@ -11355,7 +12282,7 @@
             paddingHorizontal: 5
           },
           extraData: installedItems,
-          renderItem: ({ item }) => /* @__PURE__ */ jsx(import_react_native23.View, {
+          renderItem: ({ item }) => /* @__PURE__ */ jsx(import_react_native26.View, {
             style: {
               paddingVertical: 6,
               paddingHorizontal: 8
@@ -11372,7 +12299,7 @@
       ]
     });
   }
-  var import_react_native23, showSimpleActionSheet3, hideActionSheet3, Sort, SortLabels;
+  var import_react_native26, showSimpleActionSheet3, hideActionSheet3, Sort, SortLabels;
   var init_AddonBrowser = __esm({
     "src/rain/pages/Browser/AddonBrowser.tsx"() {
       "use strict";
@@ -11390,7 +12317,7 @@
       init_metro();
       init_common();
       init_components();
-      import_react_native23 = __toESM(require_react_native());
+      import_react_native26 = __toESM(require_react_native());
       ({ showSimpleActionSheet: showSimpleActionSheet3 } = lazyDestructure(() => findByProps("showSimpleActionSheet")));
       ({ hideActionSheet: hideActionSheet3 } = findByProps("hideActionSheet"));
       Sort = /* @__PURE__ */ (function(Sort2) {
@@ -11448,23 +12375,23 @@
   }
   function TitleComponent2({ theme }) {
     var { authors } = theme.data;
-    return /* @__PURE__ */ jsxs(import_react_native24.View, {
+    return /* @__PURE__ */ jsxs(import_react_native27.View, {
       style: {
         gap: 4
       },
       children: [
-        /* @__PURE__ */ jsx(import_react_native24.View, {
+        /* @__PURE__ */ jsx(import_react_native27.View, {
           children: /* @__PURE__ */ jsx(Text, {
             variant: "heading-xl/semibold",
             children: theme.data.name
           })
         }),
-        /* @__PURE__ */ jsx(import_react_native24.View, {
+        /* @__PURE__ */ jsx(import_react_native27.View, {
           style: {
             flexDirection: "row",
             flexShrink: 1
           },
-          children: authors && authors.length > 0 && /* @__PURE__ */ jsx(import_react_native24.TouchableOpacity, {
+          children: authors && authors.length > 0 && /* @__PURE__ */ jsx(import_react_native27.TouchableOpacity, {
             style: {
               flexDirection: "row",
               gap: 8,
@@ -11489,11 +12416,11 @@
     });
   }
   function ThemeInfoActionSheet({ theme, navigation: navigation2 }) {
-    var [themeState, setThemeState] = (0, import_react7.useState)({
+    var [themeState, setThemeState] = (0, import_react9.useState)({
       ...theme
     });
-    var [loading, setLoading] = (0, import_react7.useState)(false);
-    (0, import_react7.useEffect)(() => {
+    var [loading, setLoading] = (0, import_react9.useState)(false);
+    (0, import_react9.useEffect)(() => {
       var interval = setInterval(() => {
         setThemeState({
           ...theme
@@ -11546,13 +12473,13 @@
       });
     };
     return /* @__PURE__ */ jsx(ActionSheet, {
-      children: /* @__PURE__ */ jsxs(import_react_native24.ScrollView, {
+      children: /* @__PURE__ */ jsxs(import_react_native27.ScrollView, {
         contentContainerStyle: {
           gap: 12,
           marginBottom: 12
         },
         children: [
-          /* @__PURE__ */ jsx(import_react_native24.View, {
+          /* @__PURE__ */ jsx(import_react_native27.View, {
             style: {
               flexDirection: "row",
               alignItems: "center",
@@ -11565,7 +12492,7 @@
               theme: themeState
             })
           }),
-          /* @__PURE__ */ jsxs(import_react_native24.View, {
+          /* @__PURE__ */ jsxs(import_react_native27.View, {
             style: {
               flexDirection: "row",
               justifyContent: "center",
@@ -11616,7 +12543,7 @@
       })
     });
   }
-  var import_react7, import_react_native24;
+  var import_react9, import_react_native27;
   var init_ThemeInfoActionSheet = __esm({
     "src/rain/pages/Themes/sheets/ThemeInfoActionSheet.tsx"() {
       "use strict";
@@ -11633,8 +12560,8 @@
       init_common();
       init_components();
       init_themes();
-      import_react7 = __toESM(require_react());
-      import_react_native24 = __toESM(require_react_native());
+      import_react9 = __toESM(require_react());
+      import_react_native27 = __toESM(require_react_native());
     }
   });
 
@@ -11642,6 +12569,9 @@
   function selectAndApply(value, theme) {
     return _async_to_generator(function* () {
       try {
+        if (value) {
+          applyMonetTheme(null);
+        }
         yield useThemes.getState().selectTheme(value ? theme.id : null);
       } catch (e) {
         console.error("Error while selectAndApply,", e);
@@ -11649,10 +12579,10 @@
     })();
   }
   function ThemeCard({ item: theme }) {
-    var isSelected = useThemes(React8.useCallback((state) => state.themes[theme.id]?.selected ?? false, [
+    var isSelected = useThemes(React8.useCallback((state2) => state2.themes[theme.id]?.selected ?? false, [
       theme.id
     ]));
-    var safeModeEnabled = useSettings((state) => state.safeMode);
+    var safeModeEnabled = useSettings((state2) => state2.safeMode);
     var { fetchTheme: fetchTheme2, removeTheme: removeTheme2 } = useThemes.getState();
     var [removed, setRemoved] = React8.useState(false);
     if (removed) return null;
@@ -11662,7 +12592,6 @@
       headerSublabel: authors ? `by ${authors.map((i) => i.name).join(", ")}` : "",
       headerLabelVariant: "heading-lg/semibold",
       headerSublabelVariant: "text-sm/semibold",
-      headerSublabelColor: "text-muted",
       descriptionLabel: theme.data.description ?? "No description.",
       toggleType: !safeModeEnabled ? "radio" : void 0,
       toggleValue: () => isSelected,
@@ -11695,6 +12624,7 @@
       init_settings();
       init_sheets();
       init_common();
+      init_monet();
       init_themes();
       init_AddonCard();
       React8 = __toESM(require_react());
@@ -11709,7 +12639,7 @@
   function Themes() {
     var themesMap = useThemes((s) => s.themes);
     var themesList = Object.values(themesMap);
-    var safeMode = useSettings((state) => state.safeMode);
+    var safeMode = useSettings((state2) => state2.safeMode);
     var navigation2 = NavigationNative.useNavigation();
     return /* @__PURE__ */ jsx(AddonPage, {
       title: Strings.THEMES,
@@ -11743,12 +12673,13 @@
       ListHeaderComponent: MonetCard,
       OptionsActionSheetComponent: () => {
         var { type, customBackground, setType, setCustomBackground } = useColorsPref();
+        var { iconsEnabled, setIconsEnabled } = useColorsPref();
         return /* @__PURE__ */ jsxs(ActionSheet, {
           children: [
             /* @__PURE__ */ jsx(BottomSheetTitleHeader, {
               title: Strings.OPTIONS
             }),
-            /* @__PURE__ */ jsxs(import_react_native25.View, {
+            /* @__PURE__ */ jsxs(import_react_native28.View, {
               style: {
                 paddingVertical: 20,
                 gap: 12
@@ -11791,25 +12722,39 @@
                     })
                   ]
                 }),
-                /* @__PURE__ */ jsx(TableRowGroup, {
-                  title: Strings.CHAT_BACKGROUND,
-                  children: /* @__PURE__ */ jsx(TableSwitchRow, {
-                    label: Strings.SHOW_BACKGROUND,
-                    subLabel: Strings.SHOW_BACKGROUND_DESC,
-                    icon: /* @__PURE__ */ jsx(TableRowIcon, {
-                      source: findAssetId2("ImageIcon")
-                    }),
-                    value: !customBackground,
-                    onValueChange: () => {
-                      setCustomBackground(customBackground ? null : "hidden");
-                      var currentTheme2 = getCurrentTheme();
-                      if (currentTheme2?.data) {
-                        updateColor(currentTheme2.data, {
-                          update: true
-                        });
+                /* @__PURE__ */ jsxs(TableRowGroup, {
+                  title: Strings.CUSTOMISATION,
+                  children: [
+                    /* @__PURE__ */ jsx(TableSwitchRow, {
+                      label: Strings.SHOW_BACKGROUND,
+                      subLabel: Strings.SHOW_BACKGROUND_DESC,
+                      icon: /* @__PURE__ */ jsx(TableRowIcon, {
+                        source: findAssetId2("ImageIcon")
+                      }),
+                      value: !customBackground,
+                      onValueChange: () => {
+                        setCustomBackground(customBackground ? null : "hidden");
+                        var currentTheme2 = getCurrentTheme();
+                        if (currentTheme2?.data) {
+                          updateColor(currentTheme2.data, {
+                            update: true
+                          });
+                        }
                       }
-                    }
-                  })
+                    }),
+                    /* @__PURE__ */ jsx(TableSwitchRow, {
+                      label: Strings.USE_CUSTOM_ICONS,
+                      subLabel: Strings.USE_CUSTOM_ICONS_DESC,
+                      icon: /* @__PURE__ */ jsx(TableRowIcon, {
+                        source: findAssetId2("PlusSmallIcon")
+                      }),
+                      value: iconsEnabled,
+                      onValueChange: () => {
+                        setIconsEnabled(!iconsEnabled);
+                        initPlus();
+                      }
+                    })
+                  ]
                 })
               ]
             })
@@ -11818,7 +12763,7 @@
       }
     });
   }
-  var import_react_native25;
+  var import_react_native28;
   var init_Themes2 = __esm({
     "src/rain/pages/Themes/index.tsx"() {
       "use strict";
@@ -11830,13 +12775,14 @@
       init_i18n();
       init_common();
       init_components();
+      init_MonetCard();
+      init_loader2();
       init_themes();
       init_preferences();
       init_updater();
-      init_MonetCard();
       init_AddonPage();
       init_Themes();
-      import_react_native25 = __toESM(require_react_native());
+      import_react_native28 = __toESM(require_react_native());
       init_ThemeCard();
     }
   });
@@ -12354,9 +13300,9 @@
   }
   function FontsExtractor({ fonts: fonts2, setName }) {
     var themeFonts = currentTheme.fonts;
-    var [fontName, setFontName] = (0, import_react8.useState)(guessFontName(Object.values(themeFonts)));
-    var [error, setError] = (0, import_react8.useState)(void 0);
-    return /* @__PURE__ */ jsxs(import_react_native26.View, {
+    var [fontName, setFontName] = (0, import_react10.useState)(guessFontName(Object.values(themeFonts)));
+    var [error, setError] = (0, import_react10.useState)(void 0);
+    return /* @__PURE__ */ jsxs(import_react_native29.View, {
       style: {
         padding: 8,
         paddingBottom: 16,
@@ -12403,10 +13349,10 @@
     });
   }
   function JsonFontImporter({ fonts: fonts2, setName, setSource }) {
-    var [fontLink, setFontLink] = (0, import_react8.useState)("");
-    var [saving, setSaving] = (0, import_react8.useState)(false);
-    var [error, setError] = (0, import_react8.useState)(void 0);
-    return /* @__PURE__ */ jsxs(import_react_native26.View, {
+    var [fontLink, setFontLink] = (0, import_react10.useState)("");
+    var [saving, setSaving] = (0, import_react10.useState)(false);
+    var [error, setError] = (0, import_react10.useState)(void 0);
+    return /* @__PURE__ */ jsxs(import_react_native29.View, {
       style: {
         padding: 8,
         paddingBottom: 16,
@@ -12449,9 +13395,9 @@
     });
   }
   function EntryEditorActionSheet(props) {
-    var [familyName, setFamilyName] = (0, import_react8.useState)(props.name);
-    var [fontUrl2, setFontUrl] = (0, import_react8.useState)(props.fontEntries[props.name]);
-    return /* @__PURE__ */ jsxs(import_react_native26.View, {
+    var [familyName, setFamilyName] = (0, import_react10.useState)(props.name);
+    var [fontUrl2, setFontUrl] = (0, import_react10.useState)(props.fontEntries[props.name]);
+    return /* @__PURE__ */ jsxs(import_react_native29.View, {
       style: {
         padding: 8,
         paddingBottom: 16,
@@ -12505,18 +13451,18 @@
     }), "FontEditorActionSheet");
   }
   function NewEntryRow({ fontName, fontEntry }) {
-    var nameRef = (0, import_react8.useRef)(void 0);
-    var urlRef = (0, import_react8.useRef)(void 0);
-    var [nameSet, setNameSet] = (0, import_react8.useState)(false);
-    var [error, setError] = (0, import_react8.useState)();
-    return /* @__PURE__ */ jsxs(import_react_native26.View, {
+    var nameRef = (0, import_react10.useRef)(void 0);
+    var urlRef = (0, import_react10.useRef)(void 0);
+    var [nameSet, setNameSet] = (0, import_react10.useState)(false);
+    var [error, setError] = (0, import_react10.useState)();
+    return /* @__PURE__ */ jsxs(import_react_native29.View, {
       style: {
         flexDirection: "row",
         gap: 8,
         justifyContent: "flex-start"
       },
       children: [
-        /* @__PURE__ */ jsx(import_react_native26.View, {
+        /* @__PURE__ */ jsx(import_react_native29.View, {
           style: {
             flex: 1
           },
@@ -12570,12 +13516,12 @@
     });
   }
   function FontEditor(props) {
-    var currentFonts = useFonts((state) => state.fonts);
-    var [name, setName] = (0, import_react8.useState)(props.name);
-    var [source, setSource] = (0, import_react8.useState)(props.name && currentFonts[props.name]?.source);
-    var [importing, setIsImporting] = (0, import_react8.useState)(false);
-    var [errors, setErrors] = (0, import_react8.useState)();
-    var memoEntry = (0, import_react8.useMemo)(() => {
+    var currentFonts = useFonts((state2) => state2.fonts);
+    var [name, setName] = (0, import_react10.useState)(props.name);
+    var [source, setSource] = (0, import_react10.useState)(props.name && currentFonts[props.name]?.source);
+    var [importing, setIsImporting] = (0, import_react10.useState)(false);
+    var [errors, setErrors] = (0, import_react10.useState)();
+    var memoEntry = (0, import_react10.useMemo)(() => {
       return v.from(props.name ? {
         ...currentFonts[props.name]?.main
       } : {});
@@ -12585,8 +13531,8 @@
     ]);
     var fontEntries = memoEntry;
     var navigation2 = NavigationNative.useNavigation();
-    var [, forceUpdate] = (0, import_react8.useReducer)(() => ({}), 0);
-    return /* @__PURE__ */ jsx(import_react_native26.ScrollView, {
+    var [, forceUpdate] = (0, import_react10.useReducer)(() => ({}), 0);
+    return /* @__PURE__ */ jsx(import_react_native29.ScrollView, {
       style: {
         flex: 1
       },
@@ -12717,7 +13663,7 @@
             color: "text-danger",
             children: Strings.SOME_ENTRIES_ERROR
           }),
-          /* @__PURE__ */ jsx(import_react_native26.View, {
+          /* @__PURE__ */ jsx(import_react_native29.View, {
             style: {
               flexDirection: "row",
               justifyContent: "flex-end",
@@ -12761,7 +13707,7 @@
       })
     });
   }
-  var import_react8, import_react_native26, actionSheet2, openAlert2, AlertModal3, AlertActionButton3;
+  var import_react10, import_react_native29, actionSheet2, openAlert2, AlertModal3, AlertActionButton3;
   var init_FontEditor = __esm({
     "src/rain/pages/Fonts/FontEditor.tsx"() {
       "use strict";
@@ -12779,8 +13725,8 @@
       init_components();
       init_wrappers();
       init_fonts();
-      import_react8 = __toESM(require_react());
-      import_react_native26 = __toESM(require_react_native());
+      import_react10 = __toESM(require_react());
+      import_react_native29 = __toESM(require_react_native());
       actionSheet2 = findByPropsLazy("hideActionSheet");
       ({ openAlert: openAlert2 } = lazyDestructure(() => findByProps("openAlert", "dismissAlert")));
       ({ AlertModal: AlertModal3, AlertActionButton: AlertActionButton3 } = lazyDestructure(() => findByProps("AlertModal", "AlertActions")));
@@ -12797,23 +13743,23 @@
 
   // src/rain/pages/Fonts/FontCard.tsx
   function FontPreview({ font }) {
-    var [loaded, setLoaded] = (0, import_react9.useState)(false);
-    var [WebView, setWebView] = (0, import_react9.useState)(null);
-    var [isReady, setIsReady] = (0, import_react9.useState)(false);
-    var styles5 = useStyles4();
-    var [fontUri, setFontUri] = (0, import_react9.useState)(null);
+    var [loaded, setLoaded] = (0, import_react11.useState)(false);
+    var [WebView, setWebView] = (0, import_react11.useState)(null);
+    var [isReady, setIsReady] = (0, import_react11.useState)(false);
+    var styles5 = useStyles5();
+    var [fontUri, setFontUri] = (0, import_react11.useState)(null);
     var TEXT_DEFAULT = useToken2(tokens.colors.TEXT_DEFAULT);
     var { fontFamily: fontFamilyList, fontSize } = TextStyleSheet["text-md/medium"];
     var fontFamily = fontFamilyList.split(/,/g)[0];
-    (0, import_react9.useEffect)(() => {
-      if (import_react_native27.Platform.OS === "android") {
+    (0, import_react11.useEffect)(() => {
+      if (import_react_native30.Platform.OS === "android") {
         var webViewModule = findByProps("WebView");
         if (webViewModule?.WebView) {
           setWebView(() => webViewModule.WebView);
         }
       }
     }, []);
-    (0, import_react9.useEffect)(() => {
+    (0, import_react11.useEffect)(() => {
       var getFontUri = () => _async_to_generator(function* () {
         var url2 = font.main[fontFamily];
         if (!url2) return;
@@ -12835,7 +13781,7 @@
       font,
       fontFamily
     ]);
-    (0, import_react9.useEffect)(() => {
+    (0, import_react11.useEffect)(() => {
       if (WebView && fontUri) {
         setIsReady(true);
       }
@@ -12843,9 +13789,9 @@
       WebView,
       fontUri
     ]);
-    var props = (0, import_react9.useMemo)(() => ({
+    var props = (0, import_react11.useMemo)(() => ({
       family: fontUri,
-      size: fontSize * import_react_native27.PixelRatio.getFontScale(),
+      size: fontSize * import_react_native30.PixelRatio.getFontScale(),
       color: TEXT_DEFAULT,
       text: Strings.PREVIEW_TEXT
     }), [
@@ -12853,8 +13799,8 @@
       fontSize,
       TEXT_DEFAULT
     ]);
-    if (import_react_native27.Platform.OS === "android" && isReady && WebView) {
-      return /* @__PURE__ */ jsxs(import_react_native27.View, {
+    if (import_react_native30.Platform.OS === "android" && isReady && WebView) {
+      return /* @__PURE__ */ jsxs(import_react_native30.View, {
         style: {
           width: "100%",
           height: 32
@@ -12879,7 +13825,7 @@
               }
             ]
           }),
-          !loaded && /* @__PURE__ */ jsx(import_react_native27.View, {
+          !loaded && /* @__PURE__ */ jsx(import_react_native30.View, {
             style: [
               styles5.full,
               {
@@ -12895,13 +13841,13 @@
           })
         ]
       });
-    } else if (import_react_native27.Platform.OS === "android" && !isReady) {
-      return /* @__PURE__ */ jsx(import_react_native27.View, {
+    } else if (import_react_native30.Platform.OS === "android" && !isReady) {
+      return /* @__PURE__ */ jsx(import_react_native30.View, {
         style: {
           width: "100%",
           height: 32
         },
-        children: /* @__PURE__ */ jsx(import_react_native27.View, {
+        children: /* @__PURE__ */ jsx(import_react_native30.View, {
           style: [
             styles5.full,
             {
@@ -12917,12 +13863,12 @@
         })
       });
     } else {
-      return /* @__PURE__ */ jsx(import_react_native27.View, {
+      return /* @__PURE__ */ jsx(import_react_native30.View, {
         style: {
           width: "100%",
           height: 32
         },
-        children: /* @__PURE__ */ jsx(import_react_native27.View, {
+        children: /* @__PURE__ */ jsx(import_react_native30.View, {
           style: [
             styles5.full,
             {
@@ -12940,26 +13886,26 @@
     }
   }
   function FontCard({ item: font }) {
-    var selectedFont = useFonts((state) => state.fonts.__selected);
+    var selectedFont = useFonts((state2) => state2.fonts.__selected);
     var navigation2 = NavigationNative.useNavigation();
     var selected = selectedFont === font.name;
     return /* @__PURE__ */ jsx(Card, {
       children: /* @__PURE__ */ jsxs(Stack, {
         spacing: 16,
         children: [
-          /* @__PURE__ */ jsxs(import_react_native27.View, {
+          /* @__PURE__ */ jsxs(import_react_native30.View, {
             style: {
               flexDirection: "row",
               alignItems: "center"
             },
             children: [
-              /* @__PURE__ */ jsx(import_react_native27.View, {
+              /* @__PURE__ */ jsx(import_react_native30.View, {
                 children: /* @__PURE__ */ jsx(Text, {
                   variant: "heading-lg/semibold",
                   children: font.name
                 })
               }),
-              /* @__PURE__ */ jsx(import_react_native27.View, {
+              /* @__PURE__ */ jsx(import_react_native30.View, {
                 style: {
                   marginLeft: "auto"
                 },
@@ -13009,7 +13955,7 @@
       })
     });
   }
-  var import_react9, import_react_native27, useToken2, useStyles4;
+  var import_react11, import_react_native30, useToken2, useStyles5;
   var init_FontCard = __esm({
     "src/rain/pages/Fonts/FontCard.tsx"() {
       "use strict";
@@ -13028,12 +13974,12 @@
       init_common();
       init_components();
       init_fonts();
-      import_react9 = __toESM(require_react());
-      import_react_native27 = __toESM(require_react_native());
+      import_react11 = __toESM(require_react());
+      import_react_native30 = __toESM(require_react_native());
       init_FontEditor();
       init_preview();
       ({ useToken: useToken2 } = lazyDestructure(() => findByProps("useToken")));
-      useStyles4 = createStyles({
+      useStyles5 = createStyles({
         full: {
           position: "absolute",
           inset: 0,
@@ -13051,7 +13997,7 @@
   });
   function Fonts() {
     useSettings();
-    var fonts2 = useFonts((state) => state.fonts);
+    var fonts2 = useFonts((state2) => state2.fonts);
     var navigation2 = NavigationNative.useNavigation();
     return /* @__PURE__ */ jsx(AddonPage, {
       title: Strings.FONTS,
@@ -13104,11 +14050,11 @@
 
   // src/api/storage/useFS.ts
   function useFileExists(path, prefix2) {
-    var [state, setState] = (0, import_react10.useState)(2);
+    var [state2, setState] = (0, import_react12.useState)(2);
     var check = () => fileExists(path, {
       prefix: prefix2
     }).then((exists) => setState(exists ? 1 : 0)).catch(() => setState(3));
-    var customFS = (0, import_react10.useMemo)(() => new Proxy(fs_exports, {
+    var customFS = (0, import_react12.useMemo)(() => new Proxy(fs_exports, {
       get(target, p, receiver) {
         var val = Reflect.get(target, p, receiver);
         if (typeof val !== "function") return;
@@ -13122,20 +14068,20 @@
         };
       }
     }), []);
-    (0, import_react10.useEffect)(() => void check(), []);
+    (0, import_react12.useEffect)(() => void check(), []);
     return [
-      state,
+      state2,
       customFS
     ];
   }
-  var import_react10, CheckState;
+  var import_react12, CheckState;
   var init_useFS = __esm({
     "src/api/storage/useFS.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_fs();
-      import_react10 = __toESM(require_react());
+      import_react12 = __toESM(require_react());
       CheckState = /* @__PURE__ */ (function(CheckState2) {
         CheckState2[CheckState2["FALSE"] = 0] = "FALSE";
         CheckState2[CheckState2["TRUE"] = 1] = "TRUE";
@@ -13155,7 +14101,7 @@
       variant: isImage || isTextPreview ? "default" : "danger",
       label: asset.name,
       subLabel: `Index: ${asset.id} Type: ${asset.type}`,
-      icon: isImage ? /* @__PURE__ */ jsx(import_react_native28.Image, {
+      icon: isImage ? /* @__PURE__ */ jsx(import_react_native31.Image, {
         source: asset.id,
         style: {
           width: 32,
@@ -13170,7 +14116,7 @@
         content: `Index: ${asset.id}
 Module ID: ${asset.moduleId}
 Type: ${asset.type}`,
-        extraContent: isImage ? /* @__PURE__ */ jsx(import_react_native28.Image, {
+        extraContent: isImage ? /* @__PURE__ */ jsx(import_react_native31.Image, {
           resizeMode: "contain",
           source: asset.id,
           style: {
@@ -13185,7 +14131,7 @@ Type: ${asset.type}`,
             try {
               var moduleExport = requireModule(asset.moduleId);
               var printable = typeof moduleExport === "object" ? JSON.stringify(moduleExport, null, 2) : String(moduleExport);
-              return /* @__PURE__ */ jsx(import_react_native28.ScrollView, {
+              return /* @__PURE__ */ jsx(import_react_native31.ScrollView, {
                 style: {
                   maxHeight: 192,
                   padding: 8
@@ -13248,7 +14194,7 @@ Type: ${asset.type}`,
       }))
     });
   }
-  var import_react_native28, openAlert3, AlertModal4, AlertActionButton4, DISPLAYABLE_IMAGE_TYPES, DISPLAYABLE_TEXT_TYPES, iconMap, copyToClipboard;
+  var import_react_native31, openAlert3, AlertModal4, AlertActionButton4, DISPLAYABLE_IMAGE_TYPES, DISPLAYABLE_TEXT_TYPES, iconMap, copyToClipboard;
   var init_AssetDisplay = __esm({
     "src/rain/pages/Developer/AssetDisplay.tsx"() {
       "use strict";
@@ -13263,7 +14209,7 @@ Type: ${asset.type}`,
       init_components();
       init_modules2();
       init_i18n();
-      import_react_native28 = __toESM(require_react_native());
+      import_react_native31 = __toESM(require_react_native());
       ({ openAlert: openAlert3 } = lazyDestructure(() => findByProps("openAlert", "dismissAlert")));
       ({ AlertModal: AlertModal4, AlertActionButton: AlertActionButton4 } = lazyDestructure(() => findByProps("AlertModal", "AlertActions")));
       DISPLAYABLE_IMAGE_TYPES = /* @__PURE__ */ new Set([
@@ -13294,10 +14240,10 @@ Type: ${asset.type}`,
 
   // src/rain/pages/Developer/AssetBrowser.tsx
   function AssetBrowser() {
-    var [search, setSearch] = (0, import_react11.useState)("");
-    var [updateTick, setUpdateTick] = (0, import_react11.useState)(0);
+    var [search, setSearch] = (0, import_react13.useState)("");
+    var [updateTick, setUpdateTick] = (0, import_react13.useState)(0);
     var navigation2 = NavigationNative.useNavigation();
-    (0, import_react11.useEffect)(() => {
+    (0, import_react13.useEffect)(() => {
       navigation2.setOptions({
         title: Strings.ASSET_BROWSER
       });
@@ -13306,7 +14252,7 @@ Type: ${asset.type}`,
     ]);
     var settings4 = useAssetBrowserSettings();
     var enabledFilters = settings4.enabledFilters;
-    var getFilteredAssets = (0, import_react11.useCallback)(() => {
+    var getFilteredAssets = (0, import_react13.useCallback)(() => {
       return Array.from(iterateAssets()).filter((asset) => {
         var type = String(asset.type ?? "").toLowerCase();
         return enabledFilters[type] === true;
@@ -13315,7 +14261,7 @@ Type: ${asset.type}`,
       enabledFilters,
       updateTick
     ]);
-    var all = (0, import_react11.useMemo)(() => getFilteredAssets(), [
+    var all = (0, import_react13.useMemo)(() => getFilteredAssets(), [
       getFilteredAssets
     ]);
     var toggleFilter = (filterId) => {
@@ -13365,12 +14311,12 @@ Type: ${asset.type}`,
       });
     };
     return /* @__PURE__ */ jsx(ErrorBoundary, {
-      children: /* @__PURE__ */ jsxs(import_react_native29.View, {
+      children: /* @__PURE__ */ jsxs(import_react_native32.View, {
         style: {
           flex: 1
         },
         children: [
-          /* @__PURE__ */ jsxs(import_react_native29.View, {
+          /* @__PURE__ */ jsxs(import_react_native32.View, {
             style: {
               flexDirection: "row",
               margin: 10,
@@ -13392,7 +14338,7 @@ Type: ${asset.type}`,
               })
             ]
           }),
-          /* @__PURE__ */ jsx(import_react_native29.View, {
+          /* @__PURE__ */ jsx(import_react_native32.View, {
             style: {
               flex: 1,
               borderRadius: 16,
@@ -13400,7 +14346,7 @@ Type: ${asset.type}`,
               overflow: "hidden",
               backgroundColor: "transparent"
             },
-            children: /* @__PURE__ */ jsx(import_react_native29.FlatList, {
+            children: /* @__PURE__ */ jsx(import_react_native32.FlatList, {
               data: all.filter((a) => a.name.includes(search) || a.id.toString() === search),
               renderItem: ({ item }) => /* @__PURE__ */ jsx(AssetDisplay, {
                 asset: item
@@ -13417,7 +14363,7 @@ Type: ${asset.type}`,
       })
     });
   }
-  var import_react11, import_react_native29, IMAGE_FILES, TEXT_FILES;
+  var import_react13, import_react_native32, IMAGE_FILES, TEXT_FILES;
   var init_AssetBrowser = __esm({
     "src/rain/pages/Developer/AssetBrowser.tsx"() {
       "use strict";
@@ -13431,8 +14377,8 @@ Type: ${asset.type}`,
       init_common();
       init_components();
       init_i18n();
-      import_react11 = __toESM(require_react());
-      import_react_native29 = __toESM(require_react_native());
+      import_react13 = __toESM(require_react());
+      import_react_native32 = __toESM(require_react_native());
       init_AssetDisplay();
       IMAGE_FILES = [
         {
@@ -13490,10 +14436,10 @@ Type: ${asset.type}`,
     var settings4 = useSettings();
     var loaderConfig = useLoaderConfig();
     var [rdtFileExists, fs] = useFileExists("preloads/reactDevtools.js");
-    var [isDebuggerConnected, setIsDebuggerConnected] = (0, import_react12.useState)(isConnectedToDebugger());
-    var styles5 = useStyles5();
+    var [isDebuggerConnected, setIsDebuggerConnected] = (0, import_react14.useState)(isConnectedToDebugger());
+    var styles5 = useStyles6();
     var navigation2 = NavigationNative.useNavigation();
-    (0, import_react12.useEffect)(() => {
+    (0, import_react14.useEffect)(() => {
       var interval = setInterval(() => {
         var connected = isConnectedToDebugger();
         if (connected !== isDebuggerConnected) setIsDebuggerConnected(connected);
@@ -13514,7 +14460,7 @@ Type: ${asset.type}`,
     var showSimpleActionSheet7 = findByProps("showSimpleActionSheet")?.showSimpleActionSheet;
     var hideActionSheet10 = findByProps("openLazy", "hideActionSheet")?.hideActionSheet;
     return /* @__PURE__ */ jsx(ErrorBoundary, {
-      children: /* @__PURE__ */ jsx(import_react_native30.ScrollView, {
+      children: /* @__PURE__ */ jsx(import_react_native33.ScrollView, {
         style: {
           flex: 1
         },
@@ -13622,7 +14568,7 @@ Type: ${asset.type}`,
                       }
                       yield devTools.connectToDevTools({
                         host: settings4.devToolsUrl.split(":")?.[0],
-                        resolveRNStyle: import_react_native30.StyleSheet.flatten
+                        resolveRNStyle: import_react_native33.StyleSheet.flatten
                       });
                     } catch (error) {
                       showToast(Strings.INVALID_DEVTOOLS_URL, findAssetId2("Small"));
@@ -13745,7 +14691,7 @@ Type: ${asset.type}`,
       })
     });
   }
-  var import_react12, import_react_native30, RDT_EMBED_LINK, useStyles5;
+  var import_react14, import_react_native33, RDT_EMBED_LINK, useStyles6;
   var init_Developer = __esm({
     "src/rain/pages/Developer/index.tsx"() {
       "use strict";
@@ -13766,11 +14712,11 @@ Type: ${asset.type}`,
       init_common();
       init_components();
       init_wrappers();
-      import_react12 = __toESM(require_react());
-      import_react_native30 = __toESM(require_react_native());
+      import_react14 = __toESM(require_react());
+      import_react_native33 = __toESM(require_react_native());
       init_AssetBrowser();
       RDT_EMBED_LINK = "https://codeberg.org/raincord/raindevtools/raw/branch/dev/dist/index.bundle";
-      useStyles5 = createStyles({
+      useStyles6 = createStyles({
         leadingText: {
           ...TextStyleSheet["heading-md/semibold"],
           color: semanticColors.TEXT_MUTED,
@@ -13831,7 +14777,7 @@ Type: ${asset.type}`,
           icon: findAssetId2("WrenchIcon"),
           render: () => Promise.resolve().then(() => (init_Developer(), Developer_exports)),
           usePredicate: () => {
-            var developerSettings = useSettings((state) => state.developerSettings);
+            var developerSettings = useSettings((state2) => state2.developerSettings);
             return developerSettings ?? false;
           }
         }
@@ -13853,7 +14799,7 @@ Type: ${asset.type}`,
     patchTabsUI(unpatches6);
     return () => unpatches6.forEach((u) => u());
   }
-  var import_react13, settings_default2, registeredSections;
+  var import_react15, settings_default2, registeredSections;
   var init_settings4 = __esm({
     "src/plugins/_core/settings/index.tsx"() {
       "use strict";
@@ -13867,7 +14813,7 @@ Type: ${asset.type}`,
       init_plugins3();
       init_Developers();
       init_i18n();
-      import_react13 = __toESM(require_react());
+      import_react15 = __toESM(require_react());
       init_tabs();
       init_settings3();
       settings_default2 = definePlugin({
@@ -13894,7 +14840,7 @@ Type: ${asset.type}`,
   __export(accountswitcher_exports, {
     default: () => accountswitcher_default
   });
-  var AccountDispatcher, patches3, accountswitcher_default;
+  var AccountDispatcher, patches4, accountswitcher_default;
   var init_accountswitcher = __esm({
     "src/plugins/accountswitcher/index.ts"() {
       "use strict";
@@ -13905,7 +14851,7 @@ Type: ${asset.type}`,
       init_plugins3();
       init_Developers();
       AccountDispatcher = findByProps("getCanUseMultiAccountMobile");
-      patches3 = [];
+      patches4 = [];
       accountswitcher_default = definePlugin({
         name: "AccountSwitcher",
         description: "Enables account switcher because discord got rid of experiment",
@@ -13915,12 +14861,12 @@ Type: ${asset.type}`,
         id: "accountswitcher",
         version: "1.0.0",
         start() {
-          patches3.push(after("getCanUseMultiAccountMobile", AccountDispatcher, () => {
+          patches4.push(after("getCanUseMultiAccountMobile", AccountDispatcher, () => {
             return true;
           }));
         },
         stop() {
-          for (var unpatch6 of patches3) unpatch6();
+          for (var unpatch6 of patches4) unpatch6();
         }
       });
     }
@@ -13939,27 +14885,27 @@ Type: ${asset.type}`,
       useActionSheetFinderSettings = create2()(persist((set) => ({
         logs: [],
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        addLog: (log3) => set((state) => ({
+        addLog: (log3) => set((state2) => ({
           logs: [
-            ...state.logs.slice(-99),
+            ...state2.logs.slice(-99),
             log3
           ]
         })),
         clearLogs: () => set({
           logs: []
         }),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "actionsheetfinder-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/actionsheetfinder.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
     }
@@ -13968,8 +14914,8 @@ Type: ${asset.type}`,
   // src/plugins/actionsheetfinder/settings.tsx
   function ActionSheetFinderSettings() {
     var settings4 = useActionSheetFinderSettings();
-    var [searchQuery, setSearchQuery] = (0, import_react14.useState)("");
-    var filteredLogs = (0, import_react14.useMemo)(() => {
+    var [searchQuery, setSearchQuery] = (0, import_react16.useState)("");
+    var filteredLogs = (0, import_react16.useMemo)(() => {
       var logs = settings4.logs.slice().reverse();
       if (!searchQuery) return logs;
       return logs.filter((log3) => log3.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -13988,7 +14934,7 @@ Type: ${asset.type}`,
         children: log3
       })
     }, index);
-    return /* @__PURE__ */ jsx(import_react_native31.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native34.ScrollView, {
       style: {
         flex: 1
       },
@@ -14024,7 +14970,7 @@ Type: ${asset.type}`,
                 }),
                 /* @__PURE__ */ jsx(Stack, {
                   spacing: 8,
-                  children: filteredLogs.length === 0 ? /* @__PURE__ */ jsxs(import_react_native31.View, {
+                  children: filteredLogs.length === 0 ? /* @__PURE__ */ jsxs(import_react_native34.View, {
                     style: {
                       alignItems: "center",
                       paddingVertical: 20
@@ -14057,7 +15003,7 @@ Type: ${asset.type}`,
       })
     });
   }
-  var import_react14, import_react_native31, CardComponent, LOG_COLORS;
+  var import_react16, import_react_native34, CardComponent, LOG_COLORS;
   var init_settings5 = __esm({
     "src/plugins/actionsheetfinder/settings.tsx"() {
       "use strict";
@@ -14069,8 +15015,8 @@ Type: ${asset.type}`,
       init_SettingsTextInput();
       init_components();
       init_wrappers();
-      import_react14 = __toESM(require_react());
-      import_react_native31 = __toESM(require_react_native());
+      import_react16 = __toESM(require_react());
+      import_react_native34 = __toESM(require_react_native());
       init_storage6();
       ({ Card: CardComponent } = findByProps("Card"));
       LOG_COLORS = [
@@ -14140,7 +15086,7 @@ Type: ${asset.type}`,
   __export(alwaystrust_exports, {
     default: () => alwaystrust_default
   });
-  var MaskedLink, patches4, alwaystrust_default;
+  var MaskedLink, patches5, alwaystrust_default;
   var init_alwaystrust = __esm({
     "src/plugins/alwaystrust/index.ts"() {
       "use strict";
@@ -14151,7 +15097,7 @@ Type: ${asset.type}`,
       init_plugins3();
       init_Developers();
       MaskedLink = findByStoreName("MaskedLinkStore");
-      patches4 = [];
+      patches5 = [];
       alwaystrust_default = definePlugin({
         name: "AlwaysTrust",
         description: "Disable the untrusted link popup for every link",
@@ -14161,48 +15107,12 @@ Type: ${asset.type}`,
         id: "alwaystrust",
         version: "1.0.0",
         start() {
-          patches4.push(after("isTrustedDomain", MaskedLink, () => {
+          patches5.push(after("isTrustedDomain", MaskedLink, () => {
             return true;
           }));
         },
         stop() {
-          for (var unpatch6 of patches4) unpatch6();
-        }
-      });
-    }
-  });
-
-  // src/plugins/animatedkeyboard/index.ts
-  var animatedkeyboard_exports = {};
-  __export(animatedkeyboard_exports, {
-    default: () => animatedkeyboard_default
-  });
-  var ExperimentManager, EXPERIMENT_ID, animatedkeyboard_default;
-  var init_animatedkeyboard = __esm({
-    "src/plugins/animatedkeyboard/index.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_metro();
-      init_plugins3();
-      init_Developers();
-      ExperimentManager = findByProps("overrideBucket");
-      EXPERIMENT_ID = "2025-08-animated-keyboard-android";
-      animatedkeyboard_default = definePlugin({
-        name: "AnimatedKeyboard",
-        description: "Enables animated keyboard via experiment override",
-        author: [
-          Developers.cocobo1
-        ],
-        id: "animatedkeyboard",
-        version: "1.0.0",
-        // since this is a demo i should probably mention this isnt needed for all experiment overrides
-        requiresRestart: true,
-        start() {
-          ExperimentManager.overrideBucket("apex", EXPERIMENT_ID, 1);
-        },
-        stop() {
-          ExperimentManager.overrideBucket("apex", EXPERIMENT_ID, null);
+          for (var unpatch6 of patches5) unpatch6();
         }
       });
     }
@@ -14233,36 +15143,36 @@ Type: ${asset.type}`,
           send: false
         },
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "betterchatbuttons-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/betterchatbuttons.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       betterChatButtonsSettings = new Proxy({}, {
         get(target, prop) {
-          var state = useBetterChatButtonsSettings.getState();
+          var state2 = useBetterChatButtonsSettings.getState();
           if (prop.includes(".")) {
             var [parent, child] = prop.split(".");
-            return state[parent]?.[child];
+            return state2[parent]?.[child];
           }
-          return state[prop];
+          return state2[prop];
         },
         set(target, prop, value) {
           if (prop.includes(".")) {
             var [parent, child] = prop.split(".");
-            var state = useBetterChatButtonsSettings.getState();
+            var state2 = useBetterChatButtonsSettings.getState();
             useBetterChatButtonsSettings.getState().updateSettings({
               [parent]: {
-                ...state[parent],
+                ...state2[parent],
                 [child]: value
               }
             });
@@ -14280,7 +15190,7 @@ Type: ${asset.type}`,
   // src/plugins/betterchatbuttons/settings.tsx
   function BetterChatButtonsSettings() {
     var settings4 = useBetterChatButtonsSettings();
-    var [, forceUpdate] = import_react15.default.useReducer((x2) => ~x2, 0);
+    var [, forceUpdate] = import_react17.default.useReducer((x2) => ~x2, 0);
     var updateHide = (key, value) => {
       useBetterChatButtonsSettings.getState().updateSettings({
         hide: {
@@ -14308,7 +15218,7 @@ Type: ${asset.type}`,
       });
       forceUpdate();
     };
-    return /* @__PURE__ */ jsx(import_react_native32.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native35.ScrollView, {
       style: {
         flex: 1
       },
@@ -14405,7 +15315,7 @@ Type: ${asset.type}`,
       })
     });
   }
-  var import_react15, import_react_native32;
+  var import_react17, import_react_native35;
   var init_settings6 = __esm({
     "src/plugins/betterchatbuttons/settings.tsx"() {
       "use strict";
@@ -14414,8 +15324,8 @@ Type: ${asset.type}`,
       init_jsxRuntime();
       init_assets();
       init_components();
-      import_react15 = __toESM(require_react());
-      import_react_native32 = __toESM(require_react_native());
+      import_react17 = __toESM(require_react());
+      import_react_native35 = __toESM(require_react_native());
       init_storage7();
     }
   });
@@ -14425,7 +15335,7 @@ Type: ${asset.type}`,
   __export(betterchatbuttons_exports, {
     default: () => betterchatbuttons_default
   });
-  var import_react16, unpatches, betterchatbuttons_default;
+  var import_react18, unpatches, betterchatbuttons_default;
   var init_betterchatbuttons = __esm({
     "src/plugins/betterchatbuttons/index.ts"() {
       "use strict";
@@ -14437,7 +15347,7 @@ Type: ${asset.type}`,
       init_common();
       init_plugins3();
       init_Developers();
-      import_react16 = __toESM(require_react());
+      import_react18 = __toESM(require_react());
       init_settings6();
       init_storage7();
       unpatches = [];
@@ -14457,8 +15367,8 @@ Type: ${asset.type}`,
           var actionsRef;
           if (ChatInputSendButton2?.type) {
             unpatches.push(before("render", ChatInputSendButton2.type, ([props, ref]) => {
-              var state = useBetterChatButtonsSettings.getState();
-              if (props.canSendVoiceMessage) props.canSendVoiceMessage = !state.hide.voice;
+              var state2 = useBetterChatButtonsSettings.getState();
+              if (props.canSendVoiceMessage) props.canSendVoiceMessage = !state2.hide.voice;
               sendBtnRef2 = ref;
             }));
             unpatches.push(after("render", ChatInputSendButton2.type, () => {
@@ -14467,21 +15377,21 @@ Type: ${asset.type}`,
                   var { setHasText } = sendBtnRef2.current;
                   unpatches.push(() => sendBtnRef2.current.setHasText = setHasText);
                   sendBtnRef2.current.setHasText = (hasText_) => {
-                    var state = useBetterChatButtonsSettings.getState();
-                    if (state.dismiss.send) hasText2 = hasText_;
+                    var state2 = useBetterChatButtonsSettings.getState();
+                    if (state2.dismiss.send) hasText2 = hasText_;
                     return setHasText(hasText_);
                   };
                 }
               }));
-              if (!hasText2) return import_react16.default.createElement(ReactNative.View);
+              if (!hasText2) return import_react18.default.createElement(ReactNative.View);
             }));
           }
           if (ChatInputActions2?.type) {
             unpatches.push(before("render", ChatInputActions2.type, ([props, ref]) => {
-              var state = useBetterChatButtonsSettings.getState();
-              if (props.isAppLauncherEnabled) props.isAppLauncherEnabled = !state.hide.app;
-              props.canStartThreads = state.show.thread || !state.hide.thread;
-              props.shouldShowGiftButton = !state.hide.gift;
+              var state2 = useBetterChatButtonsSettings.getState();
+              if (props.isAppLauncherEnabled) props.isAppLauncherEnabled = !state2.hide.app;
+              props.canStartThreads = state2.show.thread || !state2.hide.thread;
+              props.shouldShowGiftButton = !state2.hide.gift;
               actionsRef = ref;
             }));
             unpatches.push(after("render", ChatInputActions2.type, () => {
@@ -14490,8 +15400,8 @@ Type: ${asset.type}`,
                   var { onDismissActions } = actionsRef.current;
                   unpatches.push(() => actionsRef.current.onDismissActions = onDismissActions);
                   actionsRef.current.onDismissActions = () => {
-                    var state = useBetterChatButtonsSettings.getState();
-                    if (state.dismiss.actions) return onDismissActions();
+                    var state2 = useBetterChatButtonsSettings.getState();
+                    if (state2.dismiss.actions) return onDismissActions();
                   };
                 }
               }));
@@ -14516,7 +15426,7 @@ Type: ${asset.type}`,
   __export(bettersilentleave_exports, {
     default: () => bettersilentleave_default
   });
-  var patches5, APIUtils, bettersilentleave_default;
+  var patches6, APIUtils, bettersilentleave_default;
   var init_bettersilentleave = __esm({
     "src/plugins/bettersilentleave/index.ts"() {
       "use strict";
@@ -14530,7 +15440,7 @@ Type: ${asset.type}`,
       init_components();
       init_plugins3();
       init_Developers();
-      patches5 = [];
+      patches6 = [];
       APIUtils = findByProps("getAPIBaseURL", "del");
       bettersilentleave_default = definePlugin({
         name: "SilentLeave",
@@ -14541,7 +15451,7 @@ Type: ${asset.type}`,
         id: "silentleave",
         version: "1.0.0",
         start() {
-          patches5.push(after("render", ActionSheet, (args, res) => {
+          patches6.push(after("render", ActionSheet, (args, res) => {
             var dangerGroup = findInReactTree(res, (x2) => x2?.key === "gdm-destructive");
             if (!dangerGroup) return res;
             var children = React.Children.toArray(dangerGroup.props.children);
@@ -14586,7 +15496,7 @@ Type: ${asset.type}`,
           }));
         },
         stop() {
-          for (var unpatch6 of patches5) unpatch6();
+          for (var unpatch6 of patches6) unpatch6();
         }
       });
     }
@@ -14597,7 +15507,7 @@ Type: ${asset.type}`,
   __export(bluetoothaudiofix_exports, {
     default: () => bluetoothaudiofix_default
   });
-  var import_react_native33, patches6, bluetoothaudiofix_default;
+  var import_react_native36, patches7, bluetoothaudiofix_default;
   var init_bluetoothaudiofix = __esm({
     "src/plugins/bluetoothaudiofix/index.ts"() {
       "use strict";
@@ -14608,8 +15518,8 @@ Type: ${asset.type}`,
       init_common();
       init_plugins3();
       init_Developers();
-      import_react_native33 = __toESM(require_react_native());
-      patches6 = [];
+      import_react_native36 = __toESM(require_react_native());
+      patches7 = [];
       bluetoothaudiofix_default = definePlugin({
         name: "BluetoothAudioFix",
         description: "Prevents Discord from enabling handsfree mode while in a call",
@@ -14624,17 +15534,17 @@ Type: ${asset.type}`,
           "android"
         ],
         start() {
-          if (import_react_native33.Platform.OS === "ios") {
+          if (import_react_native36.Platform.OS === "ios") {
             showToast("This plugin does not do anything on iOS");
             usePluginSettings.getState().updatePluginSetting("bluetoothaudiofix", false);
             return;
           }
           var onUnload = ReactNative.TurboModuleRegistry.get("NativeAudioManagerModule") === null ? ReactNative.TurboModuleRegistry.get("RTNAudioManager") : ReactNative.TurboModuleRegistry.get("NativeAudioManagerModule");
-          patches6.push(instead("setCommunicationModeOn", onUnload, () => {
+          patches7.push(instead("setCommunicationModeOn", onUnload, () => {
           }));
         },
         stop() {
-          for (var unpatch6 of patches6) unpatch6();
+          for (var unpatch6 of patches7) unpatch6();
         }
       });
     }
@@ -14806,18 +15716,18 @@ Type: ${asset.type}`,
         userHash: "",
         litterboxDuration: "1",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "uploader-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/uploader.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       uploaderSettings = new Proxy({}, {
@@ -15040,7 +15950,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   function UploaderSettings() {
     var settings4 = useUploaderSettings();
     var { updateSettings } = settings4;
-    return /* @__PURE__ */ jsx(import_react_native34.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native37.ScrollView, {
       style: {
         flex: 1
       },
@@ -15138,7 +16048,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react_native34, Card3, LITTERBOX_DURATIONS;
+  var import_react_native37, Card3, LITTERBOX_DURATIONS;
   var init_settings7 = __esm({
     "src/plugins/bypassuploadlimit/settings.tsx"() {
       "use strict";
@@ -15148,7 +16058,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_SettingsTextInput();
       init_metro();
       init_components();
-      import_react_native34 = __toESM(require_react_native());
+      import_react_native37 = __toESM(require_react_native());
       init_storage8();
       ({ Card: Card3 } = findByProps("Card"));
       LITTERBOX_DURATIONS = [
@@ -15177,7 +16087,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(bypassuploadlimit_exports, {
     default: () => bypassuploadlimit_default
   });
-  var patches7, bypassuploadlimit_default;
+  var patches8, bypassuploadlimit_default;
   var init_bypassuploadlimit = __esm({
     "src/plugins/bypassuploadlimit/index.ts"() {
       "use strict";
@@ -15187,7 +16097,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_Developers();
       init_upload();
       init_settings7();
-      patches7 = [];
+      patches8 = [];
       bypassuploadlimit_default = definePlugin({
         name: "BypassUploadLimit",
         description: "Bypass Discord's file size limit by uploading to Catbox, Litterbox, or Pomf",
@@ -15197,11 +16107,11 @@ ${pendingInsertLink}` : pendingInsertLink;
         id: "bypassuploadlimit",
         version: "1.0.0",
         start() {
-          patches7.push(...getUploaderPatch());
+          patches8.push(...getUploaderPatch());
         },
         stop() {
-          for (var unpatch6 of patches7) unpatch6();
-          patches7.length = 0;
+          for (var unpatch6 of patches8) unpatch6();
+          patches8.length = 0;
         },
         settings: UploaderSettings
       });
@@ -15226,18 +16136,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         showStatusCutout: false,
         collapseWhileTyping: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "chatboxavatar-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/chatboxavatar.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated?.(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated?.(true);
         }
       }));
     }
@@ -15246,7 +16156,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   // src/plugins/chatboxavatar/settings.tsx
   function ChatboxAvatarSettings() {
     var settings4 = useChatboxAvatarSettings();
-    var [, forceUpdate] = import_react17.default.useReducer((x2) => ~x2, 0);
+    var [, forceUpdate] = import_react19.default.useReducer((x2) => ~x2, 0);
     var setPressAction = (value) => {
       useChatboxAvatarSettings.getState().updateSettings?.({
         pressAction: value
@@ -15344,7 +16254,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var import_react17;
+  var import_react19;
   var init_settings8 = __esm({
     "src/plugins/chatboxavatar/settings.tsx"() {
       "use strict";
@@ -15352,7 +16262,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react17 = __toESM(require_react());
+      import_react19 = __toESM(require_react());
       init_storage9();
     }
   });
@@ -15363,10 +16273,10 @@ ${pendingInsertLink}` : pendingInsertLink;
     default: () => chatboxavatar_default
   });
   function AvatarAction() {
-    var [textState, setTextState] = import_react18.default.useState(false);
+    var [textState, setTextState] = import_react20.default.useState(false);
     var self = Flux2?.useStateFromStores?.([
-      UserStore2
-    ], () => UserStore2?.getCurrentUser?.());
+      UserStore3
+    ], () => UserStore3?.getCurrentUser?.());
     var status = Flux2?.useStateFromStores?.([
       SelfPresenceStore
     ], () => SelfPresenceStore?.getStatus?.());
@@ -15379,14 +16289,14 @@ ${pendingInsertLink}` : pendingInsertLink;
     ], () => ChannelStore?.getChannel?.(channelId), [
       channelId
     ]);
-    var animated = (0, import_react18.useRef)(avatarCollapse).current;
-    import_react18.default.useEffect(() => {
+    var animated = (0, import_react20.useRef)(avatarCollapse).current;
+    import_react20.default.useEffect(() => {
       var interval = setInterval(() => {
         setTextState(hasText);
       }, 100);
       return () => clearInterval(interval);
     }, []);
-    (0, import_react18.useEffect)(() => {
+    (0, import_react20.useEffect)(() => {
       var shouldCollapse = settings4.collapseWhileTyping && textState;
       Animated.parallel([
         Animated.timing(animated, {
@@ -15474,7 +16384,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         justifyContent: "center",
         overflow: settings4.collapseWhileTyping ? "hidden" : "visible"
       },
-      children: /* @__PURE__ */ jsx(Pressable2, {
+      children: /* @__PURE__ */ jsx(Pressable3, {
         onPress: handlePress,
         onLongPress: handleLongPress,
         children: Avatar2 && /* @__PURE__ */ jsx(Avatar2, {
@@ -15487,7 +16397,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react18, Flux2, ChatInputActions, ChatInputSendButton, hasText, sendBtnRef, Pressable2, View17, Animated, avatarCollapse, Avatar2, UserStore2, SelectedChannelStore, ChannelStore, SelfPresenceStore, showUserProfileActionSheet2, showYouAccountActionSheetByProp, unpatches2, chatboxavatar_default;
+  var import_react20, Flux2, ChatInputActions, ChatInputSendButton, hasText, sendBtnRef, Pressable3, View21, Animated, avatarCollapse, Avatar2, UserStore3, SelectedChannelStore, ChannelStore, SelfPresenceStore, showUserProfileActionSheet2, showYouAccountActionSheetByProp, unpatches2, chatboxavatar_default;
   var init_chatboxavatar = __esm({
     "src/plugins/chatboxavatar/index.tsx"() {
       "use strict";
@@ -15499,17 +16409,17 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_common();
       init_plugins3();
       init_Developers();
-      import_react18 = __toESM(require_react());
+      import_react20 = __toESM(require_react());
       init_settings8();
       init_storage9();
       Flux2 = findByProps("useStateFromStores");
       ChatInputActions = findByTypeDisplayName("ChatInputActions");
       ChatInputSendButton = findByTypeDisplayName("ChatInputSendButton");
       hasText = false;
-      ({ Pressable: Pressable2, View: View17, Animated } = ReactNative);
+      ({ Pressable: Pressable3, View: View21, Animated } = ReactNative);
       avatarCollapse = new Animated.Value(0);
       Avatar2 = findByPropsLazy("default", "AvatarSizes", "getStatusSize")?.default;
-      UserStore2 = findByStoreName("UserStore");
+      UserStore3 = findByStoreName("UserStore");
       SelectedChannelStore = findByStoreName("SelectedChannelStore");
       ChannelStore = findByStoreName("ChannelStore");
       SelfPresenceStore = findByStoreName("SelfPresenceStore");
@@ -15547,12 +16457,12 @@ ${pendingInsertLink}` : pendingInsertLink;
             });
           }));
           unpatches2.push(after("render", ChatInputActions.type, (args, ret) => {
-            return /* @__PURE__ */ import_react18.default.createElement(View17, {
+            return /* @__PURE__ */ import_react20.default.createElement(View21, {
               style: {
                 flexDirection: "row",
                 alignItems: "center"
               }
-            }, ret, /* @__PURE__ */ import_react18.default.createElement(AvatarAction));
+            }, ret, /* @__PURE__ */ import_react20.default.createElement(AvatarAction));
           }));
         },
         stop() {
@@ -15564,24 +16474,24 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/native/modules/bubble.ts
-  var import_react_native35, bubble_default;
+  var import_react_native38, bubble_default;
   var init_bubble = __esm({
     "src/api/native/modules/bubble.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
-      import_react_native35 = __toESM(require_react_native());
+      import_react_native38 = __toESM(require_react_native());
       init_bridge();
       bubble_default = {
         hookBubbles: () => callBridgeMethod("bubbles.hook"),
         unhookBubbles: () => callBridgeMethod("bubbles.unhook"),
-        configure: (avatarRadius, bubbleRadius, bubbleColor) => callBridgeMethod("bubbles.configure", avatarRadius, bubbleRadius, Number((0, import_react_native35.processColor)(bubbleColor)))
+        configure: (avatarRadius, bubbleRadius, bubbleColor) => callBridgeMethod("bubbles.configure", avatarRadius, bubbleRadius, Number((0, import_react_native38.processColor)(bubbleColor)))
       };
     }
   });
 
   // src/api/ui/components/SliderRow.tsx
-  var import_react_native36, SliderRow, styles;
+  var import_react_native39, SliderRow, styles;
   var init_SliderRow = __esm({
     "src/api/ui/components/SliderRow.tsx"() {
       "use strict";
@@ -15589,12 +16499,12 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react_native36 = __toESM(require_react_native());
+      import_react_native39 = __toESM(require_react_native());
       init_color();
       SliderRow = ({ label, value, onChange, minimumValue = 0, maximumValue = 100 }) => {
-        return /* @__PURE__ */ jsxs(import_react_native36.View, {
+        return /* @__PURE__ */ jsxs(import_react_native39.View, {
           children: [
-            /* @__PURE__ */ jsxs(import_react_native36.View, {
+            /* @__PURE__ */ jsxs(import_react_native39.View, {
               style: styles.labelRow,
               children: [
                 /* @__PURE__ */ jsx(Text, {
@@ -15624,7 +16534,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           ]
         });
       };
-      styles = import_react_native36.StyleSheet.create({
+      styles = import_react_native39.StyleSheet.create({
         labelRow: {
           flexDirection: "row",
           justifyContent: "space-between",
@@ -15649,18 +16559,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         bubbleChatRadius: 12,
         bubbleChatColor: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "chatbubbles-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/chatbubbles.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       chatBubblesSettings = new Proxy({}, {
@@ -15678,7 +16588,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/chatbubbles/settings.tsx
-  var import_react_native37, useStyles6, settings_default3;
+  var import_react_native40, useStyles7, settings_default3;
   var init_settings9 = __esm({
     "src/plugins/chatbubbles/settings.tsx"() {
       "use strict";
@@ -15689,9 +16599,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_SliderRow();
       init_styles();
       init_components();
-      import_react_native37 = __toESM(require_react_native());
+      import_react_native40 = __toESM(require_react_native());
       init_storage10();
-      useStyles6 = createStyles({
+      useStyles7 = createStyles({
         container: {
           paddingVertical: 24,
           paddingHorizontal: 12
@@ -15714,9 +16624,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         }
       });
       settings_default3 = (() => {
-        var styles5 = useStyles6();
+        var styles5 = useStyles7();
         var { avatarRadius, bubbleChatRadius, bubbleChatColor, updateSettings } = useChatBubblesSettings();
-        return /* @__PURE__ */ jsx(import_react_native37.ScrollView, {
+        return /* @__PURE__ */ jsx(import_react_native40.ScrollView, {
           children: /* @__PURE__ */ jsx(Stack, {
             style: styles5.container,
             spacing: 24,
@@ -15850,8 +16760,8 @@ ${pendingInsertLink}` : pendingInsertLink;
         rules: null,
         lastModified: null,
         _hasHydrated: false,
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         }),
         update: () => _async_to_generator(function* () {
           try {
@@ -15876,13 +16786,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       }), {
         name: "cleanurls-rules",
         storage: createJSONStorage(() => createFileStorage("plugins/cleanurls-rules.json")),
-        partialize: (state) => ({
-          rules: state.rules,
-          lastModified: state.lastModified
+        partialize: (state2) => ({
+          rules: state2.rules,
+          lastModified: state2.lastModified
         }),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-          state?.update();
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
+          state2?.update();
         }
       }));
     }
@@ -15902,18 +16812,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         redirect: true,
         referrals: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "cleanurls-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/cleanurls.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       cleanUrlsSettings = new Proxy({}, {
@@ -16060,7 +16970,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         url2.openURL("https://gitlab.com/ClearURLs/Rules");
       }
     };
-    return /* @__PURE__ */ jsxs(import_react_native38.View, {
+    return /* @__PURE__ */ jsxs(import_react_native41.View, {
       children: [
         /* @__PURE__ */ jsx(Stack, {
           style: {
@@ -16090,7 +17000,7 @@ ${pendingInsertLink}` : pendingInsertLink;
             ]
           })
         }),
-        /* @__PURE__ */ jsx(import_react_native38.View, {
+        /* @__PURE__ */ jsx(import_react_native41.View, {
           style: {
             marginHorizontal: 16,
             marginTop: 12
@@ -16103,7 +17013,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var import_react19, import_react_native38;
+  var import_react21, import_react_native41;
   var init_settings10 = __esm({
     "src/plugins/cleanurls/settings.tsx"() {
       "use strict";
@@ -16112,8 +17022,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_common();
       init_components();
-      import_react19 = __toESM(require_react());
-      import_react_native38 = __toESM(require_react_native());
+      import_react21 = __toESM(require_react());
+      import_react_native41 = __toESM(require_react_native());
       init_storage11();
     }
   });
@@ -16123,7 +17033,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(cleanurls_exports, {
     default: () => cleanurls_default
   });
-  var patches8, cleanurls_default;
+  var patches9, cleanurls_default;
   var init_cleanurls = __esm({
     "src/plugins/cleanurls/index.ts"() {
       "use strict";
@@ -16138,7 +17048,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_rulesStore();
       init_settings10();
       init_storage11();
-      patches8 = [];
+      patches9 = [];
       cleanurls_default = definePlugin({
         name: "CleanURLs",
         description: "Remove tracking parameters and redirect wrappers from URLs",
@@ -16153,19 +17063,19 @@ ${pendingInsertLink}` : pendingInsertLink;
               waitForHydration(useCleanUrlsSettings),
               waitForHydration(useRulesStore)
             ]);
-            patches8 = setupPatches();
+            patches9 = setupPatches();
             useRulesStore.getState().update();
           })();
         },
         stop() {
-          patches8.forEach((unpatch6) => {
+          patches9.forEach((unpatch6) => {
             try {
               unpatch6();
             } catch (e) {
               logger.error(e);
             }
           });
-          patches8 = [];
+          patches9 = [];
         },
         settings() {
           return CleanUrlsSettings();
@@ -16303,18 +17213,18 @@ ${pendingInsertLink}` : pendingInsertLink;
           hideAll: false
         },
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "clearmenus-settingssections",
         storage: createJSONStorage(() => createFileStorage("plugins/clearmenus-settingssections.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       messageActionLabels = [
@@ -16347,18 +17257,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         hideUnknown: false,
         customLabels: "",
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "messageactionsheet-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/messageactionsheet.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
     }
@@ -17907,7 +18817,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         avatarUrl = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarIndex}.png`;
       }
     }
-    var styles5 = import_react_native39.StyleSheet.create({
+    var styles5 = import_react_native42.StyleSheet.create({
       header: {
         alignItems: "center",
         justifyContent: "center",
@@ -17937,17 +18847,17 @@ ${pendingInsertLink}` : pendingInsertLink;
         maxWidth: "90%"
       }
     });
-    return /* @__PURE__ */ jsxs(ScrollView16, {
+    return /* @__PURE__ */ jsxs(ScrollView17, {
       style: {
         flex: 1
       },
       children: [
-        /* @__PURE__ */ jsxs(import_react_native39.View, {
+        /* @__PURE__ */ jsxs(import_react_native42.View, {
           style: styles5.header,
           children: [
-            /* @__PURE__ */ jsx(import_react_native39.View, {
+            /* @__PURE__ */ jsx(import_react_native42.View, {
               style: styles5.avatarWrapper,
-              children: avatarUrl && /* @__PURE__ */ jsx(import_react_native39.Image, {
+              children: avatarUrl && /* @__PURE__ */ jsx(import_react_native42.Image, {
                 source: {
                   uri: avatarUrl
                 },
@@ -17955,7 +18865,7 @@ ${pendingInsertLink}` : pendingInsertLink;
                 resizeMode: "cover"
               })
             }),
-            /* @__PURE__ */ jsxs(import_react_native39.View, {
+            /* @__PURE__ */ jsxs(import_react_native42.View, {
               style: styles5.textContainer,
               children: [
                 /* @__PURE__ */ jsx(Text3, {
@@ -18013,7 +18923,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var import_react_native39, ScrollView16, TableRow2, TableRowGroup3, Stack4;
+  var import_react_native42, ScrollView17, TableRow2, TableRowGroup3, Stack4;
   var init_settings11 = __esm({
     "src/plugins/clearmenus/settings.tsx"() {
       "use strict";
@@ -18023,7 +18933,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_assets();
       init_metro();
       init_common();
-      import_react_native39 = __toESM(require_react_native());
+      import_react_native42 = __toESM(require_react_native());
       init_Text();
       init_AccountSettingsPage();
       init_AppSettingsPage();
@@ -18034,7 +18944,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_StaffSettingsPage();
       init_SupportSettingsPage();
       init_WhatsNewSettingsPage();
-      ({ ScrollView: ScrollView16 } = findByProps("ScrollView"));
+      ({ ScrollView: ScrollView17 } = findByProps("ScrollView"));
       ({ TableRow: TableRow2, TableRowGroup: TableRowGroup3, Stack: Stack4 } = findByProps("TableSwitchRow", "TableRow", "TableRowGroup", "Stack"));
     }
   });
@@ -18095,7 +19005,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(dashless_exports, {
     default: () => dashless_default
   });
-  var View21, patches9, dashless_default, traverseAndModify;
+  var View25, patches10, dashless_default, traverseAndModify;
   var init_dashless = __esm({
     "src/plugins/dashless/index.ts"() {
       "use strict";
@@ -18105,8 +19015,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_wrappers();
       init_plugins3();
       init_Developers();
-      ({ View: View21 } = findByProps("View", "Text"));
-      patches9 = [];
+      ({ View: View25 } = findByProps("View", "Text"));
+      patches10 = [];
       dashless_default = definePlugin({
         name: "Dashless",
         description: "Changes dashes in text channel names to spaces",
@@ -18116,13 +19026,13 @@ ${pendingInsertLink}` : pendingInsertLink;
         id: "dashless",
         version: "1.0.0",
         start() {
-          patches9.push(after("render", View21.prototype || View21, (_2, res) => {
+          patches10.push(after("render", View25.prototype || View25, (_2, res) => {
             return traverseAndModify(res);
           }));
         },
         stop() {
-          for (var unpatch6 of patches9) unpatch6();
-          patches9.length = 0;
+          for (var unpatch6 of patches10) unpatch6();
+          patches10.length = 0;
         }
       });
       traverseAndModify = (node) => {
@@ -18148,7 +19058,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/lib/constants.ts
   var BASE_URL, API_URL, AUTHORIZE_URL, CDN_URL, CLIENT_ID, SKU_ID, RAW_SKU_ID;
-  var init_constants2 = __esm({
+  var init_constants3 = __esm({
     "src/plugins/decor/lib/constants.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -18178,7 +19088,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/decor/lib/stores/AuthorizationStore.ts
-  var UserStore3, useAuthorizationStore2, unsubscribe, decorAuthSettings;
+  var UserStore4, useAuthorizationStore2, unsubscribe, decorAuthSettings;
   var init_AuthorizationStore2 = __esm({
     "src/plugins/decor/lib/stores/AuthorizationStore.ts"() {
       "use strict";
@@ -18189,13 +19099,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_esm();
       init_middleware();
       init_subscribeToFluxDispatcher();
-      UserStore3 = findByStoreName("UserStore");
+      UserStore4 = findByStoreName("UserStore");
       useAuthorizationStore2 = create2()(persist((set, get) => ({
         token: null,
         tokens: {},
         _hasHydrated: false,
         init: () => {
-          var user = UserStore3?.getCurrentUser?.();
+          var user = UserStore4?.getCurrentUser?.();
           if (!user?.id) return;
           var { tokens: tokens2 } = get();
           set({
@@ -18203,12 +19113,12 @@ ${pendingInsertLink}` : pendingInsertLink;
           });
         },
         setToken: (token) => {
-          var user = UserStore3?.getCurrentUser?.();
+          var user = UserStore4?.getCurrentUser?.();
           if (!user?.id) return;
-          set((state) => ({
+          set((state2) => ({
             token,
             tokens: {
-              ...state.tokens,
+              ...state2.tokens,
               [user.id]: token
             }
           }));
@@ -18216,19 +19126,19 @@ ${pendingInsertLink}` : pendingInsertLink;
         isAuthorized: () => {
           return !!get().token;
         },
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "decor-auth",
         storage: createJSONStorage(() => createFileStorage("plugins/decor_auth.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-          state?.init();
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
+          state2?.init();
         }
       }));
       unsubscribe = subscribeToFluxDispatcher("CONNECTION_OPEN", () => useAuthorizationStore2.getState().init());
@@ -18256,7 +19166,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/decor/lib/api.ts
-  function cFetch(url2, options) {
+  function cFetch2(url2, options) {
     return _async_to_generator(function* () {
       var res = yield fetch(url2, {
         ...options,
@@ -18276,7 +19186,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_async_to_generator();
-      init_constants2();
+      init_constants3();
       init_AuthorizationStore2();
       getUsersDecorations = (ids = void 0) => _async_to_generator(function* () {
         if (ids && ids.length === 0) return {};
@@ -18285,10 +19195,10 @@ ${pendingInsertLink}` : pendingInsertLink;
         return yield fetch(url2).then((c2) => c2.json());
       })();
       getUserDecorations = (id = "@me") => _async_to_generator(function* () {
-        return cFetch(API_URL + `/users/${id}/decorations`).then((c2) => c2.json());
+        return cFetch2(API_URL + `/users/${id}/decorations`).then((c2) => c2.json());
       })();
       getUserDecoration = (id = "@me") => _async_to_generator(function* () {
-        return cFetch(API_URL + `/users/${id}/decoration`).then((c2) => c2.json());
+        return cFetch2(API_URL + `/users/${id}/decoration`).then((c2) => c2.json());
       })();
       setUserDecoration = (decoration, id = "@me") => _async_to_generator(function* () {
         var formData = new FormData();
@@ -18306,7 +19216,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           });
           formData.append("alt", decoration.alt);
         }
-        return cFetch(API_URL + `/users/${id}/decoration`, {
+        return cFetch2(API_URL + `/users/${id}/decoration`, {
           method: "PUT",
           body: formData
         }).then((c2) => {
@@ -18314,7 +19224,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         });
       })();
       deleteDecoration = (hash) => _async_to_generator(function* () {
-        yield cFetch(API_URL + `/decorations/${hash}`, {
+        yield cFetch2(API_URL + `/decorations/${hash}`, {
           method: "DELETE"
         });
       })();
@@ -18342,7 +19252,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
-      init_constants2();
+      init_constants3();
       init_decorationToString();
       discordifyDecoration_default = ((d) => ({
         asset: decorationToString_default(d),
@@ -18352,7 +19262,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/decor/lib/stores/UsersDecorationsStore.ts
-  var import_lodash, UserStore4, SelectedChannelStore2, useUsersDecorationsStore, subscriptions;
+  var import_lodash, UserStore5, SelectedChannelStore2, useUsersDecorationsStore, subscriptions;
   var init_UsersDecorationsStore = __esm({
     "src/plugins/decor/lib/stores/UsersDecorationsStore.ts"() {
       "use strict";
@@ -18364,7 +19274,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_esm();
       init_api2();
       init_subscribeToFluxDispatcher();
-      UserStore4 = findByStoreName("UserStore");
+      UserStore5 = findByStoreName("UserStore");
       SelectedChannelStore2 = findByStoreName("SelectedChannelStore");
       useUsersDecorationsStore = create2((set, get) => ({
         usersDecorations: /* @__PURE__ */ new Map(),
@@ -18438,7 +19348,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           useUsersDecorationsStore.getState().fetchMany(messages.map((m2) => m2.author.id));
         }),
         subscribeToFluxDispatcher("CONNECTION_OPEN", () => {
-          useUsersDecorationsStore.getState().fetch(UserStore4.getCurrentUser().id, true);
+          useUsersDecorationsStore.getState().fetch(UserStore5.getCurrentUser().id, true);
         }),
         subscribeToFluxDispatcher("MESSAGE_CREATE", (data4) => {
           var channelId = SelectedChannelStore2.getChannelId();
@@ -18458,7 +19368,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/lib/stores/CurrentUserDecorationsStore.ts
   function updateCurrentUserAvatarDecoration(decoration) {
-    var user = UserStore5.getCurrentUser();
+    var user = UserStore6.getCurrentUser();
     if (decoration) {
       user.avatarDecoration = discordifyDecoration_default(decoration);
       user.avatarDecorationData = user.avatarDecoration;
@@ -18472,7 +19382,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       type: "USER_SETTINGS_ACCOUNT_SUBMIT_SUCCESS"
     });
   }
-  var import_lodash2, UserStore5, useCurrentUserDecorationsStore, subscriptions2;
+  var import_lodash2, UserStore6, useCurrentUserDecorationsStore, subscriptions2;
   var init_CurrentUserDecorationsStore = __esm({
     "src/plugins/decor/lib/stores/CurrentUserDecorationsStore.ts"() {
       "use strict";
@@ -18489,7 +19399,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_discordifyDecoration();
       init_subscribeToFluxDispatcher();
       init_UsersDecorationsStore();
-      UserStore5 = findByStoreName("UserStore");
+      UserStore6 = findByStoreName("UserStore");
       useCurrentUserDecorationsStore = create2(subscribeWithSelector((set, get) => ({
         decorations: [],
         selectedDecoration: null,
@@ -18534,9 +19444,9 @@ ${pendingInsertLink}` : pendingInsertLink;
         })
       })));
       subscriptions2 = [
-        useCurrentUserDecorationsStore.subscribe((state) => [
-          state.selectedDecoration,
-          state.fetched
+        useCurrentUserDecorationsStore.subscribe((state2) => [
+          state2.selectedDecoration,
+          state2.fetched
         ], (0, import_lodash2.debounce)(([decoration, fetched], [prevDecoration, prevFetched]) => {
           if (fetched !== prevFetched || decoration?.hash === prevDecoration?.hash) return;
           var bllub = setUserDecoration(decoration);
@@ -18557,7 +19467,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_async_to_generator();
       init_metro();
       init_i18n();
-      init_constants2();
+      init_constants3();
       init_AuthorizationStore2();
       ({ pushModal: pushModal2, popModal: popModal2 } = findByProps("pushModal"));
       OAuth2AuthorizeModal2 = findByName("OAuth2AuthorizeModal");
@@ -18617,23 +19527,23 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/ui/components/AvatarDecorationPreviews.tsx
   function AvatarDecorationPreviews({ pendingAvatarDecoration }) {
-    var styles5 = useStyles7();
+    var styles5 = useStyles8();
     var selectedDecoration = useCurrentUserDecorationsStore((s) => s.selectedDecoration);
     var decoration = pendingAvatarDecoration ?? (selectedDecoration ? discordifyDecoration_default(selectedDecoration) : null);
-    return /* @__PURE__ */ jsx(import_react_native40.View, {
+    return /* @__PURE__ */ jsx(import_react_native43.View, {
       style: styles5.container,
-      children: /* @__PURE__ */ jsxs(import_react_native40.View, {
+      children: /* @__PURE__ */ jsxs(import_react_native43.View, {
         style: styles5.headerAvatarContainer,
         children: [
           /* @__PURE__ */ jsx(HeaderAvatar, {
-            user: UserStore6.getCurrentUser(),
+            user: UserStore7.getCurrentUser(),
             pendingAvatarDecoration: decoration,
             size: "editAvatarDecoration",
             decorationStyle: {
               margin: -12
             }
           }),
-          decoration && /* @__PURE__ */ jsx(import_react_native40.Image, {
+          decoration && /* @__PURE__ */ jsx(import_react_native43.Image, {
             source: {
               uri: /^(file|content|ph):\/\//.test(decoration.asset) ? decoration.asset : `${CDN_URL}/${decoration.asset}.png`
             },
@@ -18647,7 +19557,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react_native40, HeaderAvatar, UserStore6, useStyles7;
+  var import_react_native43, HeaderAvatar, UserStore7, useStyles8;
   var init_AvatarDecorationPreviews = __esm({
     "src/plugins/decor/ui/components/AvatarDecorationPreviews.tsx"() {
       "use strict";
@@ -18657,13 +19567,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_color();
       init_styles();
       init_metro();
-      init_constants2();
+      init_constants3();
       init_CurrentUserDecorationsStore();
       init_discordifyDecoration();
-      import_react_native40 = __toESM(require_react_native());
+      import_react_native43 = __toESM(require_react_native());
       HeaderAvatar = findByName("HeaderAvatar");
-      UserStore6 = findByStoreName("UserStore");
-      useStyles7 = createStyles((_2) => ({
+      UserStore7 = findByStoreName("UserStore");
+      useStyles8 = createStyles((_2) => ({
         headerAvatarContainer: {
           display: "flex",
           justifyContent: "center",
@@ -18698,19 +19608,19 @@ ${pendingInsertLink}` : pendingInsertLink;
     ]);
     var insets = useSafeAreaInsets2();
     var navigation2 = useNavigation();
-    var createDecoration = useCurrentUserDecorationsStore((state) => state.create);
-    var styles5 = useStyles8();
+    var createDecoration = useCurrentUserDecorationsStore((state2) => state2.create);
+    var styles5 = useStyles9();
     var isDisabled = !asset || !alt.trim() || asset.type !== "image/png" || !!error;
-    return /* @__PURE__ */ jsxs(import_react_native41.View, {
+    return /* @__PURE__ */ jsxs(import_react_native44.View, {
       style: styles5.root,
       children: [
-        /* @__PURE__ */ jsx(import_react_native41.ScrollView, {
+        /* @__PURE__ */ jsx(import_react_native44.ScrollView, {
           contentContainerStyle: {
             flexGrow: 1
           },
           keyboardShouldPersistTaps: "handled",
           automaticallyAdjustKeyboardInsets: ReactNative.Platform.OS === "ios",
-          children: /* @__PURE__ */ jsxs(import_react_native41.View, {
+          children: /* @__PURE__ */ jsxs(import_react_native44.View, {
             style: styles5.content,
             children: [
               /* @__PURE__ */ jsx(AvatarDecorationPreviews, {
@@ -18734,7 +19644,7 @@ ${pendingInsertLink}` : pendingInsertLink;
                       icon: /* @__PURE__ */ jsx(TableRow.Icon, {
                         source: findAssetId2(asset ? "ic_image_text_channel" : "ic_image")
                       }),
-                      trailing: asset ? /* @__PURE__ */ jsx(import_react_native41.Pressable, {
+                      trailing: asset ? /* @__PURE__ */ jsx(import_react_native44.Pressable, {
                         onPress: () => setAsset(null),
                         hitSlop: 8,
                         style: {
@@ -18780,7 +19690,7 @@ ${pendingInsertLink}` : pendingInsertLink;
             ]
           })
         }),
-        /* @__PURE__ */ jsx(import_react_native41.View, {
+        /* @__PURE__ */ jsx(import_react_native44.View, {
           style: [
             styles5.footer,
             {
@@ -18820,7 +19730,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var import_react_native41, launchImageLibrary, useSafeAreaInsets2, useNavigation, Parser, useStyles8;
+  var import_react_native44, launchImageLibrary, useSafeAreaInsets2, useNavigation, Parser, useStyles9;
   var init_CreateDecoration = __esm({
     "src/plugins/decor/ui/pages/CreateDecoration.tsx"() {
       "use strict";
@@ -18835,8 +19745,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_metro();
       init_common();
       init_components();
-      import_react_native41 = __toESM(require_react_native());
-      init_constants2();
+      import_react_native44 = __toESM(require_react_native());
+      init_constants3();
       init_CurrentUserDecorationsStore();
       init_readFileAsBase64();
       init_AvatarDecorationPreviews();
@@ -18844,7 +19754,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ({ useSafeAreaInsets: useSafeAreaInsets2 } = findByProps("useSafeAreaInsets"));
       ({ useNavigation } = findByProps("useNavigation"));
       Parser = findByProps("parseTopic");
-      useStyles8 = createStyles((_2) => ({
+      useStyles9 = createStyles((_2) => ({
         root: {
           flex: 1,
           backgroundColor: semanticColors.BG_BASE_PRIMARY
@@ -18871,7 +19781,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/decor/lib/utils/showDecorationActionSheet.tsx
-  var ImageResolver, showSimpleActionSheet4, hideActionSheet4, UserStore7, Image6, showDecorationActionSheet_default;
+  var ImageResolver, showSimpleActionSheet4, hideActionSheet4, UserStore8, Image8, showDecorationActionSheet_default;
   var init_showDecorationActionSheet = __esm({
     "src/plugins/decor/lib/utils/showDecorationActionSheet.tsx"() {
       "use strict";
@@ -18888,13 +19798,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       ImageResolver = findByProps("getAvatarDecorationURL", "default");
       ({ showSimpleActionSheet: showSimpleActionSheet4 } = findByProps("showSimpleActionSheet"));
       ({ hideActionSheet: hideActionSheet4 } = findByProps("openLazy", "hideActionSheet"));
-      UserStore7 = findByStoreName("UserStore");
-      ({ Image: Image6 } = ReactNative);
+      UserStore8 = findByStoreName("UserStore");
+      ({ Image: Image8 } = ReactNative);
       showDecorationActionSheet_default = ((decoration) => showSimpleActionSheet4({
         key: "DecorationActionSheet",
         header: {
           title: decoration.alt ?? "Decoration",
-          icon: /* @__PURE__ */ jsx(Image6, {
+          icon: /* @__PURE__ */ jsx(Image8, {
             source: {
               uri: ImageResolver.getAvatarDecorationURL({
                 avatarDecoration: discordifyDecoration_default(decoration)
@@ -18917,7 +19827,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               showToast("Copied Decoration Hash!", findAssetId2("toast_copy_message"));
             }
           },
-          ...decoration.authorId === UserStore7.getCurrentUser().id ? [
+          ...decoration.authorId === UserStore8.getCurrentUser().id ? [
             {
               icon: findAssetId2("ic_message_delete"),
               label: "Delete",
@@ -18939,17 +19849,17 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/ui/components/Card.tsx
   function Card4({ onPress = void 0, onLongPress = void 0, disabled = void 0, lookDisabled = void 0, selected = false, children }) {
-    var styles5 = useStyles9();
+    var styles5 = useStyles10();
     return /* @__PURE__ */ jsx(TouchableOpacity3, {
       onPress: onPress ? (...args) => hapticFeedbackWrapper(onPress, ...args) : void 0,
       onLongPress: onLongPress ? (...args) => hapticFeedbackWrapper(onLongPress, ...args) : void 0,
       disabled,
-      children: /* @__PURE__ */ jsx(View24, {
+      children: /* @__PURE__ */ jsx(View28, {
         style: [
           styles5.container,
           selected ? styles5.selected : null
         ],
-        children: /* @__PURE__ */ jsx(View24, {
+        children: /* @__PURE__ */ jsx(View28, {
           style: [
             styles5.inner,
             (disabled || lookDisabled) && styles5.disabled
@@ -18959,7 +19869,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var View24, TouchableOpacity3, triggerHapticFeedback, HapticFeedbackTypes, useStyles9, hapticFeedbackWrapper;
+  var View28, TouchableOpacity3, triggerHapticFeedback, HapticFeedbackTypes, useStyles10, hapticFeedbackWrapper;
   var init_Card = __esm({
     "src/plugins/decor/ui/components/Card.tsx"() {
       "use strict";
@@ -18970,9 +19880,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_styles();
       init_metro();
       init_common();
-      ({ View: View24, TouchableOpacity: TouchableOpacity3 } = ReactNative);
+      ({ View: View28, TouchableOpacity: TouchableOpacity3 } = ReactNative);
       ({ triggerHapticFeedback, HapticFeedbackTypes } = findByProps("triggerHapticFeedback"));
-      useStyles9 = createStyles((_2) => ({
+      useStyles10 = createStyles((_2) => ({
         container: {
           display: "flex",
           justifyContent: "center",
@@ -19041,12 +19951,12 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/ui/components/Preset.tsx
   function Preset({ preset }) {
-    var select = useCurrentUserDecorationsStore((state) => state.select);
+    var select = useCurrentUserDecorationsStore((state2) => state2.select);
     var navigation2 = NavigationNative.useNavigation();
-    var styles5 = useStyles10();
-    return /* @__PURE__ */ jsxs(View25, {
+    var styles5 = useStyles11();
+    return /* @__PURE__ */ jsxs(View29, {
       children: [
-        /* @__PURE__ */ jsxs(View25, {
+        /* @__PURE__ */ jsxs(View29, {
           children: [
             /* @__PURE__ */ jsx(FormTitle, {
               title: preset.name
@@ -19074,7 +19984,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               navigation2.pop();
             }
           }),
-          ItemSeparatorComponent: () => /* @__PURE__ */ jsx(View25, {
+          ItemSeparatorComponent: () => /* @__PURE__ */ jsx(View29, {
             style: {
               width: 4
             }
@@ -19088,7 +19998,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var FormTitle, View25, FlatList2, Image7, TextStyleSheet2, Text4, SummarizedIconRow, OverflowCircle, Avatar3, useStyles10, UserUtils, UserStore8, defaultAvatars;
+  var FormTitle, View29, FlatList2, Image9, TextStyleSheet2, Text4, SummarizedIconRow, OverflowCircle, Avatar3, useStyles11, UserUtils, UserStore9, defaultAvatars;
   var init_Preset = __esm({
     "src/plugins/decor/ui/components/Preset.tsx"() {
       "use strict";
@@ -19104,11 +20014,11 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_CurrentUserDecorationsStore();
       init_DecorationCard();
       ({ FormTitle } = Forms);
-      ({ View: View25, FlatList: FlatList2, Image: Image7 } = ReactNative);
+      ({ View: View29, FlatList: FlatList2, Image: Image9 } = ReactNative);
       ({ TextStyleSheet: TextStyleSheet2, Text: Text4 } = findByProps("TextStyleSheet"));
       ({ default: SummarizedIconRow, OverflowCircle } = findByName("SummarizedIconRow", false));
       ({ type: Avatar3 } = findByProps("AvatarSizes"));
-      useStyles10 = createStyles((_2) => ({
+      useStyles11 = createStyles((_2) => ({
         wrapper: {
           borderWidth: 2,
           borderRadius: 20,
@@ -19117,7 +20027,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         }
       }));
       UserUtils = findByProps("getUser", "fetchCurrentUser");
-      UserStore8 = findByStoreName("UserStore");
+      UserStore9 = findByStoreName("UserStore");
       defaultAvatars = [
         findAssetId2("default_avatar_0"),
         findAssetId2("default_avatar_1"),
@@ -19140,14 +20050,14 @@ ${pendingInsertLink}` : pendingInsertLink;
       renderItem: ({ item }) => /* @__PURE__ */ jsx(Preset, {
         preset: item
       }),
-      ListFooterComponent: () => /* @__PURE__ */ jsx(import_react_native42.View, {
+      ListFooterComponent: () => /* @__PURE__ */ jsx(import_react_native45.View, {
         style: {
           height: 18
         }
       })
     });
   }
-  var import_react_native42, FlatList3;
+  var import_react_native45, FlatList3;
   var init_Presets = __esm({
     "src/plugins/decor/ui/pages/Presets.tsx"() {
       "use strict";
@@ -19155,7 +20065,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_promiseAllSettled();
       init_jsxRuntime();
       init_common();
-      import_react_native42 = __toESM(require_react_native());
+      import_react_native45 = __toESM(require_react_native());
       init_api2();
       init_Preset();
       ({ FlatList: FlatList3 } = ReactNative);
@@ -19168,7 +20078,6 @@ ${pendingInsertLink}` : pendingInsertLink;
     var [presets, setPresets] = React.useState([]);
     var { decorations, selectedDecoration, fetch: fetchUserDecorations, clear: clearUserDecorations, select: selectDecoration } = useCurrentUserDecorationsStore();
     var { isAuthorized } = useAuthorizationStore2();
-    var styles5 = useStyles11();
     React.useEffect(() => {
       if (isAuthorized()) {
         getPresets().then(setPresets).catch(() => void 0);
@@ -19182,7 +20091,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       isAuthorized
     ]);
     var navigation2 = NavigationNative.useNavigation();
+    var styles5 = useStyles12();
     var isDisabled = !isAuthorized() || loading === null;
+    var personalDecorations = decorations.filter((d) => d.presetId === null || d.presetId === void 0);
     var hasPendingDecoration = decorations.some((d) => d.reviewed === false);
     var decorPreset = presets && selectedDecoration ? presets.find((p) => p.id === selectedDecoration.presetId) : null;
     var loadingTrailing = loading ? () => /* @__PURE__ */ jsx(ActivityIndicator2, {
@@ -19191,11 +20102,72 @@ ${pendingInsertLink}` : pendingInsertLink;
       source: findAssetId2("ic_warning_24px"),
       variant: "danger"
     }) : void 0;
-    return /* @__PURE__ */ jsxs(Stack5, {
-      spacing: 24,
+    return /* @__PURE__ */ jsxs(View31, {
+      style: {
+        gap: 24
+      },
       children: [
         /* @__PURE__ */ jsx(AvatarDecorationPreviews, {
           pendingAvatarDecoration: selectedDecoration ? discordifyDecoration_default(selectedDecoration) : null
+        }),
+        selectedDecoration && /* @__PURE__ */ jsxs(View31, {
+          style: styles5.selectedMetaContainer,
+          children: [
+            /* @__PURE__ */ jsx(Text5, {
+              style: TextStyleSheet3["text-lg/semibold"],
+              children: selectedDecoration.alt
+            }),
+            decorPreset && /* @__PURE__ */ jsxs(Text5, {
+              style: [
+                TextStyleSheet3.eyebrow,
+                styles5.presetLabel
+              ],
+              children: [
+                "Part of the ",
+                decorPreset.name,
+                " Preset"
+              ]
+            }),
+            /* @__PURE__ */ jsxs(Text5, {
+              style: TextStyleSheet3["text-md/normal"],
+              children: [
+                "Created by ",
+                /* @__PURE__ */ jsx(Pressable5, {
+                  onPress: () => UserStore10.getUser(selectedDecoration.authorId) ? showUserProfile({
+                    userId: selectedDecoration.authorId
+                  }) : UserUtils2.getUser(selectedDecoration.authorId).then(() => showUserProfile({
+                    userId: selectedDecoration.authorId
+                  })),
+                  pointerEvents: "box-only",
+                  style: styles5.authorContainer,
+                  children: Parser2.parse(`<@${selectedDecoration.authorId}>`, true)
+                })
+              ]
+            })
+          ]
+        }),
+        personalDecorations.length > 0 && /* @__PURE__ */ jsx(TableRowGroup, {
+          title: "Your Decorations",
+          children: personalDecorations.map((decoration) => {
+            var isSelected = selectedDecoration?.hash === decoration.hash;
+            return /* @__PURE__ */ jsx(TableRow, {
+              label: decoration.alt,
+              icon: /* @__PURE__ */ jsx(TableRow.Icon, {
+                source: findAssetId2("ic_reaction_smile")
+              }),
+              disabled: isDisabled,
+              onPress: () => selectDecoration(isSelected ? null : decoration),
+              trailing: isSelected ? () => /* @__PURE__ */ jsx(Text5, {
+                style: [
+                  TextStyleSheet3["text-sm/normal"],
+                  {
+                    color: semanticColors.TEXT_MUTED
+                  }
+                ],
+                children: "Active"
+              }) : TableRow.Arrow
+            }, decoration.hash);
+          })
         }),
         /* @__PURE__ */ jsxs(TableRowGroup, {
           title: "Decoration Actions",
@@ -19251,7 +20223,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var FlatList4, View27, ActivityIndicator2, Pressable4, Stack5, TextStyleSheet3, Text5, UserStore9, Parser2, showUserProfile, UserUtils2, useStyles11;
+  var View31, ActivityIndicator2, Pressable5, TextStyleSheet3, Text5, UserStore10, Parser2, showUserProfile, UserUtils2, useStyles12;
   var init_DecorationPicker = __esm({
     "src/plugins/decor/ui/components/DecorationPicker.tsx"() {
       "use strict";
@@ -19271,14 +20243,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_CreateDecoration();
       init_Presets();
       init_AvatarDecorationPreviews();
-      ({ FlatList: FlatList4, View: View27, ActivityIndicator: ActivityIndicator2, Pressable: Pressable4 } = ReactNative);
-      ({ Stack: Stack5 } = findByProps("Stack"));
+      ({ View: View31, ActivityIndicator: ActivityIndicator2, Pressable: Pressable5 } = ReactNative);
       ({ TextStyleSheet: TextStyleSheet3, Text: Text5 } = findByProps("TextStyleSheet"));
-      UserStore9 = findByStoreName("UserStore");
+      UserStore10 = findByStoreName("UserStore");
       Parser2 = findByProps("parse", "parseToAST");
       ({ showUserProfile } = findByProps("showUserProfile"));
       UserUtils2 = findByProps("getUser", "fetchCurrentUser");
-      useStyles11 = createStyles((_2) => ({
+      useStyles12 = createStyles((_2) => ({
         decorationListContainer: {
           paddingVertical: 12,
           paddingHorizontal: 8
@@ -19304,12 +20275,14 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/decor/ui/pages/Settings.tsx
   function Settings3() {
-    var isAuthorized = useAuthorizationStore2((state) => !!state.token);
-    var setToken = useAuthorizationStore2((state) => state.setToken);
-    var styles5 = useStyles12();
-    return /* @__PURE__ */ jsxs(import_react_native43.View, {
+    var isAuthorized = useAuthorizationStore2((state2) => !!state2.token);
+    var setToken = useAuthorizationStore2((state2) => state2.setToken);
+    return /* @__PURE__ */ jsxs(import_react_native46.ScrollView, {
       style: {
-        flex: 1,
+        flex: 1
+      },
+      contentContainerStyle: {
+        paddingBottom: 40,
         paddingVertical: 24,
         paddingHorizontal: 12,
         gap: 24
@@ -19326,7 +20299,6 @@ ${pendingInsertLink}` : pendingInsertLink;
               }),
               onPress: showAuthorizationModal_default
             }),
-            " ",
             isAuthorized && /* @__PURE__ */ jsxs(Fragment, {
               children: [
                 /* @__PURE__ */ jsx(TableRow, {
@@ -19354,7 +20326,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       ]
     });
   }
-  var import_react_native43, useStyles12;
+  var import_react_native46;
   var init_Settings2 = __esm({
     "src/plugins/decor/ui/pages/Settings.tsx"() {
       "use strict";
@@ -19362,22 +20334,11 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_promiseAllSettled();
       init_jsxRuntime();
       init_assets();
-      init_color();
-      init_styles();
       init_components();
-      import_react_native43 = __toESM(require_react_native());
+      import_react_native46 = __toESM(require_react_native());
       init_AuthorizationStore2();
       init_showAuthorizationModal();
       init_DecorationPicker();
-      useStyles12 = createStyles((_2) => ({
-        versionText: {
-          fontSize: 15,
-          color: semanticColors.TEXT_NORMAL,
-          textAlign: "center",
-          fontWeight: "600",
-          lineHeight: 22
-        }
-      }));
     }
   });
 
@@ -19386,7 +20347,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(decor_exports, {
     default: () => decor_default
   });
-  var UserStore10, ImageResolver2, AvatarDecorationUtils, patches10, decor_default;
+  var UserStore11, ImageResolver2, AvatarDecorationUtils, patches11, decor_default;
   var init_decor = __esm({
     "src/plugins/decor/index.ts"() {
       "use strict";
@@ -19398,15 +20359,15 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_common();
       init_plugins3();
       init_Developers();
-      init_constants2();
+      init_constants3();
       init_AuthorizationStore2();
       init_CurrentUserDecorationsStore();
       init_UsersDecorationsStore();
       init_Settings2();
-      UserStore10 = findByStoreName("UserStore");
+      UserStore11 = findByStoreName("UserStore");
       ImageResolver2 = findByProps("getAvatarDecorationURL", "default");
       AvatarDecorationUtils = findByProps("isAnimatedAvatarDecoration");
-      patches10 = [];
+      patches11 = [];
       decor_default = definePlugin({
         name: "Decor",
         description: "Create and use your own custom avatar decorations, or pick your favorite from the presets.",
@@ -19419,10 +20380,10 @@ ${pendingInsertLink}` : pendingInsertLink;
         version: "1.0.0",
         eagerStart() {
           return _async_to_generator(function* () {
-            patches10.push(unsubscribe);
-            patches10.push(...subscriptions);
-            patches10.push(...subscriptions2);
-            patches10.push(after("getUser", UserStore10, (_2, user) => {
+            patches11.push(unsubscribe);
+            patches11.push(...subscriptions);
+            patches11.push(...subscriptions2);
+            patches11.push(after("getUser", UserStore11, (_2, user) => {
               var store = useUsersDecorationsStore.getState();
               if (user && store.has(user.id)) {
                 var decoration = store.get(user.id);
@@ -19437,7 +20398,7 @@ ${pendingInsertLink}` : pendingInsertLink;
                 user.avatarDecorationData = user.avatarDecoration;
               }
             }));
-            patches10.push(instead("getAvatarDecorationURL", ImageResolver2, (args, orig) => {
+            patches11.push(instead("getAvatarDecorationURL", ImageResolver2, (args, orig) => {
               var [{ avatarDecoration, canAnimate }] = args;
               if (avatarDecoration?.skuId === SKU_ID) {
                 var parts = avatarDecoration.asset.split("_");
@@ -19450,16 +20411,15 @@ ${pendingInsertLink}` : pendingInsertLink;
               }
             }));
             if (AvatarDecorationUtils) {
-              patches10.push(after("isAnimatedAvatarDecoration", AvatarDecorationUtils, ([avatarDecoration]) => {
+              patches11.push(after("isAnimatedAvatarDecoration", AvatarDecorationUtils, ([avatarDecoration]) => {
                 if (ReactNative.Platform.OS === "ios" && avatarDecoration?.asset?.startsWith("file://")) return true;
               }));
             }
-            useUsersDecorationsStore.getState().fetch(UserStore10.getCurrentUser().id, true);
           })();
         },
         stop() {
-          for (var unpatch6 of patches10) unpatch6();
-          patches10.length = 0;
+          for (var unpatch6 of patches11) unpatch6();
+          patches11.length = 0;
           useUsersDecorationsStore.getState().clear();
           useCurrentUserDecorationsStore.getState().clear();
         },
@@ -19469,16 +20429,10 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/flux/index.ts
-  var flux_exports = {};
-  __export(flux_exports, {
-    dispatcher: () => dispatcher,
-    injectFluxInterceptor: () => injectFluxInterceptor,
-    intercept: () => intercept
-  });
   function injectFluxInterceptor() {
     var cb = (payload) => {
-      for (var intercept2 of intercepts) {
-        var res = intercept2(payload);
+      for (var intercept of intercepts) {
+        var res = intercept(payload);
         if (res == null) {
           continue;
         } else if (!res) {
@@ -19492,12 +20446,6 @@ ${pendingInsertLink}` : pendingInsertLink;
     };
     (dispatcher._interceptors ??= []).unshift(cb);
     return () => dispatcher._interceptors &&= dispatcher._interceptors.filter((v2) => v2 !== cb);
-  }
-  function intercept(cb) {
-    intercepts.push(cb);
-    return () => {
-      intercepts = intercepts.filter((i) => i !== cb);
-    };
   }
   var blockedSym, modifiedSym, dispatcher, intercepts;
   var init_flux = __esm({
@@ -19514,10 +20462,6 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/native/index.ts
-  var native_exports = {};
-  __export(native_exports, {
-    fs: () => fs_exports
-  });
   var init_native = __esm({
     "src/api/native/index.ts"() {
       "use strict";
@@ -19528,10 +20472,6 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/react/index.ts
-  var react_exports = {};
-  __export(react_exports, {
-    jsx: () => jsx_exports
-  });
   var init_react2 = __esm({
     "src/api/react/index.ts"() {
       "use strict";
@@ -19542,15 +20482,6 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/api/index.ts
-  var api_exports = {};
-  __export(api_exports, {
-    assets: () => assets_exports,
-    debug: () => debug_exports,
-    flux: () => flux_exports,
-    native: () => native_exports,
-    patcher: () => patcher_exports,
-    react: () => react_exports
-  });
   var init_api3 = __esm({
     "src/api/index.ts"() {
       "use strict";
@@ -19601,6 +20532,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         ],
         id: "dummy",
         version: "1.0.0",
+        devOnly: true,
         start() {
           var targetModule = findByProps("isStaffEnv");
           unpatchIsStaffEnv = patcher_exports.instead("isStaffEnv", targetModule, (args, origFunc) => {
@@ -19670,19 +20602,19 @@ ${pendingInsertLink}` : pendingInsertLink;
         showCopyURLButton: true,
         showCopyMarkdownButton: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "expressionutils-storage",
         storage: createJSONStorage(() => createFileStorage("plugins/expressionutils.json")),
-        onRehydrateStorage: () => (state) => {
-          if (state && typeof state === "object" && "setHasHydrated" in state && typeof state.setHasHydrated === "function") {
-            state.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          if (state2 && typeof state2 === "object" && "setHasHydrated" in state2 && typeof state2.setHasHydrated === "function") {
+            state2.setHasHydrated(true);
           }
         }
       }));
@@ -19693,9 +20625,9 @@ ${pendingInsertLink}` : pendingInsertLink;
   function AddToServerRow({ guild, emoji }) {
     var emojiSlotModule = findByProps("getMaxEmojiSlots");
     var EmojiStore2 = findByProps("getGuilds");
-    var [emojiName, setEmojiName] = import_react20.default.useState(emoji.name);
-    var isSlotsUnknown = import_react20.default.useRef(false);
-    var slotsAvailable = import_react20.default.useMemo(() => {
+    var [emojiName, setEmojiName] = import_react22.default.useState(emoji.name);
+    var isSlotsUnknown = import_react22.default.useRef(false);
+    var slotsAvailable = import_react22.default.useMemo(() => {
       var maxSlots = guild.getMaxEmojiSlots?.() ?? emojiSlotModule?.getMaxEmojiSlots?.(guild);
       if (!maxSlots) {
         if (!isSlotsUnknown.current) {
@@ -19808,7 +20740,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react20, FormRow, TableRowGroup4, openAlert4, AlertModal5, AlertActionButton5;
+  var import_react22, FormRow, TableRowGroup4, openAlert4, AlertModal5, AlertActionButton5;
   var init_AddToServerRow = __esm({
     "src/plugins/expressionutils/ui/components/AddToServerRow.tsx"() {
       "use strict";
@@ -19822,7 +20754,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_metro();
       init_common();
       init_components();
-      import_react20 = __toESM(require_react());
+      import_react22 = __toESM(require_react());
       init_modules3();
       ({ FormRow } = Forms);
       ({ TableRowGroup: TableRowGroup4 } = findByProps("TableRow"));
@@ -19840,7 +20772,7 @@ ${pendingInsertLink}` : pendingInsertLink;
     var guilds = Object.values(guildsRaw).filter((guild) => PermissionsStore?.can(permission, guild)).sort((a, b3) => a.name?.localeCompare?.(b3.name));
     return /* @__PURE__ */ jsxs(ActionSheet, {
       children: [
-        /* @__PURE__ */ jsxs(import_react_native44.View, {
+        /* @__PURE__ */ jsxs(import_react_native47.View, {
           style: {
             flexDirection: "row",
             alignItems: "center",
@@ -19876,7 +20808,7 @@ ${pendingInsertLink}` : pendingInsertLink;
             })
           ]
         }),
-        /* @__PURE__ */ jsx(import_react_native44.ScrollView, {
+        /* @__PURE__ */ jsx(import_react_native47.ScrollView, {
           contentContainerStyle: {
             gap: 12,
             marginBottom: 12
@@ -19897,7 +20829,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       emoji
     });
   }
-  var import_react_native44, ActionSheetCloseButton;
+  var import_react_native47, ActionSheetCloseButton;
   var init_AddToServerActionSheet = __esm({
     "src/plugins/expressionutils/ui/sheets/AddToServerActionSheet.tsx"() {
       "use strict";
@@ -19908,7 +20840,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_metro();
       init_common();
       init_components();
-      import_react_native44 = __toESM(require_react_native());
+      import_react_native47 = __toESM(require_react_native());
       init_modules3();
       init_AddToServerRow();
       ({ ActionSheetCloseButton } = findByProps("ActionSheetCloseButton"));
@@ -20109,7 +21041,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   // src/plugins/expressionutils/settings.tsx
   function ExpressionUtilsSettings() {
     var settings4 = useExpressionUtilsSettings();
-    var [, forceUpdate] = import_react21.default.useReducer((x2) => ~x2, 0);
+    var [, forceUpdate] = import_react23.default.useReducer((x2) => ~x2, 0);
     return /* @__PURE__ */ jsx(Stack, {
       style: {
         paddingHorizontal: 16,
@@ -20177,7 +21109,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react21, settings_default4;
+  var import_react23, settings_default4;
   var init_settings12 = __esm({
     "src/plugins/expressionutils/settings.tsx"() {
       "use strict";
@@ -20185,7 +21117,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react21 = __toESM(require_react());
+      import_react23 = __toESM(require_react());
       init_storage13();
       settings_default4 = ExpressionUtilsSettings;
     }
@@ -20207,7 +21139,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           return res2;
         }
         var sticker = view?.props?.children?.props?.sticker;
-        var children = import_react22.default.Children.toArray(view.props.children);
+        var children = import_react24.default.Children.toArray(view.props.children);
         var url2 = `https://discord.com/stickers/${sticker.id}.png`;
         var favoritedStickers = UserSettingsProtoStore.frecencyWithoutFetchingLatest?.favoriteStickers?.stickerIds;
         var isFavorited = !!favoritedStickers?.find((s) => s === sticker.id);
@@ -20258,8 +21190,8 @@ ${pendingInsertLink}` : pendingInsertLink;
           }
         ].filter(Boolean);
         buttons.forEach((btn) => {
-          if (!children.some((c2) => import_react22.default.isValidElement(c2) && c2?.key === btn.key)) {
-            children.push(import_react22.default.createElement(Button, {
+          if (!children.some((c2) => import_react24.default.isValidElement(c2) && c2?.key === btn.key)) {
+            children.push(import_react24.default.createElement(Button, {
               key: btn.key,
               text: btn.text,
               onPress: btn.onPress,
@@ -20269,16 +21201,16 @@ ${pendingInsertLink}` : pendingInsertLink;
             }));
           }
         });
-        var newView = import_react22.default.cloneElement(view, {
+        var newView = import_react24.default.cloneElement(view, {
           children
         });
-        return import_react22.default.cloneElement(res2, {
+        return import_react24.default.cloneElement(res2, {
           children: newView
         });
       });
     });
   }
-  var import_react22, hideActionSheet5, UserSettingsProtoStore, StickerUtils, downloadMediaAsset2, LazyActionSheet4;
+  var import_react24, hideActionSheet5, UserSettingsProtoStore, StickerUtils, downloadMediaAsset2, LazyActionSheet4;
   var init_stickerutils = __esm({
     "src/plugins/expressionutils/stickerutils.ts"() {
       "use strict";
@@ -20289,7 +21221,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_metro();
       init_common();
       init_components();
-      import_react22 = __toESM(require_react());
+      import_react24 = __toESM(require_react());
       ({ hideActionSheet: hideActionSheet5 } = findByProps("hideActionSheet"));
       UserSettingsProtoStore = findByStoreName("UserSettingsProtoStore");
       StickerUtils = findByProps("favoriteSticker", "unfavoriteSticker");
@@ -20561,18 +21493,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         hidePremiumRestoreSubscription: false,
         hideQuests: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "fakenitro-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/fakenitro.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       fakenitroSettings = new Proxy({}, {
@@ -20689,7 +21621,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/fakenitro/settings.tsx
-  var import_react_native45, TableSwitchRow3, TableRadioGroup3, TableRadioRow3, TableRowGroup5, Stack6, sizeOptions, previewUri, settings_default5;
+  var import_react_native48, TableSwitchRow3, TableRadioGroup3, TableRadioRow3, TableRowGroup5, Stack5, sizeOptions, previewUri, settings_default5;
   var init_settings13 = __esm({
     "src/plugins/fakenitro/settings.tsx"() {
       "use strict";
@@ -20698,10 +21630,10 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_metro();
       init_common();
-      import_react_native45 = __toESM(require_react_native());
+      import_react_native48 = __toESM(require_react_native());
       init_storage14();
       ({ TableSwitchRow: TableSwitchRow3, TableRadioGroup: TableRadioGroup3, TableRadioRow: TableRadioRow3, TableRowGroup: TableRowGroup5 } = findByProps("TableRow"));
-      ({ Stack: Stack6 } = findByProps("Stack"));
+      ({ Stack: Stack5 } = findByProps("Stack"));
       sizeOptions = {
         Tiny: 16,
         Small: 32,
@@ -20714,11 +21646,11 @@ ${pendingInsertLink}` : pendingInsertLink;
       settings_default5 = (() => {
         var settings4 = useFakeNitroSettings();
         var { updateSettings } = settings4;
-        return /* @__PURE__ */ jsx(import_react_native45.ScrollView, {
+        return /* @__PURE__ */ jsx(import_react_native48.ScrollView, {
           style: {
             flex: 1
           },
-          children: /* @__PURE__ */ jsxs(Stack6, {
+          children: /* @__PURE__ */ jsxs(Stack5, {
             style: {
               paddingVertical: 24,
               paddingHorizontal: 12
@@ -20785,7 +21717,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(fakenitro_exports, {
     default: () => fakenitro_default
   });
-  var patches11, fakenitro_default;
+  var patches12, fakenitro_default;
   var init_fakenitro = __esm({
     "src/plugins/fakenitro/index.ts"() {
       "use strict";
@@ -20799,7 +21731,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_removeGetNitroButton();
       init_sendMessage();
       init_settings13();
-      patches11 = [];
+      patches12 = [];
       fakenitro_default = definePlugin({
         name: "FakeNitro",
         description: "Gives you Client-Side Nitro",
@@ -20813,582 +21745,17 @@ ${pendingInsertLink}` : pendingInsertLink;
         id: "fakenitro",
         version: "1.1.0",
         start() {
-          patches11.push(...getPatches2());
-          patches11.push(...getPatches5());
-          patches11.push(...getPatches());
-          patches11.push(...getPatches3());
-          patches11.push(...getPatches4());
+          patches12.push(...getPatches2());
+          patches12.push(...getPatches5());
+          patches12.push(...getPatches());
+          patches12.push(...getPatches3());
+          patches12.push(...getPatches4());
         },
         stop() {
-          for (var unpatch6 of patches11) unpatch6();
-          patches11.length = 0;
+          for (var unpatch6 of patches12) unpatch6();
+          patches12.length = 0;
         },
         settings: settings_default5
-      });
-    }
-  });
-
-  // src/plugins/fakeprofilecolors/storage.ts
-  var useProfileColorStore, profilecolorSettings;
-  var init_storage15 = __esm({
-    "src/plugins/fakeprofilecolors/storage.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_storage();
-      init_esm();
-      init_middleware();
-      useProfileColorStore = create2()(persist((set) => ({
-        primary: null,
-        accent: null,
-        enabled: false,
-        bannerFallback: false,
-        shareColors: false,
-        showOtherColors: true,
-        registryUrl: "https://profilecolors-registry.songspotlight.workers.dev",
-        _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
-          ...newSettings
-        })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
-        })
-      }), {
-        name: "profilecolor-settings",
-        storage: createJSONStorage(() => createFileStorage("plugins/profilecolor.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-        }
-      }));
-      profilecolorSettings = new Proxy({}, {
-        get(target, prop) {
-          return useProfileColorStore.getState()[prop];
-        },
-        set(target, prop, value) {
-          useProfileColorStore.getState().updateSettings({
-            [prop]: value
-          });
-          return true;
-        }
-      });
-    }
-  });
-
-  // src/plugins/fakeprofilecolors/api.ts
-  function fetchRegistryColors(userId) {
-    return _async_to_generator(function* () {
-      var cached = colorCache.get(userId);
-      if (cached && Date.now() - cached.fetchedAt < CACHE_TTL) {
-        return cached.colors;
-      }
-      var registryUrl = profilecolorSettings.registryUrl;
-      if (!registryUrl) return null;
-      try {
-        var res = yield fetch(`${registryUrl}/lookup/${userId}`);
-        if (!res.ok) {
-          colorCache.set(userId, {
-            colors: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var data4 = yield res.json();
-        var primary = data4?.primary;
-        var accent = data4?.accent;
-        if (!primary || !accent) {
-          colorCache.set(userId, {
-            colors: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var primaryNum = parseInt(primary.replace("#", ""), 16);
-        var accentNum = parseInt(accent.replace("#", ""), 16);
-        if (isNaN(primaryNum) || isNaN(accentNum)) {
-          colorCache.set(userId, {
-            colors: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var result = {
-          primary: primaryNum,
-          accent: accentNum
-        };
-        colorCache.set(userId, {
-          colors: result,
-          fetchedAt: Date.now()
-        });
-        return result;
-      } catch (e) {
-        logger.error("FakeProfileColors", "Failed to fetch registry colors", e);
-        colorCache.set(userId, {
-          colors: null,
-          fetchedAt: Date.now()
-        });
-        return null;
-      }
-    })();
-  }
-  function publishToRegistry(discordId, primary, accent) {
-    return _async_to_generator(function* () {
-      var registryUrl = profilecolorSettings.registryUrl;
-      if (!registryUrl || !discordId) return false;
-      var primaryHex = `#${primary.toString(16).padStart(6, "0")}`;
-      var accentHex = `#${accent.toString(16).padStart(6, "0")}`;
-      try {
-        var res = yield fetch(`${registryUrl}/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId,
-            primary: primaryHex,
-            accent: accentHex
-          })
-        });
-        if (res.ok) {
-          colorCache.set(discordId, {
-            colors: {
-              primary,
-              accent
-            },
-            fetchedAt: Date.now()
-          });
-        }
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function unpublishFromRegistry(discordId) {
-    return _async_to_generator(function* () {
-      var registryUrl = profilecolorSettings.registryUrl;
-      if (!registryUrl || !discordId) return false;
-      try {
-        var res = yield fetch(`${registryUrl}/register`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId
-          })
-        });
-        if (res.ok) {
-          colorCache.delete(discordId);
-        }
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function clearColorCache() {
-    colorCache.clear();
-  }
-  var colorCache, CACHE_TTL;
-  var init_api4 = __esm({
-    "src/plugins/fakeprofilecolors/api.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_logger();
-      init_storage15();
-      colorCache = /* @__PURE__ */ new Map();
-      CACHE_TTL = 10 * 60 * 1e3;
-    }
-  });
-
-  // src/plugins/fakeprofilecolors/settings.tsx
-  function ProfileColorSettings() {
-    var store = useProfileColorStore();
-    var [primaryInput, setPrimaryInput] = import_react23.default.useState(store.primary !== null ? `#${store.primary.toString(16)}` : "");
-    var [accentInput, setAccentInput] = import_react23.default.useState(store.accent !== null ? `#${store.accent.toString(16)}` : "");
-    function isValidHex(hex) {
-      return /^#?[0-9a-fA-F]{6}$/.test(hex);
-    }
-    function handlePrimaryChange(value) {
-      setPrimaryInput(value);
-      if (value === "") {
-        store.updateSettings({
-          primary: null
-        });
-      } else {
-        var hex = value.replace(/^#/, "");
-        if (isValidHex(value)) {
-          var num = parseInt(hex, 16);
-          store.updateSettings({
-            primary: num
-          });
-        } else {
-          store.updateSettings({
-            primary: null
-          });
-        }
-      }
-    }
-    function handleAccentChange(value) {
-      setAccentInput(value);
-      if (value === "") {
-        store.updateSettings({
-          accent: null
-        });
-      } else {
-        var hex = value.replace(/^#/, "");
-        if (isValidHex(value)) {
-          var num = parseInt(hex, 16);
-          store.updateSettings({
-            accent: num
-          });
-        } else {
-          store.updateSettings({
-            accent: null
-          });
-        }
-      }
-    }
-    return /* @__PURE__ */ jsxs(View30, {
-      style: {
-        flex: 1,
-        paddingVertical: 24,
-        paddingHorizontal: 12
-      },
-      children: [
-        /* @__PURE__ */ jsx(TableRowGroup6, {
-          title: "Settings",
-          children: /* @__PURE__ */ jsx(TableSwitchRow4, {
-            label: "Enable Profile Colors",
-            value: store.enabled,
-            onValueChange: (v2) => store.updateSettings({
-              enabled: v2
-            })
-          })
-        }),
-        /* @__PURE__ */ jsx(TableRowGroup6, {
-          title: "Colors",
-          children: /* @__PURE__ */ jsxs(Card5, {
-            style: {
-              marginBottom: 16,
-              backgroundColor: semanticColors.CARD_PRIMARY_BG
-            },
-            children: [
-              /* @__PURE__ */ jsx(SettingsTextInput, {
-                placeholder: "#000000",
-                value: primaryInput,
-                onChange: handlePrimaryChange,
-                isClearable: true
-              }),
-              /* @__PURE__ */ jsx(SettingsTextInput, {
-                placeholder: "#000000",
-                value: accentInput,
-                onChange: handleAccentChange,
-                isClearable: true
-              })
-            ]
-          })
-        }),
-        /* @__PURE__ */ jsx(TableRowGroup6, {
-          children: /* @__PURE__ */ jsx(TableRow3, {
-            label: "Reset Colors",
-            variant: "danger",
-            arrow: false,
-            onPress: () => {
-              setPrimaryInput("");
-              setAccentInput("");
-              store.updateSettings({
-                primary: null,
-                accent: null,
-                enabled: false
-              });
-            }
-          })
-        }),
-        /* @__PURE__ */ jsxs(TableRowGroup6, {
-          title: "Other Users",
-          children: [
-            /* @__PURE__ */ jsx(TableSwitchRow4, {
-              label: "Show other users' colors",
-              subLabel: "Apply profile colors shared by other Rain users via the registry",
-              value: store.showOtherColors,
-              onValueChange: (v2) => store.updateSettings({
-                showOtherColors: v2
-              })
-            }),
-            /* @__PURE__ */ jsx(TableSwitchRow4, {
-              label: "Banner color fallback",
-              subLabel: "Use banner color as profile theme for non-Nitro users",
-              value: store.bannerFallback,
-              onValueChange: (v2) => store.updateSettings({
-                bannerFallback: v2
-              })
-            })
-          ]
-        }),
-        /* @__PURE__ */ jsxs(TableRowGroup6, {
-          title: "Sharing",
-          children: [
-            /* @__PURE__ */ jsx(TableSwitchRow4, {
-              label: "Share my profile colors",
-              subLabel: "Allow other Rain users to see your custom profile colors. Your Discord ID and color values will be stored in a public registry.",
-              value: store.shareColors,
-              onValueChange: (v2) => {
-                store.updateSettings({
-                  shareColors: v2
-                });
-                var myId = UserStore11?.getCurrentUser?.()?.id;
-                if (!v2) {
-                  if (myId) {
-                    unpublishFromRegistry(myId).then((ok) => {
-                      if (ok) showToast("Removed from registry", findAssetId2("CheckIcon"));
-                    });
-                  }
-                } else if (store.primary !== null && myId) {
-                  publishToRegistry(myId, store.primary, store.accent ?? store.primary).then((ok) => {
-                    if (ok) showToast("Published colors!", findAssetId2("CheckIcon"));
-                    else showToast("Failed to publish", findAssetId2("XIcon"));
-                  });
-                }
-              }
-            }),
-            /* @__PURE__ */ jsx(TableRow3, {
-              label: "Publish Now",
-              subLabel: "Manually sync your current colors to the registry",
-              trailing: /* @__PURE__ */ jsx(TableRow3.Arrow, {}),
-              onPress: () => {
-                if (store.primary === null) {
-                  showToast("Set a primary color first", findAssetId2("XIcon"));
-                  return;
-                }
-                var myId = UserStore11?.getCurrentUser?.()?.id;
-                if (!myId) {
-                  showToast("Not logged in", findAssetId2("XIcon"));
-                  return;
-                }
-                showToast("Publishing...", findAssetId2("ClockIcon"));
-                publishToRegistry(myId, store.primary, store.accent ?? store.primary).then((ok) => {
-                  if (ok) {
-                    store.updateSettings({
-                      shareColors: true
-                    });
-                    showToast("Published colors!", findAssetId2("CheckIcon"));
-                  } else {
-                    showToast("Failed to publish", findAssetId2("XIcon"));
-                  }
-                });
-              }
-            }),
-            /* @__PURE__ */ jsx(TableRow3, {
-              label: "Clear Color Cache",
-              subLabel: "Force re-fetch other users' colors from the registry",
-              trailing: /* @__PURE__ */ jsx(TableRow3.Arrow, {}),
-              onPress: () => {
-                clearColorCache();
-                showToast("Color cache cleared", findAssetId2("CheckIcon"));
-              }
-            })
-          ]
-        })
-      ]
-    });
-  }
-  var import_react23, TableRow3, TableSwitchRow4, TableRowGroup6, Card5, TextInput3, View30, UserStore11;
-  var init_settings14 = __esm({
-    "src/plugins/fakeprofilecolors/settings.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_color();
-      init_SettingsTextInput();
-      init_toasts();
-      init_metro();
-      import_react23 = __toESM(require_react());
-      init_api4();
-      init_storage15();
-      ({ TableRow: TableRow3, TableSwitchRow: TableSwitchRow4, TableRowGroup: TableRowGroup6 } = findByProps("TableRow"));
-      ({ Card: Card5 } = findByProps("Card"));
-      ({ TextInput: TextInput3 } = findByProps("TextInput"));
-      ({ View: View30 } = findByProps("View"));
-      UserStore11 = findByStoreName("UserStore");
-    }
-  });
-
-  // src/plugins/fakeprofilecolors/index.ts
-  var fakeprofilecolors_exports = {};
-  __export(fakeprofilecolors_exports, {
-    default: () => fakeprofilecolors_default
-  });
-  function ensureRegistryColors(userId) {
-    if (resolvedColors.has(userId) || pendingFetches.has(userId)) return;
-    var state = useProfileColorStore.getState();
-    if (!state.showOtherColors || !state.registryUrl) return;
-    pendingFetches.add(userId);
-    fetchRegistryColors(userId).then((colors) => {
-      resolvedColors.set(userId, colors);
-      try {
-        var UserProfileStore = findByStoreName("UserProfileStore");
-        UserProfileStore?.emitChange?.();
-      } catch (unused) {
-      }
-    }).catch(() => {
-      resolvedColors.set(userId, null);
-    }).finally(() => {
-      pendingFetches.delete(userId);
-    });
-  }
-  function patchUseProfileTheme() {
-    var funcParent = findByName("useProfileTheme", false);
-    if (!funcParent) return;
-    after("default", funcParent, ([options], profileTheme) => {
-      var currentUser = UserStore?.getCurrentUser?.();
-      if (!currentUser) {
-        return profileTheme;
-      }
-      var userId = options?.userId || profileTheme?.userId || profileTheme?.id;
-      if (userId !== currentUser.id) {
-        return profileTheme;
-      }
-      var state = useProfileColorStore.getState();
-      if (state.enabled && (state.primary !== null || state.accent !== null)) {
-        if (state.primary !== null) {
-          profileTheme.primaryColor = state.primary;
-          profileTheme.secondaryColor = state.accent ?? state.primary;
-          profileTheme.theme = profileTheme.theme;
-        } else if (state.accent !== null) {
-          profileTheme.primaryColor = state.accent;
-          profileTheme.secondaryColor = state.accent;
-          profileTheme.theme = profileTheme.theme;
-        }
-      }
-      return profileTheme;
-    });
-  }
-  function patchGetUserProfile() {
-    var UserProfileStore = findByStoreName("UserProfileStore");
-    if (!UserProfileStore) return;
-    after("getUserProfile", UserProfileStore, (_args, profile) => {
-      if (!profile) {
-        return profile;
-      }
-      var currentUser = UserStore?.getCurrentUser?.();
-      if (!currentUser) {
-        return profile;
-      }
-      var state = useProfileColorStore.getState();
-      if (!state._hasHydrated) {
-        return profile;
-      }
-      var userId = profile.id;
-      if (!userId) {
-        userId = profile.userId || profile.user_id || profile?.user?.id;
-      }
-      if (!userId) {
-        return profile;
-      }
-      function safeHex(num) {
-        if (typeof num !== "number" || isNaN(num)) return null;
-        var hex = num.toString(16).padStart(6, "0");
-        if (!/^([0-9a-fA-F]{6})$/.test(hex)) return null;
-        return parseInt(hex, 16);
-      }
-      if (userId === currentUser.id) {
-        var primary = safeHex(state.primary);
-        var accent = safeHex(state.accent);
-        if (state.enabled && (primary !== null || accent !== null)) {
-          profile.themeColors = [
-            primary ?? accent,
-            accent ?? primary ?? accent
-          ];
-          profile.premiumType = 2;
-        } else {
-        }
-      } else {
-        if (state.showOtherColors) {
-          var regColors = resolvedColors.get(userId);
-          if (regColors) {
-            profile.themeColors = [
-              regColors.primary,
-              regColors.accent
-            ];
-            profile.premiumType = 2;
-            return profile;
-          }
-          ensureRegistryColors(userId);
-        }
-        if (state.bannerFallback && (!profile.premiumType || profile.premiumType === 0) && profile.bannerColor) {
-          var color2 = profile.bannerColor;
-          if (typeof color2 === "number") color2 = `#${color2.toString(16).padStart(6, "0")}`;
-          if (!/^#?[0-9a-fA-F]{6}$/.test(color2)) {
-            return profile;
-          }
-          profile.themeColors = [
-            color2,
-            color2
-          ];
-        } else {
-        }
-      }
-      return profile;
-    });
-  }
-  function patchUserProfileEditForm() {
-    var UserProfileEditForm = findByName("UserProfileEditForm", false);
-    if (!UserProfileEditForm) return;
-    after("default", UserProfileEditForm, (_args, tree) => {
-      function removeNitroCards(node) {
-        if (!node) return null;
-        if (node.type && node.type.name === "UserProfilePremiumUpsellCard") return null;
-        if (node.props?.children) {
-          var children = node.props.children;
-          if (!Array.isArray(children)) children = [
-            children
-          ];
-          var filteredChildren = children.map(removeNitroCards).filter((child) => child !== null);
-          node.props.children = filteredChildren.length === 1 ? filteredChildren[0] : filteredChildren;
-        }
-        return node;
-      }
-      return removeNitroCards(tree) || tree;
-    });
-  }
-  var resolvedColors, pendingFetches, fakeprofilecolors_default;
-  var init_fakeprofilecolors = __esm({
-    "src/plugins/fakeprofilecolors/index.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_patcher();
-      init_stores();
-      init_wrappers();
-      init_plugins3();
-      init_api4();
-      init_storage15();
-      init_Developers();
-      init_settings14();
-      resolvedColors = /* @__PURE__ */ new Map();
-      pendingFetches = /* @__PURE__ */ new Set();
-      fakeprofilecolors_default = definePlugin({
-        name: "FakeProfileColors",
-        description: "Set fake profile colors for yourself",
-        id: "fakeprofilecolors",
-        version: "1.0.0",
-        author: [
-          Developers.LampDelivery
-        ],
-        start() {
-          patchUseProfileTheme();
-          patchGetUserProfile();
-          patchUserProfileEditForm();
-        },
-        stop() {
-        },
-        settings: ProfileColorSettings
       });
     }
   });
@@ -21653,7 +22020,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/globalbadges/storage.ts
   var useCustomBadgesSettings, customBadgesSettings;
-  var init_storage16 = __esm({
+  var init_storage15 = __esm({
     "src/plugins/globalbadges/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -21666,18 +22033,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         mods: false,
         customs: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "globalbadges-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/globalbadges.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       customBadgesSettings = new Proxy({}, {
@@ -21703,7 +22070,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         url2.openURL("https://discord.gg/eTvYv95PCG");
       }
     };
-    return /* @__PURE__ */ jsx(import_react_native46.View, {
+    return /* @__PURE__ */ jsx(import_react_native49.View, {
       children: /* @__PURE__ */ jsx(Stack, {
         style: {
           paddingVertical: 24,
@@ -21747,8 +22114,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react24, import_react_native46;
-  var init_settings15 = __esm({
+  var import_react25, import_react_native49;
+  var init_settings14 = __esm({
     "src/plugins/globalbadges/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -21756,9 +22123,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_common();
       init_components();
-      import_react24 = __toESM(require_react());
-      import_react_native46 = __toESM(require_react_native());
-      init_storage16();
+      import_react25 = __toESM(require_react());
+      import_react_native49 = __toESM(require_react_native());
+      init_storage15();
     }
   });
 
@@ -21777,7 +22144,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       }
     })();
   }
-  var useBadgesModule2, customBadgesCache, pendingRequests2, badgeProps2, patches12, globalbadges_default;
+  var useBadgesModule2, customBadgesCache, pendingRequests2, badgeProps2, patches13, globalbadges_default;
   var init_globalbadges = __esm({
     "src/plugins/globalbadges/index.ts"() {
       "use strict";
@@ -21791,13 +22158,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       init_badgeGroups();
-      init_settings15();
-      init_storage16();
+      init_settings14();
+      init_storage15();
       useBadgesModule2 = findByNameLazy("useBadges", false);
       customBadgesCache = /* @__PURE__ */ new Map();
       pendingRequests2 = /* @__PURE__ */ new Set();
       badgeProps2 = /* @__PURE__ */ new Map();
-      patches12 = [];
+      patches13 = [];
       globalbadges_default = definePlugin({
         name: "GlobalBadges",
         description: "Display custom badges from various Discord mod clients",
@@ -21859,7 +22226,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               });
             });
           };
-          patches12.push(after("default", useBadgesModule2, ([user], result) => {
+          patches13.push(after("default", useBadgesModule2, ([user], result) => {
             if (!user) return;
             var { userId } = user;
             var cached = customBadgesCache.get(userId);
@@ -21918,10 +22285,10 @@ ${pendingInsertLink}` : pendingInsertLink;
           }));
         },
         stop() {
-          for (var unpatch6 of patches12) {
+          for (var unpatch6 of patches13) {
             if (typeof unpatch6 === "function") unpatch6();
           }
-          patches12 = [];
+          patches13 = [];
           badgeProps2.clear();
         },
         settings: CustomBadgesSettings
@@ -22060,7 +22427,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/hiddenchannels/storage.ts
   var useHiddenChannelsSettings, hiddenChannelsSettings;
-  var init_storage17 = __esm({
+  var init_storage16 = __esm({
     "src/plugins/hiddenchannels/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -22072,18 +22439,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         showIcon: true,
         showPopup: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "hiddenchannels-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hiddenchannels.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       hiddenChannelsSettings = new Proxy({}, {
@@ -22103,7 +22470,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   // src/plugins/hiddenchannels/settings.tsx
   function Settings4() {
     var settings4 = useHiddenChannelsSettings();
-    return /* @__PURE__ */ jsx(import_react_native47.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native50.ScrollView, {
       style: {
         flex: 1
       },
@@ -22137,16 +22504,16 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react_native47;
-  var init_settings16 = __esm({
+  var import_react_native50;
+  var init_settings15 = __esm({
     "src/plugins/hiddenchannels/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react_native47 = __toESM(require_react_native());
-      init_storage17();
+      import_react_native50 = __toESM(require_react_native());
+      init_storage16();
     }
   });
 
@@ -22178,8 +22545,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       init_AlertContent();
-      init_settings16();
-      init_storage17();
+      init_settings15();
+      init_storage16();
       Permissions = findByProps("getChannelPermissions", "can");
       ({ ChannelTypes } = findByProps("ChannelTypes"));
       ({ getChannel } = findByProps("getChannel") || findByName("getChannel", false));
@@ -22270,7 +22637,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/hideblockedandignoredmessages/storage.ts
   var useHideBlockedAndIgnoredMessagesSettings, hideblockedandignoredmessagesSettings;
-  var init_storage18 = __esm({
+  var init_storage17 = __esm({
     "src/plugins/hideblockedandignoredmessages/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -22283,18 +22650,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         ignored: true,
         removeReplies: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "hideblockedandignoredmessages-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hideblockedandignored.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       hideblockedandignoredmessagesSettings = new Proxy({}, {
@@ -22349,7 +22716,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_patcher();
       init_metro();
       init_common();
-      init_storage18();
+      init_storage17();
       RowManager3 = findByName("RowManager");
       ({ isBlocked, isIgnored } = findByProps("isBlocked", "isIgnored"));
       isFilteredUser = (id) => {
@@ -22370,7 +22737,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/hideblockedandignoredmessages/settings.tsx
   function Settings5() {
-    return /* @__PURE__ */ jsx(import_react_native48.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native51.ScrollView, {
       style: {
         flex: 1
       },
@@ -22380,7 +22747,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           paddingHorizontal: 12
         },
         spacing: 24,
-        children: /* @__PURE__ */ jsx(import_react_native48.View, {
+        children: /* @__PURE__ */ jsx(import_react_native51.View, {
           children: /* @__PURE__ */ jsxs(TableRowGroup, {
             title: "HideBlockedAndIgnoredMessages",
             children: [
@@ -22406,16 +22773,16 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react_native48;
-  var init_settings17 = __esm({
+  var import_react_native51;
+  var init_settings16 = __esm({
     "src/plugins/hideblockedandignoredmessages/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react_native48 = __toESM(require_react_native());
-      init_storage18();
+      import_react_native51 = __toESM(require_react_native());
+      init_storage17();
     }
   });
 
@@ -22424,7 +22791,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(hideblockedandignoredmessages_exports, {
     default: () => hideblockedandignoredmessages_default
   });
-  var patches13, hideblockedandignoredmessages_default;
+  var patches14, hideblockedandignoredmessages_default;
   var init_hideblockedandignoredmessages = __esm({
     "src/plugins/hideblockedandignoredmessages/index.ts"() {
       "use strict";
@@ -22433,8 +22800,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       init_hidemessages();
-      init_settings17();
-      patches13 = [];
+      init_settings16();
+      patches14 = [];
       hideblockedandignoredmessages_default = definePlugin({
         name: "HideBlockedAndIgnoredMessages",
         description: "A plugin that removes the `X blocked or ignored message/s` prompt and replies to the blocked or ignored messages from chat.",
@@ -22446,11 +22813,11 @@ ${pendingInsertLink}` : pendingInsertLink;
         id: "hideblockedandignoredmessages",
         version: "1.0.0",
         start() {
-          patches13.push(...getPatches6());
+          patches14.push(...getPatches6());
         },
         stop() {
-          for (var unpatch6 of patches13) unpatch6();
-          patches13.length = 0;
+          for (var unpatch6 of patches14) unpatch6();
+          patches14.length = 0;
         },
         settings: Settings5
       });
@@ -22476,14 +22843,6 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/lib/index.ts
-  var lib_exports = {};
-  __export(lib_exports, {
-    _jsx: () => jsxRuntime_exports,
-    api: () => api_exports,
-    metro: () => metro_exports,
-    unload: () => unload,
-    utils: () => utils_exports
-  });
   function unload() {
     for (var d of _disposer) if (typeof d === "function") d();
     delete globalThis.rain;
@@ -22509,7 +22868,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/hidecallbuttons/storage.ts
   var useHideCallButtonsSettings, hidecallbuttonsSettings;
-  var init_storage19 = __esm({
+  var init_storage18 = __esm({
     "src/plugins/hidecallbuttons/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -22524,18 +22883,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         dmHideVideoButton: true,
         hideVCVideoButton: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "hidecallbuttons-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/hidecallbuttons.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       hidecallbuttonsSettings = new Proxy({}, {
@@ -22553,8 +22912,8 @@ ${pendingInsertLink}` : pendingInsertLink;
   });
 
   // src/plugins/hidecallbuttons/settings.tsx
-  var TableRow4, TableSwitchRow5, TableRowGroup7, Stack7, settings_default6;
-  var init_settings18 = __esm({
+  var TableRow3, TableSwitchRow4, TableRowGroup6, Stack6, settings_default6;
+  var init_settings17 = __esm({
     "src/plugins/hidecallbuttons/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -22562,24 +22921,24 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_assets();
       init_metro();
-      init_storage19();
-      ({ TableRow: TableRow4, TableSwitchRow: TableSwitchRow5, TableRowGroup: TableRowGroup7 } = findByProps("TableRow"));
-      ({ Stack: Stack7 } = findByProps("Stack"));
+      init_storage18();
+      ({ TableRow: TableRow3, TableSwitchRow: TableSwitchRow4, TableRowGroup: TableRowGroup6 } = findByProps("TableRow"));
+      ({ Stack: Stack6 } = findByProps("Stack"));
       settings_default6 = (() => {
         var hidecallbuttonsSettings2 = useHideCallButtonsSettings();
-        return /* @__PURE__ */ jsxs(Stack7, {
+        return /* @__PURE__ */ jsxs(Stack6, {
           style: {
             paddingVertical: 24,
             paddingHorizontal: 12
           },
           spacing: 24,
           children: [
-            /* @__PURE__ */ jsxs(TableRowGroup7, {
+            /* @__PURE__ */ jsxs(TableRowGroup6, {
               title: "User Profile",
               children: [
-                /* @__PURE__ */ jsx(TableSwitchRow5, {
+                /* @__PURE__ */ jsx(TableSwitchRow4, {
                   label: "Hide call button",
-                  icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                     source: findAssetId2("PhoneCallIcon")
                   }),
                   onValueChange: (v2) => {
@@ -22589,9 +22948,9 @@ ${pendingInsertLink}` : pendingInsertLink;
                   },
                   value: hidecallbuttonsSettings2.upHideVoiceButton
                 }),
-                /* @__PURE__ */ jsx(TableSwitchRow5, {
+                /* @__PURE__ */ jsx(TableSwitchRow4, {
                   label: "Hide video button",
-                  icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                     source: findAssetId2("VideoIcon")
                   }),
                   onValueChange: (v2) => {
@@ -22603,13 +22962,13 @@ ${pendingInsertLink}` : pendingInsertLink;
                 })
               ]
             }),
-            /* @__PURE__ */ jsxs(TableRowGroup7, {
+            /* @__PURE__ */ jsxs(TableRowGroup6, {
               title: "DMs",
               titleStyleType: "no_border",
               children: [
-                /* @__PURE__ */ jsx(TableSwitchRow5, {
+                /* @__PURE__ */ jsx(TableSwitchRow4, {
                   label: "Hide call button",
-                  icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                     source: findAssetId2("PhoneCallIcon")
                   }),
                   onValueChange: (v2) => {
@@ -22619,9 +22978,9 @@ ${pendingInsertLink}` : pendingInsertLink;
                   },
                   value: hidecallbuttonsSettings2.dmHideCallButton
                 }),
-                /* @__PURE__ */ jsx(TableSwitchRow5, {
+                /* @__PURE__ */ jsx(TableSwitchRow4, {
                   label: "Hide video button",
-                  icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                     source: findAssetId2("VideoIcon")
                   }),
                   onValueChange: (v2) => {
@@ -22633,12 +22992,12 @@ ${pendingInsertLink}` : pendingInsertLink;
                 })
               ]
             }),
-            /* @__PURE__ */ jsx(TableRowGroup7, {
+            /* @__PURE__ */ jsx(TableRowGroup6, {
               title: "Other",
               titleStyleType: "no_border",
-              children: /* @__PURE__ */ jsx(TableSwitchRow5, {
+              children: /* @__PURE__ */ jsx(TableSwitchRow4, {
                 label: "Hide video button in VC",
-                icon: /* @__PURE__ */ jsx(TableRow4.Icon, {
+                icon: /* @__PURE__ */ jsx(TableRow3.Icon, {
                   source: findAssetId2("VideoIcon")
                 }),
                 onValueChange: (v2) => {
@@ -22660,7 +23019,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(hidecallbuttons_exports, {
     default: () => hidecallbuttons_default
   });
-  var patches14, find, hidecallbuttons_default;
+  var patches15, find, hidecallbuttons_default;
   var init_hidecallbuttons = __esm({
     "src/plugins/hidecallbuttons/index.ts"() {
       "use strict";
@@ -22675,9 +23034,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_metro();
       init_plugins3();
       init_Developers();
-      init_settings18();
-      init_storage19();
-      patches14 = [];
+      init_settings17();
+      init_storage18();
+      patches15 = [];
       find = (filter) => {
         return metro_exports.findExports(metro_exports.factories.createSimpleFilter(filter, cyrb64Hash(new Error().stack)));
       };
@@ -22706,7 +23065,7 @@ ${pendingInsertLink}` : pendingInsertLink;
             var PrivateChannelButtons = find((x2) => x2?.type?.name === "PrivateChannelButtons");
             var VideoButton = findByName("VideoButton", false);
             if (UserProfileActions !== void 0) {
-              patches14.push(after("default", UserProfileActions, (_2, component) => {
+              patches15.push(after("default", UserProfileActions, (_2, component) => {
                 if (!hidecallbuttonsSettings.upHideVideoButton && !hidecallbuttonsSettings.upHideVoiceButton) return;
                 var buttons = component?.props?.children?.props?.children[1]?.props?.children;
                 if (buttons === void 0) buttons = component?.props?.children[1]?.props?.children;
@@ -22729,17 +23088,17 @@ ${pendingInsertLink}` : pendingInsertLink;
                 }
               }));
             }
-            patches14.push(after("default", SimplifiedUserProfileContactButtons, (_2, component) => {
+            patches15.push(after("default", SimplifiedUserProfileContactButtons, (_2, component) => {
               var buttons = component?.props?.children;
               if (buttons === void 0) return;
               if (hidecallbuttonsSettings.upHideVoiceButton) delete buttons[1];
               if (hidecallbuttonsSettings.upHideVideoButton) delete buttons[2];
             }));
-            patches14.push(instead("default", VideoButton, (args, orig) => {
+            patches15.push(instead("default", VideoButton, (args, orig) => {
               if (hidecallbuttonsSettings.hideVCVideoButton) return;
               return orig.apply(this, args);
             }));
-            patches14.push(after("type", PrivateChannelButtons, (_2, component) => {
+            patches15.push(after("type", PrivateChannelButtons, (_2, component) => {
               if (!hidecallbuttonsSettings.dmHideCallButton && !hidecallbuttonsSettings.dmHideVideoButton) return;
               var buttons = component?.props?.children;
               if (buttons === void 0) return;
@@ -22758,7 +23117,7 @@ ${pendingInsertLink}` : pendingInsertLink;
           }).call(this);
         },
         stop() {
-          for (var unpatch6 of patches14) unpatch6();
+          for (var unpatch6 of patches15) unpatch6();
         },
         settings: settings_default6
       });
@@ -22767,7 +23126,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/letitrain/storage.ts
   var DEFAULT_SETTINGS2, useLetItRainSettings;
-  var init_storage20 = __esm({
+  var init_storage19 = __esm({
     "src/plugins/letitrain/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -22784,9 +23143,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       };
       useLetItRainSettings = create2()(persist((set) => ({
         settings: DEFAULT_SETTINGS2,
-        updateSetting: (key, value) => set((state) => ({
+        updateSetting: (key, value) => set((state2) => ({
           settings: {
-            ...state.settings,
+            ...state2.settings,
             [key]: value
           }
         }))
@@ -22800,9 +23159,9 @@ ${pendingInsertLink}` : pendingInsertLink;
   // src/plugins/letitrain/RainOverlay.tsx
   function RainOverlay() {
     var { settings: settings4 } = useLetItRainSettings();
-    var [rainDrops, setRainDrops] = (0, import_react25.useState)([]);
-    var animationRef = (0, import_react25.useRef)({});
-    (0, import_react25.useEffect)(() => {
+    var [rainDrops, setRainDrops] = (0, import_react26.useState)([]);
+    var animationRef = (0, import_react26.useRef)({});
+    (0, import_react26.useEffect)(() => {
       var _loop2 = function(i2) {
         var drop = createDrop(i2);
         newDrops.push(drop);
@@ -22811,8 +23170,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       };
       var createDrop = (id) => {
         var x2 = Math.random() * SCREEN_WIDTH;
-        var y2 = new import_react_native49.Animated.Value(-20);
-        var opacity = new import_react_native49.Animated.Value(0);
+        var y2 = new import_react_native52.Animated.Value(-20);
+        var opacity = new import_react_native52.Animated.Value(0);
         var speed = (2e3 + Math.random() * 1e3) / settings4.speed;
         return {
           id,
@@ -22826,19 +23185,19 @@ ${pendingInsertLink}` : pendingInsertLink;
         if (!animationRef.current[drop.id]) return;
         drop.y.setValue(-20);
         drop.opacity.setValue(0);
-        import_react_native49.Animated.parallel([
-          import_react_native49.Animated.timing(drop.y, {
+        import_react_native52.Animated.parallel([
+          import_react_native52.Animated.timing(drop.y, {
             toValue: SCREEN_HEIGHT + 20,
             duration: drop.speed,
             useNativeDriver: true
           }),
-          import_react_native49.Animated.sequence([
-            import_react_native49.Animated.timing(drop.opacity, {
+          import_react_native52.Animated.sequence([
+            import_react_native52.Animated.timing(drop.opacity, {
               toValue: settings4.transparency,
               duration: drop.speed * 0.2,
               useNativeDriver: true
             }),
-            import_react_native49.Animated.timing(drop.opacity, {
+            import_react_native52.Animated.timing(drop.opacity, {
               toValue: 0,
               duration: drop.speed * 0.8,
               useNativeDriver: true
@@ -22861,10 +23220,10 @@ ${pendingInsertLink}` : pendingInsertLink;
       settings4.speed,
       settings4.transparency
     ]);
-    return /* @__PURE__ */ jsx(import_react_native49.View, {
+    return /* @__PURE__ */ jsx(import_react_native52.View, {
       style: styles2.container,
       pointerEvents: "none",
-      children: rainDrops.map((drop) => /* @__PURE__ */ jsx(import_react_native49.Animated.View, {
+      children: rainDrops.map((drop) => /* @__PURE__ */ jsx(import_react_native52.Animated.View, {
         style: [
           styles2.rainDrop,
           {
@@ -22883,18 +23242,18 @@ ${pendingInsertLink}` : pendingInsertLink;
       }, drop.id))
     });
   }
-  var import_react25, import_react_native49, SCREEN_WIDTH, SCREEN_HEIGHT, styles2;
+  var import_react26, import_react_native52, SCREEN_WIDTH, SCREEN_HEIGHT, styles2;
   var init_RainOverlay = __esm({
     "src/plugins/letitrain/RainOverlay.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
-      import_react25 = __toESM(require_react());
-      import_react_native49 = __toESM(require_react_native());
-      init_storage20();
-      ({ width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = import_react_native49.Dimensions.get("window"));
-      styles2 = import_react_native49.StyleSheet.create({
+      import_react26 = __toESM(require_react());
+      import_react_native52 = __toESM(require_react_native());
+      init_storage19();
+      ({ width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = import_react_native52.Dimensions.get("window"));
+      styles2 = import_react_native52.StyleSheet.create({
         container: {
           position: "absolute",
           top: 0,
@@ -22915,7 +23274,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   // src/plugins/letitrain/settings.tsx
   function LetItRainSettings() {
     var { settings: settings4, updateSetting } = useLetItRainSettings();
-    return /* @__PURE__ */ jsx(import_react_native50.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native53.ScrollView, {
       style: {
         flex: 1
       },
@@ -22925,9 +23284,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       children: /* @__PURE__ */ jsxs(Stack, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup8, {
+          /* @__PURE__ */ jsx(TableRowGroup7, {
             title: "Rain Amount",
-            children: /* @__PURE__ */ jsx(TextInput4, {
+            children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "50",
               value: String(settings4.amount),
               onChange: (v2) => updateSetting("amount", parseInt(v2) || 0),
@@ -22935,9 +23294,9 @@ ${pendingInsertLink}` : pendingInsertLink;
               isClearable: true
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup8, {
+          /* @__PURE__ */ jsx(TableRowGroup7, {
             title: "Raindrop Size",
-            children: /* @__PURE__ */ jsx(TextInput4, {
+            children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "1",
               value: String(settings4.size),
               onChange: (v2) => updateSetting("size", parseFloat(v2) || 1),
@@ -22945,9 +23304,9 @@ ${pendingInsertLink}` : pendingInsertLink;
               isClearable: true
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup8, {
+          /* @__PURE__ */ jsx(TableRowGroup7, {
             title: "Transparency",
-            children: /* @__PURE__ */ jsx(TextInput4, {
+            children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "0.8",
               value: String(settings4.transparency),
               onChange: (v2) => updateSetting("transparency", parseFloat(v2) || 0.8),
@@ -22955,9 +23314,9 @@ ${pendingInsertLink}` : pendingInsertLink;
               isClearable: true
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup8, {
+          /* @__PURE__ */ jsx(TableRowGroup7, {
             title: "Speed Multiplier",
-            children: /* @__PURE__ */ jsx(TextInput4, {
+            children: /* @__PURE__ */ jsx(TextInput3, {
               placeholder: "1",
               value: String(settings4.speed),
               onChange: (v2) => updateSetting("speed", parseFloat(v2) || 1),
@@ -22969,8 +23328,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react_native50, TextInput4, TableRowGroup8;
-  var init_settings19 = __esm({
+  var import_react_native53, TextInput3, TableRowGroup7;
+  var init_settings18 = __esm({
     "src/plugins/letitrain/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -22978,9 +23337,9 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_jsxRuntime();
       init_metro();
       init_components();
-      import_react_native50 = __toESM(require_react_native());
-      init_storage20();
-      ({ TextInput: TextInput4, TableRowGroup: TableRowGroup8 } = findByProps("TextInput"));
+      import_react_native53 = __toESM(require_react_native());
+      init_storage19();
+      ({ TextInput: TextInput3, TableRowGroup: TableRowGroup7 } = findByProps("TextInput"));
     }
   });
 
@@ -22989,7 +23348,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   __export(letitrain_exports, {
     default: () => letitrain_default
   });
-  var patches15, letitrain_default;
+  var patches16, letitrain_default;
   var init_letitrain = __esm({
     "src/plugins/letitrain/index.tsx"() {
       "use strict";
@@ -23000,8 +23359,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_plugins3();
       init_Developers();
       init_RainOverlay();
-      init_settings19();
-      patches15 = [];
+      init_settings18();
+      patches16 = [];
       letitrain_default = definePlugin({
         name: "LetItRain",
         description: "rain tomorrow btw",
@@ -23025,11 +23384,11 @@ ${pendingInsertLink}` : pendingInsertLink;
           };
           onJsxCreate("App", injectRain);
           onJsxCreate("SafeAreaProvider", injectRain);
-          patches15.push(() => {
+          patches16.push(() => {
           });
         },
         stop() {
-          for (var unpatch6 of patches15) unpatch6();
+          for (var unpatch6 of patches16) unpatch6();
         },
         settings: LetItRainSettings
       });
@@ -23038,7 +23397,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/messagelogger/storage.ts
   var useMessageLoggerSettings;
-  var init_storage21 = __esm({
+  var init_storage20 = __esm({
     "src/plugins/messagelogger/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23062,18 +23421,18 @@ ${pendingInsertLink}` : pendingInsertLink;
         },
         databaseLogging: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "messagelogger-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/messagelogger.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
     }
@@ -23082,7 +23441,7 @@ ${pendingInsertLink}` : pendingInsertLink;
   // src/plugins/messagelogger/settings.tsx
   function MessageLoggerSettings() {
     var settings4 = useMessageLoggerSettings();
-    return /* @__PURE__ */ jsx(import_react_native51.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native54.ScrollView, {
       style: {
         flex: 1
       },
@@ -23206,17 +23565,17 @@ ${pendingInsertLink}` : pendingInsertLink;
       })
     });
   }
-  var import_react26, import_react_native51;
-  var init_settings20 = __esm({
+  var import_react27, import_react_native54;
+  var init_settings19 = __esm({
     "src/plugins/messagelogger/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react26 = __toESM(require_react());
-      import_react_native51 = __toESM(require_react_native());
-      init_storage21();
+      import_react27 = __toESM(require_react());
+      import_react_native54 = __toESM(require_react_native());
+      init_storage20();
     }
   });
 
@@ -23426,14 +23785,14 @@ ${separator2}
           if (storage3.edited?.enabled && typeof msg.content === "string" && msg.content.includes(EDIT_HISTORY_SEPARATOR)) {
             var separator2 = new RegExp(EDIT_HISTORY_SEPARATOR, "gmi");
             if (separator2.test(msg.content) && data4.buttons) {
-              var React26 = require_react();
+              var React24 = require_react();
               var ActionSheet3 = findByName("ActionSheet");
               var FormRow4 = findByName("FormRow");
               var getAssetIDByName = findByProps("getAssetIDByName")?.getAssetIDByName;
               var FluxDispatcher2 = findByProps("dispatch", "_subscriptions");
-              data4.buttons.push(React26.createElement(FormRow4, {
+              data4.buttons.push(React24.createElement(FormRow4, {
                 label: "Remove Edit History",
-                leading: React26.createElement("img", {
+                leading: React24.createElement("img", {
                   style: {
                     opacity: 1
                   },
@@ -23500,7 +23859,7 @@ ${separator2}
       };
     }
   }
-  var patches16, selfDeletedMessages, MessageStore, UserStore12, deleteable, dbStorage, messagelogger_default;
+  var patches17, selfDeletedMessages, MessageStore, UserStore12, deleteable, dbStorage, messagelogger_default;
   var init_messagelogger = __esm({
     "src/plugins/messagelogger/index.ts"() {
       "use strict";
@@ -23513,9 +23872,9 @@ ${separator2}
       init_metro();
       init_plugins3();
       init_Developers();
-      init_settings20();
-      init_storage21();
-      patches16 = [];
+      init_settings19();
+      init_storage20();
+      patches17 = [];
       selfDeletedMessages = /* @__PURE__ */ new Set();
       deleteable = [];
       dbStorage = createFileStorage("public/message_logs.json");
@@ -23530,20 +23889,20 @@ ${separator2}
         version: "2.0.0",
         settings: MessageLoggerSettings,
         start() {
-          patches16.push(patchDeleteAction());
-          patches16.push(patchMessageDeleteHandler());
-          patches16.push(patchMessageEditHandler());
-          patches16.push(patchRowManager());
+          patches17.push(patchDeleteAction());
+          patches17.push(patchMessageDeleteHandler());
+          patches17.push(patchMessageEditHandler());
+          patches17.push(patchRowManager());
         },
         stop() {
-          for (var unpatch6 of patches16) {
+          for (var unpatch6 of patches17) {
             try {
               unpatch6();
             } catch (e) {
               console.error("[MessageLogger] Error unpatching:", e);
             }
           }
-          patches16 = [];
+          patches17 = [];
           selfDeletedMessages.clear();
           deleteable.length = 0;
         }
@@ -23559,8 +23918,8 @@ ${separator2}
           resolve();
           return;
         }
-        var unsubscribe2 = useMoreCommandsSettings.subscribe((state) => {
-          if (state._hasHydrated) {
+        var unsubscribe2 = useMoreCommandsSettings.subscribe((state2) => {
+          if (state2._hasHydrated) {
             unsubscribe2();
             resolve();
           }
@@ -23573,7 +23932,7 @@ ${separator2}
     })();
   }
   var createFileStorage2, useMoreCommandsSettings, storage;
-  var init_storage22 = __esm({
+  var init_storage21 = __esm({
     "src/plugins/morecommands/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -23652,41 +24011,41 @@ ${separator2}
         sortdefs: true,
         nsfwwarn: true,
         _hasHydrated: false,
-        updateFactSettings: (newSettings) => set((state) => ({
+        updateFactSettings: (newSettings) => set((state2) => ({
           factSettings: {
-            ...state.factSettings,
+            ...state2.factSettings,
             ...newSettings
           }
         })),
-        updateGarySettings: (newSettings) => set((state) => ({
+        updateGarySettings: (newSettings) => set((state2) => ({
           garySettings: {
-            ...state.garySettings,
+            ...state2.garySettings,
             ...newSettings
           }
         })),
-        updateEnabledCommands: (newCommands) => set((state) => ({
+        updateEnabledCommands: (newCommands) => set((state2) => ({
           enabledCommands: {
-            ...state.enabledCommands,
+            ...state2.enabledCommands,
             ...newCommands
           }
         })),
-        updateHiddenSettings: (newSettings) => set((state) => ({
+        updateHiddenSettings: (newSettings) => set((state2) => ({
           hiddenSettings: {
-            ...state.hiddenSettings,
+            ...state2.hiddenSettings,
             ...newSettings
           }
         })),
         setPendingRestart: (pending) => set({
           pendingRestart: pending
         }),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "morecommands-settings",
         storage: createJSONStorage(() => createFileStorage2("plugins/morecommands.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       storage = new Proxy({}, {
@@ -23694,15 +24053,15 @@ ${separator2}
           return useMoreCommandsSettings.getState()[prop];
         },
         set(target, prop, value) {
-          var state = useMoreCommandsSettings.getState();
+          var state2 = useMoreCommandsSettings.getState();
           if (prop === "factSettings") {
-            state.updateFactSettings(value);
+            state2.updateFactSettings(value);
           } else if (prop === "garySettings") {
-            state.updateGarySettings(value);
+            state2.updateGarySettings(value);
           } else if (prop === "enabledCommands") {
-            state.updateEnabledCommands(value);
+            state2.updateEnabledCommands(value);
           } else if (prop === "hiddenSettings") {
-            state.updateHiddenSettings(value);
+            state2.updateHiddenSettings(value);
           }
           return true;
         }
@@ -23720,7 +24079,7 @@ ${separator2}
     var currentUser = users?.getCurrentUser?.();
     var { getUserAvatarURL } = findByProps("getUserAvatarURL") || {};
     var { getDefaultAvatarURL } = findByProps("getDefaultAvatarURL") || {};
-    var styles5 = import_react_native52.StyleSheet.create({
+    var styles5 = import_react_native55.StyleSheet.create({
       container: {
         flexDirection: "column",
         alignItems: "center",
@@ -23874,7 +24233,7 @@ ${separator2}
       ]
     });
   }
-  var import_react_native52;
+  var import_react_native55;
   var init_Header = __esm({
     "src/plugins/morecommands/settings/components/Header.tsx"() {
       "use strict";
@@ -23886,8 +24245,8 @@ ${separator2}
       init_toasts();
       init_metro();
       init_common();
-      import_react_native52 = __toESM(require_react_native());
-      init_storage22();
+      import_react_native55 = __toESM(require_react_native());
+      init_storage21();
       init_Text();
     }
   });
@@ -23960,7 +24319,7 @@ ${separator2}
         value: "woof"
       }
     ].sort((a, b3) => a.name.localeCompare(b3.name));
-    return /* @__PURE__ */ jsx(import_react_native53.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native56.ScrollView, {
       style: {
         flex: 1
       },
@@ -23999,7 +24358,7 @@ ${separator2}
       })
     });
   }
-  var import_react_native53;
+  var import_react_native56;
   var init_NekosLifeCategoriesPage = __esm({
     "src/plugins/morecommands/settings/pages/NekosLifeCategoriesPage.tsx"() {
       "use strict";
@@ -24010,7 +24369,7 @@ ${separator2}
       init_toasts();
       init_common();
       init_components();
-      import_react_native53 = __toESM(require_react_native());
+      import_react_native56 = __toESM(require_react_native());
       init_Text();
     }
   });
@@ -24093,7 +24452,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
       init_NekosLifeCategoriesPage();
     }
   });
@@ -24165,7 +24524,7 @@ ${separator2}
     var handleProfilePress = (githubUrl) => {
       ReactNative.Linking.openURL(githubUrl);
     };
-    return /* @__PURE__ */ jsx(import_react_native54.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native57.ScrollView, {
       style: {
         flex: 1
       },
@@ -24210,7 +24569,7 @@ ${separator2}
       })
     });
   }
-  var import_react_native54;
+  var import_react_native57;
   var init_CreditsPage = __esm({
     "src/plugins/morecommands/settings/pages/CreditsPage.tsx"() {
       "use strict";
@@ -24219,7 +24578,7 @@ ${separator2}
       init_jsxRuntime();
       init_common();
       init_components();
-      import_react_native54 = __toESM(require_react_native());
+      import_react_native57 = __toESM(require_react_native());
       init_Text();
     }
   });
@@ -24331,7 +24690,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
     }
   });
 
@@ -24421,7 +24780,7 @@ ${separator2}
       init_assets();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
       init_Text();
     }
   });
@@ -24554,7 +24913,7 @@ ${separator2}
       init_alerts();
       init_toasts();
       init_components();
-      init_storage22();
+      init_storage21();
       init_Text();
     }
   });
@@ -24638,7 +24997,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
     }
   });
 
@@ -24752,7 +25111,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
     }
   });
 
@@ -24852,7 +25211,7 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      init_storage22();
+      init_storage21();
       init_Text();
     }
   });
@@ -24885,7 +25244,7 @@ ${separator2}
           return "Gary API";
       }
     };
-    return /* @__PURE__ */ jsx(import_react_native55.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native58.ScrollView, {
       style: {
         flex: 1,
         backgroundColor: semanticColors.BACKGROUND_PRIMARY
@@ -25011,8 +25370,8 @@ ${separator2}
       })
     });
   }
-  var import_react_native55;
-  var init_settings21 = __esm({
+  var import_react_native58;
+  var init_settings20 = __esm({
     "src/plugins/morecommands/settings/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -25022,8 +25381,8 @@ ${separator2}
       init_color();
       init_common();
       init_components();
-      import_react_native55 = __toESM(require_react_native());
-      init_storage22();
+      import_react_native58 = __toESM(require_react_native());
+      init_storage21();
       init_Header();
       init_AliucordPage();
       init_CreditsPage();
@@ -25038,7 +25397,7 @@ ${separator2}
 
   // src/plugins/morecommands/src/utils/api.ts
   var uselessFact, dogFact, catFact, getPetPetData, getGaryUrl;
-  var init_api5 = __esm({
+  var init_api4 = __esm({
     "src/plugins/morecommands/src/utils/api.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -25114,8 +25473,8 @@ ${separator2}
       init_async_to_generator();
       init_toasts();
       init_metro();
-      init_storage22();
-      init_api5();
+      init_storage21();
+      init_api4();
       MessageActions = findByProps("sendMessage");
       formatFactResponse = (fact) => {
         var response = fact.text;
@@ -25444,8 +25803,8 @@ ${friendInviteList.join("\n")}`);
       init_promiseAllSettled();
       init_async_to_generator();
       init_metro();
-      init_storage22();
-      init_api5();
+      init_storage21();
+      init_api4();
       MessageActions3 = findByProps("sendMessage");
       garyCommand = {
         name: "gary",
@@ -25632,7 +25991,7 @@ ${formattedData}
       init_async_to_generator();
       init_alerts();
       init_metro();
-      init_storage22();
+      init_storage21();
       MessageActions5 = findByProps("sendMessage");
       messageUtil3 = findByProps("sendBotMessage", "sendMessage", "receiveMessage");
       fetchImage = (isNSFW) => _async_to_generator(function* () {
@@ -25780,7 +26139,7 @@ ${formattedData}
       init_async_to_generator();
       init_alerts();
       init_metro();
-      init_storage22();
+      init_storage21();
       MessageActions6 = findByProps("sendMessage", "receiveMessage");
       Channels = findByProps("getLastSelectedChannelId");
       BotMessage = findByProps("createBotMessage");
@@ -26109,7 +26468,7 @@ ${formattedData}
       init_promiseAllSettled();
       init_async_to_generator();
       init_metro();
-      init_api5();
+      init_api4();
       UserStore13 = findByStoreName("UserStore");
       MessageActions8 = findByProps("sendMessage");
       petPetCommand = {
@@ -26212,7 +26571,7 @@ ${formattedData}
       init_promiseAllSettled();
       init_async_to_generator();
       init_metro();
-      init_storage22();
+      init_storage21();
       MessageActions9 = findByProps("sendMessage", "receiveMessage");
       SpotifyStore = findByStoreName("SpotifyStore");
       spotifyTrackCommand = {
@@ -26420,7 +26779,7 @@ ${formattedData}
       init_debug();
       init_metro();
       init_common();
-      init_storage22();
+      init_storage21();
       MessageActions10 = findByProps("sendMessage");
       messageUtil5 = findByProps("sendBotMessage", "sendMessage", "receiveMessage");
       categories = [
@@ -26481,7 +26840,7 @@ ${formattedData}
       init_commands();
       init_plugins3();
       init_Developers();
-      init_settings21();
+      init_settings20();
       init_facts();
       init_firstmessage();
       init_friendinvites();
@@ -26493,7 +26852,7 @@ ${formattedData}
       init_petpet();
       init_spotify();
       init_sysinfo();
-      init_storage22();
+      init_storage21();
       commandMap = {
         catfact: catFactCommand,
         dogfact: dogFactCommand,
@@ -26558,7 +26917,7 @@ ${formattedData}
   __export(moreconfirm_exports, {
     default: () => moreconfirm_default
   });
-  var dialog, relationshipManager, callManager, actionSheetManager, UserStore14, patches17, moreconfirm_default;
+  var dialog, relationshipManager, callManager, actionSheetManager, UserStore14, patches18, moreconfirm_default;
   var init_moreconfirm = __esm({
     "src/plugins/moreconfirm/index.ts"() {
       "use strict";
@@ -26574,7 +26933,7 @@ ${formattedData}
       callManager = findByProps("handleStartCall");
       actionSheetManager = findByProps("hideActionSheet");
       UserStore14 = findByStoreName("UserStore");
-      patches17 = [];
+      patches18 = [];
       moreconfirm_default = definePlugin({
         name: "MoreConfirm",
         description: "Prompts confirmations before making irreversible actions.",
@@ -26585,7 +26944,7 @@ ${formattedData}
         id: "moreconfirm",
         version: "1.0.0",
         start() {
-          patches17.push(patcher_default.instead("handleStartCall", callManager, (args, orig) => {
+          patches18.push(patcher_default.instead("handleStartCall", callManager, (args, orig) => {
             var [{ rawRecipients: [{ username, discriminator }, multiple] }, isVideo] = args;
             var action = isVideo ? "video call" : "call";
             dialog.show({
@@ -26603,7 +26962,7 @@ ${formattedData}
               }
             });
           }));
-          patches17.push(patcher_default.instead("addRelationship", relationshipManager, (args, orig) => {
+          patches18.push(patcher_default.instead("addRelationship", relationshipManager, (args, orig) => {
             if (typeof args[0] !== "object" || !args[0].userId) return orig.apply(this, args);
             var { username, discriminator } = UserStore14.getUser(args[0].userId);
             var hideASInterval = setInterval(() => actionSheetManager.hideActionSheet(), 100);
@@ -26631,7 +26990,7 @@ ${formattedData}
           }));
         },
         stop() {
-          for (var unpatch6 of patches17) unpatch6();
+          for (var unpatch6 of patches18) unpatch6();
         }
       });
     }
@@ -26639,7 +26998,7 @@ ${formattedData}
 
   // src/plugins/moyai/storage.ts
   var useMoyaiSettings, moyaiSettings;
-  var init_storage23 = __esm({
+  var init_storage22 = __esm({
     "src/plugins/moyai/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -26649,8 +27008,8 @@ ${formattedData}
       init_middleware();
       useMoyaiSettings = create2()(persist((set) => ({
         allowReactions: true,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         }))
       }), {
@@ -26674,19 +27033,19 @@ ${formattedData}
   // src/plugins/moyai/settings.tsx
   function MoyaiSettings() {
     var settings4 = useMoyaiSettings();
-    return /* @__PURE__ */ jsx(import_react_native56.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native59.ScrollView, {
       style: {
         flex: 1
       },
-      children: /* @__PURE__ */ jsx(Stack8, {
+      children: /* @__PURE__ */ jsx(Stack7, {
         style: {
           paddingVertical: 24,
           paddingHorizontal: 12
         },
         spacing: 24,
-        children: /* @__PURE__ */ jsx(TableRowGroup9, {
+        children: /* @__PURE__ */ jsx(TableRowGroup8, {
           title: "Behavior",
-          children: /* @__PURE__ */ jsx(TableSwitchRow6, {
+          children: /* @__PURE__ */ jsx(TableSwitchRow5, {
             label: "Play on reactions",
             onValueChange: (value) => {
               settings4.updateSettings({
@@ -26699,18 +27058,18 @@ ${formattedData}
       })
     });
   }
-  var import_react_native56, TableSwitchRow6, TableRowGroup9, Stack8;
-  var init_settings22 = __esm({
+  var import_react_native59, TableSwitchRow5, TableRowGroup8, Stack7;
+  var init_settings21 = __esm({
     "src/plugins/moyai/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_metro();
-      import_react_native56 = __toESM(require_react_native());
-      init_storage23();
-      ({ TableSwitchRow: TableSwitchRow6, TableRowGroup: TableRowGroup9 } = findByProps("TableRow"));
-      ({ Stack: Stack8 } = findByProps("Stack"));
+      import_react_native59 = __toESM(require_react_native());
+      init_storage22();
+      ({ TableSwitchRow: TableSwitchRow5, TableRowGroup: TableRowGroup8 } = findByProps("TableRow"));
+      ({ Stack: Stack7 } = findByProps("Stack"));
     }
   });
 
@@ -26763,8 +27122,8 @@ ${formattedData}
       init_common();
       init_plugins3();
       init_Developers();
-      init_settings22();
-      init_storage23();
+      init_settings21();
+      init_storage22();
       ({ DCDSoundManager } = ReactNative.NativeModules);
       SelectedChannelStore3 = findByStoreName("SelectedChannelStore");
       THUD_URL = "https://raw.githubusercontent.com/Metastruct/garrysmod-chatsounds/master/sound/chatsounds/autoadd/memes/overused%20thud.ogg";
@@ -26804,7 +27163,7 @@ ${formattedData}
 
   // src/plugins/multiscrobbler/storage.ts
   var DEFAULT_SETTINGS3, useMultiScrobblerSettings, multiScrobblerSettings, currentSettings, pluginState, debugInfo;
-  var init_storage24 = __esm({
+  var init_storage23 = __esm({
     "src/plugins/multiscrobbler/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -26835,18 +27194,18 @@ ${formattedData}
       useMultiScrobblerSettings = create2()(persist((set) => ({
         ...DEFAULT_SETTINGS3,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "multiscrobbler-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/multiscrobbler.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       multiScrobblerSettings = new Proxy({}, {
@@ -26899,13 +27258,13 @@ ${formattedData}
   });
 
   // src/plugins/multiscrobbler/constants.ts
-  var Constants, constants_default;
-  var init_constants3 = __esm({
+  var Constants, constants_default2;
+  var init_constants4 = __esm({
     "src/plugins/multiscrobbler/constants.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
-      init_storage24();
+      init_storage23();
       Constants = {
         DEFAULT_APP_NAME: "Music",
         DEFAULT_TIME_INTERVAL: 5,
@@ -26960,7 +27319,7 @@ ${formattedData}
           29: "Rate limit exceeded"
         }
       };
-      constants_default = Constants;
+      constants_default2 = Constants;
     }
   });
 
@@ -27014,15 +27373,15 @@ ${formattedData}
     log("Successful update recorded at:", debugInfo.lastSuccessfulUpdate);
     __forceUpdate?.();
   }
-  var import_react27, __forceUpdate, log, logError;
+  var import_react28, __forceUpdate, log, logError;
   var init_debug3 = __esm({
     "src/plugins/multiscrobbler/utils/debug.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_logger();
-      import_react27 = __toESM(require_react());
-      init_storage24();
+      import_react28 = __toESM(require_react());
+      init_storage23();
       log = (...args) => logger.verbose("[Scrobbler Debug]", ...args);
       logError = (...args) => logger.error("[Scrobbler Debug] Error:", ...args);
     }
@@ -27040,8 +27399,8 @@ ${formattedData}
       init_create_class();
       init_define_property();
       init_logger();
-      init_constants3();
-      init_storage24();
+      init_constants4();
+      init_storage23();
       init_debug3();
       BaseService = /* @__PURE__ */ (function() {
         "use strict";
@@ -27084,8 +27443,8 @@ ${formattedData}
           {
             key: "getErrorMessage",
             value: function getErrorMessage(error) {
-              if (error.error && constants_default.API_ERROR_CODES[error.error]) {
-                return constants_default.API_ERROR_CODES[error.error];
+              if (error.error && constants_default2.API_ERROR_CODES[error.error]) {
+                return constants_default2.API_ERROR_CODES[error.error];
               }
               return error.message || error.toString() || "Unknown error";
             }
@@ -27117,13 +27476,13 @@ ${formattedData}
                   return data4;
                 }).catch((error) => {
                   this.retryCount++;
-                  if (this.retryCount > constants_default.MAX_RETRY_ATTEMPTS) {
+                  if (this.retryCount > constants_default2.MAX_RETRY_ATTEMPTS) {
                     this.retryCount = 0;
                     recordServiceError(this.getServiceName().toLowerCase(), `Max retries exceeded: ${error.message}`);
                     this.handleError(error);
                   } else {
-                    this.logVerbose(`Request failed, retrying (${this.retryCount}/${constants_default.MAX_RETRY_ATTEMPTS})`);
-                    return new Promise((resolve) => setTimeout(resolve, constants_default.RETRY_DELAY)).then(() => this.makeRequest(url2, options));
+                    this.logVerbose(`Request failed, retrying (${this.retryCount}/${constants_default2.MAX_RETRY_ATTEMPTS})`);
+                    return new Promise((resolve) => setTimeout(resolve, constants_default2.RETRY_DELAY)).then(() => this.makeRequest(url2, options));
                   }
                 });
               }).apply(this, arguments);
@@ -27133,7 +27492,7 @@ ${formattedData}
             key: "isDefaultCover",
             value: function isDefaultCover(cover) {
               if (!cover) return true;
-              return constants_default.DEFAULT_COVER_HASHES.some((hash) => cover.includes(hash));
+              return constants_default2.DEFAULT_COVER_HASHES.some((hash) => cover.includes(hash));
             }
           },
           {
@@ -27176,8 +27535,8 @@ ${formattedData}
       init_create_class();
       init_inherits();
       init_logger();
-      init_constants3();
-      init_storage24();
+      init_constants4();
+      init_storage23();
       init_BaseService();
       LastFmService = /* @__PURE__ */ (function(BaseService2) {
         "use strict";
@@ -27215,7 +27574,7 @@ ${formattedData}
                     api_key: currentSettings.apiKey,
                     format: "json"
                   });
-                  var url2 = `${constants_default.SERVICES.lastfm.baseUrl}?${params}`;
+                  var url2 = `${constants_default2.SERVICES.lastfm.baseUrl}?${params}`;
                   this.makeRequest(url2);
                   this.log("Credentials validation successful");
                   return true;
@@ -27242,7 +27601,7 @@ ${formattedData}
                   extended: "1",
                   format: "json"
                 });
-                var url2 = `${constants_default.SERVICES.lastfm.baseUrl}?${params}`;
+                var url2 = `${constants_default2.SERVICES.lastfm.baseUrl}?${params}`;
                 return this.makeRequest(url2).then((data4) => {
                   var lastTrack = data4?.recenttracks?.track?.[0];
                   if (!lastTrack) {
@@ -27261,7 +27620,7 @@ ${formattedData}
                       api_key: currentSettings.apiKey,
                       format: "json"
                     });
-                    var trackInfoUrl = `${constants_default.SERVICES.lastfm.baseUrl}?${trackInfoParams}`;
+                    var trackInfoUrl = `${constants_default2.SERVICES.lastfm.baseUrl}?${trackInfoParams}`;
                     return this.makeRequest(trackInfoUrl).then((trackInfo) => {
                       if (trackInfo?.track?.duration) {
                         duration = parseInt(trackInfo.track.duration);
@@ -27324,8 +27683,8 @@ ${formattedData}
       init_create_class();
       init_inherits();
       init_logger();
-      init_constants3();
-      init_storage24();
+      init_constants4();
+      init_storage23();
       init_BaseService();
       LibreFmService = /* @__PURE__ */ (function(BaseService2) {
         "use strict";
@@ -27365,7 +27724,7 @@ ${formattedData}
                     api_key: apiKey,
                     format: "json"
                   });
-                  var url2 = `${constants_default.SERVICES.librefm.baseUrl}?${params}`;
+                  var url2 = `${constants_default2.SERVICES.librefm.baseUrl}?${params}`;
                   this.makeRequest(url2);
                   this.log("Credentials validation successful");
                   return true;
@@ -27394,7 +27753,7 @@ ${formattedData}
                   extended: "1",
                   format: "json"
                 });
-                var url2 = `${constants_default.SERVICES.librefm.baseUrl}?${params}`;
+                var url2 = `${constants_default2.SERVICES.librefm.baseUrl}?${params}`;
                 return this.makeRequest(url2).then((data4) => {
                   var lastTrack = data4?.recenttracks?.track?.[0];
                   if (!lastTrack) {
@@ -27413,7 +27772,7 @@ ${formattedData}
                       api_key: apiKey,
                       format: "json"
                     });
-                    var trackInfoUrl = `${constants_default.SERVICES.librefm.baseUrl}?${trackInfoParams}`;
+                    var trackInfoUrl = `${constants_default2.SERVICES.librefm.baseUrl}?${trackInfoParams}`;
                     return this.makeRequest(trackInfoUrl).then((trackInfo) => {
                       if (trackInfo?.track?.duration) {
                         duration = parseInt(trackInfo.track.duration);
@@ -27476,8 +27835,8 @@ ${formattedData}
       init_create_class();
       init_inherits();
       init_logger();
-      init_constants3();
-      init_storage24();
+      init_constants4();
+      init_storage23();
       init_BaseService();
       ListenBrainzService = /* @__PURE__ */ (function(BaseService2) {
         "use strict";
@@ -27511,7 +27870,7 @@ ${formattedData}
                   if (!username) {
                     throw new Error("Username not set for ListenBrainz");
                   }
-                  var url2 = `${constants_default.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/listens?count=1`;
+                  var url2 = `${constants_default2.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/listens?count=1`;
                   var headers = {};
                   if (token) {
                     headers.Authorization = `Token ${token}`;
@@ -27548,7 +27907,7 @@ ${formattedData}
                     return void 0;
                   };
                   try {
-                    var playingNowUrl = `${constants_default.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/playing-now`;
+                    var playingNowUrl = `${constants_default2.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/playing-now`;
                     var headers = {};
                     if (token) {
                       headers.Authorization = `Token ${token}`;
@@ -27569,7 +27928,7 @@ ${formattedData}
                     latestListen = currentlyPlaying;
                     this.logVerbose("Using currently playing track");
                   } else {
-                    var url2 = `${constants_default.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/listens?count=1`;
+                    var url2 = `${constants_default2.SERVICES.listenbrainz.baseUrl}/user/${encodeURIComponent(username)}/listens?count=1`;
                     var headers1 = {};
                     if (token) {
                       headers1.Authorization = `Token ${token}`;
@@ -27613,7 +27972,7 @@ ${formattedData}
                     artist: latestListen.track_metadata.artist_name,
                     album: latestListen.track_metadata.release_name || "",
                     albumArt,
-                    url: latestListen.track_metadata.additional_info?.origin_url || `https://listenbrainz.org/user/${username}`,
+                    url: latestListen.track_metadata.additional_info?.origin_url || `https://listenbrainz.org/player/${latestListen.track_metadata.additional_info?.recording_mbid || `${encodeURIComponent(latestListen.track_metadata.artist_name)}/${encodeURIComponent(latestListen.track_metadata.track_name)}`}`,
                     date: isNowPlaying ? "now" : new Date(trackTimestamp * 1e3).toISOString(),
                     nowPlaying: isNowPlaying,
                     loved: false,
@@ -27661,7 +28020,7 @@ ${formattedData}
       init_create_class();
       init_define_property();
       init_logger();
-      init_storage24();
+      init_storage23();
       init_LastFmService();
       init_LibreFmService();
       init_ListenBrainzService();
@@ -27793,7 +28152,7 @@ ${formattedData}
     });
   }
   function fetchAsset(_0) {
-    return _async_to_generator(function* (asset, appId = constants_default.APPLICATION_ID) {
+    return _async_to_generator(function* (asset, appId = constants_default2.APPLICATION_ID) {
       if (!asset?.length) return [];
       try {
         return AssetManager.fetchAssetIds(appId, asset);
@@ -27811,10 +28170,10 @@ ${formattedData}
       init_async_to_generator();
       init_logger();
       init_common();
-      init_constants3();
+      init_constants4();
       init_manager();
       init_modules4();
-      init_storage24();
+      init_storage23();
     }
   });
 
@@ -27860,10 +28219,10 @@ ${formattedData}
       init_create_class();
       init_define_property();
       init_logger();
-      init_constants3();
+      init_constants4();
       init_modules4();
       init_ServiceFactory();
-      init_storage24();
+      init_storage23();
       init_activity();
       init_debug3();
       init_time();
@@ -27965,13 +28324,13 @@ ${formattedData}
                     }
                     logVerbose(`Preparing RPC update for: ${lastTrack.artist} - ${lastTrack.name}`);
                     var activity = {
-                      name: currentSettings.appName || constants_default.DEFAULT_APP_NAME,
+                      name: currentSettings.appName || constants_default2.DEFAULT_APP_NAME,
                       flags: 0,
                       type: currentSettings.listeningTo ? 2 : 0,
                       details: lastTrack.name,
                       state: `${lastTrack.artist}`,
                       status_display_type: 1,
-                      application_id: constants_default.APPLICATION_ID
+                      application_id: constants_default2.APPLICATION_ID
                     };
                     if (activity.name.includes("{{")) {
                       var variables = {
@@ -28066,8 +28425,8 @@ ${formattedData}
             value: function handleError(error) {
               this.consecutiveFailures++;
               setDebugInfo("lastError", error);
-              logError2(`Failure ${this.consecutiveFailures}/${constants_default.MAX_RETRY_ATTEMPTS}:`, error.message);
-              if (this.consecutiveFailures >= constants_default.MAX_RETRY_ATTEMPTS) {
+              logError2(`Failure ${this.consecutiveFailures}/${constants_default2.MAX_RETRY_ATTEMPTS}:`, error.message);
+              if (this.consecutiveFailures >= constants_default2.MAX_RETRY_ATTEMPTS) {
                 logError2("Max retry attempts reached, initiating reconnection...");
                 this.startReconnection();
               }
@@ -28088,7 +28447,7 @@ ${formattedData}
                 }).catch((error) => {
                   logError2("Reconnection attempt failed:", error.message);
                 });
-              }, constants_default.RETRY_DELAY);
+              }, constants_default2.RETRY_DELAY);
             }
           },
           {
@@ -28151,7 +28510,7 @@ ${formattedData}
                     logVerbose("Could not fetch initial track:", error);
                   });
                 }).then(() => {
-                  var interval = Math.max((Number(currentSettings.timeInterval) || constants_default.DEFAULT_SETTINGS.timeInterval) * 1e3, constants_default.MIN_UPDATE_INTERVAL * 1e3);
+                  var interval = Math.max((Number(currentSettings.timeInterval) || constants_default2.DEFAULT_SETTINGS.timeInterval) * 1e3, constants_default2.MIN_UPDATE_INTERVAL * 1e3);
                   this.updateTimer = setInterval(() => this.updateActivity(), interval);
                   logger.verbose(`Update timer started with interval: ${interval}ms (${interval / 1e3}s)`);
                 }).catch((error) => {
@@ -28251,49 +28610,49 @@ ${formattedData}
   });
 
   // src/plugins/multiscrobbler/ui/pages/pages/components/TableComponents.tsx
-  var ScrollView28, TableRowGroup10, TableSwitchRow7, TableCheckboxRow2, TableRadioRow4, TableRadioGroup4, Stack9, TableRow5, TextInput5;
+  var ScrollView30, TableRowGroup9, TableSwitchRow6, TableCheckboxRow2, TableRadioRow4, TableRadioGroup4, Stack8, TableRow4, TextInput4;
   var init_TableComponents = __esm({
     "src/plugins/multiscrobbler/ui/pages/pages/components/TableComponents.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_metro();
-      ({ ScrollView: ScrollView28 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup10, TableSwitchRow: TableSwitchRow7, TableCheckboxRow: TableCheckboxRow2, TableRadioRow: TableRadioRow4, TableRadioGroup: TableRadioGroup4, Stack: Stack9, TableRow: TableRow5 } = findByProps("TableSwitchRow", "TableCheckboxRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput5 } = findByProps("TextInput"));
+      ({ ScrollView: ScrollView30 } = findByProps("ScrollView"));
+      ({ TableRowGroup: TableRowGroup9, TableSwitchRow: TableSwitchRow6, TableCheckboxRow: TableCheckboxRow2, TableRadioRow: TableRadioRow4, TableRadioGroup: TableRadioGroup4, Stack: Stack8, TableRow: TableRow4 } = findByProps("TableSwitchRow", "TableCheckboxRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
+      ({ TextInput: TextInput4 } = findByProps("TextInput"));
     }
   });
 
   // src/plugins/multiscrobbler/ui/pages/pages/DisplaySettingsPage.tsx
   function DisplaySettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView30, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Activity Display",
-            children: /* @__PURE__ */ jsxs(Stack9, {
+            children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput5, {
-                  placeholder: `App Name (Default: ${constants_default.DEFAULT_SETTINGS.appName})`,
+                /* @__PURE__ */ jsx(TextInput4, {
+                  placeholder: `App Name (Default: ${constants_default2.DEFAULT_SETTINGS.appName})`,
                   value: settings4.appName,
                   onChange: (v2) => setStorage("appName", v2),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput5, {
-                  placeholder: `Update Interval (Default: ${constants_default.DEFAULT_SETTINGS.timeInterval}s)`,
+                /* @__PURE__ */ jsx(TextInput4, {
+                  placeholder: `Update Interval (Default: ${constants_default2.DEFAULT_SETTINGS.timeInterval}s)`,
                   value: String(settings4.timeInterval),
                   onChange: (v2) => {
                     var interval = Number(v2);
-                    if (interval >= constants_default.MIN_UPDATE_INTERVAL) {
+                    if (interval >= constants_default2.MIN_UPDATE_INTERVAL) {
                       setStorage("timeInterval", interval);
                     }
                   },
@@ -28303,20 +28662,20 @@ ${formattedData}
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "About Display Settings",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "App Name",
                 subLabel: "The name shown in Discord for your activity"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Update Interval",
                 subLabel: "How often the plugin checks for new tracks (in seconds)"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Minimum Interval",
-                subLabel: `The plugin will never check more frequently than ${constants_default.MIN_UPDATE_INTERVAL} seconds`
+                subLabel: `The plugin will never check more frequently than ${constants_default2.MIN_UPDATE_INTERVAL} seconds`
               })
             ]
           })
@@ -28330,8 +28689,8 @@ ${formattedData}
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
-      init_constants3();
-      init_storage24();
+      init_constants4();
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -28377,21 +28736,21 @@ ${formattedData}
       showToast("App removed from ignore list", findAssetId2("Check"));
       triggerImmediateUpdate();
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView30, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Add App to Ignore",
-            children: /* @__PURE__ */ jsx(Stack9, {
+            children: /* @__PURE__ */ jsx(Stack8, {
               spacing: 4,
-              children: /* @__PURE__ */ jsx(TextInput5, {
+              children: /* @__PURE__ */ jsx(TextInput4, {
                 placeholder: "Enter app name",
                 value: newAppName,
                 onChange: setNewAppName,
@@ -28401,17 +28760,17 @@ ${formattedData}
               })
             })
           }),
-          /* @__PURE__ */ jsx(TableRowGroup10, {
-            children: /* @__PURE__ */ jsx(TableRow5, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
+            children: /* @__PURE__ */ jsx(TableRow4, {
               label: "Add to Ignore List",
               subLabel: "Add the current app name to your ignore list",
-              trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+              trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
               onPress: addAppToIgnoreList
             })
           }),
-          settings4.ignoreList.length > 0 && /* @__PURE__ */ jsx(TableRowGroup10, {
+          settings4.ignoreList.length > 0 && /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Ignored Apps",
-            children: settings4.ignoreList.map((appName, index) => /* @__PURE__ */ jsx(TableRow5, {
+            children: settings4.ignoreList.map((appName, index) => /* @__PURE__ */ jsx(TableRow4, {
               label: appName,
               trailing: /* @__PURE__ */ jsx(ReactNative.TouchableOpacity, {
                 onPress: () => removeAppFromIgnoreList(appName),
@@ -28433,18 +28792,18 @@ ${formattedData}
               })
             }, index))
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "About Ignore List",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "How it Works",
                 subLabel: "When any app in your ignore list is active, your music status will be hidden"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Detection",
                 subLabel: "Apps are detected by their Discord activity name"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Examples",
                 subLabel: "Spotify, YouTube Music, Kizzy, Metrolist, echo"
               })
@@ -28464,7 +28823,7 @@ ${formattedData}
       init_toasts();
       init_common();
       init_modules4();
-      init_storage24();
+      init_storage23();
       init_activity();
       init_Settings3();
       init_TableComponents();
@@ -28474,7 +28833,7 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/LastFmSettingsPage.tsx
   function LastFmSettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    var testConnection2 = () => {
+    var testConnection = () => {
       showToast("Testing Last.fm connection...", findAssetId2("ClockIcon"));
       serviceFactory2.testService("lastfm").then((isValid) => {
         if (isValid) {
@@ -28486,28 +28845,28 @@ ${formattedData}
         showToast("\u274C Connection error", findAssetId2("XIcon"));
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView30, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack9, {
+            children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "Last.fm Username",
                   value: settings4.username,
                   onChange: (v2) => setStorage("username", v2),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "Last.fm API Key",
                   value: settings4.apiKey,
                   onChange: (v2) => setStorage("apiKey", v2),
@@ -28517,21 +28876,21 @@ ${formattedData}
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Actions",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Test Connection",
                 subLabel: "Verify your Last.fm credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
-                onPress: testConnection2
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
+                onPress: testConnection
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Get API Key",
                 subLabel: "Create a Last.fm API key at last.fm/api/account/create",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => {
-                  import_react_native57.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
+                  import_react_native60.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
                     showToast("Failed to open web browser. Please visit: https://www.last.fm/api/account/create", findAssetId2("XIcon"));
                   });
                 }
@@ -28542,7 +28901,7 @@ ${formattedData}
       })
     });
   }
-  var import_react_native57;
+  var import_react_native60;
   var init_LastFmSettingsPage = __esm({
     "src/plugins/multiscrobbler/ui/pages/pages/LastFmSettingsPage.tsx"() {
       "use strict";
@@ -28551,8 +28910,8 @@ ${formattedData}
       init_jsxRuntime();
       init_assets();
       init_toasts();
-      import_react_native57 = __toESM(require_react_native());
-      init_storage24();
+      import_react_native60 = __toESM(require_react_native());
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -28561,7 +28920,7 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/LibreFmSettingsPage.tsx
   function LibreFmSettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    var testConnection2 = () => {
+    var testConnection = () => {
       showToast("Testing Libre.fm connection...", findAssetId2("ClockIcon"));
       serviceFactory2.testService("librefm").then((isValid) => {
         if (isValid) {
@@ -28573,28 +28932,28 @@ ${formattedData}
         showToast("\u274C Connection error", findAssetId2("XIcon"));
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView30, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack9, {
+            children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "Libre.fm Username",
                   value: settings4.librefmUsername,
                   onChange: (v2) => setStorage("librefmUsername", v2),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "Libre.fm API Key",
                   value: settings4.librefmApiKey,
                   onChange: (v2) => setStorage("librefmApiKey", v2),
@@ -28604,21 +28963,21 @@ ${formattedData}
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Actions",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Test Connection",
                 subLabel: "Verify your Libre.fm credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
-                onPress: testConnection2
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
+                onPress: testConnection
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Get API Key",
                 subLabel: "Create a Last.fm API key (compatible with Libre.fm)",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => {
-                  import_react_native58.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
+                  import_react_native61.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
                     showToast("Failed to open web browser. Please visit: https://www.last.fm/api/account/create", findAssetId2("XIcon"));
                   });
                 }
@@ -28629,7 +28988,7 @@ ${formattedData}
       })
     });
   }
-  var import_react_native58;
+  var import_react_native61;
   var init_LibreFmSettingsPage = __esm({
     "src/plugins/multiscrobbler/ui/pages/pages/LibreFmSettingsPage.tsx"() {
       "use strict";
@@ -28638,8 +28997,8 @@ ${formattedData}
       init_jsxRuntime();
       init_assets();
       init_toasts();
-      import_react_native58 = __toESM(require_react_native());
-      init_storage24();
+      import_react_native61 = __toESM(require_react_native());
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -28648,7 +29007,7 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/ListenBrainzSettingsPage.tsx
   function ListenBrainzSettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    var testConnection2 = () => {
+    var testConnection = () => {
       showToast("Testing ListenBrainz connection...", findAssetId2("ClockIcon"));
       serviceFactory2.testService("listenbrainz").then((isValid) => {
         if (isValid) {
@@ -28660,28 +29019,28 @@ ${formattedData}
         showToast("\u274C Connection error", findAssetId2("XIcon"));
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView30, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack9, {
+            children: /* @__PURE__ */ jsxs(Stack8, {
               spacing: 4,
               children: [
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "ListenBrainz Username",
                   value: settings4.listenbrainzUsername,
                   onChange: (v2) => setStorage("listenbrainzUsername", v2),
                   isClearable: true
                 }),
-                /* @__PURE__ */ jsx(TextInput5, {
+                /* @__PURE__ */ jsx(TextInput4, {
                   placeholder: "ListenBrainz Token",
                   value: settings4.listenbrainzToken,
                   onChange: (v2) => setStorage("listenbrainzToken", v2),
@@ -28691,21 +29050,21 @@ ${formattedData}
               ]
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Actions",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Test Connection",
                 subLabel: "Verify your ListenBrainz credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
-                onPress: testConnection2
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
+                onPress: testConnection
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Get User Token",
                 subLabel: "Get your ListenBrainz user token at listenbrainz.org/settings/",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => {
-                  import_react_native59.Linking.openURL("https://listenbrainz.org/settings/").catch(() => {
+                  import_react_native62.Linking.openURL("https://listenbrainz.org/settings/").catch(() => {
                     showToast("Failed to open web browser. Please visit: https://listenbrainz.org/settings/", findAssetId2("XIcon"));
                   });
                 }
@@ -28716,7 +29075,7 @@ ${formattedData}
       })
     });
   }
-  var import_react_native59;
+  var import_react_native62;
   var init_ListenBrainzSettingsPage = __esm({
     "src/plugins/multiscrobbler/ui/pages/pages/ListenBrainzSettingsPage.tsx"() {
       "use strict";
@@ -28725,8 +29084,8 @@ ${formattedData}
       init_jsxRuntime();
       init_assets();
       init_toasts();
-      import_react_native59 = __toESM(require_react_native());
-      init_storage24();
+      import_react_native62 = __toESM(require_react_native());
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -28735,19 +29094,19 @@ ${formattedData}
   // src/plugins/multiscrobbler/ui/pages/pages/LoggingSettingsPage.tsx
   function LoggingSettingsPage() {
     var settings4 = useMultiScrobblerSettings();
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView30, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup10, {
+          /* @__PURE__ */ jsx(TableRowGroup9, {
             title: "Logging Options",
-            children: /* @__PURE__ */ jsx(TableSwitchRow7, {
+            children: /* @__PURE__ */ jsx(TableSwitchRow6, {
               label: "Verbose Logging",
               subLabel: "Enable detailed console logging for debugging",
               value: settings4.verboseLogging,
@@ -28756,31 +29115,31 @@ ${formattedData}
               }
             })
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Debug Information",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Console Logging",
                 subLabel: "Logs are written to the browser/app console when verbose is enabled"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Error Tracking",
                 subLabel: "Connection errors and API failures are automatically logged"
               })
             ]
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Log Information",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "API Calls",
                 subLabel: "All API requests are logged when verbose is enabled"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Track Updates",
                 subLabel: "Song changes and RPC updates are logged"
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Error Details",
                 subLabel: "Connection errors and retries are logged"
               })
@@ -28796,7 +29155,7 @@ ${formattedData}
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
-      init_storage24();
+      init_storage23();
       init_Settings3();
       init_TableComponents();
     }
@@ -29076,7 +29435,7 @@ ${formattedData}
       init_jsxRuntime();
       init_logger();
       init_common();
-      init_storage24();
+      init_storage23();
       styles3 = ReactNative.StyleSheet.create({
         container: {
           backgroundColor: "#1e1f22",
@@ -29233,7 +29592,7 @@ ${formattedData}
       if (!settings4.listeningTo) return;
       setStorage("showTimestamp", !settings4.showTimestamp);
     };
-    return /* @__PURE__ */ jsxs(ScrollView28, {
+    return /* @__PURE__ */ jsxs(ScrollView30, {
       style: {
         flex: 1
       },
@@ -29242,9 +29601,9 @@ ${formattedData}
       },
       children: [
         /* @__PURE__ */ jsx(RPCPreview, {}),
-        /* @__PURE__ */ jsx(Stack9, {
+        /* @__PURE__ */ jsx(Stack8, {
           spacing: 8,
-          children: /* @__PURE__ */ jsxs(TableRowGroup10, {
+          children: /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "RPC Display Options",
             children: [
               /* @__PURE__ */ jsx(TableCheckboxRow2, {
@@ -29259,7 +29618,7 @@ ${formattedData}
                 checked: settings4.showLargeText,
                 onPress: () => setStorage("showLargeText", !settings4.showLargeText)
               }),
-              !settings4.listeningTo && /* @__PURE__ */ jsx(TableRow5, {
+              !settings4.listeningTo && /* @__PURE__ */ jsx(TableRow4, {
                 label: "Timestamp Unavailable",
                 subLabel: "Enable 'Show as Listening' to use timestamp feature",
                 disabled: true,
@@ -29296,7 +29655,7 @@ ${formattedData}
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
-      init_storage24();
+      init_storage23();
       init_Settings3();
       init_RPCPreview();
       init_TableComponents();
@@ -29325,14 +29684,14 @@ ${formattedData}
           return "\u2753 Unknown";
       }
     };
-    return /* @__PURE__ */ jsx(ScrollView28, {
+    return /* @__PURE__ */ jsx(ScrollView30, {
       style: {
         flex: 1
       },
       contentContainerStyle: {
         padding: 10
       },
-      children: /* @__PURE__ */ jsxs(Stack9, {
+      children: /* @__PURE__ */ jsxs(Stack8, {
         spacing: 8,
         children: [
           /* @__PURE__ */ jsx(TableRadioGroup4, {
@@ -29349,31 +29708,31 @@ ${formattedData}
               value: service
             }, service))
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Service Configuration",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Last.fm Settings",
                 subLabel: "Configure Last.fm credentials and options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Last.fm Settings",
                   render: LastFmSettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Libre.fm Settings",
                 subLabel: "Configure Libre.fm credentials and options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Libre.fm Settings",
                   render: LibreFmSettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "ListenBrainz Settings",
                 subLabel: "Configure ListenBrainz credentials and options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "ListenBrainz Settings",
                   render: ListenBrainzSettingsPage
@@ -29381,40 +29740,40 @@ ${formattedData}
               })
             ]
           }),
-          /* @__PURE__ */ jsxs(TableRowGroup10, {
+          /* @__PURE__ */ jsxs(TableRowGroup9, {
             title: "Plugin Configuration",
             children: [
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Display Settings",
                 subLabel: "Customize app name and update interval",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Display Settings",
                   render: DisplaySettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "RPC Customization",
                 subLabel: "Customize Discord rich presence display options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "RPC Customization",
                   render: RPCCustomizationSettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Ignore List",
                 subLabel: "Configure apps that should hide your status",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Ignore List Settings",
                   render: IgnoreListSettingsPage
                 })
               }),
-              /* @__PURE__ */ jsx(TableRow5, {
+              /* @__PURE__ */ jsx(TableRow4, {
                 label: "Logging Settings",
                 subLabel: "Configure logging and debugging options",
-                trailing: /* @__PURE__ */ jsx(TableRow5.Arrow, {}),
+                trailing: /* @__PURE__ */ jsx(TableRow4.Arrow, {}),
                 onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
                   title: "Logging Settings",
                   render: LoggingSettingsPage
@@ -29436,7 +29795,7 @@ ${formattedData}
       init_create_class();
       init_jsxRuntime();
       init_common();
-      init_storage24();
+      init_storage23();
       init_TableComponents();
       init_DisplaySettingsPage();
       init_IgnoreListSettingsPage();
@@ -29563,19 +29922,19 @@ ${formattedData}
         logger.error("[Multi-Scrobbler] Failed to determine current service name:", e);
       }
       var service = currentSettings.service;
-      var hasCredentials2 = false;
+      var hasCredentials = false;
       switch (service) {
         case "lastfm":
-          hasCredentials2 = !!(currentSettings.username && currentSettings.apiKey);
+          hasCredentials = !!(currentSettings.username && currentSettings.apiKey);
           break;
         case "librefm":
-          hasCredentials2 = !!(currentSettings.librefmUsername && currentSettings.librefmApiKey);
+          hasCredentials = !!(currentSettings.librefmUsername && currentSettings.librefmApiKey);
           break;
         case "listenbrainz":
-          hasCredentials2 = !!currentSettings.listenbrainzUsername;
+          hasCredentials = !!currentSettings.listenbrainzUsername;
           break;
       }
-      if (!hasCredentials2) {
+      if (!hasCredentials) {
         logger.error(`[Multi-Scrobbler] Missing credentials for ${serviceName}. Please configure in settings.`);
         return;
       }
@@ -29608,7 +29967,7 @@ ${formattedData}
       init_manager();
       init_modules4();
       init_ServiceFactory();
-      init_storage24();
+      init_storage23();
       init_Settings3();
       connectionAttempts = 0;
       MAX_CONNECTION_ATTEMPTS = 3;
@@ -29684,7 +30043,7 @@ ${formattedData}
       if (!image) return res;
       var url2 = typeof image === "number" ? `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(user.id) >> 22n) % 6}.png` : image?.replace(".webp", ".png");
       delete res.props.style;
-      return React.createElement(Pressable5, {
+      return React.createElement(Pressable6, {
         onPress: ({ nativeEvent }) => openModal(url2, nativeEvent),
         onLongPress: ({ nativeEvent }) => guildSpecific && openMediaModal(guildSpecific, nativeEvent),
         style
@@ -29695,12 +30054,12 @@ ${formattedData}
     return after("default", ProfileBanner, ([{ bannerSource }], res) => {
       if (typeof bannerSource?.uri !== "string" || !res) return res;
       var url2 = bannerSource.uri.replace(/(?:\?size=\d{3,4})?$/, "?size=4096").replace(".webp", ".png");
-      return React.createElement(Pressable5, {
+      return React.createElement(Pressable6, {
         onPress: ({ nativeEvent }) => openModal(url2, nativeEvent)
       }, res);
     });
   }
-  var Pressable5, ProfileBanner, HeaderAvatar2, openMediaModal, hideActionSheet6, getChannelId, getGuildId2;
+  var Pressable6, ProfileBanner, HeaderAvatar2, openMediaModal, hideActionSheet6, getChannelId, getGuildId2;
   var init_picturelinks = __esm({
     "src/plugins/picturelinks/patches/picturelinks.ts"() {
       "use strict";
@@ -29710,7 +30069,7 @@ ${formattedData}
       init_patcher();
       init_metro();
       init_common();
-      ({ Pressable: Pressable5 } = findByProps("Button", "Text", "View"));
+      ({ Pressable: Pressable6 } = findByProps("Button", "Text", "View"));
       ProfileBanner = findByName("ProfileBanner", false);
       HeaderAvatar2 = findByName("HeaderAvatar", false);
       ({ openMediaModal } = findByProps("openMediaModal"));
@@ -29725,7 +30084,7 @@ ${formattedData}
   __export(picturelinks_exports, {
     default: () => picturelinks_default
   });
-  var patches18, picturelinks_default;
+  var patches19, picturelinks_default;
   var init_picturelinks2 = __esm({
     "src/plugins/picturelinks/index.ts"() {
       "use strict";
@@ -29734,7 +30093,7 @@ ${formattedData}
       init_plugins3();
       init_picturelinks();
       init_Developers();
-      patches18 = [];
+      patches19 = [];
       picturelinks_default = definePlugin({
         name: "PictureLinks",
         description: "Allows you to click on profile pictures and banners.",
@@ -29746,28 +30105,28 @@ ${formattedData}
         id: "picturelinks",
         version: "1.0.0",
         start() {
-          patches18.push(unpatchAvatar());
-          patches18.push(unpatchBanner());
+          patches19.push(unpatchAvatar());
+          patches19.push(unpatchBanner());
         },
         stop() {
-          for (var unpatch6 of patches18) unpatch6();
+          for (var unpatch6 of patches19) unpatch6();
         }
       });
     }
   });
 
   // src/plugins/platformindicators/PresenceUpdatedContainer.tsx
-  var import_react28, PresenceUpdatedContainer, PresenceUpdatedContainer_default;
+  var import_react29, PresenceUpdatedContainer, PresenceUpdatedContainer_default;
   var init_PresenceUpdatedContainer = __esm({
     "src/plugins/platformindicators/PresenceUpdatedContainer.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_common();
-      import_react28 = __toESM(require_react());
+      import_react29 = __toESM(require_react());
       PresenceUpdatedContainer = ({ children }) => {
-        var [counter, setCounter] = (0, import_react28.useState)(0);
-        (0, import_react28.useEffect)(() => {
+        var [counter, setCounter] = (0, import_react29.useState)(0);
+        (0, import_react29.useEffect)(() => {
           var presenceUpdate = () => {
             setCounter((prevCounter) => prevCounter + 1);
           };
@@ -29776,8 +30135,8 @@ ${formattedData}
             FluxDispatcher.unsubscribe("PRESENCE_UPDATES", presenceUpdate);
           };
         }, []);
-        return import_react28.default.Children.map(children, (child, index) => {
-          return /* @__PURE__ */ import_react28.default.cloneElement(child, {
+        return import_react29.default.Children.map(children, (child, index) => {
+          return /* @__PURE__ */ import_react29.default.cloneElement(child, {
             key: `${index}-${counter}`
           });
         });
@@ -29788,7 +30147,7 @@ ${formattedData}
 
   // src/plugins/platformindicators/storage.ts
   var usePlatformIndicatorSettings, platformIndicatorSettings;
-  var init_storage25 = __esm({
+  var init_storage24 = __esm({
     "src/plugins/platformindicators/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -29803,18 +30162,18 @@ ${formattedData}
         removeDefaultMobile: true,
         useThemeColors: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "platformindicator-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/platformindicator.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       platformIndicatorSettings = new Proxy({}, {
@@ -29834,44 +30193,44 @@ ${formattedData}
   // src/plugins/platformindicators/settings.tsx
   function Settings8() {
     var settings4 = usePlatformIndicatorSettings();
-    return /* @__PURE__ */ jsx(Stack10, {
+    return /* @__PURE__ */ jsx(Stack9, {
       style: {
         paddingVertical: 24,
         paddingHorizontal: 12
       },
       spacing: 24,
-      children: /* @__PURE__ */ jsxs(TableRowGroup11, {
+      children: /* @__PURE__ */ jsxs(TableRowGroup10, {
         title: "Platform Indicator",
         children: [
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Show icons on the dm top bar",
             value: settings4.dmTopBar ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
               dmTopBar: v2
             })
           }),
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Show icons on the users and DMs list",
             value: settings4.userList ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
               userList: v2
             })
           }),
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Show icons on user profiles",
             value: settings4.profileUsername ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
               profileUsername: v2
             })
           }),
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Hide mobile status from the normal indicator",
             value: settings4.removeDefaultMobile ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
               removeDefaultMobile: v2
             })
           }),
-          /* @__PURE__ */ jsx(TableSwitchRow8, {
+          /* @__PURE__ */ jsx(TableSwitchRow7, {
             label: "Theme compatibility mode",
             value: settings4.useThemeColors ?? true,
             onValueChange: (v2) => usePlatformIndicatorSettings.getState().updateSettings({
@@ -29882,17 +30241,17 @@ ${formattedData}
       })
     });
   }
-  var TableSwitchRow8, TableRowGroup11, Stack10;
-  var init_settings23 = __esm({
+  var TableSwitchRow7, TableRowGroup10, Stack9;
+  var init_settings22 = __esm({
     "src/plugins/platformindicators/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_metro();
-      init_storage25();
-      ({ TableSwitchRow: TableSwitchRow8, TableRowGroup: TableRowGroup11 } = findByProps("TableSwitchRow"));
-      ({ Stack: Stack10 } = findByProps("Stack"));
+      init_storage24();
+      ({ TableSwitchRow: TableSwitchRow7, TableRowGroup: TableRowGroup10 } = findByProps("TableSwitchRow"));
+      ({ Stack: Stack9 } = findByProps("Stack"));
     }
   });
 
@@ -29935,7 +30294,7 @@ ${formattedData}
     var iconSize = props.iconSize ?? 16;
     var path = IconPaths[platform];
     if (!Svg || !path) return null;
-    return /* @__PURE__ */ jsx(View34, {
+    return /* @__PURE__ */ jsx(View36, {
       children: /* @__PURE__ */ jsx(Svg, {
         width: iconSize,
         height: iconSize,
@@ -29947,7 +30306,7 @@ ${formattedData}
       })
     });
   }
-  var View34, Svg, Path, IconPaths;
+  var View36, Svg, Path, IconPaths;
   var init_StatusIcon = __esm({
     "src/plugins/platformindicators/StatusIcon.tsx"() {
       "use strict";
@@ -29956,7 +30315,7 @@ ${formattedData}
       init_jsxRuntime();
       init_metro();
       init_common();
-      ({ View: View34 } = ReactNative);
+      ({ View: View36 } = ReactNative);
       Svg = findByName("Svg", false)?.default;
       Path = findByName("Svg", false)?.Path;
       IconPaths = {
@@ -30022,7 +30381,7 @@ ${formattedData}
       init_metro();
       init_colors3();
       init_StatusIcon();
-      init_storage25();
+      init_storage24();
       PresenceStore = findByStoreName("PresenceStore");
       SessionsStore = findByStoreName("SessionsStore");
       UserStore16 = findByStoreName("UserStore");
@@ -30035,7 +30394,7 @@ ${formattedData}
   __export(platformindicators_exports, {
     default: () => platformindicators_default
   });
-  var View35, Text7, unpatches5, platformindicators_default;
+  var View37, Text7, unpatches5, platformindicators_default;
   var init_platformindicators = __esm({
     "src/plugins/platformindicators/index.tsx"() {
       "use strict";
@@ -30052,10 +30411,10 @@ ${formattedData}
       init_plugins3();
       init_Developers();
       init_PresenceUpdatedContainer();
-      init_settings23();
+      init_settings22();
       init_StatusIcons();
-      init_storage25();
-      ({ View: View35, Text: Text7 } = ReactNative);
+      init_storage24();
+      ({ View: View37, Text: Text7 } = ReactNative);
       unpatches5 = [];
       platformindicators_default = definePlugin({
         name: "PlatformIndicators",
@@ -30097,13 +30456,13 @@ ${formattedData}
                     } else {
                       var arrowId = findAssetId2("arrow-right");
                       var container1 = findInReactTree(dmTopBar, (m2) => m2.props?.children[1]?.props?.source === arrowId);
-                      container1?.props?.children?.push(/* @__PURE__ */ jsx(View35, {
+                      container1?.props?.children?.push(/* @__PURE__ */ jsx(View37, {
                         style: {
                           flexDirection: "row",
                           justifyContent: "center",
                           alignContent: "flex-start"
                         },
-                        children: /* @__PURE__ */ jsx(View35, {
+                        children: /* @__PURE__ */ jsx(View37, {
                           style: {
                             flexDirection: "row"
                           }
@@ -30152,8 +30511,8 @@ ${formattedData}
                 userId: user.id
               }));
             }));
-            var Status = findByName("Status", false);
-            unpatches5.push(before("default", Status, (args) => {
+            var Status2 = findByName("Status", false);
+            unpatches5.push(before("default", Status2, (args) => {
               if (!args) return;
               if (!args[0]) return;
               if (!platformIndicatorSettings.removeDefaultMobile) return;
@@ -30168,7 +30527,7 @@ ${formattedData}
                 if (!statusIconsView) {
                   var row = findInReactTree(res, (c2) => c2.props?.style?.flexDirection === "row");
                   if (row) {
-                    row.props.children.splice(2, 0, /* @__PURE__ */ jsx(View35, {
+                    row.props.children.splice(2, 0, /* @__PURE__ */ jsx(View37, {
                       style: {
                         flexDirection: "row"
                       },
@@ -30188,14 +30547,14 @@ ${formattedData}
               if (!platformIndicatorSettings.userList) return;
               var modifiedStatusIcons = findInReactTree(res?.props?.label, (c2) => c2.key === "TabsV2MemberListStatusIconsView");
               if (!modifiedStatusIcons) {
-                res.props.label = /* @__PURE__ */ jsxs(View35, {
+                res.props.label = /* @__PURE__ */ jsxs(View37, {
                   style: {
                     flexDirection: "row",
                     alignItems: "center"
                   },
                   children: [
                     res.props.label,
-                    /* @__PURE__ */ jsx(View35, {
+                    /* @__PURE__ */ jsx(View37, {
                       style: {
                         flexDirection: "row"
                       },
@@ -30225,7 +30584,7 @@ ${formattedData}
                 var userId = channel.recipients[0];
                 var textContainer = findInReactTree(res, (m2) => m2.props?.children?.[0]?.props?.variant === "redesign/channel-title/semibold");
                 if (textContainer) {
-                  textContainer.props.children.push(/* @__PURE__ */ jsx(View35, {
+                  textContainer.props.children.push(/* @__PURE__ */ jsx(View37, {
                     style: {
                       flexDirection: "row"
                     },
@@ -30251,7 +30610,7 @@ ${formattedData}
 
   // src/plugins/quickdelete/storage.ts
   var useQuickDeleteSettings, quickDeleteSettings;
-  var init_storage26 = __esm({
+  var init_storage25 = __esm({
     "src/plugins/quickdelete/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -30263,18 +30622,18 @@ ${formattedData}
         autoConfirmMessage: true,
         autoConfirmEmbed: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "quickdelete-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/quickdelete.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       quickDeleteSettings = new Proxy({}, {
@@ -30295,7 +30654,7 @@ ${formattedData}
   function QuickDeleteSettings() {
     var store = useQuickDeleteSettings();
     var { autoConfirmMessage, autoConfirmEmbed } = store;
-    return /* @__PURE__ */ jsx(import_react_native60.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native63.ScrollView, {
       style: {
         flex: 1
       },
@@ -30325,7 +30684,7 @@ ${formattedData}
       })
     });
   }
-  var import_react_native60, settings2;
+  var import_react_native63, settings2;
   var init_Settings4 = __esm({
     "src/plugins/quickdelete/Settings.tsx"() {
       "use strict";
@@ -30334,8 +30693,8 @@ ${formattedData}
       init_jsxRuntime();
       init_assets();
       init_components();
-      import_react_native60 = __toESM(require_react_native());
-      init_storage26();
+      import_react_native63 = __toESM(require_react_native());
+      init_storage25();
       settings2 = [
         {
           label: "Messages",
@@ -30369,7 +30728,7 @@ ${formattedData}
       init_plugins3();
       init_Developers();
       init_Settings4();
-      init_storage26();
+      init_storage25();
       ({ intl, t: intlMap } = findByProps("intl"));
       KEYS = {
         message: {
@@ -30397,12 +30756,12 @@ ${formattedData}
         start() {
           if (intl && intlMap) {
             autoConfirmMessages = {
-              embed: intl.string(intlMap[KEYS.embed.hash]) || "Delete embed",
+              embed: intl.string(intlMap[KEYS.embed.hash]) || "Remove All Embeds",
               message: intl.string(intlMap[KEYS.message.hash]) || "Delete Message"
             };
           } else {
             autoConfirmMessages = {
-              embed: "Delete embed",
+              embed: "Remove All Embeds",
               message: "Delete Message"
             };
           }
@@ -30411,14 +30770,19 @@ ${formattedData}
           unpatch3 = instead("show", Popup, (args, fn) => {
             var popup = args?.[0];
             var title = popup?.title;
-            var body = popup?.children?.props?.message?.content;
+            var confirmText = popup?.confirmText;
+            var body = popup?.children?.props?.message?.content ?? "";
             if (!popup?.onConfirm || typeof popup.onConfirm !== "function" || typeof title !== "string" && typeof body !== "string") {
               return fn(...args);
             }
             var shouldConfirm = (type) => {
               var matcher = autoConfirmMessages[type];
               if (!matcher) return false;
-              var match = title?.includes(matcher) || body?.includes(matcher);
+              var titleLower = title?.toLowerCase();
+              var confirmLower = confirmText?.toLowerCase();
+              var bodyLower = body?.toLowerCase();
+              var matcherLower = matcher.toLowerCase();
+              var match = titleLower?.includes(matcherLower) || confirmLower?.includes(matcherLower) || bodyLower?.includes(matcherLower);
               return quickDeleteSettings[KEYS[type].storage] && match;
             };
             var result = shouldConfirm("message") || shouldConfirm("embed");
@@ -30434,7 +30798,7 @@ ${formattedData}
 
   // src/plugins/reviewdb/storage.ts
   var useReviewDBSettings, reviewdbSettings;
-  var init_storage27 = __esm({
+  var init_storage26 = __esm({
     "src/plugins/reviewdb/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -30446,18 +30810,18 @@ ${formattedData}
         authToken: "",
         useThemedSend: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "reviewdb-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/reviewdb.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       reviewdbSettings = new Proxy({}, {
@@ -30476,7 +30840,7 @@ ${formattedData}
 
   // src/plugins/reviewdb/lib/constants.ts
   var CLIENT_ID2, BASE_URL2, API_URL2;
-  var init_constants4 = __esm({
+  var init_constants5 = __esm({
     "src/plugins/reviewdb/lib/constants.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -30534,14 +30898,14 @@ ${formattedData}
 
   // src/plugins/reviewdb/lib/api.ts
   var getReviews, getAdmins, addReview, deleteReview, reportReview;
-  var init_api6 = __esm({
+  var init_api5 = __esm({
     "src/plugins/reviewdb/lib/api.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_async_to_generator();
-      init_storage27();
-      init_constants4();
+      init_storage26();
+      init_constants5();
       init_utils5();
       getReviews = (userId) => _async_to_generator(function* () {
         return (yield jsonFetch(API_URL2 + `/users/${userId}/reviews`)).reviews;
@@ -30626,7 +30990,7 @@ ${formattedData}
   });
 
   // src/plugins/reviewdb/lib/redesign.ts
-  var rain, NotFound, findProp2, findPropPolyfill, TextInput6, Button2;
+  var rain, NotFound, findProp2, findPropPolyfill, TextInput5, Button2;
   var init_redesign2 = __esm({
     "src/plugins/reviewdb/lib/redesign.ts"() {
       "use strict";
@@ -30647,7 +31011,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       };
       findProp2 = (...props) => findByProps(...props)?.[props[0]];
       findPropPolyfill = (isFunction, ...props) => findProp2(...props) ?? NotFound(props[0], isFunction);
-      TextInput6 = findPropPolyfill(false, "TextInput");
+      TextInput5 = findPropPolyfill(false, "TextInput");
       Button2 = findPropPolyfill(false, "Button");
     }
   });
@@ -30659,10 +31023,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var [reviewText, setReviewText] = React.useState("");
     var disableTextArea = !reviewdbSettings2.authToken;
     var disableButton = !reviewdbSettings2.authToken || reviewText.length === 0;
-    if (TextInput6) {
+    if (TextInput5) {
       return /* @__PURE__ */ jsxs(ReactNative.View, {
         children: [
-          /* @__PURE__ */ jsx(TextInput6, {
+          /* @__PURE__ */ jsx(TextInput5, {
             style: {
               ...styles5.textInput,
               color: useThemedColor("TEXT_NORMAL")
@@ -30750,10 +31114,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_toasts();
       init_metro();
       init_common();
-      init_api6();
+      init_api5();
       init_redesign2();
       init_utils5();
-      init_storage27();
+      init_storage26();
       useStyles13 = createStyles({
         container: {
           flex: 1,
@@ -30802,8 +31166,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_toasts();
       init_metro();
       init_common();
-      init_storage27();
-      init_api6();
+      init_storage26();
+      init_api5();
       init_utils5();
       ({ hideActionSheet: hideActionSheet8 } = findByProps("openLazy", "hideActionSheet"));
       ({ showSimpleActionSheet: showSimpleActionSheet5 } = findByProps("showSimpleActionSheet"));
@@ -30932,7 +31296,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/reviewdb/components/ReviewRow.tsx
-  var useStyles15, FormRow2, FormSubLabel, TableRowGroup12, ReviewRow_default;
+  var useStyles15, FormRow2, FormSubLabel, TableRowGroup11, ReviewRow_default;
   var init_ReviewRow = __esm({
     "src/plugins/reviewdb/components/ReviewRow.tsx"() {
       "use strict";
@@ -30958,10 +31322,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         }
       });
       ({ FormRow: FormRow2, FormSubLabel } = Forms);
-      ({ TableRowGroup: TableRowGroup12 } = findByProps("TableRow"));
+      ({ TableRowGroup: TableRowGroup11 } = findByProps("TableRow"));
       ReviewRow_default = (({ review, style }) => {
         var styles5 = useStyles15();
-        return /* @__PURE__ */ jsx(TableRowGroup12, {
+        return /* @__PURE__ */ jsx(TableRowGroup11, {
           style: [
             style
           ],
@@ -31065,7 +31429,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_styles();
       init_metro();
       init_common();
-      init_api6();
+      init_api5();
       init_ReviewInput();
       init_ReviewRow();
       ({ getCurrentUser: getCurrentUser5 } = findByStoreName("UserStore"));
@@ -31158,8 +31522,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   // src/plugins/reviewdb/components/ReviewCard.tsx
   function ReviewCard({ userId }) {
     return /* @__PURE__ */ jsx(ErrorBoundary, {
-      children: /* @__PURE__ */ jsx(TableRowGroup13, {
-        children: /* @__PURE__ */ jsx(TableRow6, {
+      children: /* @__PURE__ */ jsx(TableRowGroup12, {
+        children: /* @__PURE__ */ jsx(TableRow5, {
           label: "Reviews",
           onPress: () => {
             ActionSheet2.open(ReviewActionSheet, {
@@ -31170,7 +31534,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var TableRow6, TableRowGroup13;
+  var TableRow5, TableRowGroup12;
   var init_ReviewCard = __esm({
     "src/plugins/reviewdb/components/ReviewCard.tsx"() {
       "use strict";
@@ -31181,7 +31545,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_metro();
       init_ActionSheet2();
       init_ReviewActionSheet();
-      ({ TableRow: TableRow6, TableRowGroup: TableRowGroup13 } = findByProps("TableRow"));
+      ({ TableRow: TableRow5, TableRowGroup: TableRowGroup12 } = findByProps("TableRow"));
     }
   });
 
@@ -31244,8 +31608,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_toasts();
       init_logger();
       init_metro();
-      init_storage27();
-      init_constants4();
+      init_storage26();
+      init_constants5();
       init_utils5();
       ({ pushModal: pushModal3, popModal: popModal3 } = findByProps("pushModal"));
       OAuth2AuthorizeModal3 = findByName("OAuth2AuthorizeModal");
@@ -31297,7 +31661,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/reviewdb/Settings.tsx
-  var TableRow7, TableSwitchRow9, TableRowGroup14, Stack11, Settings_default;
+  var TableRow6, TableSwitchRow8, TableRowGroup13, Stack10, Settings_default;
   var init_Settings5 = __esm({
     "src/plugins/reviewdb/Settings.tsx"() {
       "use strict";
@@ -31307,36 +31671,36 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_assets();
       init_metro();
       init_showAuthModal2();
-      init_storage27();
-      ({ TableRow: TableRow7, TableSwitchRow: TableSwitchRow9, TableRowGroup: TableRowGroup14 } = findByProps("TableRow"));
-      ({ Stack: Stack11 } = findByProps("Stack"));
+      init_storage26();
+      ({ TableRow: TableRow6, TableSwitchRow: TableSwitchRow8, TableRowGroup: TableRowGroup13 } = findByProps("TableRow"));
+      ({ Stack: Stack10 } = findByProps("Stack"));
       Settings_default = (() => {
         var reviewdbSettings2 = useReviewDBSettings();
         var isAuthenticated = reviewdbSettings2.authToken.length !== 0;
-        return /* @__PURE__ */ jsxs(Stack11, {
+        return /* @__PURE__ */ jsxs(Stack10, {
           style: {
             paddingVertical: 24,
             paddingHorizontal: 12
           },
           spacing: 24,
           children: [
-            /* @__PURE__ */ jsxs(TableRowGroup14, {
+            /* @__PURE__ */ jsxs(TableRowGroup13, {
               title: "Authentication",
               children: [
-                /* @__PURE__ */ jsx(TableRow7, {
+                /* @__PURE__ */ jsx(TableRow6, {
                   label: "Authenticate with ReviewDB",
-                  icon: /* @__PURE__ */ jsx(TableRow7.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow6.Icon, {
                     source: findAssetId2("copy")
                   }),
                   arrow: true,
                   disabled: isAuthenticated,
                   onPress: showAuthModal_default2
                 }),
-                /* @__PURE__ */ jsx(TableRow7, {
+                /* @__PURE__ */ jsx(TableRow6, {
                   variant: isAuthenticated ? "danger" : void 0,
                   label: "Log out of ReviewDB",
                   subLabel: "Note that this does not remove ReviewDB from your Authorized Apps page in Discord.",
-                  icon: /* @__PURE__ */ jsx(TableRow7.Icon, {
+                  icon: /* @__PURE__ */ jsx(TableRow6.Icon, {
                     variant: isAuthenticated ? "danger" : void 0,
                     source: findAssetId2("ic_leave_24px")
                   }),
@@ -31347,12 +31711,12 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
                 })
               ]
             }),
-            /* @__PURE__ */ jsx(TableRowGroup14, {
+            /* @__PURE__ */ jsx(TableRowGroup13, {
               title: "Settings",
-              children: /* @__PURE__ */ jsx(TableSwitchRow9, {
+              children: /* @__PURE__ */ jsx(TableSwitchRow8, {
                 label: "Use profile-themed send button",
                 subLabel: "Controls whether the review send button should attempt to match the user's profile colors.",
-                icon: /* @__PURE__ */ jsx(TableRow7.Icon, {
+                icon: /* @__PURE__ */ jsx(TableRow6.Icon, {
                   source: findAssetId2("ic_paint_brush")
                 }),
                 value: reviewdbSettings2.useThemedSend,
@@ -31373,7 +31737,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     admins: () => admins,
     default: () => reviewdb_default
   });
-  var patches19, admins, reviewdb_default;
+  var patches20, admins, reviewdb_default;
   var init_reviewdb = __esm({
     "src/plugins/reviewdb/index.ts"() {
       "use strict";
@@ -31383,14 +31747,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_storage();
       init_plugins3();
       init_Developers();
-      init_api6();
+      init_api5();
       init_patchContextMenu();
       init_patchProfile();
       init_patchServer();
       init_patchSimplifiedProfile();
       init_Settings5();
-      init_storage27();
-      patches19 = [];
+      init_storage26();
+      patches20 = [];
       admins = [];
       reviewdb_default = definePlugin({
         name: "ReviewDB",
@@ -31404,15 +31768,15 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         start() {
           return _async_to_generator(function* () {
             waitForHydration(useReviewDBSettings);
-            patches19.push(patchProfile_default());
-            patches19.push(patchSimplifiedProfile_default());
-            patches19.push(patchServer_default());
-            patches19.push(patchContextMenu_default());
+            patches20.push(patchProfile_default());
+            patches20.push(patchSimplifiedProfile_default());
+            patches20.push(patchServer_default());
+            patches20.push(patchContextMenu_default());
             getAdmins().then((i) => admins.push(...i));
           })();
         },
         stop() {
-          for (var unpatch6 of patches19) unpatch6();
+          for (var unpatch6 of patches20) unpatch6();
         },
         settings: Settings_default
       });
@@ -31473,7 +31837,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(showimagelinks_exports, {
     default: () => showimagelinks_default
   });
-  var patches20, showimagelinks_default;
+  var patches21, showimagelinks_default;
   var init_showimagelinks2 = __esm({
     "src/plugins/showimagelinks/index.ts"() {
       "use strict";
@@ -31482,7 +31846,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_Developers();
       init_showimagelinks();
-      patches20 = [];
+      patches21 = [];
       showimagelinks_default = definePlugin({
         name: "ShowImageLinks",
         description: "Shows image links if the message is just a linked image.",
@@ -31493,10 +31857,10 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "showimagelinks",
         version: "1.0.0",
         start() {
-          patches20.push(onLoad());
+          patches21.push(onLoad());
         },
         stop() {
-          for (var unpatch6 of patches20) unpatch6();
+          for (var unpatch6 of patches21) unpatch6();
         }
       });
     }
@@ -31507,7 +31871,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   __export(silenttyping_exports, {
     default: () => silenttyping_default
   });
-  var Typing, patches21, silenttyping_default;
+  var Typing, patches22, silenttyping_default;
   var init_silenttyping = __esm({
     "src/plugins/silenttyping/index.ts"() {
       "use strict";
@@ -31518,7 +31882,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_Developers();
       Typing = findByProps("startTyping", "stopTyping");
-      patches21 = [];
+      patches22 = [];
       silenttyping_default = definePlugin({
         name: "SilentTyping",
         description: "Hides your typing status from others",
@@ -31528,1859 +31892,21 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         id: "silenttyping",
         version: "1.0.0",
         start() {
-          patches21.push(instead("startTyping", Typing, () => {
+          patches22.push(instead("startTyping", Typing, () => {
           }), instead("stopTyping", Typing, () => {
           }));
         },
         stop() {
-          for (var unpatch6 of patches21) unpatch6();
-          patches21.length = 0;
-        }
-      });
-    }
-  });
-
-  // src/plugins/songspotlight/storage.ts
-  var DEFAULT_SETTINGS4, useSongSpotlightSettings, songSpotlightSettings;
-  var init_storage28 = __esm({
-    "src/plugins/songspotlight/storage.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_storage();
-      init_esm();
-      init_middleware();
-      DEFAULT_SETTINGS4 = {
-        username: "",
-        apiKey: "",
-        trackCount: 5,
-        period: "7day",
-        displayMode: "top",
-        displaySource: "lastfm",
-        showAlbumArt: true,
-        showPlayCount: true,
-        showAlbumName: true,
-        colorfulCards: true,
-        showOnOwnProfile: true,
-        showOnOtherProfiles: true,
-        showLastFmHeader: true,
-        headerSize: "small",
-        sectionTitle: "",
-        showRankNumbers: true,
-        cardOpacity: 40,
-        shareUsername: false,
-        registryUrl: "https://songspotlight-registry.songspotlight.workers.dev",
-        favoritesRegistryUrl: "https://songspotlight-favorites.songspotlight.workers.dev",
-        displayPosition: "aboveBio",
-        favoriteSongs: []
-      };
-      useSongSpotlightSettings = create2()(persist((set) => ({
-        ...DEFAULT_SETTINGS4,
-        _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
-          ...newSettings
-        })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
-        })
-      }), {
-        name: "songspotlight-settings",
-        storage: createJSONStorage(() => createFileStorage("plugins/songspotlight.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
-        }
-      }));
-      songSpotlightSettings = new Proxy({}, {
-        get(_target, prop) {
-          return useSongSpotlightSettings.getState()[prop];
-        },
-        set(_target, prop, value) {
-          useSongSpotlightSettings.getState().updateSettings({
-            [prop]: value
-          });
-          return true;
-        }
-      });
-    }
-  });
-
-  // src/plugins/songspotlight/api.ts
-  function getCredentials() {
-    var { username, apiKey } = songSpotlightSettings;
-    if (username && apiKey) {
-      return {
-        username,
-        apiKey
-      };
-    }
-    return null;
-  }
-  function hasCredentials() {
-    return getCredentials() !== null;
-  }
-  function getUsername() {
-    return getCredentials()?.username ?? null;
-  }
-  function parseLastFmFromBio(bio) {
-    if (!bio) return null;
-    var match = bio.match(/(?:(?:www\.)?last\.?fm\.com?\/user\/|last\.fm\/user\/)([\w-]+)/i);
-    return match?.[1] ?? null;
-  }
-  function fetchRegistryUsername(userId) {
-    return _async_to_generator(function* () {
-      var cached = registryCache.get(userId);
-      if (cached && Date.now() - cached.fetchedAt < REGISTRY_CACHE_TTL) {
-        return cached.username;
-      }
-      var registryUrl = songSpotlightSettings.registryUrl;
-      if (!registryUrl) return null;
-      try {
-        var res = yield fetch(`${registryUrl}/lookup/${userId}`);
-        if (!res.ok) {
-          registryCache.set(userId, {
-            username: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var data4 = yield res.json();
-        var username = data4?.lastfm || null;
-        registryCache.set(userId, {
-          username,
-          fetchedAt: Date.now()
-        });
-        return username;
-      } catch (unused) {
-        registryCache.set(userId, {
-          username: null,
-          fetchedAt: Date.now()
-        });
-        return null;
-      }
-    })();
-  }
-  function publishToRegistry2(discordId) {
-    return _async_to_generator(function* () {
-      var registryUrl = songSpotlightSettings.registryUrl;
-      var username = songSpotlightSettings.username;
-      if (!registryUrl || !username || !discordId) return false;
-      try {
-        var res = yield fetch(`${registryUrl}/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId,
-            lastfm: username
-          })
-        });
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function unpublishFromRegistry2(discordId) {
-    return _async_to_generator(function* () {
-      var registryUrl = songSpotlightSettings.registryUrl;
-      if (!registryUrl || !discordId) return false;
-      try {
-        var res = yield fetch(`${registryUrl}/register`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId
-          })
-        });
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function publishFavoritesToRegistry(discordId, favorites) {
-    return _async_to_generator(function* () {
-      var favoritesRegistryUrl = songSpotlightSettings.favoritesRegistryUrl;
-      if (!favoritesRegistryUrl || !discordId) return false;
-      try {
-        var res = yield fetch(`${favoritesRegistryUrl}/favorites/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            discordId,
-            favorites
-          })
-        });
-        return res.ok;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function fetchFavoritesFromRegistry(userId) {
-    return _async_to_generator(function* () {
-      var favoritesRegistryUrl = songSpotlightSettings.favoritesRegistryUrl;
-      if (!favoritesRegistryUrl || !userId) return null;
-      try {
-        var res = yield fetch(`${favoritesRegistryUrl}/favorites/lookup/${userId}`);
-        if (!res.ok) return null;
-        var data4 = yield res.json();
-        return data4?.favorites ?? null;
-      } catch (unused) {
-        return null;
-      }
-    })();
-  }
-  function resolveLastFmUsername(userId, isOwnProfile, bio) {
-    return _async_to_generator(function* () {
-      if (isOwnProfile) return getUsername();
-      var registryUsername = yield fetchRegistryUsername(userId);
-      if (registryUsername) return registryUsername;
-      var bioUsername = parseLastFmFromBio(bio);
-      if (bioUsername) return bioUsername;
-      return null;
-    })();
-  }
-  function testConnection() {
-    return _async_to_generator(function* () {
-      var creds = getCredentials();
-      if (!creds) return false;
-      try {
-        var params = new URLSearchParams({
-          method: "user.getinfo",
-          user: creds.username,
-          api_key: creds.apiKey,
-          format: "json"
-        });
-        var res = yield fetch(`${LASTFM_BASE_URL}?${params}`);
-        var data4 = yield res.json();
-        return !data4.error;
-      } catch (unused) {
-        return false;
-      }
-    })();
-  }
-  function fetchLastFmUserInfo(lastFmUsername) {
-    return _async_to_generator(function* () {
-      var cached = userInfoCache.get(lastFmUsername);
-      if (cached && Date.now() - cached.fetchedAt < USER_INFO_CACHE_TTL) {
-        return cached.info;
-      }
-      var creds = getCredentials();
-      if (!creds) return null;
-      try {
-        var params = new URLSearchParams({
-          method: "user.getinfo",
-          user: lastFmUsername,
-          api_key: creds.apiKey,
-          format: "json"
-        });
-        var res = yield fetch(`${LASTFM_BASE_URL}?${params}`);
-        var data4 = yield res.json();
-        if (data4.error || !data4.user) {
-          userInfoCache.set(lastFmUsername, {
-            info: null,
-            fetchedAt: Date.now()
-          });
-          return null;
-        }
-        var images = data4.user.image;
-        var avatar = null;
-        if (Array.isArray(images)) {
-          var _loop2 = function(size2) {
-            var img = images.find((i) => i.size === size2);
-            if (img?.["#text"]) {
-              avatar = img["#text"];
-              return "break";
-            }
-          };
-          for (var size of [
-            "extralarge",
-            "large",
-            "medium",
-            "small"
-          ]) {
-            var _ret = _loop2(size);
-            if (_ret === "break") break;
-          }
-        }
-        var info = {
-          name: data4.user.name || lastFmUsername,
-          url: data4.user.url || `https://www.last.fm/user/${lastFmUsername}`,
-          avatar
-        };
-        userInfoCache.set(lastFmUsername, {
-          info,
-          fetchedAt: Date.now()
-        });
-        return info;
-      } catch (unused) {
-        userInfoCache.set(lastFmUsername, {
-          info: null,
-          fetchedAt: Date.now()
-        });
-        return null;
-      }
-    })();
-  }
-  function fetchITunesInfo(artist, track) {
-    return _async_to_generator(function* () {
-      var _loop2 = function* (query2) {
-        try {
-          var params = new URLSearchParams({
-            term: query2,
-            entity: "song",
-            limit: "10"
-          });
-          var res = yield fetch(`https://itunes.apple.com/search?${params}`);
-          var data4 = yield res.json();
-          var results = data4?.results;
-          if (!results?.length) return "continue";
-          var artistLower = artist.toLowerCase();
-          var trackLower = track.toLowerCase();
-          var match = results.find((r) => r.artistName?.toLowerCase().includes(artistLower) && r.trackName?.toLowerCase().includes(trackLower)) || // Partial: artist matches
-          results.find((r) => r.artistName?.toLowerCase().includes(artistLower)) || // Partial: track name matches
-          results.find((r) => r.trackName?.toLowerCase().includes(trackLower)) || results[0];
-          if (match) {
-            return {
-              v: {
-                art: match.artworkUrl100?.replace("100x100", "600x600") ?? null,
-                album: match.collectionName || ""
-              }
-            };
-          }
-        } catch (unused) {
-          return "continue";
-        }
-      };
-      var attempts = [
-        `${track} ${artist}`,
-        `${artist} ${track}`,
-        track.length <= 4 ? `${artist} - ${track}` : null
-      ].filter(Boolean);
-      for (var query of attempts) {
-        var _ret = yield* _loop2(query);
-        if (_type_of(_ret) === "object") return _ret.v;
-      }
-      return {
-        art: null,
-        album: ""
-      };
-    })();
-  }
-  function fetchTrackInfo(artist, track) {
-    return _async_to_generator(function* () {
-      return fetchITunesInfo(artist, track);
-    })();
-  }
-  function clearTrackCache() {
-    trackCache.clear();
-  }
-  function fetchTopTracks(username, period, limit) {
-    return _async_to_generator(function* () {
-      var creds = getCredentials();
-      if (!creds) {
-        throw new Error("No Last.fm credentials configured. Add your username and API key in Song Spotlight settings.");
-      }
-      var resolvedUsername = username || creds.username;
-      var resolvedPeriod = period || songSpotlightSettings.period;
-      var resolvedLimit = limit || songSpotlightSettings.trackCount;
-      var cacheKey = `${resolvedUsername}:${resolvedPeriod}:${resolvedLimit}`;
-      var cached = trackCache.get(cacheKey);
-      if (cached && Date.now() - cached.fetchedAt < CACHE_TTL2) {
-        return cached.tracks;
-      }
-      var params = new URLSearchParams({
-        method: "user.getTopTracks",
-        user: resolvedUsername,
-        api_key: creds.apiKey,
-        period: resolvedPeriod,
-        limit: String(resolvedLimit),
-        format: "json"
-      });
-      var url2 = `${LASTFM_BASE_URL}?${params}`;
-      try {
-        var response = yield fetch(url2);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        var data4 = yield response.json();
-        if (data4.error) {
-          throw new Error(`Last.fm API Error ${data4.error}: ${data4.message}`);
-        }
-        if (!data4.toptracks?.track?.length) {
-          return [];
-        }
-        var rawTracks = data4.toptracks.track;
-        var tracks = rawTracks.map((track) => ({
-          name: track.name,
-          artist: track.artist.name,
-          album: "",
-          playCount: parseInt(track.playcount) || 0,
-          url: track.url,
-          albumArt: null,
-          rank: parseInt(track["@attr"]?.rank) || 0
-        }));
-        yield allSettled(tracks.map((t) => _async_to_generator(function* () {
-          var info = yield fetchITunesInfo(t.artist, t.name);
-          t.albumArt = info.art;
-          if (!t.album) t.album = info.album;
-        })()));
-        trackCache.set(cacheKey, {
-          tracks,
-          fetchedAt: Date.now()
-        });
-        return tracks;
-      } catch (error) {
-        logger.error("[SongSpotlight] Failed to fetch top tracks:", error);
-        throw error;
-      }
-    })();
-  }
-  function fetchRecentTracks(username, limit = 5) {
-    return _async_to_generator(function* () {
-      var creds = getCredentials();
-      if (!creds) {
-        throw new Error("No Last.fm credentials available.");
-      }
-      var resolvedUsername = username || creds.username;
-      var cacheKey = `recent:${resolvedUsername}:${limit}`;
-      var cached = trackCache.get(cacheKey);
-      if (cached && Date.now() - cached.fetchedAt < CACHE_TTL2) {
-        return cached.tracks;
-      }
-      var params = new URLSearchParams({
-        method: "user.getRecentTracks",
-        user: resolvedUsername,
-        api_key: creds.apiKey,
-        limit: String(limit),
-        format: "json"
-      });
-      var url2 = `${LASTFM_BASE_URL}?${params}`;
-      try {
-        var response = yield fetch(url2);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        var data4 = yield response.json();
-        if (data4.error) {
-          throw new Error(`Last.fm API Error ${data4.error}: ${data4.message}`);
-        }
-        if (!data4.recenttracks?.track?.length) {
-          return [];
-        }
-        var tracks = data4.recenttracks.track.filter((t) => t.name).map((track, index) => ({
-          name: track.name,
-          artist: track.artist?.["#text"] || track.artist?.name || "Unknown",
-          album: track.album?.["#text"] || "",
-          playCount: 0,
-          url: track.url || "",
-          albumArt: null,
-          rank: index + 1
-        }));
-        yield allSettled(tracks.map((t) => _async_to_generator(function* () {
-          var info = yield fetchITunesInfo(t.artist, t.name);
-          t.albumArt = info.art;
-          if (!t.album) t.album = info.album;
-        })()));
-        trackCache.set(cacheKey, {
-          tracks,
-          fetchedAt: Date.now()
-        });
-        return tracks;
-      } catch (error) {
-        logger.error("[SongSpotlight] Failed to fetch recent tracks:", error);
-        throw error;
-      }
-    })();
-  }
-  var LASTFM_BASE_URL, registryCache, REGISTRY_CACHE_TTL, userInfoCache, USER_INFO_CACHE_TTL, trackCache, CACHE_TTL2;
-  var init_api7 = __esm({
-    "src/plugins/songspotlight/api.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_type_of();
-      init_logger();
-      init_storage28();
-      LASTFM_BASE_URL = "https://ws.audioscrobbler.com/2.0";
-      registryCache = /* @__PURE__ */ new Map();
-      REGISTRY_CACHE_TTL = 10 * 60 * 1e3;
-      userInfoCache = /* @__PURE__ */ new Map();
-      USER_INFO_CACHE_TTL = 30 * 60 * 1e3;
-      trackCache = /* @__PURE__ */ new Map();
-      CACHE_TTL2 = 5 * 60 * 1e3;
-    }
-  });
-
-  // src/plugins/songspotlight/components/SongRow.tsx
-  function getBlurSource(artUrl) {
-    return artUrl.replace(/\d+x\d+/, "100x100");
-  }
-  function SongRow({ track, style, showAlbumArt, showPlayCount, showAlbumName = true, showRankNumbers = true, hasThemeColors, colorfulCards, cardOpacity = 40, trailing }) {
-    var showBlur = colorfulCards && !!track.albumArt;
-    var overlayOpacity = cardOpacity / 100;
-    var useStyles16 = createStyles({
-      outerClip: {
-        borderRadius: 8,
-        overflow: "hidden"
-      },
-      container: {
-        flexDirection: "row",
-        alignItems: "center",
-        padding: 8
-      },
-      blurBackground: {
-        position: "absolute",
-        top: -20,
-        left: -20,
-        right: -20,
-        bottom: -20
-      },
-      blurOverlay: {
-        ...ReactNative.StyleSheet.absoluteFillObject,
-        backgroundColor: hasThemeColors ? `rgba(0,0,0,${Math.min(overlayOpacity + 0.05, 1)})` : `rgba(0,0,0,${overlayOpacity})`
-      },
-      rankContainer: {
-        width: 24,
-        alignItems: "center",
-        justifyContent: "center"
-      },
-      rankText: {
-        color: showBlur || hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
-      },
-      thumbnail: {
-        width: 44,
-        height: 44,
-        borderRadius: 6,
-        backgroundColor: showBlur || hasThemeColors ? "#FFFFFF1A" : semanticColors.BACKGROUND_TERTIARY
-      },
-      infoContainer: {
-        flex: 1,
-        marginLeft: 10,
-        justifyContent: "center"
-      },
-      trackName: {
-        color: showBlur || hasThemeColors ? "#FFFFFF" : semanticColors.TEXT_NORMAL
-      },
-      subText: {
-        color: showBlur || hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
-      },
-      albumSubText: {
-        color: showBlur || hasThemeColors ? "#FFFFFF60" : semanticColors.TEXT_MUTED,
-        opacity: 0.7
-      },
-      playCountContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginTop: 2
-      },
-      trailingContainer: {
-        marginLeft: 8,
-        alignItems: "flex-end",
-        justifyContent: "center"
-      }
-    });
-    var styles5 = useStyles16();
-    var handlePress = () => {
-      if (track.url) {
-        ReactNative.Linking.openURL(track.url);
-      }
-    };
-    return /* @__PURE__ */ jsx(PressableScale, {
-      onPress: handlePress,
-      children: /* @__PURE__ */ jsxs(ReactNative.View, {
-        style: [
-          styles5.outerClip,
-          style,
-          showBlur && {
-            backgroundColor: "transparent"
-          }
-        ],
-        children: [
-          showBlur && /* @__PURE__ */ jsxs(Fragment, {
-            children: [
-              /* @__PURE__ */ jsx(ReactNative.Image, {
-                source: {
-                  uri: getBlurSource(track.albumArt)
-                },
-                style: styles5.blurBackground,
-                blurRadius: 30,
-                resizeMode: "cover"
-              }),
-              /* @__PURE__ */ jsx(ReactNative.View, {
-                style: styles5.blurOverlay
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsxs(ReactNative.View, {
-            style: styles5.container,
-            children: [
-              showRankNumbers && /* @__PURE__ */ jsx(ReactNative.View, {
-                style: styles5.rankContainer,
-                children: /* @__PURE__ */ jsx(Text, {
-                  variant: "text-md/bold",
-                  style: styles5.rankText,
-                  children: track.rank
-                })
-              }),
-              showAlbumArt && (track.albumArt ? /* @__PURE__ */ jsx(ReactNative.Image, {
-                source: {
-                  uri: track.albumArt
-                },
-                style: styles5.thumbnail
-              }) : /* @__PURE__ */ jsx(ReactNative.View, {
-                style: styles5.thumbnail,
-                children: /* @__PURE__ */ jsx(ReactNative.View, {
-                  style: {
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "center"
-                  },
-                  children: /* @__PURE__ */ jsx(Text, {
-                    variant: "text-lg/bold",
-                    style: styles5.rankText,
-                    children: "\u266A"
-                  })
-                })
-              })),
-              /* @__PURE__ */ jsxs(ReactNative.View, {
-                style: styles5.infoContainer,
-                children: [
-                  /* @__PURE__ */ jsx(Text, {
-                    variant: "text-sm/semibold",
-                    style: styles5.trackName,
-                    numberOfLines: 1,
-                    children: track.name
-                  }),
-                  /* @__PURE__ */ jsx(ReactNative.View, {
-                    style: styles5.playCountContainer,
-                    children: /* @__PURE__ */ jsxs(Text, {
-                      variant: "text-xs/normal",
-                      style: styles5.subText,
-                      numberOfLines: 1,
-                      children: [
-                        track.artist,
-                        showPlayCount && track.playCount > 0 ? ` \xB7 ${track.playCount.toLocaleString()} plays` : "",
-                        showAlbumName && track.album ? /* @__PURE__ */ jsx(Text, {
-                          variant: "text-xs/normal",
-                          style: styles5.albumSubText,
-                          children: ` \xB7 ${track.album}`
-                        }) : null
-                      ]
-                    })
-                  })
-                ]
-              }),
-              trailing ? /* @__PURE__ */ jsx(ReactNative.View, {
-                style: styles5.trailingContainer,
-                children: trailing
-              }) : null
-            ]
-          })
-        ]
-      })
-    });
-  }
-  var init_SongRow = __esm({
-    "src/plugins/songspotlight/components/SongRow.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_color();
-      init_styles();
-      init_common();
-      init_components();
-    }
-  });
-
-  // src/plugins/songspotlight/components/SongSection.tsx
-  function SongSection({ userId }) {
-    var settings4 = useSongSpotlightSettings();
-    var [tracks, setTracks] = React.useState([]);
-    var [loading, setLoading] = React.useState(true);
-    var [error, setError] = React.useState(null);
-    var [lastFmUsername, setLastFmUsername] = React.useState(null);
-    var [resolving, setResolving] = React.useState(true);
-    var [userInfo, setUserInfo] = React.useState(null);
-    var [favorites, setFavorites] = React.useState([]);
-    var [favoritesLoading, setFavoritesLoading] = React.useState(true);
-    var isOwnProfile = userId === UserStore17.getCurrentUser()?.id;
-    var displayProfile = getDisplayProfile2?.(userId);
-    var themeColors = displayProfile?.themeColors;
-    var hasThemeColors = themeColors !== void 0;
-    var bio = displayProfile?.bio ?? null;
-    var headerSizes = {
-      small: {
-        avatar: 24,
-        radius: 12,
-        textVariant: "text-xs/semibold",
-        arrowVariant: "text-xs/normal",
-        padding: 8
-      },
-      medium: {
-        avatar: 32,
-        radius: 16,
-        textVariant: "text-sm/semibold",
-        arrowVariant: "text-sm/normal",
-        padding: 10
-      },
-      big: {
-        avatar: 44,
-        radius: 22,
-        textVariant: "text-md/semibold",
-        arrowVariant: "text-md/normal",
-        padding: 12
-      }
-    };
-    var hSize = headerSizes[settings4.headerSize] || headerSizes.small;
-    var useStyles16 = createStyles({
-      card: {
-        backgroundColor: hasThemeColors ? "#00000073" : semanticColors.CARD_PRIMARY_BG,
-        borderRadius: 16,
-        padding: 12
-      },
-      trackCard: {
-        backgroundColor: hasThemeColors ? "#00000083" : semanticColors.CARD_SECONDARY_BG
-      },
-      emptyText: {
-        textAlign: "center",
-        paddingVertical: 16,
-        color: hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
-      },
-      headerRow: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: 4,
-        paddingBottom: hSize.padding
-      },
-      headerAvatar: {
-        width: hSize.avatar,
-        height: hSize.avatar,
-        borderRadius: hSize.radius,
-        marginRight: 8,
-        backgroundColor: hasThemeColors ? "#FFFFFF1A" : semanticColors.BACKGROUND_TERTIARY
-      },
-      headerText: {
-        color: hasThemeColors ? "#FFFFFFB3" : semanticColors.TEXT_MUTED
-      }
-    });
-    var styles5 = useStyles16();
-    var sectionTitle = settings4.sectionTitle?.trim() || "Song Spotlight";
-    var favoriteSongs = settings4.favoriteSongs ?? [];
-    var autofillTracks = tracks.slice(0, Math.max(0, Math.min(settings4.trackCount || 0, 5)));
-    React.useEffect(() => {
-      setResolving(true);
-      resolveLastFmUsername(userId, isOwnProfile, bio).then((username) => {
-        setLastFmUsername(username);
-        setResolving(false);
-      }).catch(() => {
-        setLastFmUsername(null);
-        setResolving(false);
-      });
-    }, [
-      userId,
-      isOwnProfile,
-      bio
-    ]);
-    React.useEffect(() => {
-      if (!lastFmUsername || !settings4.showLastFmHeader) {
-        setUserInfo(null);
-        return;
-      }
-      fetchLastFmUserInfo(lastFmUsername).then((info) => setUserInfo(info)).catch(() => setUserInfo(null));
-    }, [
-      lastFmUsername,
-      settings4.showLastFmHeader
-    ]);
-    React.useEffect(() => {
-      if (resolving) return;
-      if (settings4.displaySource === "favorites") {
-        setTracks([]);
-        setLoading(false);
-        setError(null);
-        return;
-      }
-      if (!hasCredentials()) {
-        setLoading(false);
-        setError(null);
-        return;
-      }
-      if (isOwnProfile && !settings4.showOnOwnProfile) {
-        setLoading(false);
-        return;
-      }
-      if (!isOwnProfile && !settings4.showOnOtherProfiles) {
-        setLoading(false);
-        return;
-      }
-      if (!lastFmUsername) {
-        setLoading(false);
-        return;
-      }
-      setLoading(true);
-      setError(null);
-      var fetchFn = settings4.displayMode === "recent" ? fetchRecentTracks(lastFmUsername, settings4.trackCount) : fetchTopTracks(lastFmUsername, settings4.period, settings4.trackCount);
-      fetchFn.then((result) => {
-        setTracks(result);
-        setLoading(false);
-      }).catch((e) => {
-        setError(e.message || "Failed to fetch tracks");
-        setLoading(false);
-      });
-    }, [
-      resolving,
-      lastFmUsername,
-      settings4.period,
-      settings4.trackCount,
-      settings4.displayMode,
-      settings4.showOnOwnProfile,
-      settings4.showOnOtherProfiles
-    ]);
-    React.useEffect(() => {
-      if (settings4.displaySource !== "favorites") return;
-      setFavoritesLoading(true);
-      if (isOwnProfile) {
-        setFavorites((settings4.favoriteSongs ?? []).map((song, index) => ({
-          name: song.title,
-          artist: song.artist,
-          album: song.album,
-          playCount: 0,
-          url: song.url,
-          albumArt: song.albumArt || null,
-          rank: index + 1
-        })));
-        setFavoritesLoading(false);
-      } else {
-        fetchFavoritesFromRegistry(userId).then((favs) => {
-          setFavorites((favs ?? []).map((song, index) => ({
-            name: song.title,
-            artist: song.artist,
-            album: song.album,
-            playCount: 0,
-            url: song.url,
-            albumArt: song.albumArt || null,
-            rank: index + 1
-          })));
-          setFavoritesLoading(false);
-        }).catch(() => {
-          setFavorites([]);
-          setFavoritesLoading(false);
-        });
-      }
-    }, [
-      settings4.displaySource,
-      userId,
-      isOwnProfile,
-      settings4.favoriteSongs
-    ]);
-    if (settings4.displaySource === "favorites") {
-      if (favoritesLoading) return null;
-      if (favorites.length === 0) return null;
-      if (isOwnProfile && !settings4.showOnOwnProfile) return null;
-      if (!isOwnProfile && !settings4.showOnOtherProfiles) return null;
-    } else {
-      if (!hasCredentials()) return null;
-      if (resolving) return null;
-      if (!lastFmUsername) return null;
-      if (isOwnProfile && !settings4.showOnOwnProfile) return null;
-      if (!isOwnProfile && !settings4.showOnOtherProfiles) return null;
-    }
-    var handleHeaderPress = () => {
-      var url2 = userInfo?.url || `https://www.last.fm/user/${lastFmUsername}`;
-      ReactNative.Linking.openURL(url2);
-    };
-    return /* @__PURE__ */ jsx(ErrorBoundary, {
-      children: /* @__PURE__ */ jsx(ReactNative.View, {
-        style: [
-          styles5.card
-        ],
-        children: /* @__PURE__ */ jsxs(UserProfileCard2, {
-          title: sectionTitle,
-          style: [
-            styles5.card
-          ],
-          children: [
-            settings4.showLastFmHeader && lastFmUsername && /* @__PURE__ */ jsx(PressableScale, {
-              onPress: handleHeaderPress,
-              children: /* @__PURE__ */ jsxs(ReactNative.View, {
-                style: styles5.headerRow,
-                children: [
-                  userInfo?.avatar ? /* @__PURE__ */ jsx(ReactNative.Image, {
-                    source: {
-                      uri: userInfo.avatar
-                    },
-                    style: styles5.headerAvatar
-                  }) : /* @__PURE__ */ jsx(ReactNative.View, {
-                    style: styles5.headerAvatar
-                  }),
-                  /* @__PURE__ */ jsx(Text, {
-                    variant: hSize.textVariant,
-                    style: styles5.headerText,
-                    children: userInfo?.name || lastFmUsername
-                  }),
-                  /* @__PURE__ */ jsx(Text, {
-                    variant: hSize.arrowVariant,
-                    style: {
-                      ...styles5.headerText,
-                      marginLeft: 4
-                    },
-                    children: "\u2197"
-                  })
-                ]
-              })
-            }),
-            settings4.displaySource === "favorites" ? /* @__PURE__ */ jsxs(ReactNative.View, {
-              style: {
-                marginBottom: 10
-              },
-              children: [
-                /* @__PURE__ */ jsx(ReactNative.View, {
-                  style: {
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 4
-                  },
-                  children: /* @__PURE__ */ jsx(Text, {
-                    variant: "text-sm/semibold",
-                    style: {
-                      color: "#FF69B4"
-                    },
-                    children: "Favorites"
-                  })
-                }),
-                favorites.map((song, index) => /* @__PURE__ */ jsxs(React.Fragment, {
-                  children: [
-                    index > 0 && /* @__PURE__ */ jsx(ReactNative.View, {
-                      style: {
-                        height: 6
-                      }
-                    }),
-                    /* @__PURE__ */ jsx(SongRow, {
-                      track: song,
-                      style: styles5.trackCard,
-                      showAlbumArt: settings4.showAlbumArt,
-                      showPlayCount: false,
-                      showAlbumName: settings4.showAlbumName,
-                      showRankNumbers: settings4.showRankNumbers,
-                      hasThemeColors,
-                      colorfulCards: settings4.colorfulCards,
-                      cardOpacity: settings4.cardOpacity
-                    })
-                  ]
-                }, song.url || song.name || index))
-              ]
-            }) : loading ? /* @__PURE__ */ jsx(ReactNative.ActivityIndicator, {
-              size: "small",
-              style: {
-                paddingVertical: 20
-              }
-            }) : error ? /* @__PURE__ */ jsx(Text, {
-              variant: "text-sm/medium",
-              style: styles5.emptyText,
-              children: error
-            }) : autofillTracks.length === 0 ? /* @__PURE__ */ jsx(Text, {
-              variant: "text-sm/medium",
-              style: styles5.emptyText,
-              children: settings4.displayMode === "recent" ? "No recent tracks" : "No top tracks found"
-            }) : /* @__PURE__ */ jsx(ReactNative.View, {
-              children: autofillTracks.map((track, index) => /* @__PURE__ */ jsxs(React.Fragment, {
-                children: [
-                  index > 0 && /* @__PURE__ */ jsx(ReactNative.View, {
-                    style: {
-                      height: 6
-                    }
-                  }),
-                  /* @__PURE__ */ jsx(SongRow, {
-                    track,
-                    style: styles5.trackCard,
-                    showAlbumArt: settings4.showAlbumArt,
-                    showPlayCount: settings4.showPlayCount,
-                    showAlbumName: settings4.showAlbumName,
-                    showRankNumbers: settings4.showRankNumbers,
-                    hasThemeColors,
-                    colorfulCards: settings4.colorfulCards,
-                    cardOpacity: settings4.cardOpacity
-                  })
-                ]
-              }, `${track.rank}-${track.name}`))
-            })
-          ]
-        })
-      })
-    });
-  }
-  var UserStore17, UserProfileCard2, getDisplayProfile2;
-  var init_SongSection = __esm({
-    "src/plugins/songspotlight/components/SongSection.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_components2();
-      init_color();
-      init_styles();
-      init_metro();
-      init_common();
-      init_components();
-      init_api7();
-      init_storage28();
-      init_SongRow();
-      UserStore17 = findByStoreName("UserStore");
-      UserProfileCard2 = findByName("UserProfileCard");
-      ({ getDisplayProfile: getDisplayProfile2 } = findByProps("getDisplayProfile"));
-    }
-  });
-
-  // src/plugins/songspotlight/patches/patchProfile.ts
-  var UserProfile2, patchProfile_default2;
-  var init_patchProfile2 = __esm({
-    "src/plugins/songspotlight/patches/patchProfile.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_patcher();
-      init_utils();
-      init_metro();
-      init_SongSection();
-      init_storage28();
-      UserProfile2 = findByTypeName("UserProfile");
-      if (UserProfile2 === void 0) UserProfile2 = findByTypeName("UserProfileContent");
-      patchProfile_default2 = (() => after("type", UserProfile2, (args, ret) => {
-        var profileSections = findInReactTree(ret, (r) => r?.type?.displayName === "View" && r?.props?.children.findIndex((i) => i?.type?.name === "UserProfileBio" || i?.type?.name === "UserProfileAboutMeCard") !== -1)?.props?.children;
-        var userId = args[0]?.userId;
-        if (userId === void 0) userId = args[0]?.user?.id;
-        if (profileSections) {
-          var displayPosition = songSpotlightSettings.displayPosition;
-          if (displayPosition === "betweenBioAndRoles") {
-            var bioIdx = profileSections.findIndex((i) => i?.type?.name === "UserProfileBio" || i?.type?.name === "UserProfileAboutMeCard");
-            var insertAt = bioIdx !== -1 ? bioIdx + 1 : 0;
-            profileSections.splice(insertAt, 0, React.createElement(SongSection, {
-              userId
-            }));
-          } else if (displayPosition === "aboveBio") {
-            var bioIdx1 = profileSections.findIndex((i) => i?.type?.name === "UserProfileBio" || i?.type?.name === "UserProfileAboutMeCard");
-            var insertAt1 = bioIdx1 !== -1 ? bioIdx1 : 0;
-            profileSections.splice(insertAt1, 0, React.createElement(SongSection, {
-              userId
-            }));
-          } else {
-            var reviewIndex = profileSections.findIndex((i) => i?.type?.name === "ReviewSection");
-            var insertAt2 = reviewIndex !== -1 ? reviewIndex : profileSections.length;
-            profileSections.splice(insertAt2, 0, React.createElement(SongSection, {
-              userId
-            }));
-          }
-        }
-      }));
-    }
-  });
-
-  // src/plugins/songspotlight/patches/patchSimplifiedProfile.ts
-  var SimplifiedUserProfileContent2, patchSimplifiedProfile_default2;
-  var init_patchSimplifiedProfile2 = __esm({
-    "src/plugins/songspotlight/patches/patchSimplifiedProfile.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_patcher();
-      init_utils();
-      init_metro();
-      init_SongSection();
-      init_storage28();
-      SimplifiedUserProfileContent2 = findByTypeName("SimplifiedUserProfileContent");
-      patchSimplifiedProfile_default2 = (() => SimplifiedUserProfileContent2 !== void 0 ? after("type", SimplifiedUserProfileContent2, (args, ret) => {
-        var profileSections = findInReactTree(ret, (r) => r?.type?.displayName === "View" && r?.props?.children.findIndex((i) => i?.type?.name === "SimplifiedUserProfileAboutMeCard") !== -1)?.props?.children;
-        var userId = args[0]?.user?.id;
-        if (profileSections) {
-          var displayPosition = songSpotlightSettings.displayPosition;
-          if (displayPosition === "betweenBioAndRoles") {
-            var bioIdx = profileSections.findIndex((i) => i?.type?.name === "SimplifiedUserProfileAboutMeCard");
-            var insertAt = bioIdx !== -1 ? bioIdx + 1 : 0;
-            profileSections.splice(insertAt, 0, React.createElement(SongSection, {
-              userId
-            }));
-          } else if (displayPosition === "aboveBio") {
-            var bioIdx1 = profileSections.findIndex((i) => i?.type?.name === "SimplifiedUserProfileAboutMeCard");
-            var insertAt1 = bioIdx1 !== -1 ? bioIdx1 : 0;
-            profileSections.splice(insertAt1, 0, React.createElement(SongSection, {
-              userId
-            }));
-          } else {
-            var reviewIndex = profileSections.findIndex((i) => i?.type?.name === "ReviewSection");
-            var insertAt2 = reviewIndex !== -1 ? reviewIndex : profileSections.length;
-            profileSections.splice(insertAt2, 0, React.createElement(SongSection, {
-              userId
-            }));
-          }
-        }
-      }) : () => {
-        return false;
-      });
-    }
-  });
-
-  // src/plugins/songspotlight/pages/FavoriteSongsSettingsPage.tsx
-  var FavoriteSongsSettingsPage_exports = {};
-  __export(FavoriteSongsSettingsPage_exports, {
-    default: () => FavoriteSongsSettingsPage
-  });
-  function FavoriteSongsSettingsPage() {
-    var settings4 = useSongSpotlightSettings();
-    var [input, setInput] = import_react29.default.useState("");
-    var [loading, setLoading] = import_react29.default.useState(false);
-    var [error, setError] = import_react29.default.useState(null);
-    function handleAdd() {
-      return _async_to_generator(function* () {
-        setError(null);
-        if (!input) return;
-        var m2 = input.match(/last\.fm\/music\/([^\/]+)(?:\/_\/|\/)([^\/?#]+)/i);
-        if (!m2) {
-          setError("Invalid Last.fm track URL");
-          return;
-        }
-        var artist = decodeURIComponent(m2[1].replace(/\+/g, " ").trim());
-        var title = decodeURIComponent(m2[2].replace(/\+/g, " ").trim());
-        setLoading(true);
-        try {
-          var info = yield fetchTrackInfo(artist, title);
-          var newSong = {
-            title,
-            artist,
-            album: info.album || "",
-            url: input,
-            albumArt: info.art
-          };
-          var updated = [
-            ...settings4.favoriteSongs || [],
-            newSong
-          ];
-          settings4.updateSettings({
-            favoriteSongs: updated
-          });
-          try {
-            var UserStore20 = findByStoreName("UserStore");
-            var myId = UserStore20?.getCurrentUser?.()?.id;
-            if (myId && settings4.shareUsername) {
-              publishFavoritesToRegistry(myId, updated);
-            }
-          } catch (unused) {
-          }
-          setInput("");
-          showToast("Added to favorites", findAssetId2("CheckIcon"));
-        } catch (e) {
-          setError("Failed to fetch track info");
-        }
-        setLoading(false);
-      })();
-    }
-    function handleRemove(idx) {
-      var updated = [
-        ...settings4.favoriteSongs || []
-      ];
-      updated.splice(idx, 1);
-      settings4.updateSettings({
-        favoriteSongs: updated
-      });
-      showToast("Removed favorite", findAssetId2("CheckIcon"));
-      try {
-        var UserStore20 = findByStoreName("UserStore");
-        var myId = UserStore20?.getCurrentUser?.()?.id;
-        if (myId && settings4.shareUsername) {
-          publishFavoritesToRegistry(myId, updated);
-        }
-      } catch (unused) {
-      }
-    }
-    function handleMoveUp(idx) {
-      if (idx <= 0) return;
-      var list = [
-        ...settings4.favoriteSongs || []
-      ];
-      var tmp = list[idx - 1];
-      list[idx - 1] = list[idx];
-      list[idx] = tmp;
-      settings4.updateSettings({
-        favoriteSongs: list
-      });
-      showToast("Moved up", findAssetId2("CheckIcon"));
-      try {
-        var UserStore20 = findByStoreName("UserStore");
-        var myId = UserStore20?.getCurrentUser?.()?.id;
-        if (myId && settings4.shareUsername) publishFavoritesToRegistry(myId, list);
-      } catch (unused) {
-      }
-    }
-    function handleMoveDown(idx) {
-      var len = (settings4.favoriteSongs || []).length;
-      if (idx >= len - 1) return;
-      var list = [
-        ...settings4.favoriteSongs || []
-      ];
-      var tmp = list[idx + 1];
-      list[idx + 1] = list[idx];
-      list[idx] = tmp;
-      settings4.updateSettings({
-        favoriteSongs: list
-      });
-      showToast("Moved down", findAssetId2("CheckIcon"));
-      try {
-        var UserStore20 = findByStoreName("UserStore");
-        var myId = UserStore20?.getCurrentUser?.()?.id;
-        if (myId && settings4.shareUsername) publishFavoritesToRegistry(myId, list);
-      } catch (unused) {
-      }
-    }
-    return /* @__PURE__ */ jsx(ScrollView30, {
-      style: {
-        flex: 1
-      },
-      contentContainerStyle: {
-        padding: 10
-      },
-      children: /* @__PURE__ */ jsxs(Stack12, {
-        spacing: 8,
-        children: [
-          /* @__PURE__ */ jsxs(TableRowGroup15, {
-            title: "Add songs with Last.fm links",
-            children: [
-              /* @__PURE__ */ jsx(TextInput7, {
-                placeholder: "https://www.last.fm/music/Artist/_/Track",
-                value: input,
-                onChange: setInput,
-                isClearable: true,
-                editable: !loading
-              }),
-              /* @__PURE__ */ jsx(Button3, {
-                text: "Add to favorites",
-                size: "md",
-                onPress: handleAdd,
-                disabled: loading || !input,
-                style: {
-                  borderRadius: 8
-                }
-              }),
-              error && /* @__PURE__ */ jsx(Text8, {
-                style: {
-                  color: "#FF6B6B"
-                },
-                children: error
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup15, {
-            title: "Favorites",
-            children: (settings4.favoriteSongs || []).length === 0 ? /* @__PURE__ */ jsx(Text8, {
-              style: {
-                color: "#888",
-                padding: 8
-              },
-              children: "No favorites added."
-            }) : (settings4.favoriteSongs || []).map((s, idx) => /* @__PURE__ */ jsx(import_react29.default.Fragment, {
-              children: /* @__PURE__ */ jsx(SongRow, {
-                track: {
-                  name: s.title,
-                  artist: s.artist,
-                  album: s.album,
-                  playCount: 0,
-                  url: s.url,
-                  albumArt: s.albumArt || null,
-                  rank: idx + 1
-                },
-                style: {
-                  marginBottom: 6
-                },
-                showAlbumArt: true,
-                showPlayCount: false,
-                showAlbumName: true,
-                showRankNumbers: false,
-                hasThemeColors: true,
-                trailing: /* @__PURE__ */ jsxs(ReactNative.View, {
-                  style: {
-                    flexDirection: "row",
-                    gap: 6
-                  },
-                  children: [
-                    /* @__PURE__ */ jsx(IconButton, {
-                      size: "sm",
-                      icon: findAssetId2("ArrowSmallUpIcon"),
-                      onPress: () => {
-                        if (idx > 0) handleMoveUp(idx);
-                      }
-                    }),
-                    /* @__PURE__ */ jsx(IconButton, {
-                      size: "sm",
-                      icon: findAssetId2("ArrowSmallDownIcon"),
-                      onPress: () => {
-                        if (idx < (settings4.favoriteSongs || []).length - 1) handleMoveDown(idx);
-                      }
-                    }),
-                    /* @__PURE__ */ jsx(IconButton, {
-                      size: "sm",
-                      variant: "destructive",
-                      icon: findAssetId2("TrashIcon"),
-                      onPress: () => handleRemove(idx)
-                    })
-                  ]
-                })
-              })
-            }, s.url || `${s.title}-${idx}`))
-          })
-        ]
-      })
-    });
-  }
-  var import_react29, ScrollView30, TableRowGroup15, TableRow8, Stack12, TextInput7, Text8, Button3;
-  var init_FavoriteSongsSettingsPage = __esm({
-    "src/plugins/songspotlight/pages/FavoriteSongsSettingsPage.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_jsxRuntime();
-      import_react29 = __toESM(require_react());
-      init_metro();
-      init_components();
-      init_common();
-      init_toasts();
-      init_assets();
-      init_storage28();
-      init_api7();
-      init_SongRow();
-      ({ ScrollView: ScrollView30 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup15, TableRow: TableRow8, Stack: Stack12, TextInput: TextInput7, Text: Text8, Button: Button3 } = findByProps("TableRowGroup", "TableRow", "Stack", "TextInput", "Text", "Button"));
-    }
-  });
-
-  // src/plugins/songspotlight/pages/DisplaySettingsPage.tsx
-  function DisplaySettingsPage2() {
-    var settings4 = useSongSpotlightSettings();
-    var navigation2 = NavigationNative.useNavigation();
-    return /* @__PURE__ */ jsx(ScrollView31, {
-      style: {
-        flex: 1
-      },
-      contentContainerStyle: {
-        padding: 10
-      },
-      children: /* @__PURE__ */ jsxs(Stack13, {
-        spacing: 8,
-        children: [
-          /* @__PURE__ */ jsxs(TableRowGroup16, {
-            title: "Track Display",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show album art",
-                subLabel: "Display album artwork thumbnails",
-                onValueChange: (value) => settings4.updateSettings({
-                  showAlbumArt: value
-                }),
-                value: settings4.showAlbumArt
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show play count",
-                subLabel: "Display number of plays next to tracks",
-                onValueChange: (value) => settings4.updateSettings({
-                  showPlayCount: value
-                }),
-                value: settings4.showPlayCount
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show album name",
-                subLabel: "Display the album name under each track",
-                onValueChange: (value) => settings4.updateSettings({
-                  showAlbumName: value
-                }),
-                value: settings4.showAlbumName
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Colorful cards",
-                subLabel: "Use blurred album art as the background for each track row",
-                onValueChange: (value) => settings4.updateSettings({
-                  colorfulCards: value
-                }),
-                value: settings4.colorfulCards
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Section Position",
-            children: /* @__PURE__ */ jsxs(TableRadioGroup5, {
-              value: settings4.displayPosition,
-              onChange: (value) => settings4.updateSettings({
-                displayPosition: value
-              }),
-              children: [
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Above Bio (default)",
-                  value: "aboveBio"
-                }),
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Below Connections",
-                  value: "aboveReviewDB"
-                }),
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Between Bio and Roles",
-                  value: "betweenBioAndRoles"
-                })
-              ]
-            })
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Source",
-            children: /* @__PURE__ */ jsxs(TableRadioGroup5, {
-              value: settings4.displaySource,
-              onChange: (value) => settings4.updateSettings({
-                displaySource: value
-              }),
-              children: [
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Last.fm stats",
-                  value: "lastfm"
-                }),
-                /* @__PURE__ */ jsx(TableRadioRow5, {
-                  label: "Favorites",
-                  value: "favorites"
-                })
-              ]
-            })
-          }),
-          settings4.displaySource === "favorites" && /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Favorites",
-            children: /* @__PURE__ */ jsx(TableRow9, {
-              label: "Configure favorite songs",
-              trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
-              onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
-                title: "Favorite Songs",
-                render: (init_FavoriteSongsSettingsPage(), __toCommonJS(FavoriteSongsSettingsPage_exports)).default
-              })
-            })
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup16, {
-            title: "Visibility",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show on own profile",
-                onValueChange: (value) => settings4.updateSettings({
-                  showOnOwnProfile: value
-                }),
-                value: settings4.showOnOwnProfile
-              }),
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show on other profiles",
-                subLabel: "Show stats for users who shared their Last.fm via the registry or have a last.fm link in their bio",
-                onValueChange: (value) => settings4.updateSettings({
-                  showOnOtherProfiles: value
-                }),
-                value: settings4.showOnOtherProfiles
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            title: "Last.fm Header",
-            children: /* @__PURE__ */ jsx(TableSwitchRow10, {
-              label: "Show Last.fm profile header",
-              subLabel: "Display Last.fm profiles as headers",
-              onValueChange: (value) => settings4.updateSettings({
-                showLastFmHeader: value
-              }),
-              value: settings4.showLastFmHeader
-            })
-          }),
-          settings4.showLastFmHeader && /* @__PURE__ */ jsxs(TableRadioGroup5, {
-            title: "Header Size",
-            value: settings4.headerSize,
-            onChange: (value) => settings4.updateSettings({
-              headerSize: value
-            }),
-            children: [
-              /* @__PURE__ */ jsx(TableRadioRow5, {
-                label: "Small",
-                value: "small"
-              }),
-              /* @__PURE__ */ jsx(TableRadioRow5, {
-                label: "Medium",
-                value: "medium"
-              }),
-              /* @__PURE__ */ jsx(TableRadioRow5, {
-                label: "Big",
-                value: "big"
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup16, {
-            title: "Advanced",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow10, {
-                label: "Show rank numbers",
-                subLabel: "Display 1, 2, 3... on each track row",
-                onValueChange: (value) => settings4.updateSettings({
-                  showRankNumbers: value
-                }),
-                value: settings4.showRankNumbers
-              }),
-              /* @__PURE__ */ jsx(TableRow9, {
-                label: "Clear Track Cache",
-                subLabel: "Force refresh track data on next profile view",
-                trailing: /* @__PURE__ */ jsx(TableRow9.Arrow, {}),
-                onPress: () => {
-                  clearTrackCache();
-                  showToast("Track cache cleared", findAssetId2("CheckIcon"));
-                }
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup16, {
-            children: /* @__PURE__ */ jsxs(Stack13, {
-              spacing: 4,
-              children: [
-                /* @__PURE__ */ jsx(TextInput8, {
-                  placeholder: "Section Title (default: Song Spotlight)",
-                  value: settings4.sectionTitle,
-                  onChange: (v2) => settings4.updateSettings({
-                    sectionTitle: v2
-                  }),
-                  isClearable: true
-                }),
-                /* @__PURE__ */ jsx(TextInput8, {
-                  placeholder: "Card Opacity % (default: 40)",
-                  value: settings4.cardOpacity === 40 ? "" : String(settings4.cardOpacity),
-                  onChange: (v2) => {
-                    if (v2 === "") {
-                      settings4.updateSettings({
-                        cardOpacity: 40
-                      });
-                      return;
-                    }
-                    var num = parseInt(v2);
-                    if (!isNaN(num) && num >= 0 && num <= 100) {
-                      settings4.updateSettings({
-                        cardOpacity: num
-                      });
-                    }
-                  },
-                  isClearable: true
-                })
-              ]
-            })
-          })
-        ]
-      })
-    });
-  }
-  var ScrollView31, TableSwitchRow10, TableRowGroup16, TableRow9, TableRadioRow5, TableRadioGroup5, Stack13, TextInput8;
-  var init_DisplaySettingsPage2 = __esm({
-    "src/plugins/songspotlight/pages/DisplaySettingsPage.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_toasts();
-      init_metro();
-      init_api7();
-      init_common();
-      init_storage28();
-      ({ ScrollView: ScrollView31 } = findByProps("ScrollView"));
-      ({ TableSwitchRow: TableSwitchRow10, TableRowGroup: TableRowGroup16, TableRow: TableRow9, TableRadioRow: TableRadioRow5, TableRadioGroup: TableRadioGroup5, Stack: Stack13 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput8 } = findByProps("TextInput"));
-    }
-  });
-
-  // src/plugins/songspotlight/pages/LastFmCredentialsPage.tsx
-  function LastFmCredentialsPage() {
-    var settings4 = useSongSpotlightSettings();
-    var handleTestConnection = () => {
-      showToast("Testing Last.fm connection...", findAssetId2("ClockIcon"));
-      testConnection().then((isValid) => {
-        if (isValid) {
-          showToast("\u2705 Last.fm connection successful!", findAssetId2("CheckIcon"));
-        } else {
-          showToast("\u274C Last.fm connection failed", findAssetId2("XIcon"));
-        }
-      }).catch(() => {
-        showToast("\u274C Connection error", findAssetId2("XIcon"));
-      });
-    };
-    return /* @__PURE__ */ jsx(ScrollView32, {
-      style: {
-        flex: 1
-      },
-      contentContainerStyle: {
-        padding: 10
-      },
-      children: /* @__PURE__ */ jsxs(Stack14, {
-        spacing: 8,
-        children: [
-          /* @__PURE__ */ jsx(TableRowGroup17, {
-            title: "Credentials",
-            children: /* @__PURE__ */ jsxs(Stack14, {
-              spacing: 4,
-              children: [
-                /* @__PURE__ */ jsx(TextInput9, {
-                  placeholder: "Last.fm Username",
-                  value: settings4.username,
-                  onChange: (v2) => settings4.updateSettings({
-                    username: v2
-                  }),
-                  isClearable: true
-                }),
-                /* @__PURE__ */ jsx(TextInput9, {
-                  placeholder: "Last.fm API Key",
-                  value: settings4.apiKey,
-                  onChange: (v2) => settings4.updateSettings({
-                    apiKey: v2
-                  }),
-                  secureTextEntry: true,
-                  isClearable: true
-                })
-              ]
-            })
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup17, {
-            title: "Actions",
-            children: [
-              /* @__PURE__ */ jsx(TableRow10, {
-                label: "Test Connection",
-                subLabel: "Verify your Last.fm credentials",
-                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
-                onPress: handleTestConnection
-              }),
-              /* @__PURE__ */ jsx(TableRow10, {
-                label: "Get API Key",
-                subLabel: "Create a Last.fm API key at last.fm/api/account/create",
-                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
-                onPress: () => {
-                  import_react_native61.Linking.openURL("https://www.last.fm/api/account/create").catch(() => {
-                    showToast("Failed to open web browser. Please visit: https://www.last.fm/api/account/create", findAssetId2("XIcon"));
-                  });
-                }
-              }),
-              /* @__PURE__ */ jsx(TableRow10, {
-                label: "Clear Track Cache",
-                subLabel: "Force refresh track data on next profile view",
-                trailing: /* @__PURE__ */ jsx(TableRow10.Arrow, {}),
-                onPress: () => {
-                  clearTrackCache();
-                  showToast("Track cache cleared", findAssetId2("CheckIcon"));
-                }
-              })
-            ]
-          })
-        ]
-      })
-    });
-  }
-  var import_react_native61, ScrollView32, TableRowGroup17, TableRow10, Stack14, TextInput9;
-  var init_LastFmCredentialsPage = __esm({
-    "src/plugins/songspotlight/pages/LastFmCredentialsPage.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_toasts();
-      init_metro();
-      import_react_native61 = __toESM(require_react_native());
-      init_api7();
-      init_storage28();
-      ({ ScrollView: ScrollView32 } = findByProps("ScrollView"));
-      ({ TableRowGroup: TableRowGroup17, TableRow: TableRow10, Stack: Stack14 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      ({ TextInput: TextInput9 } = findByProps("TextInput"));
-    }
-  });
-
-  // src/plugins/songspotlight/Settings.tsx
-  function Settings9() {
-    var settings4 = useSongSpotlightSettings();
-    var navigation2 = NavigationNative.useNavigation();
-    var credentialStatus = settings4.username && settings4.apiKey ? "\u2705 Authenticated" : "\u274C Missing credentials";
-    return /* @__PURE__ */ jsx(ScrollView33, {
-      style: {
-        flex: 1
-      },
-      contentContainerStyle: {
-        padding: 10
-      },
-      children: /* @__PURE__ */ jsxs(Stack15, {
-        spacing: 8,
-        children: [
-          /* @__PURE__ */ jsx(TableRowGroup18, {
-            title: "Service Configuration",
-            children: /* @__PURE__ */ jsx(TableRow11, {
-              label: "Last.fm Settings",
-              subLabel: credentialStatus,
-              trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
-              onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
-                title: "Last.fm Settings",
-                render: LastFmCredentialsPage
-              })
-            })
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup18, {
-            title: "Display",
-            children: /* @__PURE__ */ jsx(TableRow11, {
-              label: "Configure display",
-              trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
-              onPress: () => navigation2.push("RAIN_CUSTOM_PAGE", {
-                title: "Display",
-                render: DisplaySettingsPage2
-              })
-            })
-          }),
-          /* @__PURE__ */ jsxs(TableRowGroup18, {
-            title: "Sharing",
-            children: [
-              /* @__PURE__ */ jsx(TableSwitchRow11, {
-                label: "Share my Last.fm username",
-                subLabel: "Allow other Rain users to see your top tracks on your profile. Your Discord ID and Last.fm username will be stored in a public registry.",
-                onValueChange: (value) => {
-                  settings4.updateSettings({
-                    shareUsername: value
-                  });
-                  var myId = UserStore18?.getCurrentUser?.()?.id;
-                  if (!value) {
-                    if (myId) {
-                      unpublishFromRegistry2(myId).then((ok) => {
-                        if (ok) showToast("Removed from registry", findAssetId2("CheckIcon"));
-                      });
-                    }
-                  } else if (settings4.username && myId) {
-                    publishToRegistry2(myId).then((ok) => {
-                      if (ok) showToast("Published to registry!", findAssetId2("CheckIcon"));
-                      else showToast("Failed to publish", findAssetId2("XIcon"));
-                    });
-                  }
-                },
-                value: settings4.shareUsername
-              }),
-              /* @__PURE__ */ jsx(TableRow11, {
-                label: "Publish Now",
-                subLabel: "Manually sync your Last.fm username to the registry",
-                trailing: /* @__PURE__ */ jsx(TableRow11.Arrow, {}),
-                onPress: () => {
-                  if (!settings4.username) {
-                    showToast("Set your Last.fm username first", findAssetId2("XIcon"));
-                    return;
-                  }
-                  var myId = UserStore18?.getCurrentUser?.()?.id;
-                  if (!myId) {
-                    showToast("Not logged in", findAssetId2("XIcon"));
-                    return;
-                  }
-                  showToast("Publishing...", findAssetId2("ClockIcon"));
-                  publishToRegistry2(myId).then((ok) => {
-                    if (ok) {
-                      settings4.updateSettings({
-                        shareUsername: true
-                      });
-                      showToast("Published to registry!", findAssetId2("CheckIcon"));
-                    } else {
-                      showToast("Failed to publish", findAssetId2("XIcon"));
-                    }
-                  });
-                }
-              })
-            ]
-          }),
-          /* @__PURE__ */ jsx(TableRowGroup18, {
-            title: "Preview",
-            children: /* @__PURE__ */ jsx(Stack15, {
-              spacing: 0,
-              children: UserStore18?.getCurrentUser?.()?.id ? /* @__PURE__ */ jsx(SongSection, {
-                userId: UserStore18.getCurrentUser().id
-              }) : /* @__PURE__ */ jsx(Text, {
-                variant: "text-sm/medium",
-                style: {
-                  textAlign: "center",
-                  paddingVertical: 16
-                },
-                children: "Log in to see preview"
-              })
-            })
-          })
-        ]
-      })
-    });
-  }
-  var ScrollView33, TableSwitchRow11, TableRowGroup18, TableRow11, Stack15, UserStore18;
-  var init_Settings6 = __esm({
-    "src/plugins/songspotlight/Settings.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_jsxRuntime();
-      init_assets();
-      init_toasts();
-      init_metro();
-      init_common();
-      init_components();
-      init_api7();
-      init_SongSection();
-      init_DisplaySettingsPage2();
-      init_LastFmCredentialsPage();
-      init_storage28();
-      ({ ScrollView: ScrollView33 } = findByProps("ScrollView"));
-      ({ TableSwitchRow: TableSwitchRow11, TableRowGroup: TableRowGroup18, TableRow: TableRow11, Stack: Stack15 } = findByProps("TableSwitchRow", "TableRowGroup", "Stack", "TableRow", "TableRadioRow", "TableRadioGroup"));
-      UserStore18 = findByStoreName("UserStore");
-    }
-  });
-
-  // src/plugins/songspotlight/index.ts
-  var songspotlight_exports = {};
-  __export(songspotlight_exports, {
-    default: () => songspotlight_default
-  });
-  var patches22, songspotlight_default;
-  var init_songspotlight = __esm({
-    "src/plugins/songspotlight/index.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_storage();
-      init_plugins3();
-      init_Developers();
-      init_patchProfile2();
-      init_patchSimplifiedProfile2();
-      init_Settings6();
-      init_storage28();
-      patches22 = [];
-      songspotlight_default = definePlugin({
-        name: "SongSpotlight",
-        description: "Show your top Last.fm tracks on your Discord profile.",
-        author: [
-          Developers.LampDelivery
-        ],
-        id: "songspotlight",
-        version: "1.0.0",
-        start() {
-          return _async_to_generator(function* () {
-            yield waitForHydration(useSongSpotlightSettings);
-            patches22.push(patchProfile_default2());
-            patches22.push(patchSimplifiedProfile_default2());
-          })();
-        },
-        stop() {
           for (var unpatch6 of patches22) unpatch6();
           patches22.length = 0;
-        },
-        settings: Settings9
+        }
       });
     }
   });
 
   // src/plugins/stafftags/storage.ts
   var useStaffTagsSettings, storage2;
-  var init_storage29 = __esm({
+  var init_storage27 = __esm({
     "src/plugins/stafftags/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -33391,18 +31917,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       useStaffTagsSettings = create2()(persist((set) => ({
         useRoleColor: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "stafftags-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/stafftags.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       storage2 = new Proxy({}, {
@@ -33461,7 +31987,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_metro();
       init_common();
       import_chroma_js5 = __toESM(require_chroma_js());
-      init_storage29();
+      init_storage27();
       ({ computePermissions } = findByProps("computePermissions", "canEveryoneRole") ?? {});
       GuildMemberStore = findByStoreName("GuildMemberStore");
       getBuiltInTags = () => [
@@ -33711,9 +32237,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/stafftags/Settings.tsx
-  function Settings10() {
+  function Settings9() {
     var settings4 = useStaffTagsSettings();
-    return /* @__PURE__ */ jsx(import_react_native62.View, {
+    return /* @__PURE__ */ jsx(import_react_native64.View, {
       children: /* @__PURE__ */ jsx(Stack, {
         style: {
           paddingVertical: 24,
@@ -33733,16 +32259,16 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native62;
-  var init_Settings7 = __esm({
+  var import_react_native64;
+  var init_Settings6 = __esm({
     "src/plugins/stafftags/Settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_jsxRuntime();
       init_components();
-      import_react_native62 = __toESM(require_react_native());
-      init_storage29();
+      import_react_native64 = __toESM(require_react_native());
+      init_storage27();
     }
   });
 
@@ -33763,7 +32289,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_details();
       init_name();
       init_tag();
-      init_Settings7();
+      init_Settings6();
       patches23 = [];
       stafftags_default = definePlugin({
         name: "StaffTags",
@@ -33785,14 +32311,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           for (var unpatch6 of patches23) unpatch6();
           patches23.length = 0;
         },
-        settings: Settings10
+        settings: Settings9
       });
     }
   });
 
   // src/plugins/taptap/storage.ts
   var useTapTapSettings, taptapSettings;
-  var init_storage30 = __esm({
+  var init_storage28 = __esm({
     "src/plugins/taptap/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -33813,18 +32339,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         delay: "300",
         debugMode: false,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "taptap-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/taptap.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       taptapSettings = new Proxy({}, {
@@ -33860,7 +32386,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         });
       }
     }, []);
-    return /* @__PURE__ */ jsx(import_react_native63.View, {
+    return /* @__PURE__ */ jsx(import_react_native65.View, {
       children: /* @__PURE__ */ jsxs(Stack, {
         style: {
           paddingVertical: 24,
@@ -33919,8 +32445,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react30, import_react_native63;
-  var init_settings24 = __esm({
+  var import_react30, import_react_native65;
+  var init_settings23 = __esm({
     "src/plugins/taptap/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -33930,8 +32456,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_common();
       init_components();
       import_react30 = __toESM(require_react());
-      import_react_native63 = __toESM(require_react_native());
-      init_storage30();
+      import_react_native65 = __toESM(require_react_native());
+      init_storage28();
     }
   });
 
@@ -33983,11 +32509,11 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       if (taptapSettings.debugMode) logger.error("TapTap: openKeyboard error", e);
     }
   }
-  function doubleTapState(state, nativeEvent) {
+  function doubleTapState(state2, nativeEvent) {
     try {
       if (taptapSettings.debugMode) {
         logger.log("TapTap: DoubleTapState", {
-          state,
+          state: state2,
           data: nativeEvent
         });
       }
@@ -34009,7 +32535,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             var channel = ChannelStore5?.getChannel?.(channelId);
             var message = MessageStore2?.getMessage?.(channelId, messageId);
             if (!message) return;
-            var currentUser = UserStore19?.getCurrentUser?.();
+            var currentUser = UserStore17?.getCurrentUser?.();
             var isAuthor = !!(currentUser && message.author && message.author.id === currentUser.id);
             if (isAuthor && taptapSettings.userEdit) {
               Messages2?.startEditMessage?.(channelId, messageId, message.content ?? "");
@@ -34071,7 +32597,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             if (!Number.isNaN(parsed) && parsed >= 200) delayMs = parsed;
             if (timeoutTap) clearTimeout(timeoutTap);
             timeoutTap = setTimeout(() => resetTapState(), delayMs);
-            var currentUser = UserStore19?.getCurrentUser?.();
+            var currentUser = UserStore17?.getCurrentUser?.();
             var isAuthor = !!(currentUser && message.author && message.author.id === currentUser.id);
             var enriched = {
               ...nativeEvent,
@@ -34177,7 +32703,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   function resolveRuntimeModules() {
     ChannelStore5 = findByStoreName("ChannelStore");
     MessageStore2 = findByStoreName("MessageStore");
-    UserStore19 = findByStoreName("UserStore");
+    UserStore17 = findByStoreName("UserStore");
     Messages2 = findByProps("sendMessage", "startEditMessage");
     ReplyManager = findByProps("createPendingReply");
     ChatInputRef = findByProps("insertText");
@@ -34185,7 +32711,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var mhModule = findByProps("MessagesHandlers");
     MessagesHandlers = mhModule?.MessagesHandlers ?? null;
   }
-  var ChannelStore5, MessageStore2, UserStore19, Messages2, ReplyManager, ChatInputRef, MessagesHandlers, getChatInputRef2, unpatchGetter, unpatchHandlers, currentTapIndex, currentMessageID, timeoutTap, handlerInstances, patches24, taptap_default;
+  var ChannelStore5, MessageStore2, UserStore17, Messages2, ReplyManager, ChatInputRef, MessagesHandlers, getChatInputRef2, unpatchGetter, unpatchHandlers, currentTapIndex, currentMessageID, timeoutTap, handlerInstances, patches24, taptap_default;
   var init_taptap = __esm({
     "src/plugins/taptap/index.ts"() {
       "use strict";
@@ -34199,8 +32725,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_wrappers();
       init_plugins3();
       init_Developers();
-      init_settings24();
-      init_storage30();
+      init_settings23();
+      init_storage28();
       unpatchGetter = null;
       unpatchHandlers = null;
       currentTapIndex = 0;
@@ -34345,7 +32871,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
   });
 
   // src/plugins/translator/api/index.ts
-  var init_api8 = __esm({
+  var init_api6 = __esm({
     "src/plugins/translator/api/index.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -34548,7 +33074,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
 
   // src/plugins/translator/storage.ts
   var useTranslatorSettings, settings3;
-  var init_storage31 = __esm({
+  var init_storage29 = __esm({
     "src/plugins/translator/storage.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -34561,18 +33087,18 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         translator: 1,
         immersive_enabled: true,
         _hasHydrated: false,
-        updateSettings: (newSettings) => set((state) => ({
-          ...state,
+        updateSettings: (newSettings) => set((state2) => ({
+          ...state2,
           ...newSettings
         })),
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "translator-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/translator.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       settings3 = new Proxy({}, {
@@ -34606,9 +33132,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_logger();
       init_common();
       init_wrappers();
-      init_api8();
+      init_api6();
       init_lang();
-      init_storage31();
+      init_storage29();
       LazyActionSheet6 = findByProps("openLazy", "hideActionSheet");
       MessageStore3 = findByStoreName("MessageStore");
       ChannelStore6 = findByStoreName("ChannelStore");
@@ -34735,7 +33261,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     var [query, setQuery] = React2.useState("");
     var langs = settings4.translator === 0 ? DeepLLangs : GTranslateLangs;
     var filteredLangs = Object.entries(langs).filter(([key]) => key.toLowerCase().includes(query.toLowerCase()));
-    return /* @__PURE__ */ jsxs(ScrollView34, {
+    return /* @__PURE__ */ jsxs(ScrollView32, {
       style: {
         flex: 1
       },
@@ -34774,7 +33300,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       ]
     });
   }
-  var ScrollView34;
+  var ScrollView32;
   var init_TargetLang = __esm({
     "src/plugins/translator/settings/TargetLang.tsx"() {
       "use strict";
@@ -34785,13 +33311,13 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_common();
       init_components();
       init_lang();
-      init_storage31();
-      ({ ScrollView: ScrollView34 } = ReactNative);
+      init_storage29();
+      ({ ScrollView: ScrollView32 } = ReactNative);
     }
   });
 
   // src/plugins/translator/settings/index.tsx
-  function Settings11() {
+  function Settings10() {
     var navigation2 = NavigationNative.useNavigation();
     var settings4 = useTranslatorSettings();
     var showTranslatorSheet = () => {
@@ -34822,7 +33348,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         ]
       });
     };
-    return /* @__PURE__ */ jsx(ScrollView35, {
+    return /* @__PURE__ */ jsx(ScrollView33, {
       style: {
         flex: 1
       },
@@ -34875,8 +33401,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView35, Text9, showSimpleActionSheet6, hideActionSheet9;
-  var init_settings25 = __esm({
+  var ScrollView33, Text8, showSimpleActionSheet6, hideActionSheet9;
+  var init_settings24 = __esm({
     "src/plugins/translator/settings/index.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -34886,9 +33412,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_metro();
       init_common();
       init_components();
-      init_storage31();
+      init_storage29();
       init_TargetLang();
-      ({ ScrollView: ScrollView35, Text: Text9 } = ReactNative);
+      ({ ScrollView: ScrollView33, Text: Text8 } = ReactNative);
       ({ showSimpleActionSheet: showSimpleActionSheet6 } = findByProps("showSimpleActionSheet"));
       ({ hideActionSheet: hideActionSheet9 } = findByProps("openLazy", "hideActionSheet"));
     }
@@ -34908,8 +33434,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_plugins3();
       init_Developers();
       init_ActionSheet3();
-      init_settings25();
-      init_storage31();
+      init_settings24();
+      init_storage29();
       settings3.target_lang ??= "en";
       settings3.translator ??= 1;
       settings3.immersive_enabled ??= true;
@@ -34932,14 +33458,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         stop() {
           for (var unpatch6 of patches25) unpatch6();
         },
-        settings: Settings11
+        settings: Settings10
       });
     }
   });
 
   // src/plugins/userbg/settings.tsx
   function UserBGSettings() {
-    return /* @__PURE__ */ jsx(import_react_native64.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native66.ScrollView, {
       style: {
         flex: 1
       },
@@ -34959,8 +33485,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               }),
               trailing: TableRow.Arrow,
               onPress: () => {
-                var { Linking: Linking7 } = require_react_native();
-                Linking7.openURL("https://discord.gg/ECg96KZ3Fh");
+                var { Linking: Linking6 } = require_react_native();
+                Linking6.openURL("https://discord.gg/ECg96KZ3Fh");
               }
             }),
             /* @__PURE__ */ jsx(TableRow, {
@@ -34978,8 +33504,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native64;
-  var init_settings26 = __esm({
+  var import_react_native66;
+  var init_settings25 = __esm({
     "src/plugins/userbg/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -34988,7 +33514,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_assets();
       init_toasts();
       init_components();
-      import_react_native64 = __toESM(require_react_native());
+      import_react_native66 = __toESM(require_react_native());
       init_userbg();
     }
   });
@@ -35018,7 +33544,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_metro();
       init_plugins3();
       init_Developers();
-      init_settings26();
+      init_settings25();
       getUserBannerURL = findByProps("default", "getUserBannerURL");
       pluginEnabled = false;
       userbg_default = definePlugin({
@@ -35056,7 +33582,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
 
   // src/plugins/userpfp/settings.tsx
   function UserPFPSettings() {
-    return /* @__PURE__ */ jsx(import_react_native65.ScrollView, {
+    return /* @__PURE__ */ jsx(import_react_native67.ScrollView, {
       style: {
         flex: 1
       },
@@ -35076,8 +33602,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
               }),
               trailing: TableRow.Arrow,
               onPress: () => {
-                var { Linking: Linking7 } = require_react_native();
-                Linking7.openURL("https://discord.gg/userpfp-1129784704267210844");
+                var { Linking: Linking6 } = require_react_native();
+                Linking6.openURL("https://discord.gg/userpfp-1129784704267210844");
               }
             }),
             /* @__PURE__ */ jsx(TableRow, {
@@ -35095,8 +33621,8 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var import_react_native65;
-  var init_settings27 = __esm({
+  var import_react_native67;
+  var init_settings26 = __esm({
     "src/plugins/userpfp/settings.tsx"() {
       "use strict";
       init_asyncIteratorSymbol();
@@ -35105,7 +33631,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_assets();
       init_toasts();
       init_components();
-      import_react_native65 = __toESM(require_react_native());
+      import_react_native67 = __toESM(require_react_native());
       init_userpfp();
     }
   });
@@ -35150,9 +33676,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         var patches27 = [];
         fetchData2();
         var avatarStuff = findByProps("getUserAvatarURL", "getUserAvatarSource");
-        var UserStore20 = findByStoreName("UserStore");
+        var UserStore18 = findByStoreName("UserStore");
         dataInterval = setInterval(() => fetchData2(), 1e3 * 60 * 60);
-        patches27.push(instead("getUser", UserStore20, (args, orig) => {
+        patches27.push(instead("getUser", UserStore18, (args, orig) => {
           var ret = orig(...args);
           if (!pluginEnabled2 || !data3?.avatars?.[args[0]]) return ret;
           var ext = data3.avatars[args[0]] && urlExt(data3.avatars[args[0]]);
@@ -35203,7 +33729,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_logger();
       init_plugins3();
       init_Developers();
-      init_settings27();
+      init_settings26();
       init_patcher3();
       userpfp_default = definePlugin({
         name: "UserPFP",
@@ -35264,7 +33790,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       message.id
     ]);
     return /* @__PURE__ */ jsx(Fragment, {
-      children: /* @__PURE__ */ jsx(ScrollView38, {
+      children: /* @__PURE__ */ jsx(ScrollView36, {
         style: {
           flex: 1,
           marginVertical: 10
@@ -35314,7 +33840,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       })
     });
   }
-  var ScrollView38;
+  var ScrollView36;
   var init_RawPage = __esm({
     "src/plugins/viewraw/patches/RawPage.tsx"() {
       "use strict";
@@ -35327,7 +33853,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       init_common();
       init_components();
       init_cleanmessage();
-      ({ ScrollView: ScrollView38 } = ReactNative);
+      ({ ScrollView: ScrollView36 } = ReactNative);
     }
   });
 
@@ -35461,6 +33987,76 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     }
   });
 
+  // src/plugins/visualrefresh/index.ts
+  var visualrefresh_exports = {};
+  __export(visualrefresh_exports, {
+    default: () => visualrefresh_default
+  });
+  var ExperimentManager, EXPERIMENT_ID, visualrefresh_default;
+  var init_visualrefresh = __esm({
+    "src/plugins/visualrefresh/index.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_metro();
+      init_plugins3();
+      init_Developers();
+      ExperimentManager = findByProps("overrideBucket");
+      EXPERIMENT_ID = "2026-01-you-bar";
+      visualrefresh_default = definePlugin({
+        name: "VisualRefresh",
+        description: "Enables an experimental new appearance",
+        author: [
+          Developers.cocobo1
+        ],
+        id: "visualrefresh",
+        version: "1.0.0",
+        start() {
+          ExperimentManager.overrideBucket("apex", EXPERIMENT_ID, 1);
+        },
+        stop() {
+          ExperimentManager.overrideBucket("apex", EXPERIMENT_ID, null);
+        }
+      });
+    }
+  });
+
+  // src/plugins/youbar/index.ts
+  var youbar_exports = {};
+  __export(youbar_exports, {
+    default: () => youbar_default
+  });
+  var ExperimentManager2, EXPERIMENT_ID2, youbar_default;
+  var init_youbar = __esm({
+    "src/plugins/youbar/index.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_metro();
+      init_plugins3();
+      init_Developers();
+      ExperimentManager2 = findByProps("overrideBucket");
+      EXPERIMENT_ID2 = "2026-01-you-bar";
+      youbar_default = definePlugin({
+        name: "YouBar",
+        description: "Enables YouBar via experiment override",
+        author: [
+          Developers.cocobo1
+        ],
+        id: "youbar",
+        version: "1.0.0",
+        // since this is a demo i should probably mention this isnt needed for all experiment overrides
+        requiresRestart: true,
+        start() {
+          ExperimentManager2.overrideBucket("apex", EXPERIMENT_ID2, 1);
+        },
+        stop() {
+          ExperimentManager2.overrideBucket("apex", EXPERIMENT_ID2, null);
+        }
+      });
+    }
+  });
+
   // rain-plugins-importer:/home/runner/work/lamp.delivery/lamp.delivery/codeberg-src/src/plugins
   var plugins_exports2 = {};
   __export(plugins_exports2, {
@@ -35493,6 +34089,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return (init_corecommands(), __toCommonJS(corecommands_exports)).default;
           } catch (error) {
             console.error("[Failed to compile 'core.corecommands' from './plugins/_core/corecommands':", error.message);
+            return null;
+          }
+        })(),
+        "core.errorboundary": (() => {
+          try {
+            return (init_errorboundary(), __toCommonJS(errorboundary_exports)).default;
+          } catch (error) {
+            console.error("[Failed to compile 'core.errorboundary' from './plugins/_core/errorboundary':", error.message);
             return null;
           }
         })(),
@@ -35541,14 +34145,6 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return (init_alwaystrust(), __toCommonJS(alwaystrust_exports)).default;
           } catch (error) {
             console.error("[Failed to compile 'alwaystrust' from './plugins/alwaystrust':", error.message);
-            return null;
-          }
-        })(),
-        "animatedkeyboard": (() => {
-          try {
-            return (init_animatedkeyboard(), __toCommonJS(animatedkeyboard_exports)).default;
-          } catch (error) {
-            console.error("[Failed to compile 'animatedkeyboard' from './plugins/animatedkeyboard':", error.message);
             return null;
           }
         })(),
@@ -35653,14 +34249,6 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return (init_fakenitro(), __toCommonJS(fakenitro_exports)).default;
           } catch (error) {
             console.error("[Failed to compile 'fakenitro' from './plugins/fakenitro':", error.message);
-            return null;
-          }
-        })(),
-        "fakeprofilecolors": (() => {
-          try {
-            return (init_fakeprofilecolors(), __toCommonJS(fakeprofilecolors_exports)).default;
-          } catch (error) {
-            console.error("[Failed to compile 'fakeprofilecolors' from './plugins/fakeprofilecolors':", error.message);
             return null;
           }
         })(),
@@ -35792,14 +34380,6 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return null;
           }
         })(),
-        "songspotlight": (() => {
-          try {
-            return (init_songspotlight(), __toCommonJS(songspotlight_exports)).default;
-          } catch (error) {
-            console.error("[Failed to compile 'songspotlight' from './plugins/songspotlight':", error.message);
-            return null;
-          }
-        })(),
         "stafftags": (() => {
           try {
             return (init_stafftags(), __toCommonJS(stafftags_exports)).default;
@@ -35845,6 +34425,22 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return (init_viewraw2(), __toCommonJS(viewraw_exports)).default;
           } catch (error) {
             console.error("[Failed to compile 'viewraw' from './plugins/viewraw':", error.message);
+            return null;
+          }
+        })(),
+        "visualrefresh": (() => {
+          try {
+            return (init_visualrefresh(), __toCommonJS(visualrefresh_exports)).default;
+          } catch (error) {
+            console.error("[Failed to compile 'visualrefresh' from './plugins/visualrefresh':", error.message);
+            return null;
+          }
+        })(),
+        "youbar": (() => {
+          try {
+            return (init_youbar(), __toCommonJS(youbar_exports)).default;
+          } catch (error) {
+            console.error("[Failed to compile 'youbar' from './plugins/youbar':", error.message);
             return null;
           }
         })()
@@ -35952,9 +34548,9 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         settings: {},
         _hasHydrated: false,
         updatePluginSetting: (id, enabled) => {
-          set((state) => ({
+          set((state2) => ({
             settings: {
-              ...state.settings,
+              ...state2.settings,
               [id]: {
                 enabled
               }
@@ -35962,14 +34558,14 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
           }));
         },
         getPluginSetting: (id) => get().settings[id],
-        setHasHydrated: (state) => set({
-          _hasHydrated: state
+        setHasHydrated: (state2) => set({
+          _hasHydrated: state2
         })
       }), {
         name: "plugin-settings",
         storage: createJSONStorage(() => createFileStorage("plugins/settings.json")),
-        onRehydrateStorage: () => (state) => {
-          state?.setHasHydrated(true);
+        onRehydrateStorage: () => (state2) => {
+          state2?.setHasHydrated(true);
         }
       }));
       pluginSettings = new Proxy({}, {
@@ -36011,8 +34607,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         var critical = yield Promise.all([
           patchLogHook(),
           patchJsx(),
-          injectFluxInterceptor(),
-          globalThis.rain = lib_exports
+          injectFluxInterceptor()
         ]);
         var core = yield Promise.all([
           initEagerPlugins(),
@@ -36024,6 +34619,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
         core.forEach((f) => {
           if (f !== void 0) unload.push(f);
         });
+        initDebugger();
       })());
     }
   });
@@ -36039,7 +34635,7 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
       try {
         Object.freeze = Object.seal = Object;
         yield (init_caches(), __toCommonJS(caches_exports)).initMetroCache();
-        (init_index(), __toCommonJS(index_exports)).default();
+        yield (init_index(), __toCommonJS(index_exports)).default();
       } catch (e) {
         alert(e);
       }
