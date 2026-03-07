@@ -22737,6 +22737,7 @@ ${pendingInsertLink}` : pendingInsertLink;
 
   // src/plugins/hideblockedandignoredmessages/settings.tsx
   function Settings5() {
+    var settings4 = useHideBlockedAndIgnoredMessagesSettings();
     return /* @__PURE__ */ jsx(import_react_native51.ScrollView, {
       style: {
         flex: 1
@@ -22753,18 +22754,24 @@ ${pendingInsertLink}` : pendingInsertLink;
             children: [
               /* @__PURE__ */ jsx(TableSwitchRow, {
                 label: "Remove blocked messages",
-                value: hideblockedandignoredmessagesSettings.blocked ?? true,
-                onValueChange: (v2) => hideblockedandignoredmessagesSettings.blocked = v2
+                value: settings4.blocked ?? true,
+                onValueChange: (v2) => useHideBlockedAndIgnoredMessagesSettings.getState().updateSettings({
+                  blocked: v2
+                })
               }),
               /* @__PURE__ */ jsx(TableSwitchRow, {
                 label: "Remove ignored messages",
-                value: hideblockedandignoredmessagesSettings.ignored ?? true,
-                onValueChange: (v2) => hideblockedandignoredmessagesSettings.ignored = v2
+                value: settings4.ignored ?? true,
+                onValueChange: (v2) => useHideBlockedAndIgnoredMessagesSettings.getState().updateSettings({
+                  ignored: v2
+                })
               }),
               /* @__PURE__ */ jsx(TableSwitchRow, {
                 label: "Remove replies to blocked/ignored users",
-                value: hideblockedandignoredmessagesSettings.removeReplies ?? true,
-                onValueChange: (v2) => hideblockedandignoredmessagesSettings.removeReplies = v2,
+                value: settings4.removeReplies ?? true,
+                onValueChange: (v2) => useHideBlockedAndIgnoredMessagesSettings.getState().updateSettings({
+                  removeReplies: v2
+                }),
                 subLabel: "Filters messages replying to blocked or ignored users."
               })
             ]
