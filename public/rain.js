@@ -11808,7 +11808,6 @@
         }),
         /* @__PURE__ */ jsx(Text, {
           variant: "text-xs/medium",
-          color: "TEXT_MUTED",
           style: {
             textAlign: "center"
           },
@@ -11875,23 +11874,9 @@
         },
         spacing: 24,
         children: [
-          showMessage && /* @__PURE__ */ jsxs(ReactNative.View, {
-            style: {
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center"
-            },
-            children: [
-              /* @__PURE__ */ jsx(ReactNative.Image, {
-                source: findAssetId2("CircleInformationIcon-primary"),
-                style: styles5.help
-              }),
-              /* @__PURE__ */ jsx(Text, {
-                variant: "text-md/semibold",
-                color: "TEXT_BRAND",
-                children: showMessage
-              })
-            ]
+          showMessage && /* @__PURE__ */ jsx(HelpMessage, {
+            messageType: 0,
+            children: showMessage
           }),
           /* @__PURE__ */ jsx(TableRowGroup, {
             title: "Colors",
