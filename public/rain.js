@@ -15223,42 +15223,6 @@ Type: ${asset.type}`,
     }
   });
 
-  // src/plugins/animatedkeyboard/index.ts
-  var animatedkeyboard_exports = {};
-  __export(animatedkeyboard_exports, {
-    default: () => animatedkeyboard_default
-  });
-  var ExperimentManager, EXPERIMENT_ID, animatedkeyboard_default;
-  var init_animatedkeyboard = __esm({
-    "src/plugins/animatedkeyboard/index.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_metro();
-      init_plugins3();
-      init_Developers();
-      ExperimentManager = findByProps("overrideBucket");
-      EXPERIMENT_ID = "2025-08-animated-keyboard-android";
-      animatedkeyboard_default = definePlugin({
-        name: "AnimatedKeyboard",
-        description: "Enables animated keyboard via experiment override",
-        author: [
-          Developers.cocobo1
-        ],
-        id: "animatedkeyboard",
-        version: "1.0.0",
-        // since this is a demo i should probably mention this isnt needed for all experiment overrides
-        requiresRestart: true,
-        start() {
-          ExperimentManager.overrideBucket("apex", EXPERIMENT_ID, 1);
-        },
-        stop() {
-          ExperimentManager.overrideBucket("apex", EXPERIMENT_ID, null);
-        }
-      });
-    }
-  });
-
   // src/plugins/betterchatbuttons/storage.ts
   var useBetterChatButtonsSettings, betterChatButtonsSettings;
   var init_storage7 = __esm({
@@ -20702,6 +20666,7 @@ ${pendingInsertLink}` : pendingInsertLink;
         ],
         id: "dummy",
         version: "1.0.0",
+        devOnly: true,
         start() {
           var targetModule = findByProps("isStaffEnv");
           unpatchIsStaffEnv = patcher_exports.instead("isStaffEnv", targetModule, (args, origFunc) => {
@@ -36670,6 +36635,76 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
     }
   });
 
+  // src/plugins/visualrefresh/index.ts
+  var visualrefresh_exports = {};
+  __export(visualrefresh_exports, {
+    default: () => visualrefresh_default
+  });
+  var ExperimentManager, EXPERIMENT_ID, visualrefresh_default;
+  var init_visualrefresh = __esm({
+    "src/plugins/visualrefresh/index.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_metro();
+      init_plugins3();
+      init_Developers();
+      ExperimentManager = findByProps("overrideBucket");
+      EXPERIMENT_ID = "2026-01-you-bar";
+      visualrefresh_default = definePlugin({
+        name: "VisualRefresh",
+        description: "Enables an experimental new appearance",
+        author: [
+          Developers.cocobo1
+        ],
+        id: "visualrefresh",
+        version: "1.0.0",
+        start() {
+          ExperimentManager.overrideBucket("apex", EXPERIMENT_ID, 1);
+        },
+        stop() {
+          ExperimentManager.overrideBucket("apex", EXPERIMENT_ID, null);
+        }
+      });
+    }
+  });
+
+  // src/plugins/youbar/index.ts
+  var youbar_exports = {};
+  __export(youbar_exports, {
+    default: () => youbar_default
+  });
+  var ExperimentManager2, EXPERIMENT_ID2, youbar_default;
+  var init_youbar = __esm({
+    "src/plugins/youbar/index.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_metro();
+      init_plugins3();
+      init_Developers();
+      ExperimentManager2 = findByProps("overrideBucket");
+      EXPERIMENT_ID2 = "2026-01-you-bar";
+      youbar_default = definePlugin({
+        name: "YouBar",
+        description: "Enables YouBar via experiment override",
+        author: [
+          Developers.cocobo1
+        ],
+        id: "youbar",
+        version: "1.0.0",
+        // since this is a demo i should probably mention this isnt needed for all experiment overrides
+        requiresRestart: true,
+        start() {
+          ExperimentManager2.overrideBucket("apex", EXPERIMENT_ID2, 1);
+        },
+        stop() {
+          ExperimentManager2.overrideBucket("apex", EXPERIMENT_ID2, null);
+        }
+      });
+    }
+  });
+
   // rain-plugins-importer:/home/runner/work/lamp.delivery/lamp.delivery/codeberg-src/src/plugins
   var plugins_exports2 = {};
   __export(plugins_exports2, {
@@ -36758,14 +36793,6 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return (init_alwaystrust(), __toCommonJS(alwaystrust_exports)).default;
           } catch (error) {
             console.error("[Failed to compile 'alwaystrust' from './plugins/alwaystrust':", error.message);
-            return null;
-          }
-        })(),
-        "animatedkeyboard": (() => {
-          try {
-            return (init_animatedkeyboard(), __toCommonJS(animatedkeyboard_exports)).default;
-          } catch (error) {
-            console.error("[Failed to compile 'animatedkeyboard' from './plugins/animatedkeyboard':", error.message);
             return null;
           }
         })(),
@@ -37062,6 +37089,22 @@ Missing the redesign ${isFunction ? "function" : "component"}: ${prop}. Please b
             return (init_viewraw2(), __toCommonJS(viewraw_exports)).default;
           } catch (error) {
             console.error("[Failed to compile 'viewraw' from './plugins/viewraw':", error.message);
+            return null;
+          }
+        })(),
+        "visualrefresh": (() => {
+          try {
+            return (init_visualrefresh(), __toCommonJS(visualrefresh_exports)).default;
+          } catch (error) {
+            console.error("[Failed to compile 'visualrefresh' from './plugins/visualrefresh':", error.message);
+            return null;
+          }
+        })(),
+        "youbar": (() => {
+          try {
+            return (init_youbar(), __toCommonJS(youbar_exports)).default;
+          } catch (error) {
+            console.error("[Failed to compile 'youbar' from './plugins/youbar':", error.message);
             return null;
           }
         })()
