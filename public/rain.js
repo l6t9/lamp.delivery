@@ -20556,7 +20556,6 @@ ${pendingInsertLink}` : pendingInsertLink;
                 if (ReactNative.Platform.OS === "ios" && avatarDecoration?.asset?.startsWith("file://")) return true;
               }));
             }
-            useUsersDecorationsStore.getState().fetch(UserStore11.getCurrentUser().id, true);
           })();
         },
         stop() {
