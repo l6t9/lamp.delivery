@@ -30892,7 +30892,7 @@ ${formattedData}
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_patcher();
-      init_wrappers();
+      init_metro();
       init_plugins3();
       init_Developers();
       init_Settings4();
@@ -30933,13 +30933,13 @@ ${formattedData}
               message: "Delete Message"
             };
           }
-          var Alerts3 = findByPropsLazy("show", "openLazy");
-          if (!Alerts3) return;
-          unpatch3 = instead("show", Alerts3, (args, fn) => {
+          var Popup = findByProps("show", "openLazy");
+          if (!Popup) return;
+          unpatch3 = instead("show", Popup, (args, fn) => {
             var popup = args?.[0];
             var title = popup?.title;
             var confirmText = popup?.confirmText;
-            var body = popup?.body ?? popup?.children?.props?.message?.content ?? "";
+            var body = popup?.children?.props?.message?.content ?? "";
             if (!popup?.onConfirm || typeof popup.onConfirm !== "function" || typeof title !== "string" && typeof body !== "string") {
               return fn(...args);
             }
@@ -30950,8 +30950,7 @@ ${formattedData}
               var confirmLower = confirmText?.toLowerCase();
               var bodyLower = body?.toLowerCase();
               var matcherLower = matcher.toLowerCase();
-              var fallback = type === "message" ? "delete" : "embed";
-              var match = titleLower?.includes(matcherLower) || confirmLower?.includes(matcherLower) || bodyLower?.includes(matcherLower) || titleLower?.includes(fallback);
+              var match = titleLower?.includes(matcherLower) || confirmLower?.includes(matcherLower) || bodyLower?.includes(matcherLower);
               return quickDeleteSettings[KEYS[type].storage] && match;
             };
             var result = shouldConfirm("message") || shouldConfirm("embed");
