@@ -6078,6 +6078,7 @@
         name: "CloudSync",
         description: "Sync your plugins, themes, and fonts to the cloud.",
         author: [
+          Developers.cocobo1,
           Developers.LampDelivery,
           Contributors.nexpid
         ],
