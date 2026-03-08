@@ -4356,6 +4356,528 @@
     }
   });
 
+  // src/plugins/_core/painter/plus/index.ts
+  var PatchType, InactiveReason;
+  var init_plus = __esm({
+    "src/plugins/_core/painter/plus/index.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      PatchType = /* @__PURE__ */ (function(PatchType2) {
+        PatchType2["Icons"] = "icons";
+        PatchType2["CustomIconOverlays"] = "custom_icon_overlays";
+        PatchType2["MentionLineColor"] = "mention_line_color";
+        PatchType2["Iconpack"] = "iconpack";
+        return PatchType2;
+      })({});
+      InactiveReason = /* @__PURE__ */ (function(InactiveReason2) {
+        InactiveReason2["NoTheme"] = "no_theme";
+        InactiveReason2["ThemesPlusUnsupported"] = "themes_plus_unsupported";
+        InactiveReason2["NoIconpacksList"] = "no_iconpacks_list";
+        InactiveReason2["NoIconpackConfig"] = "no_iconpack_config";
+        InactiveReason2["NoIconpackFiles"] = "no_iconpack_files";
+        return InactiveReason2;
+      })({});
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/active.ts
+  function updateState() {
+    for (var x2 of listeners) x2();
+  }
+  var state, listeners;
+  var init_active = __esm({
+    "src/plugins/_core/painter/plus/stuff/active.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_common();
+      state = {
+        loading: true,
+        active: false,
+        iconpack: {
+          iconpack: void 0,
+          list: [],
+          hashes: {}
+        },
+        patches: [],
+        inactive: []
+      };
+      listeners = /* @__PURE__ */ new Set();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/resolveColor.ts
+  function matchTheme(colors) {
+    var { theme } = ThemeStore2;
+    if (theme in colors) return colors[theme];
+    if ([
+      "dark",
+      "midnight"
+    ].includes(theme)) return colors.darker;
+    return colors.light;
+  }
+  function resolveColor_default(color2) {
+    if (Array.isArray(color2)) {
+      return matchTheme({
+        darker: color2[0],
+        light: color2[1],
+        midnight: color2[2]
+      });
+    }
+    if (color2.startsWith("SC_")) {
+      return semanticColors[color2.slice(3)] ? resolveSemanticColor(semanticColors[color2.slice(3)]) : "#ffffff";
+    }
+    if (color2.startsWith("RC_")) return rawColors[color2.slice(3)] ?? "#ffffff";
+    if (color2.startsWith("#") && color2.length === 4) {
+      return `#${color2[1].repeat(2)}${color2[2].repeat(2)}${color2[3].repeat(2)}`;
+    }
+    if (color2.startsWith("#") && color2.length === 7) return color2;
+  }
+  var ThemeStore2;
+  var init_resolveColor = __esm({
+    "src/plugins/_core/painter/plus/stuff/resolveColor.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_color();
+      init_metro();
+      ThemeStore2 = findByStoreName("ThemeStore");
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/iconOverlays.tsx
+  function getIconOverlay(plus, id, style) {
+    var asset = findAsset(id);
+    if (!asset) return;
+    var overlay = plus.customOverlays?.[asset.name];
+    if (!overlay) return;
+    return {
+      replace: overlay.replace,
+      style: overlay.style,
+      children: overlay.children
+    };
+  }
+  function getIconTint(plus, source, name) {
+    var tint = plus.icons?.[name];
+    if (!tint) return;
+    return resolveColor_default(tint);
+  }
+  var init_iconOverlays = __esm({
+    "src/plugins/_core/painter/plus/stuff/iconOverlays.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_assets();
+      init_resolveColor();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/modIcons.ts
+  var modIcons_default;
+  var init_modIcons = __esm({
+    "src/plugins/_core/painter/plus/stuff/modIcons.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      modIcons_default = {
+        bunny: {
+          source: "https://raw.githubusercontent.com/bunny-mod/Bunny/main/src/assets/icons/pyoncord.png",
+          raw: "data:image/png;base64,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"
+        },
+        revenge: {
+          source: "https://raw.githubusercontent.com/revenge-mod/revenge-bundle/main/src/assets/icons/revenge.png",
+          raw: "data:image/png;base64,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"
+        }
+      };
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stores/CacheStore.ts
+  var useCacheStore2;
+  var init_CacheStore2 = __esm({
+    "src/plugins/_core/painter/plus/stores/CacheStore.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_storage();
+      init_esm();
+      init_middleware();
+      useCacheStore2 = create2()(persist((set) => ({
+        iconpacks: {},
+        setIconpack: (id, data4) => set((state2) => ({
+          iconpacks: {
+            ...state2.iconpacks,
+            [id]: data4
+          }
+        }))
+      }), {
+        name: "themes-plus-cache",
+        storage: createJSONStorage(() => createFileStorage("plugins/themes-plus-cache.json"))
+      }));
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/util.ts
+  function fixPath(path) {
+    return path.startsWith("../") ? `_/${path.slice(3)}` : path;
+  }
+  function cFetch(url2, init, format = "text") {
+    return _async_to_generator(function* () {
+      var cache = useCacheStore2.getState();
+      var rawUrl = typeof url2 === "string" ? url2 : url2.url;
+      var res = yield fetch(url2, init);
+      var ret;
+      if (res.status !== 200) {
+        if (cache?.isCached?.(rawUrl)) ret = cache.readCache(rawUrl);
+        else throw new Error(`Failed to fetch ${rawUrl}`);
+      } else {
+        ret = yield res.text();
+        cache?.writeCache?.(rawUrl, ret);
+      }
+      if (format === "json") return JSON.parse(ret);
+      return ret;
+    })();
+  }
+  var init_util = __esm({
+    "src/plugins/_core/painter/plus/stuff/util.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_plus();
+      init_CacheStore2();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/patches/icons.tsx
+  function patchIcons(plus, tree, config) {
+    var { iconpack } = state.iconpack;
+    if (config.biggerStatus) {
+      patches.push(before("default", Status, ([props], ...args) => [
+        {
+          ...props,
+          size: Math.floor(props.size * 1.5)
+        },
+        ...args
+      ]));
+    }
+    if (plus.icons || plus.customOverlays || iconpack) {
+      if (plus.icons) state.patches.push(PatchType.Icons);
+      if (plus.customOverlays) {
+        state.patches.push(PatchType.CustomIconOverlays);
+      }
+      if (iconpack) state.patches.push(PatchType.Iconpack);
+      patches.push(waitFor((exports) => typeof exports?.jsx === "function" && typeof exports?.jsxs === "function" ? exports : void 0, (ReactJSX) => {
+        if (!useColorsPref.getState().iconsEnabled) return;
+        function interceptJSX(args, orig) {
+          var [type, props, ...rest] = args;
+          if (!props) return orig(...args);
+          var { source } = props;
+          var isOriginalImage = type === OriginalImage;
+          if (!isOriginalImage) {
+            if (typeof source === "number" && iconpack) {
+              var asset = findAsset(source);
+              if (asset?.httpServerLocation) {
+                var assetIconpackLocation = fixPath([
+                  ...asset.httpServerLocation.split("/").slice(2),
+                  `${asset.name}${iconpack.suffix}.${asset.type}`
+                ].join("/"));
+                var useIconpack = tree.length ? tree.includes(assetIconpackLocation) : true;
+                if (useIconpack) {
+                  return orig(type, {
+                    ...props,
+                    source: {
+                      uri: iconpack.load + assetIconpackLocation,
+                      headers: {
+                        "cache-control": "public, max-age=3600"
+                      },
+                      width: asset.width,
+                      height: asset.height,
+                      original: source
+                    }
+                  }, ...rest);
+                }
+              }
+            }
+            return orig(...args);
+          }
+          var patchedProps = {
+            ...props
+          };
+          var asset1 = null;
+          var modIcon = Object.entries(modIcons_default).find(([_2, { raw }]) => source?.uri === raw);
+          if (modIcon) {
+            asset1 = {
+              httpServerLocation: "//_",
+              width: 64,
+              height: 64,
+              name: modIcon[0],
+              type: "png"
+            };
+          } else if (source && typeof source.uri === "string" && typeof source.width === "number" && typeof source.height === "number" && typeof source.file === "string" && source.allowIconTheming) {
+            var [file, ...parent] = source.file.split("/").reverse();
+            var [ext, ...base] = file.split(".").reverse();
+            asset1 = {
+              httpServerLocation: `//_/external${parent[0] ? "/" : ""}${parent.reverse().join("/")}`,
+              width: source.width,
+              height: source.height,
+              name: base.reverse().join("."),
+              type: ext
+            };
+          } else if (typeof source === "number") {
+            asset1 = findAsset(source);
+          }
+          if (!asset1?.httpServerLocation) return orig(...args);
+          var assetIconpackLocation1 = iconpack && fixPath([
+            ...asset1.httpServerLocation.split("/").slice(2),
+            `${asset1.name}${iconpack.suffix}.${asset1.type}`
+          ].join("/"));
+          var useIconpack1 = assetIconpackLocation1 && (tree.length ? tree.includes(assetIconpackLocation1) : true);
+          var overlayChildren;
+          if (plus.customOverlays && !useIconpack1 && typeof source === "number") {
+            var overlay = getIconOverlay(plus, source, patchedProps.style);
+            if (overlay) {
+              if (overlay.replace) patchedProps.source = findAsset(overlay.replace)?.id;
+              if (overlay.style) patchedProps.style = [
+                patchedProps.style,
+                overlay.style
+              ];
+              overlayChildren = overlay.children;
+            }
+          }
+          if (plus.icons) {
+            var tint = getIconTint(plus, source, asset1.name);
+            if (tint) {
+              patchedProps.style = [
+                patchedProps.style,
+                {
+                  tintColor: tint
+                }
+              ];
+            }
+          }
+          if (useIconpack1) {
+            patchedProps.source = {
+              uri: iconpack.load + assetIconpackLocation1,
+              headers: {
+                "cache-control": "public, max-age=3600"
+              },
+              width: asset1.width,
+              height: asset1.height,
+              original: patchedProps.source
+            };
+          }
+          var imageEl = orig(OriginalImage, patchedProps, ...rest);
+          return overlayChildren ? orig(RN.View, null, imageEl, overlayChildren) : imageEl;
+        }
+        patches.push(instead("jsx", ReactJSX, (args, orig) => interceptJSX(args, orig)), instead("jsxs", ReactJSX, (args, orig) => interceptJSX(args, orig)));
+      }));
+    }
+  }
+  var Status, RN, OriginalImage;
+  var init_icons = __esm({
+    "src/plugins/_core/painter/plus/patches/icons.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_assets();
+      init_patcher();
+      init_modules2();
+      init_wrappers();
+      init_preferences();
+      init_plus();
+      init_active();
+      init_iconOverlays();
+      init_loader2();
+      init_modIcons();
+      init_util();
+      Status = findByName("Status", false);
+      RN = findByProps("Image", "View");
+      OriginalImage = RN.Image;
+    }
+  });
+
+  // src/plugins/_core/painter/plus/patches/mentionLineColor.ts
+  function patchMentionLineColors(plus) {
+    if (plus.mentionLineColor) {
+      state.patches.push(PatchType.MentionLineColor);
+      patches.push(after("createBackgroundHighlight", RowGeneratorUtils, ([x2], ret) => {
+        if (!ret || !x2?.message?.mentioned) return;
+        var clr = resolveColor_default(plus.mentionLineColor);
+        if (!clr) return;
+        var hex = clr.startsWith("#") && clr.length === 9 ? `#${clr.slice(3)}` : clr;
+        var r = parseInt(hex.slice(1, 3), 16);
+        var g2 = parseInt(hex.slice(3, 5), 16);
+        var b3 = parseInt(hex.slice(5, 7), 16);
+        ret.gutterColor = 4278190080 | r << 16 | g2 << 8 | b3 | 0;
+      }));
+    }
+  }
+  var RowGeneratorUtils;
+  var init_mentionLineColor = __esm({
+    "src/plugins/_core/painter/plus/patches/mentionLineColor.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_patcher();
+      init_wrappers();
+      init_plus();
+      init_active();
+      init_loader2();
+      init_resolveColor();
+      RowGeneratorUtils = findByProps("createBackgroundHighlight");
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/constants.ts
+  var constants_default;
+  var init_constants2 = __esm({
+    "src/plugins/_core/painter/plus/stuff/constants.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      constants_default = {
+        iconpacks: {
+          list: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/list.json",
+          assets: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/assets/",
+          tree: (iconpack) => `https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/${iconpack}.txt`,
+          hashes: "https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/_hashes.txt"
+        }
+      };
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/iconpackDataGetter.ts
+  function getIconpackData(id, configUrl) {
+    return _async_to_generator(function* () {
+      var treeUrl = constants_default.iconpacks.tree(id);
+      var [config, tree] = yield allSettled([
+        configUrl ? cFetch(configUrl, void 0, "json") : new Promise((res) => res(/* @__PURE__ */ Symbol())),
+        cFetch(treeUrl).then((x2) => x2.replaceAll("\r", "").split("\n"))
+      ]);
+      return {
+        config: config.status === "fulfilled" && typeof config.value !== "symbol" ? config.value : null,
+        tree: tree.status === "fulfilled" ? tree.value : null
+      };
+    })();
+  }
+  var init_iconpackDataGetter = __esm({
+    "src/plugins/_core/painter/plus/stuff/iconpackDataGetter.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_constants2();
+      init_util();
+    }
+  });
+
+  // src/plugins/_core/painter/plus/stuff/loader.tsx
+  function initPlus() {
+    return _async_to_generator(function* () {
+      for (var x2 of patches) {
+        x2();
+      }
+      patches.length = 0;
+      state.loading = true;
+      state.active = false;
+      state.iconpack = {
+        iconpack: void 0,
+        list: [],
+        hashes: {}
+      };
+      state.patches = [];
+      state.inactive = [];
+      updateState();
+      try {
+        state.iconpack = {
+          iconpack: void 0,
+          list: yield cFetch(constants_default.iconpacks.list, void 0, "json").then((res) => res.list),
+          hashes: yield cFetch(constants_default.iconpacks.hashes, void 0, "json")
+        };
+      } catch (unused) {
+        if (!state.iconpack.list.length || !Object.keys(state.iconpack.hashes).length) {
+          state.loading = false;
+          state.inactive.push(InactiveReason.NoIconpacksList);
+          updateState();
+          return;
+        }
+      }
+      var selectedTheme = getCurrentTheme();
+      if (!selectedTheme) {
+        state.loading = false;
+        state.inactive.push(InactiveReason.NoTheme);
+        updateState();
+        return;
+      }
+      var plusData = selectedTheme.data?.plus;
+      if (!plusData) {
+        state.loading = false;
+        state.inactive.push(InactiveReason.ThemesPlusUnsupported);
+        updateState();
+        return;
+      }
+      var useIconpack = plusData.iconpack;
+      var isCustomIconpack = false;
+      var user = UserStore2.getCurrentUser();
+      state.iconpack.iconpack = state.iconpack.list.find((x3) => useIconpack === x3.id);
+      var iconpackConfig = {
+        biggerStatus: false
+      };
+      var tree = [];
+      if (!isCustomIconpack && state.iconpack.iconpack) {
+        var dt;
+        try {
+          dt = yield getIconpackData(state.iconpack.iconpack.id, state.iconpack.iconpack.config);
+        } catch (unused) {
+          dt = {
+            config: null,
+            tree: null
+          };
+        }
+        if (dt.tree === null) {
+          state.loading = false;
+          if (dt.config === null) {
+            state.inactive.push(InactiveReason.NoIconpackConfig);
+          }
+          if (dt.tree === null) {
+            state.inactive.push(InactiveReason.NoIconpackFiles);
+          }
+          updateState();
+          return;
+        }
+        tree = dt.tree;
+        if (dt.config) iconpackConfig = dt.config;
+      }
+      state.active = true;
+      state.loading = false;
+      patchIcons(plusData, tree, iconpackConfig);
+      patchMentionLineColors(plusData);
+      updateState();
+    })();
+  }
+  var UserStore2, patches;
+  var init_loader2 = __esm({
+    "src/plugins/_core/painter/plus/stuff/loader.tsx"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_wrappers();
+      init_themes();
+      init_plus();
+      init_icons();
+      init_mentionLineColor();
+      init_active();
+      init_constants2();
+      init_iconpackDataGetter();
+      init_util();
+      UserStore2 = findByStoreName("UserStore");
+      patches = [];
+    }
+  });
+
   // globals:chroma-js
   var require_chroma_js = __commonJS({
     "globals:chroma-js"(exports, module) {
@@ -4602,8 +5124,11 @@
     var ref = Object.assign(_colorRef, {
       current: internalDef,
       key: `rain-theme-${++_inc}`,
-      lastSetDiscordTheme: !ThemeStore2.theme.startsWith("rain-theme-") ? ThemeStore2.theme : _colorRef.lastSetDiscordTheme
+      lastSetDiscordTheme: !ThemeStore3.theme.startsWith("rain-theme-") ? ThemeStore3.theme : _colorRef.lastSetDiscordTheme
     });
+    if (useColorsPref.getState().iconsEnabled) {
+      initPlus();
+    }
     if (internalDef != null) {
       tokenRef2.Theme[ref.key.toUpperCase()] = ref.key;
       FormDivider.DIVIDER_COLORS[ref.key] = FormDivider.DIVIDER_COLORS[ref.current.reference];
@@ -4619,20 +5144,22 @@
       AppearanceManager.updateTheme(internalDef != null ? ref.key : ref.lastSetDiscordTheme);
     }
   }
-  var tokenRef2, origRawColor, AppearanceManager, ThemeStore2, FormDivider, _inc, _colorRef;
+  var tokenRef2, origRawColor, AppearanceManager, ThemeStore3, FormDivider, _inc, _colorRef;
   var init_updater = __esm({
     "src/plugins/_core/painter/themes/updater.ts"() {
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
       init_metro();
+      init_loader2();
       init_parser();
+      init_preferences();
       tokenRef2 = findByPropsLazy("SemanticColor");
       origRawColor = {
         ...tokenRef2.RawColor
       };
       AppearanceManager = findByPropsLazy("updateTheme");
-      ThemeStore2 = findByStoreNameLazy("ThemeStore");
+      ThemeStore3 = findByStoreNameLazy("ThemeStore");
       FormDivider = findByPropsLazy("DIVIDER_COLORS");
       _inc = 1;
       _colorRef = {
@@ -4897,11 +5424,6 @@
     })();
   }
   function processData(data4) {
-    if (data4.spec === 3 && data4.display) {
-      data4.name = data4.display.name;
-      data4.description = data4.display.description;
-      data4.authors = data4.display.authors;
-    }
     if (data4.semanticColors) {
       var { semanticColors: semanticColors2 } = data4;
       for (var key in semanticColors2) {
@@ -5591,7 +6113,7 @@
         return !c2.__rain?.shouldHide || !c2.__rain.shouldHide();
       }));
     });
-    patches.add(unpatchGetBuiltInCommands);
+    patches2.add(unpatchGetBuiltInCommands);
   }
   function registerCommand(command) {
     var builtInCommands;
@@ -5629,7 +6151,7 @@
     commands2.push(command);
     return () => commands2 = commands2.filter(({ id }) => id !== command.id);
   }
-  var commands2, patches;
+  var commands2, patches2;
   var init_commands = __esm({
     "src/api/commands/index.ts"() {
       "use strict";
@@ -5640,7 +6162,7 @@
       init_common();
       init_types();
       commands2 = [];
-      patches = /* @__PURE__ */ new Set();
+      patches2 = /* @__PURE__ */ new Set();
     }
   });
 
@@ -8147,7 +8669,7 @@
   // src/plugins/_core/painter/monet/stuff/buildTheme.ts
   function getDiscordTheme() {
     try {
-      var theme = ThemeStore3?.theme;
+      var theme = ThemeStore4?.theme;
       if (theme === "light") return "light";
     } catch (unused) {
     }
@@ -8339,7 +8861,7 @@
     theme.rawColors = raw;
     return JSON.parse(JSON.stringify(theme));
   }
-  var ThemeStore3;
+  var ThemeStore4;
   var init_buildTheme = __esm({
     "src/plugins/_core/painter/monet/stuff/buildTheme.ts"() {
       "use strict";
@@ -8349,7 +8871,7 @@
       init_wrappers();
       init_storage4();
       init_colors2();
-      ThemeStore3 = findByStoreNameLazy("ThemeStore");
+      ThemeStore4 = findByStoreNameLazy("ThemeStore");
     }
   });
 
@@ -8464,14 +8986,14 @@
         }
       };
       try {
-        ThemeStore4?.addChangeListener?.(onThemeChanged);
-        cleanupFns.push(() => ThemeStore4?.removeChangeListener?.(onThemeChanged));
+        ThemeStore5?.addChangeListener?.(onThemeChanged);
+        cleanupFns.push(() => ThemeStore5?.removeChangeListener?.(onThemeChanged));
       } catch (e) {
         logger2.error("Failed to add theme change listener", e);
       }
     })();
   }
-  var logger2, ThemeStore4, hasThemeKey, cachedSysColors, cleanupFns;
+  var logger2, ThemeStore5, hasThemeKey, cachedSysColors, cleanupFns;
   var init_monet = __esm({
     "src/plugins/_core/painter/monet/index.ts"() {
       "use strict";
@@ -8490,532 +9012,10 @@
       init_storage4();
       init_buildTheme();
       logger2 = new LoggerClass("MonetTheme");
-      ThemeStore4 = findByStoreNameLazy("ThemeStore");
+      ThemeStore5 = findByStoreNameLazy("ThemeStore");
       hasThemeKey = /* @__PURE__ */ Symbol.for("monettheme.isThemed");
       cachedSysColors = null;
       cleanupFns = [];
-    }
-  });
-
-  // src/plugins/_core/painter/plus/index.ts
-  var PatchType, InactiveReason;
-  var init_plus = __esm({
-    "src/plugins/_core/painter/plus/index.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      PatchType = /* @__PURE__ */ (function(PatchType2) {
-        PatchType2["Icons"] = "icons";
-        PatchType2["CustomIconOverlays"] = "custom_icon_overlays";
-        PatchType2["MentionLineColor"] = "mention_line_color";
-        PatchType2["Iconpack"] = "iconpack";
-        return PatchType2;
-      })({});
-      InactiveReason = /* @__PURE__ */ (function(InactiveReason2) {
-        InactiveReason2["NoTheme"] = "no_theme";
-        InactiveReason2["ThemesPlusUnsupported"] = "themes_plus_unsupported";
-        InactiveReason2["NoIconpacksList"] = "no_iconpacks_list";
-        InactiveReason2["NoIconpackConfig"] = "no_iconpack_config";
-        InactiveReason2["NoIconpackFiles"] = "no_iconpack_files";
-        return InactiveReason2;
-      })({});
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stuff/active.ts
-  function updateState() {
-    for (var x2 of listeners) x2();
-  }
-  var state, listeners;
-  var init_active = __esm({
-    "src/plugins/_core/painter/plus/stuff/active.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_common();
-      state = {
-        loading: true,
-        active: false,
-        iconpack: {
-          iconpack: void 0,
-          list: [],
-          hashes: {}
-        },
-        patches: [],
-        inactive: []
-      };
-      listeners = /* @__PURE__ */ new Set();
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stuff/resolveColor.ts
-  function matchTheme(colors) {
-    var { theme } = ThemeStore5;
-    if (theme in colors) return colors[theme];
-    if ([
-      "dark",
-      "midnight"
-    ].includes(theme)) return colors.darker;
-    return colors.light;
-  }
-  function resolveColor_default(color2) {
-    if (Array.isArray(color2)) {
-      return matchTheme({
-        darker: color2[0],
-        light: color2[1],
-        midnight: color2[2]
-      });
-    }
-    if (color2.startsWith("SC_")) {
-      return semanticColors[color2.slice(3)] ? resolveSemanticColor(semanticColors[color2.slice(3)]) : "#ffffff";
-    }
-    if (color2.startsWith("RC_")) return rawColors[color2.slice(3)] ?? "#ffffff";
-    if (color2.startsWith("#") && color2.length === 4) {
-      return `#${color2[1].repeat(2)}${color2[2].repeat(2)}${color2[3].repeat(2)}`;
-    }
-    if (color2.startsWith("#") && color2.length === 7) return color2;
-  }
-  var ThemeStore5;
-  var init_resolveColor = __esm({
-    "src/plugins/_core/painter/plus/stuff/resolveColor.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_color();
-      init_metro();
-      ThemeStore5 = findByStoreName("ThemeStore");
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stuff/iconOverlays.tsx
-  function getIconOverlay(plus, id, style) {
-    var asset = findAsset(id);
-    if (!asset) return;
-    var overlay = plus.customOverlays?.[asset.name];
-    if (!overlay) return;
-    return {
-      replace: overlay.replace,
-      style: overlay.style,
-      children: overlay.children
-    };
-  }
-  function getIconTint(plus, source, name) {
-    var tint = plus.icons?.[name];
-    if (!tint) return;
-    return resolveColor_default(tint);
-  }
-  var init_iconOverlays = __esm({
-    "src/plugins/_core/painter/plus/stuff/iconOverlays.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_assets();
-      init_resolveColor();
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stuff/modIcons.ts
-  var modIcons_default;
-  var init_modIcons = __esm({
-    "src/plugins/_core/painter/plus/stuff/modIcons.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      modIcons_default = {
-        bunny: {
-          source: "https://raw.githubusercontent.com/bunny-mod/Bunny/main/src/assets/icons/pyoncord.png",
-          raw: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAABoBJREFUeF7lW1nIVlUUXasom80kijJKaVQzGtTUjCJteNBmeqigssnIpDIqwmw0GqhQi4iw8SEaHtKgMpNKM7SiyUZpLppoTi0rd2f9nCu36/2+79zxv/5t8MV/n333WWefffb0EQ0iM+sH4AEAowG8CGAqycVVqsgqhWeVbWavAtg/tu4vABNIPphVVih/YwAws2EAlrRQfChJgVM6NQmARwGc0GKHX5PcofTdA2gSAJ8A2KXNJueQPLpsEJoEwI8A+rTZ4GrnIAeQ/KpMEJoEwCoAm3TY3DKSezcKADPbCMDWADYEIK/9B4CVJC2LomYWwv8PgC1JCqxSqJAFmNlOAF6PAfA3ACn3MYBLSD4bqmUgABI3l+T4ULmd+IoCcDeAs9p8RI5NPDNJrminTAYAZAVbkJSlFaaiALwJYEiAFh8CuJHk7Fa8ZqaNbRAgSyzjSc4N5G3LVhQAmfiYDIosBXAGyXeSa8xMJ9orUNb7AAZm9TNpsosCMNnd/9sDlY7Y/gRwAYDZJOUzusjMfvK+JFRcX5J6OgtRUQB2B/BBDg3k8ZeQHBED4AsASoZCaTTJRaHMrfiKAqD1jwM4NqcinwE4mOTnZiYgBWgozSN5RChzJQB40x0A4KMCivwO4GQAFwI4JIMcRYa9i74GhSwgZr5XuWs8LYPyaazPAMh6ojvLeop8tywA5L0V/FSSsbXZ4Eh3DV7udgD8VdgMwK8+JC6iU5a115GcmmVBkrcUC4hdhYPcPX6+RhAWkDysMQB4SzgXwB0Zoroi+q8iKcvLTaVaQMwSZgGYWBMIfUj+nBeBSgDwljADwHk1XIdCL0FlAMRAOL/i0tsgku82zgI8AMruLgNwfV4FA9btQ/KtAL5UlkotIOYTjgdwr6o5eRVts244SWWZuagWALw1DFUGCGBwLk1bLxpG8pW8MmsDwIPQ25W+7wNwTF6FU9bJ2U7L+xLUCkDsSij5keLblASEagmjSL6XVV63AOCtQSVw3d2yytxr3JN7LUklZsHUnQAMcnUE1RRVTi+TXgIwjqSsoiN1CwBmtqvzA28A2LyjhvkYlCKr9vhcp+W1A2BmewB4AcB2nZQr+Hc1aaaQlK9pSbUC4E9eLfCynF8IRoo/JpJUMXYdqgUAM9N3RgFYGKJxDh71FK5WAwbAvgAeShRnPgWwZxoIdQFwEwCV0DfOsbmQJWPi993MZGGqMsdT5e9VdE3GC5UCYGY69ehUQjaSh0dv/5B4j0FCXJ8hrWexHMAIkj9EH6oEADNTZUjNj+MqeOaSIM0nOTb5n2amStH8FEQVNh8eWcJaAHybe7gfU9kLgEzmbd/91VCCujArXdd3hdA2M73fKobKzDTYIK+uRsel7tT75jnKnGvUUtuWpMrra8nMNG12aguZatjKMa7pAsDMtnK9tkdylKVz6lz6snsATFKPwB+M+gtppx//sBoyCyMAkuNppWtYg0CVxeT4tvfPbKcI8zHXpD2RZnaOW3RXDQo27ROrSfYSAGowylv/30iR4qYCQBFSVe9zk0Fd5GKH0QJAPfpO96XJG8mjmyJHOcHFAuA1APvlkbIerzmN5P3SXwBc7IaOblmPN5NVdaXK/RUDRACoTqcOq4KfptA37l1XuKpma0QKrlQ/2LEEJY8i+XQXAD4Q6u+uwZwKKrbtdNWYjMboNDClf0qTl+ktb5W6RsLMbDc/naZK80Cvt/YQSvruYJIr46GwanQTAJzph5Y1/Vk2aVZQCck8xR4kpUgpZGYCQDHNOK9/p6bpRSRvS02GzEx1tZGlaAbopH8DcDnJO0uS2VaMmWnzk1xz9hrXldIob9o+ldf0W+cPZiafkLvbmtDsSY3MytQ7mXUVwJiZrFozTKoK6QcZSVrXAszsSABPFVRIs4MzyjTxgvoo4TsAwCm+Yy2rEC1PswC9CAfm+KBMSsWPW0l+l2N9LUt8UfYKf8Vn/gcAM9MT82VGTeTYngBwdqeB6Ixya2FPAnCSKx4+HPhlBRJ6vsaS/DZwTePYkgCozx7SqpJXl69YmqzFNW6HHRSKxwGhc79XApgV2npqOiBxAE73/ftWOquRqbJT7mGEJoIRhcIaZVGjMm14QT+BucHVDKa7oUSlkT2KIgAUT6/zIwbXYFTmpLxZU909kiIAprhM6+bEDqf7Hy93pY09lSIAFriO7aF+k7/4aYs0i+hxOEQAqIGgNrJ+iDS5p3j4kNP6F9f7+CyBdXonAAAAAElFTkSuQmCC"
-        },
-        revenge: {
-          source: "https://raw.githubusercontent.com/revenge-mod/revenge-bundle/main/src/assets/icons/revenge.png",
-          raw: "data:image/png;base64,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"
-        }
-      };
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stores/CacheStore.ts
-  var useCacheStore2;
-  var init_CacheStore2 = __esm({
-    "src/plugins/_core/painter/plus/stores/CacheStore.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_storage();
-      init_esm();
-      init_middleware();
-      useCacheStore2 = create2()(persist((set) => ({
-        iconpacks: {},
-        setIconpack: (id, data4) => set((state2) => ({
-          iconpacks: {
-            ...state2.iconpacks,
-            [id]: data4
-          }
-        }))
-      }), {
-        name: "themes-plus-cache",
-        storage: createJSONStorage(() => createFileStorage("plugins/themes-plus-cache.json"))
-      }));
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stuff/util.ts
-  function fixPath(path) {
-    return path.startsWith("../") ? `_/${path.slice(3)}` : path;
-  }
-  function cFetch(url2, init, format = "text") {
-    return _async_to_generator(function* () {
-      var cache = useCacheStore2.getState();
-      var rawUrl = typeof url2 === "string" ? url2 : url2.url;
-      var res = yield fetch(url2, init);
-      var ret;
-      if (res.status !== 200) {
-        if (cache?.isCached?.(rawUrl)) ret = cache.readCache(rawUrl);
-        else throw new Error(`Failed to fetch ${rawUrl}`);
-      } else {
-        ret = yield res.text();
-        cache?.writeCache?.(rawUrl, ret);
-      }
-      if (format === "json") return JSON.parse(ret);
-      return ret;
-    })();
-  }
-  var init_util = __esm({
-    "src/plugins/_core/painter/plus/stuff/util.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_plus();
-      init_CacheStore2();
-    }
-  });
-
-  // src/plugins/_core/painter/plus/patches/icons.tsx
-  function patchIcons(plus, tree, config) {
-    var { iconpack } = state.iconpack;
-    if (config.biggerStatus) {
-      patches2.push(before("default", Status, ([props], ...args) => [
-        {
-          ...props,
-          size: Math.floor(props.size * 1.5)
-        },
-        ...args
-      ]));
-    }
-    if (plus.icons || plus.customOverlays || iconpack) {
-      if (plus.icons) state.patches.push(PatchType.Icons);
-      if (plus.customOverlays) {
-        state.patches.push(PatchType.CustomIconOverlays);
-      }
-      if (iconpack) state.patches.push(PatchType.Iconpack);
-      patches2.push(waitFor((exports) => typeof exports?.jsx === "function" && typeof exports?.jsxs === "function" ? exports : void 0, (ReactJSX) => {
-        if (!useColorsPref.getState().iconsEnabled) return;
-        function interceptJSX(args, orig) {
-          var [type, props, ...rest] = args;
-          if (!props) return orig(...args);
-          var { source } = props;
-          var isOriginalImage = type === OriginalImage;
-          if (!isOriginalImage) {
-            if (typeof source === "number" && iconpack) {
-              var asset = findAsset(source);
-              if (asset?.httpServerLocation) {
-                var assetIconpackLocation = fixPath([
-                  ...asset.httpServerLocation.split("/").slice(2),
-                  `${asset.name}${iconpack.suffix}.${asset.type}`
-                ].join("/"));
-                var useIconpack = tree.length ? tree.includes(assetIconpackLocation) : true;
-                if (useIconpack) {
-                  return orig(type, {
-                    ...props,
-                    source: {
-                      uri: iconpack.load + assetIconpackLocation,
-                      headers: {
-                        "cache-control": "public, max-age=3600"
-                      },
-                      width: asset.width,
-                      height: asset.height,
-                      original: source
-                    }
-                  }, ...rest);
-                }
-              }
-            }
-            return orig(...args);
-          }
-          var patchedProps = {
-            ...props
-          };
-          var asset1 = null;
-          var modIcon = Object.entries(modIcons_default).find(([_2, { raw }]) => source?.uri === raw);
-          if (modIcon) {
-            asset1 = {
-              httpServerLocation: "//_",
-              width: 64,
-              height: 64,
-              name: modIcon[0],
-              type: "png"
-            };
-          } else if (source && typeof source.uri === "string" && typeof source.width === "number" && typeof source.height === "number" && typeof source.file === "string" && source.allowIconTheming) {
-            var [file, ...parent] = source.file.split("/").reverse();
-            var [ext, ...base] = file.split(".").reverse();
-            asset1 = {
-              httpServerLocation: `//_/external${parent[0] ? "/" : ""}${parent.reverse().join("/")}`,
-              width: source.width,
-              height: source.height,
-              name: base.reverse().join("."),
-              type: ext
-            };
-          } else if (typeof source === "number") {
-            asset1 = findAsset(source);
-          }
-          if (!asset1?.httpServerLocation) return orig(...args);
-          var assetIconpackLocation1 = iconpack && fixPath([
-            ...asset1.httpServerLocation.split("/").slice(2),
-            `${asset1.name}${iconpack.suffix}.${asset1.type}`
-          ].join("/"));
-          var useIconpack1 = assetIconpackLocation1 && (tree.length ? tree.includes(assetIconpackLocation1) : true);
-          var overlayChildren;
-          if (plus.customOverlays && !useIconpack1 && typeof source === "number") {
-            var overlay = getIconOverlay(plus, source, patchedProps.style);
-            if (overlay) {
-              if (overlay.replace) patchedProps.source = findAsset(overlay.replace)?.id;
-              if (overlay.style) patchedProps.style = [
-                patchedProps.style,
-                overlay.style
-              ];
-              overlayChildren = overlay.children;
-            }
-          }
-          if (plus.icons) {
-            var tint = getIconTint(plus, source, asset1.name);
-            if (tint) {
-              patchedProps.style = [
-                patchedProps.style,
-                {
-                  tintColor: tint
-                }
-              ];
-            }
-          }
-          if (useIconpack1) {
-            patchedProps.source = {
-              uri: iconpack.load + assetIconpackLocation1,
-              headers: {
-                "cache-control": "public, max-age=3600"
-              },
-              width: asset1.width,
-              height: asset1.height,
-              original: patchedProps.source
-            };
-          }
-          var imageEl = orig(OriginalImage, patchedProps, ...rest);
-          return overlayChildren ? orig(RN.View, null, imageEl, overlayChildren) : imageEl;
-        }
-        patches2.push(instead("jsx", ReactJSX, (args, orig) => interceptJSX(args, orig)), instead("jsxs", ReactJSX, (args, orig) => interceptJSX(args, orig)));
-      }));
-    }
-  }
-  var Status, RN, OriginalImage;
-  var init_icons = __esm({
-    "src/plugins/_core/painter/plus/patches/icons.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_assets();
-      init_patcher();
-      init_modules2();
-      init_wrappers();
-      init_preferences();
-      init_plus();
-      init_active();
-      init_iconOverlays();
-      init_loader2();
-      init_modIcons();
-      init_util();
-      Status = findByName("Status", false);
-      RN = findByProps("Image", "View");
-      OriginalImage = RN.Image;
-    }
-  });
-
-  // src/plugins/_core/painter/plus/patches/mentionLineColor.ts
-  function patchMentionLineColors(plus) {
-    if (plus.mentionLineColor) {
-      state.patches.push(PatchType.MentionLineColor);
-      patches2.push(after("createBackgroundHighlight", RowGeneratorUtils, ([x2], ret) => {
-        if (!ret || !x2?.message?.mentioned) return;
-        var clr = resolveColor_default(plus.mentionLineColor);
-        if (!clr) return;
-        var hex = clr.startsWith("#") && clr.length === 9 ? `#${clr.slice(3)}` : clr;
-        var r = parseInt(hex.slice(1, 3), 16);
-        var g2 = parseInt(hex.slice(3, 5), 16);
-        var b3 = parseInt(hex.slice(5, 7), 16);
-        ret.gutterColor = 4278190080 | r << 16 | g2 << 8 | b3 | 0;
-      }));
-    }
-  }
-  var RowGeneratorUtils;
-  var init_mentionLineColor = __esm({
-    "src/plugins/_core/painter/plus/patches/mentionLineColor.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_patcher();
-      init_wrappers();
-      init_plus();
-      init_active();
-      init_loader2();
-      init_resolveColor();
-      RowGeneratorUtils = findByProps("createBackgroundHighlight");
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stuff/constants.ts
-  var constants_default;
-  var init_constants2 = __esm({
-    "src/plugins/_core/painter/plus/stuff/constants.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      constants_default = {
-        iconpacks: {
-          list: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/list.json",
-          assets: "https://raw.githubusercontent.com/nexpid/ThemesPlus/main/iconpacks/assets/",
-          tree: (iconpack) => `https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/${iconpack}.txt`,
-          hashes: "https://raw.githubusercontent.com/nexpid/ThemesPlus/iconpack-trees/_hashes.txt"
-        }
-      };
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stuff/iconpackDataGetter.ts
-  function getIconpackData(id, configUrl) {
-    return _async_to_generator(function* () {
-      var treeUrl = constants_default.iconpacks.tree(id);
-      var [config, tree] = yield allSettled([
-        configUrl ? cFetch(configUrl, void 0, "json") : new Promise((res) => res(/* @__PURE__ */ Symbol())),
-        cFetch(treeUrl).then((x2) => x2.replaceAll("\r", "").split("\n"))
-      ]);
-      return {
-        config: config.status === "fulfilled" && typeof config.value !== "symbol" ? config.value : null,
-        tree: tree.status === "fulfilled" ? tree.value : null
-      };
-    })();
-  }
-  var init_iconpackDataGetter = __esm({
-    "src/plugins/_core/painter/plus/stuff/iconpackDataGetter.ts"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_constants2();
-      init_util();
-    }
-  });
-
-  // src/plugins/_core/painter/plus/stuff/loader.tsx
-  function initPlus() {
-    return _async_to_generator(function* () {
-      for (var x2 of patches2) {
-        x2();
-      }
-      patches2.length = 0;
-      state.loading = true;
-      state.active = false;
-      state.iconpack = {
-        iconpack: void 0,
-        list: [],
-        hashes: {}
-      };
-      state.patches = [];
-      state.inactive = [];
-      updateState();
-      try {
-        state.iconpack = {
-          iconpack: void 0,
-          list: yield cFetch(constants_default.iconpacks.list, void 0, "json").then((res) => res.list),
-          hashes: yield cFetch(constants_default.iconpacks.hashes, void 0, "json")
-        };
-      } catch (unused) {
-        if (!state.iconpack.list.length || !Object.keys(state.iconpack.hashes).length) {
-          state.loading = false;
-          state.inactive.push(InactiveReason.NoIconpacksList);
-          updateState();
-          return;
-        }
-      }
-      var selectedTheme = getCurrentTheme();
-      if (!selectedTheme) {
-        state.loading = false;
-        state.inactive.push(InactiveReason.NoTheme);
-        updateState();
-        return;
-      }
-      var plusData = selectedTheme.data?.plus;
-      if (!plusData) {
-        state.loading = false;
-        state.inactive.push(InactiveReason.ThemesPlusUnsupported);
-        updateState();
-        return;
-      }
-      var useIconpack = plusData.iconpack;
-      var isCustomIconpack = false;
-      var user = UserStore2.getCurrentUser();
-      state.iconpack.iconpack = state.iconpack.list.find((x3) => useIconpack === x3.id);
-      var iconpackConfig = {
-        biggerStatus: false
-      };
-      var tree = [];
-      if (!isCustomIconpack && state.iconpack.iconpack) {
-        var dt;
-        try {
-          dt = yield getIconpackData(state.iconpack.iconpack.id, state.iconpack.iconpack.config);
-        } catch (unused) {
-          dt = {
-            config: null,
-            tree: null
-          };
-        }
-        if (dt.tree === null) {
-          state.loading = false;
-          if (dt.config === null) {
-            state.inactive.push(InactiveReason.NoIconpackConfig);
-          }
-          if (dt.tree === null) {
-            state.inactive.push(InactiveReason.NoIconpackFiles);
-          }
-          updateState();
-          return;
-        }
-        tree = dt.tree;
-        if (dt.config) iconpackConfig = dt.config;
-      }
-      state.active = true;
-      state.loading = false;
-      patchIcons(plusData, tree, iconpackConfig);
-      patchMentionLineColors(plusData);
-      updateState();
-    })();
-  }
-  var UserStore2, patches2;
-  var init_loader2 = __esm({
-    "src/plugins/_core/painter/plus/stuff/loader.tsx"() {
-      "use strict";
-      init_asyncIteratorSymbol();
-      init_promiseAllSettled();
-      init_async_to_generator();
-      init_wrappers();
-      init_themes();
-      init_plus();
-      init_icons();
-      init_mentionLineColor();
-      init_active();
-      init_constants2();
-      init_iconpackDataGetter();
-      init_util();
-      UserStore2 = findByStoreName("UserStore");
-      patches2 = [];
     }
   });
 
@@ -12574,18 +12574,22 @@
     var [removed, setRemoved] = React8.useState(false);
     if (removed) return null;
     var { authors } = theme.data;
+    var manifest = theme.data;
+    var isSpec3 = manifest.spec === 3;
+    var name = isSpec3 ? theme.data.display?.name : theme.data.name;
+    var description = isSpec3 ? theme.data.display?.description : theme.data.description;
     return /* @__PURE__ */ jsx(AddonCard, {
-      headerLabel: theme.data.name,
+      headerLabel: name,
       headerSublabel: authors ? `by ${authors.map((i) => i.name).join(", ")}` : "",
       headerLabelVariant: "heading-lg/semibold",
       headerSublabelVariant: "text-sm/semibold",
-      descriptionLabel: theme.data.description ?? "No description.",
+      descriptionLabel: description,
       toggleType: !safeModeEnabled ? "radio" : void 0,
       toggleValue: () => isSelected,
       onToggleChange: (v2) => {
         selectAndApply(v2, theme);
       },
-      overflowTitle: theme.data.name,
+      overflowTitle: name,
       actions: [
         {
           icon: "CircleInformationIcon-primary",
