@@ -3134,6 +3134,10 @@
         Fiery: {
           name: "Fiery",
           id: 890228870559698955n
+        },
+        SerStars: {
+          name: "SerStars",
+          id: 861631850681729045n
         }
       };
     }
@@ -15676,6 +15680,53 @@ Type: ${asset.type}`,
     }
   });
 
+  // src/plugins/bypassuploadlimit/api/zipline.ts
+  function uploadToZipline(file, ziplineServerURL, ziplineUserToken, ziplineDuration = "never", ziplineFileNameFormat = "date") {
+    return _async_to_generator(function* () {
+      try {
+        if (!ziplineServerURL) throw new Error("Missing Zipline server URL");
+        if (!ziplineUserToken) throw new Error("Missing Zipline token");
+        var fileUri = file?.item?.originalUri ?? file?.uri ?? file?.fileUri ?? file?.path ?? file?.sourceURL;
+        if (!fileUri) throw new Error("Could not resolve a file URI from the upload object.");
+        var formData = new FormData();
+        formData.append("file", {
+          uri: fileUri,
+          name: file.filename ?? "upload",
+          type: file.mimeType ?? "application/octet-stream"
+        });
+        var headers = {
+          authorization: ziplineUserToken,
+          "x-zipline-format": ziplineFileNameFormat
+        };
+        if (ziplineDuration !== "never") {
+          headers["x-zipline-deletes-at"] = ziplineDuration;
+        }
+        var uploadURL = new URL("/api/upload", ziplineServerURL).toString();
+        var response = yield fetch(uploadURL, {
+          method: "POST",
+          headers,
+          body: formData
+        });
+        var json = yield response.json();
+        var uploadedUrl = json?.files?.[0]?.url;
+        if (!uploadedUrl) throw new Error("No URL in Zipline response.");
+        return uploadedUrl.trim();
+      } catch (err) {
+        logger.error("[Uploader/Zipline] Upload failed:", err);
+        return null;
+      }
+    })();
+  }
+  var init_zipline = __esm({
+    "src/plugins/bypassuploadlimit/api/zipline.ts"() {
+      "use strict";
+      init_asyncIteratorSymbol();
+      init_promiseAllSettled();
+      init_async_to_generator();
+      init_logger();
+    }
+  });
+
   // src/plugins/bypassuploadlimit/lib/utils.ts
   function formatBytes(bytes, decimals = 2) {
     if (bytes === 0) return "0 Bytes";
@@ -15711,10 +15762,15 @@ Type: ${asset.type}`,
       init_middleware();
       useUploaderSettings = create2()(persist((set) => ({
         alwaysUpload: false,
+        useHyperlink: false,
         uploadAction: "clipboard",
         selectedHost: "catbox",
         userHash: "",
         litterboxDuration: "1",
+        ziplineServerURL: "",
+        ziplineUserToken: "",
+        ziplineFileNameFormat: "date",
+        ziplineDuration: "never",
         _hasHydrated: false,
         updateSettings: (newSettings) => set((state2) => ({
           ...state2,
@@ -15775,7 +15831,7 @@ Type: ${asset.type}`,
         var file = this;
         var size = file?.preCompressionSize ?? 0;
         var readableSize = formatBytes(size);
-        var { alwaysUpload, selectedHost, userHash, uploadAction, litterboxDuration } = uploaderSettings;
+        var { alwaysUpload, useHyperlink, selectedHost, userHash, uploadAction, litterboxDuration, ziplineServerURL, ziplineUserToken, ziplineDuration, ziplineFileNameFormat } = uploaderSettings;
         var useHost = selectedHost;
         var CATBOX_LIMIT = 200 * 1024 * 1024;
         if (useHost === "catbox" && size > CATBOX_LIMIT) {
@@ -15809,6 +15865,9 @@ Type: ${asset.type}`,
             case "uguu":
               link = yield uploadToUguu(file);
               break;
+            case "zipline":
+              link = yield uploadToZipline(file, ziplineServerURL, ziplineUserToken, ziplineDuration, ziplineFileNameFormat);
+              break;
           }
         } catch (err) {
           uploadError = err;
@@ -15819,7 +15878,7 @@ Type: ${asset.type}`,
         if (channelId) setTimeout(() => cleanupPendingMessages(channelId), 500);
         if (link) {
           var filename = file?.filename ?? "file";
-          var content = `[${filename}](${link})`;
+          var content = useHyperlink ? `[${filename}](${link})` : link;
           if (uploadAction === "clipboard") {
             clipboard.setString(link);
             showToast("Uploaded and link copied to clipboard!", findAssetId2("toast_copy_link"));
@@ -15936,6 +15995,7 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_catbox();
       init_litterbox();
       init_uguu();
+      init_zipline();
       init_utils3();
       init_storage8();
       getChatInputRef = null;
@@ -15960,16 +16020,26 @@ ${pendingInsertLink}` : pendingInsertLink;
           paddingHorizontal: 12
         },
         children: [
-          /* @__PURE__ */ jsx(TableRowGroup, {
+          /* @__PURE__ */ jsxs(TableRowGroup, {
             title: "Behavior",
-            children: /* @__PURE__ */ jsx(TableSwitchRow, {
-              label: "Always upload",
-              subLabel: "Upload to the service even if under the limit",
-              value: settings4.alwaysUpload,
-              onValueChange: (v2) => updateSettings({
-                alwaysUpload: v2
+            children: [
+              /* @__PURE__ */ jsx(TableSwitchRow, {
+                label: "Always upload",
+                subLabel: "Upload to the service even if under the limit",
+                value: settings4.alwaysUpload,
+                onValueChange: (v2) => updateSettings({
+                  alwaysUpload: v2
+                })
+              }),
+              /* @__PURE__ */ jsx(TableSwitchRow, {
+                label: "Use hyperlink",
+                subLabel: "Use a markdown hyperlink so the filename is shown in chat",
+                value: settings4.useHyperlink,
+                onValueChange: (v2) => updateSettings({
+                  useHyperlink: v2
+                })
               })
-            })
+            ]
           }),
           /* @__PURE__ */ jsxs(TableRadioGroup, {
             title: "Upload Action",
@@ -16017,6 +16087,11 @@ ${pendingInsertLink}` : pendingInsertLink;
                 label: "Uguu",
                 subLabel: "Files are stored temporarily, max 128MB, expires in 3h",
                 value: "uguu"
+              }),
+              /* @__PURE__ */ jsx(TableRadioRow, {
+                label: "Zipline",
+                subLabel: "Self-hosted file host instance, can be stored permanently or temporarily",
+                value: "zipline"
               })
             ]
           }),
@@ -16031,7 +16106,7 @@ ${pendingInsertLink}` : pendingInsertLink;
               value
             }, value))
           }),
-          /* @__PURE__ */ jsx(TableRowGroup, {
+          settings4.selectedHost === "catbox" && /* @__PURE__ */ jsx(TableRowGroup, {
             title: "Catbox User Hash",
             children: /* @__PURE__ */ jsx(Card3, {
               children: /* @__PURE__ */ jsx(SettingsTextInput, {
@@ -16043,12 +16118,66 @@ ${pendingInsertLink}` : pendingInsertLink;
                 isClearable: true
               })
             })
+          }),
+          settings4.selectedHost === "zipline" && /* @__PURE__ */ jsxs(Fragment, {
+            children: [
+              /* @__PURE__ */ jsx(TableRowGroup, {
+                title: "Zipline Auth Settings",
+                children: /* @__PURE__ */ jsxs(Stack, {
+                  spacing: 5,
+                  children: [
+                    /* @__PURE__ */ jsx(Card3, {
+                      children: /* @__PURE__ */ jsx(SettingsTextInput, {
+                        placeholder: "Server URL (e.g. https://your-zipline.com)",
+                        value: settings4.ziplineServerURL,
+                        onChange: (v2) => updateSettings({
+                          ziplineServerURL: v2
+                        }),
+                        isClearable: true
+                      })
+                    }),
+                    /* @__PURE__ */ jsx(Card3, {
+                      children: /* @__PURE__ */ jsx(SettingsTextInput, {
+                        placeholder: "Your Zipline Token",
+                        value: settings4.ziplineUserToken,
+                        onChange: (v2) => updateSettings({
+                          ziplineUserToken: v2
+                        }),
+                        isClearable: true
+                      })
+                    })
+                  ]
+                })
+              }),
+              /* @__PURE__ */ jsx(TableRadioGroup, {
+                title: "Zipline File Expiry",
+                value: settings4.ziplineDuration,
+                onChange: (v2) => updateSettings({
+                  ziplineDuration: v2
+                }),
+                children: ZIPLINE_DURATIONS.map(({ label, value }) => /* @__PURE__ */ jsx(TableRadioRow, {
+                  label,
+                  value
+                }, value))
+              }),
+              /* @__PURE__ */ jsx(TableRadioGroup, {
+                title: "Zipline File Name",
+                value: settings4.ziplineFileNameFormat,
+                onChange: (v2) => updateSettings({
+                  ziplineFileNameFormat: v2
+                }),
+                children: ZIPLINE_FILENAMES.map(({ label, value }) => /* @__PURE__ */ jsx(TableRadioRow, {
+                  label,
+                  value
+                }, value))
+              })
+            ]
           })
         ]
       })
     });
   }
-  var import_react_native37, Card3, LITTERBOX_DURATIONS;
+  var import_react_native37, Card3, LITTERBOX_DURATIONS, ZIPLINE_DURATIONS, ZIPLINE_FILENAMES;
   var init_settings7 = __esm({
     "src/plugins/bypassuploadlimit/settings.tsx"() {
       "use strict";
@@ -16071,12 +16200,56 @@ ${pendingInsertLink}` : pendingInsertLink;
           value: "12"
         },
         {
-          label: "24 hours",
+          label: "1 day",
           value: "24"
         },
         {
-          label: "72 hours",
+          label: "3 days",
           value: "72"
+        }
+      ];
+      ZIPLINE_DURATIONS = [
+        {
+          label: "Never (default)",
+          value: "never"
+        },
+        {
+          label: "1 hour",
+          value: "1h"
+        },
+        {
+          label: "12 hours",
+          value: "12h"
+        },
+        {
+          label: "1 day",
+          value: "1d"
+        },
+        {
+          label: "3 days",
+          value: "3d"
+        }
+      ];
+      ZIPLINE_FILENAMES = [
+        {
+          label: "Date (default)",
+          value: "date"
+        },
+        {
+          label: "Random",
+          value: "random"
+        },
+        {
+          label: "UUID",
+          value: "uuid"
+        },
+        {
+          label: "File name",
+          value: "name"
+        },
+        {
+          label: "Gfycat-style name",
+          value: "gfycat"
         }
       ];
     }
@@ -16100,12 +16273,13 @@ ${pendingInsertLink}` : pendingInsertLink;
       patches8 = [];
       bypassuploadlimit_default = definePlugin({
         name: "BypassUploadLimit",
-        description: "Bypass Discord's file size limit by uploading to Catbox, Litterbox, or Pomf",
+        description: "Bypass Discord's file size limit by uploading to Catbox, Litterbox, Pomf or Zipline",
         author: [
-          Developers.LampDelivery
+          Developers.LampDelivery,
+          Contributors.SerStars
         ],
         id: "bypassuploadlimit",
-        version: "1.0.0",
+        version: "1.1.0",
         start() {
           patches8.push(...getUploaderPatch());
         },
