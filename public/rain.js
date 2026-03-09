@@ -21547,10 +21547,11 @@ ${pendingInsertLink}` : pendingInsertLink;
   // src/plugins/fakenitro/patches/nitroThemes.ts
   function getPatches3() {
     return [
+      instead("setShouldSyncAppearanceSettings", AppearanceSettings, () => false),
       instead("canUseClientThemes", canUse, () => true)
     ];
   }
-  var canUse;
+  var canUse, AppearanceSettings;
   var init_nitroThemes = __esm({
     "src/plugins/fakenitro/patches/nitroThemes.ts"() {
       "use strict";
@@ -21559,6 +21560,8 @@ ${pendingInsertLink}` : pendingInsertLink;
       init_patcher();
       init_metro();
       canUse = findByProps("canUseClientThemes");
+      AppearanceSettings = findByProps("setShouldSyncAppearanceSettings");
+      AppearanceSettings.setShouldSyncAppearanceSettings(false);
     }
   });
 
