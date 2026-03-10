@@ -156,7 +156,7 @@
       {/each}
     </div>
     <div class="pill">
-      <h2>people i know</h2>
+      <h2>friends</h2>
       <div class="avatars">
         <a href="https://nyx.meowery.eu/" target="_blank">
           <img src="https://github.com/nyxiereal.png" alt="Nyx" />
