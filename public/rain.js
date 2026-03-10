@@ -2090,6 +2090,7 @@
         CODEBERG: "Codeberg",
         CONNECTED: "Connected",
         CONNECT_TO_DEBUG_WEBSOCKET: "Connect to Debugger",
+        CONNECT_TO_HOT_RELOAD_THEME: "Connect to Hot Reload Theme",
         CONNECT_TO_REACT_DEVTOOLS: "Connect to React DevTools",
         COPIED_TO_CLIPBOARD: "Copied to clipboard",
         COPY_ASSET_NAME: "Copy Asset Name",
@@ -2139,6 +2140,8 @@
         HIDE_BACKGROUND: "Show Background",
         HIDE_CORE: "Hide Core Plugins",
         HOLD_UP: "Hold up!",
+        HOT_RELOAD_THEME: "Hot Reload Theme",
+        HOT_RELOAD_THEME_DESC: "Automatically refetch your theme upon update",
         IMPORT: "Import",
         IMPORT_ENTRIES_TITLE: "Import font entries from a link",
         IMPORT_ENTRIES_TITLE_DESC: "Directly import from a link with a pre-configured JSON file",
@@ -2753,9 +2756,11 @@
       useSettings = create2()(persist((set) => ({
         debuggerUrl: "",
         devToolsUrl: "",
+        hotReloadThemeUrl: "",
         developerSettings: false,
         autoDebugger: false,
         autoDevTools: false,
+        hotReloadTheme: false,
         safeMode: false,
         settingsPosition: "TOP",
         pluginCard: {
@@ -5119,14 +5124,14 @@
   });
 
   // src/plugins/_core/painter/themes/updater.ts
-  function updateColor(colorManifest, { update = true }) {
+  function updateColor(colorManifest, { update = true }, { noCustomIcons }) {
     var internalDef = colorManifest ? parseColorManifest(colorManifest) : null;
     var ref = Object.assign(_colorRef, {
       current: internalDef,
       key: `rain-theme-${++_inc}`,
       lastSetDiscordTheme: !ThemeStore3.theme.startsWith("rain-theme-") ? ThemeStore3.theme : _colorRef.lastSetDiscordTheme
     });
-    if (useColorsPref.getState().iconsEnabled) {
+    if (useColorsPref.getState().iconsEnabled && noCustomIcons == false) {
       initPlus();
     }
     if (internalDef != null) {
@@ -5395,6 +5400,8 @@
   function initColors(manifest) {
     if (manifest) updateColor(manifest, {
       update: false
+    }, {
+      noCustomIcons: false
     });
     var patches27 = [
       patchStorage(),
@@ -5518,6 +5525,8 @@
         if (currentTheme2) {
           updateColor(currentTheme2.data, {
             update: true
+          }, {
+            noCustomIcons: false
           });
         }
         updateThemes().catch((e) => console.error("Failed to update themes", e));
@@ -5590,11 +5599,15 @@
           if (theme == null && write) {
             updateColor(null, {
               update: true
+            }, {
+              noCustomIcons: false
             });
             return yield writeThemeToNative({});
           } else if (theme) {
             updateColor(theme.data, {
               update: true
+            }, {
+              noCustomIcons: false
             });
             return yield writeThemeToNative(theme);
           }
@@ -5619,6 +5632,33 @@
             writeThemeToNative(themeInfo);
             updateColor(themeInfo.data, {
               update: true
+            }, {
+              noCustomIcons: false
+            });
+          }
+        })(),
+        hotFetchTheme: (url2, selected = false) => _async_to_generator(function* () {
+          var themeJSON;
+          try {
+            themeJSON = yield (yield safeFetch(url2, {
+              cache: "no-store"
+            })).json();
+          } catch (unused) {
+            throw new Error(`Failed to fetch theme at ${url2}`);
+          }
+          if (!validateTheme(themeJSON)) throw new Error(`Invalid theme at ${url2}`);
+          var themeInfo = {
+            id: url2,
+            selected,
+            data: processData(themeJSON)
+          };
+          get().setTheme(url2, themeInfo);
+          if (selected) {
+            writeThemeToNative(themeInfo);
+            updateColor(themeInfo.data, {
+              update: true
+            }, {
+              noCustomIcons: true
             });
           }
         })(),
@@ -6417,6 +6457,32 @@
       })
     };
   }
+  function hotReloadTheme() {
+    var lastHash = null;
+    var hashString = (str) => {
+      var hash = 0;
+      for (var i = 0; i < str.length; i++) {
+        hash = Math.imul(31, hash) + str.charCodeAt(i) | 0;
+      }
+      return hash.toString(16);
+    };
+    setInterval(() => _async_to_generator(function* () {
+      var currentSettings2 = settings();
+      if (!currentSettings2.hotReloadThemeUrl) return;
+      try {
+        var response = yield fetch(currentSettings2.hotReloadThemeUrl, {
+          cache: "no-store"
+        });
+        if (!response.ok) return;
+        var text = yield response.text();
+        var hash = hashString(text);
+        if (hash === lastHash) return;
+        lastHash = hash;
+        yield useThemes.getState().hotFetchTheme(currentSettings2.hotReloadThemeUrl, true);
+      } catch (unused) {
+      }
+    })(), 2e3);
+  }
   function initDebugger() {
     var currentSettings2 = settings();
     if (currentSettings2.autoDebugger) {
@@ -6435,6 +6501,15 @@
         logger.error("Failed to connect to ReactDevTools during startup:", e);
       }
     }
+    if (currentSettings2.hotReloadTheme) {
+      try {
+        if (currentSettings2.hotReloadThemeUrl) {
+          hotReloadTheme();
+        }
+      } catch (e) {
+        logger.error("Failed to run hotReloadThemes:", e);
+      }
+    }
   }
   var import_react_native11, socket, originalConsoleLog, originalConsoleError, originalConsoleWarn, originalLoggerLog, originalLoggerError, originalLoggerWarn, VERSION, rdtPort, rdtClient, rdtConnected, changeHooks, versionHash;
   var init_debug = __esm({
@@ -6442,6 +6517,7 @@
       "use strict";
       init_asyncIteratorSymbol();
       init_promiseAllSettled();
+      init_async_to_generator();
       init_toasts();
       init_logger();
       import_react_native11 = __toESM(require_react_native());
@@ -6450,6 +6526,7 @@
       init_modules();
       init_patcher();
       init_settings();
+      init_themes();
       VERSION = 1;
       rdtPort = 8097;
       rdtClient = null;
@@ -8916,6 +8993,8 @@
     try {
       updateColor(theme, {
         update: true
+      }, {
+        noCustomIcons: false
       });
       var isActive = !!theme;
       globalThis[hasThemeKey] = isActive;
@@ -8971,6 +9050,8 @@
         }
         updateColor(theme, {
           update: true
+        }, {
+          noCustomIcons: false
         });
         globalThis[hasThemeKey] = true;
       })();
@@ -12686,6 +12767,8 @@
                     if (currentTheme2?.data) {
                       updateColor(currentTheme2.data, {
                         update: true
+                      }, {
+                        noCustomIcons: false
                       });
                     }
                   },
@@ -12729,6 +12812,8 @@
                         if (currentTheme2?.data) {
                           updateColor(currentTheme2.data, {
                             update: true
+                          }, {
+                            noCustomIcons: false
                           });
                         }
                       }
@@ -14598,6 +14683,47 @@ Type: ${asset.type}`,
                     placeholder: "http://localhost:4040/rain.js",
                     label: Strings.RAIN_URL
                   })
+                })
+              ]
+            }),
+            /* @__PURE__ */ jsxs(TableRowGroup, {
+              title: Strings.HOT_RELOAD_THEME,
+              children: [
+                /* @__PURE__ */ jsx(TextInput, {
+                  defaultValue: settings4.hotReloadThemeUrl,
+                  size: "md",
+                  placeholder: "http://localhost:4040/theme.json",
+                  onChange: (v2) => settings4.updateSettings({
+                    hotReloadThemeUrl: v2
+                  })
+                }),
+                /* @__PURE__ */ jsx(Stack, {
+                  style: {
+                    marginTop: 4,
+                    borderTopLeftRadius: 16,
+                    borderTopRightRadius: 16,
+                    overflow: "hidden"
+                  },
+                  children: /* @__PURE__ */ jsx(TableSwitchRow, {
+                    label: Strings.HOT_RELOAD_THEME,
+                    subLabel: Strings.HOT_RELOAD_THEME_DESC,
+                    icon: /* @__PURE__ */ jsx(TableRow.Icon, {
+                      source: findAssetId2("PaintPaletteIcon")
+                    }),
+                    value: settings4.hotReloadTheme,
+                    onValueChange: (v2) => settings4.updateSettings({
+                      hotReloadTheme: v2
+                    })
+                  })
+                }),
+                /* @__PURE__ */ jsx(TableRow, {
+                  label: Strings.CONNECT_TO_HOT_RELOAD_THEME,
+                  icon: /* @__PURE__ */ jsx(TableRow.Icon, {
+                    source: findAssetId2("PaintPaletteIcon")
+                  }),
+                  onPress: () => _async_to_generator(function* () {
+                    hotReloadTheme();
+                  })()
                 })
               ]
             }),
