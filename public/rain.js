@@ -21904,10 +21904,11 @@ ${pendingInsertLink}` : pendingInsertLink;
           Developers.cocobo1,
           Developers.kmmiio99o,
           Developers.LampDelivery,
-          Developers.j
+          Developers.j,
+          Contributors.SerStars
         ],
         id: "fakenitro",
-        version: "1.1.0",
+        version: "1.1.1",
         start() {
           patches12.push(...getPatches2());
           patches12.push(...getPatches5());
