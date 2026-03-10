@@ -158,8 +158,8 @@
     <div class="pill">
       <h2>people i know</h2>
       <div class="avatars">
-        <a href="https://github.com/Ushie" target="_blank">
-          <img src="https://github.com/Ushie.png" alt="Ushie" />
+        <a href="https://nyx.meowery.eu/" target="_blank">
+          <img src="https://github.com/nyxiereal.png" alt="Nyx" />
         </a>
       </div>
     </div>
