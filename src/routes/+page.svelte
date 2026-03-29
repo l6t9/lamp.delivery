@@ -46,8 +46,8 @@
   <div class="title">
     <div class="profile-header">
       <img
-        src="https://github.com/LampDelivery.png"
-        alt="LampDelivery"
+        src="https://github.com/l6t9.png"
+        alt="l6t9"
         class="avatar"
       />
       <div>
@@ -63,7 +63,7 @@
     i might be too <i>silly</i>
     <div class="social-links">
       <a
-        href="https://github.com/LampDelivery"
+        href="https://github.com/l6t9"
         class="social-button"
         target="_blank"
       >
