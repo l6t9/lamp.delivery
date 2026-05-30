@@ -9,6 +9,9 @@ export type TrackInfo =
         link?: string;
         isNowPlaying?: boolean;
         playedAt?: string;
+        from?: number;
+        to?: number | null;
+        duration?: number;
     }
     | false
     | null;
@@ -210,6 +213,35 @@ export async function getNowPlaying(): Promise<TrackInfo> {
 
         const isNowPlaying = lastFmTrack['@attr']?.nowplaying === 'true';
 
+        // timestamps (seconds)
+        const fromTs = lastFmTrack.date?.uts ? parseInt(lastFmTrack.date.uts, 10) : Math.floor(Date.now() / 1000);
+        let durationSec: number | undefined = undefined;
+        let endTime: number | null = null;
+
+        if (isNowPlaying) {
+            try {
+                const infoParams = new URLSearchParams({
+                    method: 'track.getInfo',
+                    track: partialTrackBase.songName,
+                    artist: partialTrackBase.artistName,
+                    api_key: apiKey,
+                    format: 'json'
+                });
+
+                const infoRes = await fetch(`https://ws.audioscrobbler.com/2.0/?${infoParams}`).then(r => r.json()).catch(() => null);
+
+                if (infoRes?.track?.duration) {
+                    const ms = parseInt(infoRes.track.duration, 10);
+                    if (!Number.isNaN(ms) && ms > 0) {
+                        durationSec = Math.floor(ms / 1000);
+                        endTime = fromTs + durationSec;
+                    }
+                }
+            } catch (e) {
+                // ignore and proceed without duration
+            }
+        }
+
         const performSearch = async (searchTerm: string) => {
             const encodedTerm = encodeURIComponent(normalize(searchTerm));
 
@@ -243,7 +275,7 @@ export async function getNowPlaying(): Promise<TrackInfo> {
         const track = matches.deezerMatch || matches.itunesMatch;
 
         if (!track) {
-            const fallback: TrackInfo = { ...partialTrackBase, link: undefined, isNowPlaying };
+            const fallback: TrackInfo = { ...partialTrackBase, link: undefined, isNowPlaying, from: fromTs, to: endTime, duration: durationSec };
             cachedTrack = fallback;
             lastFetchTime = now;
             return fallback;
@@ -263,6 +295,11 @@ export async function getNowPlaying(): Promise<TrackInfo> {
             link: track.trackViewUrl,
             isNowPlaying
         };
+
+        // include time info if available
+        finalTrack.from = fromTs;
+        finalTrack.duration = durationSec ?? finalTrack.duration;
+        finalTrack.to = endTime;
 
         // include played time if available
         if (lastFmTrack.date?.uts) {

@@ -243,6 +243,18 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
                         <div class="np-actions">
                             {null}
                         </div>
+                        {nowPlaying.isNowPlaying ? (
+                          <div class="np-progress-wrap">
+                            <svg class="np-progress" viewBox="0 0 400 32" preserveAspectRatio="none" data-from={nowPlaying.from || ''} data-duration={nowPlaying.duration || ''}>
+                              <path stroke-width="4" fill="none" class="np-wave-bg" />
+                              <path stroke-width="4" fill="none" class="np-wave-fg" />
+                            </svg>
+                            <div class="np-times">
+                              <span class="np-time-left">0:00</span>
+                              <span class="np-time-right">0:00</span>
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   )}
@@ -773,6 +785,58 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 
   .np-empty b { font-weight: 600; }
 
+  .np-progress-wrap {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .np-progress {
+    width: 100%;
+    height: 32px;
+    display: block;
+    overflow: visible;
+  }
+
+  .np-wave-bg {
+    stroke: rgba(0,0,0,0.08);
+    stroke-linecap: round;
+  }
+
+  .np-wave-fg {
+    stroke: var(--md-sys-color-primary);
+    stroke-linecap: round;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    transition: stroke-dashoffset 0.12s linear;
+  }
+
+  .np-knob {
+    fill: var(--md-sys-color-primary);
+    stroke: white;
+    stroke-width: 2px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18));
+    transform-origin: center;
+  }
+
+  .np-thumb {
+    stroke: var(--md-sys-color-primary);
+    stroke-width: 6px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .np-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--md-sys-color-on-surface-variant);
+    margin-top: 6px;
+  }
+
+  .np-time-left, .np-time-right {
+    line-height: 1;
+  }
+
   /* ═══ FOOTER ═══ */
   .footer-wrap {
     max-width: var(--content-max);
@@ -893,3 +957,112 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
     }
   }
 </style>
+
+<script type="module">
+  // Smooth animator for squiggly progress + time labels
+  function formatTime(totalSeconds) {
+    if (!Number.isFinite(totalSeconds) || totalSeconds < 0) return '0:00';
+    const s = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
+    const m = Math.floor(totalSeconds / 60);
+    return `${m}:${s}`;
+  }
+
+  function animateProgress(svg) {
+    const fg = svg.querySelector('.np-wave-fg');
+    const from = Number(svg.getAttribute('data-from')) || 0;
+    const duration = Number(svg.getAttribute('data-duration')) || 0;
+    if (!fg || !duration || !from) return;
+
+    const timeLeftEl = svg.parentElement.querySelector('.np-time-left');
+    const timeRightEl = svg.parentElement.querySelector('.np-time-right');
+
+    const path = fg;
+    const bg = svg.querySelector('.np-wave-bg');
+    const knob = svg.querySelector('.np-knob');
+
+    // parameters to mirror Metrolist's SquigglySlider
+    const width = 400;
+    const height = 32;
+    const amplitude = 6; // px
+    const waveLength = 80; // px
+    const phaseSpeed = 24; // px per second
+    const strokeW = 4; // matches SVG stroke-width
+
+    let phase = 0;
+
+    function generateSinePath(w, h, amp, waveLen, phaseOffset, step = 4) {
+      const cx = h / 2;
+      let d = '';
+      for (let x = 0; x <= w; x += step) {
+        const y = cx + Math.sin(((x + phaseOffset) / waveLen) * Math.PI * 2) * amp;
+        if (x === 0) d += `M ${x} ${y}`;
+        else d += ` L ${x} ${y}`;
+      }
+      return d;
+    }
+
+    const thumb = svg.querySelector('.np-thumb');
+
+    let lastT = performance.now();
+    let rafId = null;
+
+    function draw(nowMs) {
+      const now = nowMs || performance.now();
+      const delta = Math.max(0, (now - lastT) / 1000);
+      lastT = now;
+
+      // advance phase for motion
+      phase = (phase + delta * phaseSpeed) % waveLength;
+
+      // regenerate path with phase offset
+      const d = generateSinePath(width, height, amplitude, waveLength, -phase);
+      bg.setAttribute('d', d);
+      path.setAttribute('d', d);
+
+      const length = path.getTotalLength();
+      path.style.strokeDasharray = length;
+
+      const tNow = Date.now() / 1000;
+      const elapsed = Math.max(0, tNow - from);
+      const ratio = Math.min(1, elapsed / duration);
+      const offset = (1 - ratio) * length;
+      path.style.strokeDashoffset = offset;
+
+      // update knob position
+      if (knob) {
+        const point = path.getPointAtLength(length * ratio);
+        knob.setAttribute('cx', point.x);
+        knob.setAttribute('cy', point.y);
+      }
+
+      // update thumb (vertical bar)
+      if (thumb) {
+        const point = path.getPointAtLength(length * ratio);
+        const barHalfHeight = amplitude + strokeW;
+        const y1 = point.y - barHalfHeight;
+        const y2 = point.y + barHalfHeight;
+        thumb.setAttribute('x1', point.x);
+        thumb.setAttribute('x2', point.x);
+        thumb.setAttribute('y1', y1);
+        thumb.setAttribute('y2', y2);
+      }
+
+      if (timeLeftEl) timeLeftEl.textContent = formatTime(elapsed);
+      if (timeRightEl) timeRightEl.textContent = formatTime(duration);
+
+      if (ratio < 1) {
+        rafId = requestAnimationFrame(draw);
+      } else {
+        path.style.strokeDashoffset = 0;
+        if (timeLeftEl) timeLeftEl.textContent = formatTime(duration);
+        if (rafId) cancelAnimationFrame(rafId);
+      }
+    }
+
+    rafId = requestAnimationFrame(draw);
+  }
+
+  for (const svg of document.querySelectorAll('.np-progress')) {
+    animateProgress(svg);
+  }
+</script>
