@@ -1,12 +1,6 @@
 name = "lamp-delivery"
-main = "dist/_worker.js/index.js"
 compatibility_date = "2024-11-01"
-# Replace CF_ACCOUNT_ID_PLACEHOLDER with your Cloudflare Account ID in CI or locally
-account_id = "CF_ACCOUNT_ID_PLACEHOLDER"
-routes = [
-  { pattern = "lamp.delivery/*", zone_name = "lamp.delivery" },
-  { pattern = "www.lamp.delivery/*", zone_name = "lamp.delivery" }
-]
 
 [vars]
-# add any worker-level environment variables here
+# Add your environment variables here
+# API_URL = "https://api.example.com"

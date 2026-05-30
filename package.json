@@ -9,13 +9,15 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "lint": "astro check"
+    "lint": "astro check",
+    "deploy": "pnpm build && wrangler pages deploy dist"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@astrojs/cloudflare": "^12.2.4",
     "astro": "^5.7.4",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wrangler": "^3.107.2"
   },
   "dependencies": {
     "@m3e/web": "^2.5.6"
