@@ -1,5 +1,5 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
-import { g as getNowPlaying } from '../../chunks/nowPlaying__pUWJ_fL.mjs';
+import { g as getNowPlaying } from '../../chunks/nowPlaying_DV6QJ9Wx.mjs';
 export { renderers } from '../../renderers.mjs';
 
 async function GET() {

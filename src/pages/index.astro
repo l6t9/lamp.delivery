@@ -66,7 +66,8 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
         <div class="col-left">
           <div class="card card-profile">
             <span class="card-icon">
-              <span class="material-symbols-outlined">waving_hand</span>
+              <m3e-shape name="sunny" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-primary);--m3e-shape-size:40px;display:block"></m3e-shape>
+              <span class="card-icon-inner"><span class="material-symbols-outlined">waving_hand</span></span>
             </span>
             <div class="profile-body">
               <h1 class="profile-greeting">heya, i'm lamp</h1>
@@ -81,7 +82,8 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 
           <div class="card">
             <span class="card-icon">
-              <span class="material-symbols-outlined">connect_without_contact</span>
+              <m3e-shape name="4-sided-cookie" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-primary);--m3e-shape-size:40px;display:block"></m3e-shape>
+              <span class="card-icon-inner"><span class="material-symbols-outlined">connect_without_contact</span></span>
             </span>
             <h2 class="card-title">where to find me</h2>
             <div class="link-list">
@@ -140,14 +142,16 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 
           <div class="card">
             <span class="card-icon">
-              <span class="material-symbols-outlined">group</span>
+              <m3e-shape name="flower" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-primary);--m3e-shape-size:40px;display:block"></m3e-shape>
+              <span class="card-icon-inner"><span class="material-symbols-outlined">group</span></span>
             </span>
             <h2 class="card-title">friends</h2>
             <div class="link-list">
               <a class="link-row" href="https://nyx.meowery.eu/" target="_blank" rel="noreferrer">
-                <span class="link-icon link-icon--sm">
-                  <img src="https://github.com/nyxiereal.png" alt="" style="width:24px;height:24px;border-radius:50%" />
+                <span id="friend-nyx" class="link-icon link-icon--sm" data-tooltip="ok garmin">
+                  <img src="https://github.com/nyxiereal.png" alt="" class="friend-avatar" />
                 </span>
+                <m3e-tooltip for="friend-nyx" position="above">ok garmin</m3e-tooltip>
                 <div>
                   <b>nyx</b>
                   <span class="muted-2">nyx.meowery.eu</span>
@@ -155,9 +159,10 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
                 <span class="material-symbols-outlined link-arrow">chevron_forward</span>
               </a>
               <a class="link-row" href="https://elissa.moe/" target="_blank" rel="noreferrer">
-                <span class="link-icon link-icon--sm">
-                  <img src="https://github.com/blahai.png" alt="" style="width:24px;height:24px;border-radius:50%" />
+                <span id="friend-elissa" class="link-icon link-icon--sm" data-tooltip="mink supplier">
+                  <img src="https://github.com/blahai.png" alt="" class="friend-avatar" />
                 </span>
+                <m3e-tooltip for="friend-elissa" position="above">mink supplier</m3e-tooltip>
                 <div>
                   <b>elissa</b>
                   <span class="muted-2">elissa.moe</span>
@@ -171,7 +176,8 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
         <div class="col-right">
           <div class="card">
             <span class="card-icon card-icon--alt">
-              <span class="material-symbols-outlined">package_2</span>
+              <m3e-shape name="8-leaf-clover" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-secondary-container);--m3e-shape-size:40px;display:block"></m3e-shape>
+              <span class="card-icon-inner"><span class="material-symbols-outlined">package_2</span></span>
             </span>
             <h2 class="card-title">what i've made</h2>
             <div class="link-list">
@@ -201,7 +207,8 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 
           <div class="card now-playing-card">
             <span class="card-icon card-icon--alt">
-              <span class="material-symbols-outlined">graphic_eq</span>
+              <m3e-shape name="soft-burst" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-secondary-container);--m3e-shape-size:40px;display:block"></m3e-shape>
+              <span class="card-icon-inner"><span class="material-symbols-outlined">graphic_eq</span></span>
             </span>
             <h2 class="card-title">what i'm listening to</h2>
             <div class="now-playing">
@@ -217,47 +224,24 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
                 </div>
               ) : (
                 <>
-                  {nowPlaying.isNowPlaying === false ? (
-                    <div class="np-banner">
-                      <img src={nowPlaying.cover} alt="cover" />
-                      <a class="lastfm-icon" href={`https://last.fm/user/${import.meta.env.LASTFM_USERNAME || 'Lmpamapa'}`} target="_blank" rel="noreferrer" aria-label="Last.fm">
-                        <svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M14.131 22.948l-1.172-3.193c0 0-1.912 2.131-4.771 2.131-2.537 0-4.333-2.203-4.333-5.729 0-4.511 2.276-6.125 4.515-6.125 3.224 0 4.245 2.089 5.125 4.772l1.161 3.667c1.161 3.561 3.365 6.421 9.713 6.421 4.548 0 7.631-1.391 7.631-5.068 0-2.968-1.697-4.511-4.844-5.244l-2.344-0.511c-1.624-0.371-2.104-1.032-2.104-2.131 0-1.249.985-1.984 2.604-1.984 1.767 0 2.704 0.661 2.865 2.24l3.661-0.444c-0.297-3.301-2.584-4.656-6.323-4.656-3.308 0-6.532 1.251-6.532 5.245 0 2.5 1.204 4.077 4.245 4.807l2.484 0.589c1.865.443 2.484 1.224 2.484 2.287 0 1.359-1.323 1.921-3.828 1.921-3.703 0-5.244-1.943-6.124-4.625l-1.204-3.667c-1.541-4.765-4.005-6.531-8.891-6.531-5.287-0.016-8.151 3.385-8.151 9.192 0 5.573 2.864 8.595 8.005 8.595 4.14 0 6.125-1.943 6.125-1.943z"/></svg>
+                  {/* Unified banner for playing and not-playing; show small playing indicator when live */}
+                  <div class={`np-banner ${nowPlaying.isNowPlaying ? 'playing' : ''}`}>
+                    <img src={nowPlaying.cover} alt="cover" />
+                    <a id="lastfm-badge" class="lastfm-icon" href={`https://last.fm/user/${import.meta.env.LASTFM_USERNAME || 'Lmpamapa'}`} target="_blank" rel="noreferrer" aria-label="Last.fm" data-tooltip="powered by Last.fm">
+                      <svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M14.131 22.948l-1.172-3.193c0 0-1.912 2.131-4.771 2.131-2.537 0-4.333-2.203-4.333-5.729 0-4.511 2.276-6.125 4.515-6.125 3.224 0 4.245 2.089 5.125 4.772l1.161 3.667c1.161 3.561 3.365 6.421 9.713 6.421 4.548 0 7.631-1.391 7.631-5.068 0-2.968-1.697-4.511-4.844-5.244l-2.344-0.511c-1.624-0.371-2.104-1.032-2.104-2.131 0-1.249.985-1.984 2.604-1.984 1.767 0 2.704 0.661 2.865 2.24l3.661-0.444c-0.297-3.301-2.584-4.656-6.323-4.656-3.308 0-6.532 1.251-6.532 5.245 0 2.5 1.204 4.077 4.245 4.807l2.484 0.589c1.865 0.443 2.484 1.224 2.484 2.287 0 1.359-1.323 1.921-3.828 1.921-3.703 0-5.244-1.943-6.124-4.625l-1.204-3.667c-1.541-4.765-4.005-6.531-8.891-6.531-5.287-.016-8.151 3.385-8.151 9.192 0 5.573 2.864 8.595 8.005 8.595 4.14 0 6.125-1.943 6.125-1.943z"/></svg>
+                    </a>
+                    <m3e-tooltip for="lastfm-badge">powered by Last.fm</m3e-tooltip>
+                    {nowPlaying.isNowPlaying ? (
+                      <span class="playing-indicator top-left" aria-hidden="true"><span></span><span></span><span></span></span>
+                    ) : null}
+                    <div class="np-banner-overlay">
+                      <a class="np-artist np-artist-link" href={nowPlaying.link ? nowPlaying.link : `https://music.youtube.com/search?q=${encodeURIComponent(nowPlaying.artistName + ' ' + nowPlaying.songName)}`} target="_blank" rel="noreferrer">{nowPlaying.artistName}</a>
+                      <a class="np-title-link" href={nowPlaying.link ? nowPlaying.link : `https://music.youtube.com/search?q=${encodeURIComponent(nowPlaying.artistName + ' ' + nowPlaying.songName)}`} target="_blank" rel="noreferrer">
+                        <div class="np-title">{nowPlaying.songName}</div>
                       </a>
-                      <div class="np-banner-overlay">
-                        <div class="np-title">{nowPlaying.songName}</div>
-                        <div class="np-artist">{nowPlaying.artistName}</div>
-                        {nowPlaying.albumName ? <div class="muted-2">{nowPlaying.albumName}</div> : null}
-                        <div class="np-actions">
-                          {null}
-                        </div>
-                      </div>
+                      {nowPlaying.albumName ? <div class="muted-2">{nowPlaying.albumName}</div> : null}
                     </div>
-                  ) : (
-                      <div style="display:flex;gap:14px;align-items:center">
-                      <div class="np-cover-wrap">
-                        <img src={nowPlaying.cover} alt="cover" class="np-cover" />
-                      </div>
-                      <div class="np-info">
-                        <div class="np-title">{nowPlaying.songName}</div>
-                        <div class="np-artist">{nowPlaying.artistName}</div>
-                        <div class="np-actions">
-                            {null}
-                        </div>
-                        {nowPlaying.isNowPlaying ? (
-                          <div class="np-progress-wrap">
-                            <svg class="np-progress" viewBox="0 0 400 16" preserveAspectRatio="none" data-from={nowPlaying.from} data-duration={nowPlaying.duration}>
-                              <path stroke-width="3" fill="none" class="np-wave-bg" />
-                              <path stroke-width="3" fill="none" class="np-wave-fg" />
-                            </svg>
-                            <div class="np-times">
-                              <span class="np-time-left">0:00</span>
-                              <span class="np-time-right">0:00</span>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </>
               )}
             </div>
@@ -265,9 +249,10 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 
           {posts.length > 0 ? (
             <div class="card">
-              <span class="card-icon card-icon--alt">
-                <span class="material-symbols-outlined">article</span>
-              </span>
+                  <span class="card-icon card-icon--alt">
+                      <m3e-shape name="6-sided-cookie" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-secondary-container);--m3e-shape-size:40px;display:block"></m3e-shape>
+                      <span class="card-icon-inner"><span class="material-symbols-outlined">article</span></span>
+                  </span>
               <h2 class="card-title">recent posts</h2>
               <div class="link-list">
                 {posts.map((post) => (
@@ -289,21 +274,26 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
       <div class="footer-wrap">
         <footer class="card site-footer">
           <div class="footer-icon-row">
-            <a class="ficon" href="https://github.com/l6t9" target="_blank" aria-label="GitHub">
+            <a id="ficon-github" class="ficon" href="https://github.com/l6t9" target="_blank" aria-label="GitHub" data-tooltip="GitHub">
               <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.73.083-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.776.417-1.306.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12 24 5.37 18.63 0 12 0z"/></svg>
             </a>
-            <a class="ficon" href="https://codeberg.org/LampDelivery" target="_blank" aria-label="Codeberg">
+            <m3e-tooltip for="ficon-github" position="above">GitHub</m3e-tooltip>
+            <a id="ficon-codeberg" class="ficon" href="https://codeberg.org/LampDelivery" target="_blank" aria-label="Codeberg" data-tooltip="Codeberg">
               <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M12 1A11 11 0 0 0 1 12a11 11 0 0 0 1.7 6.4L12 6l9.3 12.4A11 11 0 0 0 23 12 11 11 0 0 0 12 1Z"/><path d="M21.3 18.4 12 6l4.4 16.8a11 11 0 0 0 4.9-4.4Z"/></svg>
             </a>
-            <a class="ficon" href="https://discord.com/users/650805815623680030" target="_blank" aria-label="Discord">
+            <m3e-tooltip for="ficon-codeberg" position="above">Codeberg</m3e-tooltip>
+            <a id="ficon-discord" class="ficon" href="https://discord.com/users/650805815623680030" target="_blank" aria-label="Discord" data-tooltip="Discord">
               <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"><path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.31 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.52-4.51-51.48-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"/></svg>
             </a>
-            <a class="ficon" href="https://youtube.com/@LampDelivery" target="_blank" aria-label="YouTube">
+            <m3e-tooltip for="ficon-discord" position="above">Discord</m3e-tooltip>
+            <a id="ficon-youtube" class="ficon" href="https://youtube.com/@LampDelivery" target="_blank" aria-label="YouTube" data-tooltip="YouTube">
               <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.322 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
             </a>
-            <a class="ficon" href="https://last.fm/user/Lmpamapa" target="_blank" aria-label="Last.fm">
-              <svg viewBox="0 0 32 32" width="24" height="24" fill="currentColor"><path d="M14.131 22.948l-1.172-3.193c0 0-1.912 2.131-4.771 2.131-2.537 0-4.333-2.203-4.333-5.729 0-4.511 2.276-6.125 4.515-6.125 3.224 0 4.245 2.089 5.125 4.772l1.161 3.667c1.161 3.561 3.365 6.421 9.713 6.421 4.548 0 7.631-1.391 7.631-5.068 0-2.968-1.697-4.511-4.844-5.244l-2.344-0.511c-1.624-0.371-2.104-1.032-2.104-2.131 0-1.249.985-1.984 2.604-1.984 1.767 0 2.704 0.661 2.865 2.24l3.661-0.444c-0.297-3.301-2.584-4.656-6.323-4.656-3.308 0-6.532 1.251-6.532 5.245 0 2.5 1.204 4.077 4.245 4.807l2.484 0.589c1.865.443 2.484 1.224 2.484 2.287 0 1.359-1.323 1.921-3.828 1.921-3.703 0-5.244-1.943-6.124-4.625l-1.204-3.667c-1.541-4.765-4.005-6.531-8.891-6.531-5.287-.016-8.151 3.385-8.151 9.192 0 5.573 2.864 8.595 8.005 8.595 4.14 0 6.125-1.943 6.125-1.943z"/></svg>
+            <m3e-tooltip for="ficon-youtube" position="above">YouTube</m3e-tooltip>
+            <a id="ficon-lastfm" class="ficon" href="https://last.fm/user/Lmpamapa" target="_blank" aria-label="Last.fm" data-tooltip="Last.fm">
+              <svg viewBox="0 0 32 32" width="24" height="24" fill="currentColor"><path d="M14.131 22.948l-1.172-3.193c0 0-1.912 2.131-4.771 2.131-2.537 0-4.333-2.203-4.333-5.729 0-4.511 2.276-6.125 4.515-6.125 3.224 0 4.245 2.089 5.125 4.772l1.161 3.667c1.161 3.561 3.365 6.421 9.713 6.421 4.548 0 7.631-1.391 7.631-5.068 0-2.968-1.697-4.511-4.844-5.244l-2.344-0.511c-1.624-0.371-2.104-1.032-2.104-2.131 0-1.249.985-1.984 2.604-1.984 1.767 0 2.704 0.661 2.865 2.24l3.661-0.444c-0.297-3.301-2.584-4.656-6.323-4.656-3.308 0-6.532 1.251-6.532 5.245 0 2.5 1.204 4.077 4.245 4.807l2.484 0.589c1.865 0.443 2.484 1.224 2.484 2.287 0 1.359-1.323 1.921-3.828 1.921-3.703 0-5.244-1.943-6.124-4.625l-1.204-3.667c-1.541-4.765-4.005-6.531-8.891-6.531-5.287-.016-8.151 3.385-8.151 9.192 0 5.573 2.864 8.595 8.005 8.595 4.14 0 6.125-1.943 6.125-1.943z"/></svg>
             </a>
+            <m3e-tooltip for="ficon-lastfm" position="above">Last.fm</m3e-tooltip>
           </div>
           <div class="footer-meta">
             <a href="mailto:hi@lamp.delivery" aria-label="Email" class="ficon ficon--sm">
@@ -320,6 +310,7 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 <script>
   import '@m3e/web/icon';
   import '@m3e/web/shape';
+  import '@m3e/web/tooltip';
 </script>
 
 <style>
@@ -348,7 +339,7 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
     min-height: 512px;
     max-height: 600px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     background: var(--md-sys-color-surface-container-lowest);
   }
 
@@ -494,23 +485,48 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
   }
 
   .card-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--md-sys-color-primary);
+    width: 44px;
+    height: 44px;
+    background: transparent;
     color: var(--md-sys-color-on-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    overflow: visible;
+    box-sizing: border-box;
+    position: relative;
   }
 
   .card-icon .material-symbols-outlined {
     font-size: 22px;
   }
 
+  .card-icon m3e-shape {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    box-sizing: border-box;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: visible;
+    --m3e-shape-size: 40px;
+    z-index: 1;
+  }
+  .card-icon-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
   .card-icon--alt {
-    background: var(--md-sys-color-secondary-container);
+    background: transparent;
     color: var(--md-sys-color-on-secondary-container);
   }
 
@@ -606,13 +622,22 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
   }
 
   .link-icon--sm {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
   }
 
   .link-icon svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .link-icon--sm img,
+  .link-icon img.friend-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
   }
 
   .link-row > div {
@@ -818,6 +843,72 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
     transform-origin: center;
   }
 
+  /* Playing indicator and banner tweaks */
+  .np-banner.playing {
+    transform-origin: center;
+  }
+
+  .playing-indicator {
+    display: inline-block;
+    width: 36px;
+    height: 18px;
+    position: relative;
+    vertical-align: middle;
+  }
+  .playing-indicator span {
+    position: absolute;
+    bottom: 0;
+    width: 4px;
+    background: var(--md-sys-color-primary);
+    left: 0;
+    border-radius: 2px;
+    animation: play-bounce 900ms infinite ease-in-out;
+  }
+  .playing-indicator span:nth-child(2) { left: 8px; animation-delay: 120ms }
+  .playing-indicator span:nth-child(3) { left: 16px; animation-delay: 240ms }
+
+  @keyframes play-bounce {
+    0% { height: 4px }
+    50% { height: 14px }
+    100% { height: 4px }
+  }
+
+  /* Top-left placement for playing indicator */
+  .np-banner .playing-indicator.top-left {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 20px;
+    z-index: 20;
+  }
+
+  /* Make artist above, title prominent at bottom-left */
+  .np-banner-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  .np-banner .np-artist {
+    font-size: 0.9rem;
+    opacity: 0.95;
+    margin-bottom: 6px;
+  }
+
+  .np-title {
+    font-weight: 800;
+    font-size: 1.25rem;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  .np-title-link { text-decoration: none; color: inherit; }
+  .np-title-link:hover .np-title { text-decoration: underline; }
+  .np-artist-link { text-decoration: none; color: inherit; }
+  .np-artist-link:hover { text-decoration: underline; }
+
   .np-thumb {
     stroke: var(--md-sys-color-primary);
     stroke-width: 6px;
@@ -860,6 +951,8 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
     flex-wrap: wrap;
     justify-content: center;
   }
+
+  /* Tooltip fallback removed — rely on m3e web tooltips for consistent UI */
 
   .ficon {
     width: 44px;
@@ -959,114 +1052,5 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 </style>
 
 <script type="module">
-  // Smooth animator for squiggly progress + time labels
-  function formatTime(totalSeconds) {
-    if (!Number.isFinite(totalSeconds) || totalSeconds < 0) return '0:00';
-    const s = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
-    const m = Math.floor(totalSeconds / 60);
-    return `${m}:${s}`;
-  }
-
-  function animateProgress(svg) {
-    const fg = svg.querySelector('.np-wave-fg');
-    const from = Number(svg.getAttribute('data-from')) || 0;
-    const duration = Number(svg.getAttribute('data-duration')) || 0;
-    if (!fg || !duration || !from) return;
-
-    const timeLeftEl = svg.parentElement.querySelector('.np-time-left');
-    const timeRightEl = svg.parentElement.querySelector('.np-time-right');
-
-    const path = fg;
-    const bg = svg.querySelector('.np-wave-bg');
-    const knob = svg.querySelector('.np-knob');
-
-    // parameters to mirror Metrolist's SquigglySlider
-    const width = 400;
-    const height = 16;
-    const amplitude = 3; // px
-    const waveLength = 80; // px
-    const phaseSpeed = 24; // px per second
-    const strokeW = 3; // matches SVG stroke-width
-
-    let phase = 0;
-
-    function generateSinePath(w, h, amp, waveLen, phaseOffset, step = 4) {
-      const cx = h / 2;
-      let d = '';
-      for (let x = 0; x <= w; x += step) {
-        const y = cx + Math.sin(((x + phaseOffset) / waveLen) * Math.PI * 2) * amp;
-        if (x === 0) d += `M ${x} ${y}`;
-        else d += ` L ${x} ${y}`;
-      }
-      return d;
-    }
-
-    const thumb = svg.querySelector('.np-thumb');
-
-    let lastT = performance.now();
-    let rafId = null;
-
-    function draw(nowMs) {
-      const now = nowMs || performance.now();
-      const delta = Math.max(0, (now - lastT) / 1000);
-      lastT = now;
-
-      // advance phase for motion
-      phase = (phase + delta * phaseSpeed) % waveLength;
-
-      // regenerate path with phase offset
-      const d = generateSinePath(width, height, amplitude, waveLength, -phase);
-      bg.setAttribute('d', d);
-      path.setAttribute('d', d);
-
-      const length = path.getTotalLength();
-      path.style.strokeDasharray = length;
-
-      const from = Number(svg.getAttribute('data-from')) || 0;
-      const duration = Number(svg.getAttribute('data-duration')) || 0;
-      if (!duration || !from) return;
-      
-      const tNow = Date.now() / 1000; // Current time in seconds
-      const elapsed = Math.max(0, tNow - from); // Time since song started
-      const ratio = Math.min(1, elapsed / duration);
-      const offset = (1 - ratio) * length;
-      path.style.strokeDashoffset = offset;
-
-      // update knob position
-      if (knob) {
-        const point = path.getPointAtLength(length * ratio);
-        knob.setAttribute('cx', point.x);
-        knob.setAttribute('cy', point.y);
-      }
-
-      // update thumb (vertical bar)
-      if (thumb) {
-        const point = path.getPointAtLength(length * ratio);
-        const barHalfHeight = amplitude + strokeW;
-        const y1 = point.y - barHalfHeight;
-        const y2 = point.y + barHalfHeight;
-        thumb.setAttribute('x1', point.x);
-        thumb.setAttribute('x2', point.x);
-        thumb.setAttribute('y1', y1);
-        thumb.setAttribute('y2', y2);
-      }
-
-      if (timeLeftEl) timeLeftEl.textContent = formatTime(elapsed);
-      if (timeRightEl) timeRightEl.textContent = formatTime(duration);
-
-      if (ratio < 1) {
-        rafId = requestAnimationFrame(draw);
-      } else {
-        path.style.strokeDashoffset = 0;
-        if (timeLeftEl) timeLeftEl.textContent = formatTime(duration);
-        if (rafId) cancelAnimationFrame(rafId);
-      }
-    }
-
-    rafId = requestAnimationFrame(draw);
-  }
-
-  for (const svg of document.querySelectorAll('.np-progress')) {
-    animateProgress(svg);
-  }
+  // Progress sync removed — banner-only UI handles playing state with CSS animation.
 </script>

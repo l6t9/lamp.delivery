@@ -213,9 +213,9 @@ export async function getNowPlaying(): Promise<TrackInfo> {
 
         const isNowPlaying = lastFmTrack['@attr']?.nowplaying === 'true';
 
-        // timestamps (seconds)
-        const fromTs = lastFmTrack.date?.uts ? parseInt(lastFmTrack.date.uts, 10) : Math.floor(Date.now() / 1000);
-        let durationSec: number | undefined = undefined;
+        // timestamps (milliseconds)
+        const fromTs = lastFmTrack.date?.uts ? parseInt(lastFmTrack.date.uts, 10) * 1000 : Date.now();
+        let durationMs: number | undefined = undefined;
         let endTime: number | null = null;
 
         if (isNowPlaying) {
@@ -233,8 +233,8 @@ export async function getNowPlaying(): Promise<TrackInfo> {
                 if (infoRes?.track?.duration) {
                     const ms = parseInt(infoRes.track.duration, 10);
                     if (!Number.isNaN(ms) && ms > 0) {
-                        durationSec = Math.floor(ms / 1000);
-                        endTime = fromTs + durationSec;
+                        durationMs = ms;
+                        endTime = fromTs + durationMs;
                     }
                 }
             } catch (e) {
@@ -275,7 +275,7 @@ export async function getNowPlaying(): Promise<TrackInfo> {
         const track = matches.deezerMatch || matches.itunesMatch;
 
         if (!track) {
-            const fallback: TrackInfo = { ...partialTrackBase, link: undefined, isNowPlaying, from: fromTs, to: endTime, duration: durationSec };
+            const fallback: TrackInfo = { ...partialTrackBase, link: undefined, isNowPlaying, from: fromTs, to: endTime, duration: durationMs };
             cachedTrack = fallback;
             lastFetchTime = now;
             return fallback;
@@ -298,7 +298,7 @@ export async function getNowPlaying(): Promise<TrackInfo> {
 
         // include time info if available
         finalTrack.from = fromTs;
-        finalTrack.duration = durationSec ?? finalTrack.duration;
+        finalTrack.duration = durationMs ?? finalTrack.duration;
         finalTrack.to = endTime;
 
         // include played time if available

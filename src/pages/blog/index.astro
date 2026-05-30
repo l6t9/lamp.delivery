@@ -8,10 +8,14 @@ const posts = (await getCollection('blog', ({ data }) => data.published)).sort(
 ---
 
 <BaseLayout title="blog | lamp.delivery" description="Posts and notes from LampDelivery." pathname="/blog">
-  <main class="page">
-    <div class="card">
+  <main class="home">
+    <section class="content-area">
+      <div class="content-row">
+        <div class="col-left">
+          <div class="card">
       <span class="card-icon card-icon--alt">
-        <span class="material-symbols-outlined">article</span>
+        <m3e-shape name="6-sided-cookie" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-secondary-container);--m3e-shape-size:40px;display:block"></m3e-shape>
+        <span class="card-icon-inner"><span class="material-symbols-outlined">article</span></span>
       </span>
       <h2 class="card-title">blog</h2>
       <p class="muted intro">short posts, notes, and anything else that feels worth keeping around.</p>
@@ -31,19 +35,45 @@ const posts = (await getCollection('blog', ({ data }) => data.published)).sort(
       </div>
 
       <a class="card-footer-link" href="/">back home <span class="material-symbols-outlined" style="font-size:16px">chevron_forward</span></a>
-    </div>
+        </div>
+        <div class="col-right">
+          <!-- right column intentionally left blank for blog index -->
+        </div>
+      </div>
+    </section>
   </main>
 </BaseLayout>
 
 <script>
   import '@m3e/web/icon';
+  import '@m3e/web/shape';
 </script>
 
 <style>
-  .page {
+  .content-area {
+    background: var(--md-sys-color-surface-container-lowest);
+    width: 100vw;
+    position: relative;
+    z-index: 1;
+  }
+
+  .content-row {
+    display: flex;
+    flex-direction: row;
+    gap: var(--home-gap);
+    max-width: min(1200px, calc(100vw - 20px));
+    margin: 0 auto;
+    padding: calc(var(--m3e-unit) * 6) 10px calc(var(--m3e-unit) * 12);
+    position: relative;
+    z-index: 1;
+  }
+
+  .col-left,
+  .col-right {
     display: flex;
     flex-direction: column;
-    gap: var(--home-gap, 24px);
+    gap: var(--home-gap);
+    width: 100%;
   }
 
   .intro {
@@ -59,4 +89,40 @@ const posts = (await getCollection('blog', ({ data }) => data.published)).sort(
       white-space: normal;
     }
   }
+</style>
+
+<style>
+  .card-icon {
+    overflow: visible;
+    box-sizing: border-box;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border-radius: 0;
+    position: relative;
+  }
+  .card {
+    background: var(--md-sys-color-surface);
+    border-radius: var(--m3e-radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    position: relative;
+  }
+
+  .card-icon m3e-shape {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: var(--m3e-shape-size);
+    height: var(--m3e-shape-size);
+    display: block;
+    box-sizing: border-box;
+    --m3e-shape-size: 40px;
+    z-index: 1;
+  }
+  .card-icon-inner { position: relative; z-index: 2; display:flex; align-items:center; justify-content:center; width:100%; height:100%; }
+  .card-icon .material-symbols-outlined { font-size:22px }
 </style>
