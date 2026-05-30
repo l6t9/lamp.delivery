@@ -28,6 +28,9 @@ jobs:
         run: pnpm install
 
       - name: Build
+        env:
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+          LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
         run: pnpm build
 
       - name: Inject Cloudflare Account ID
