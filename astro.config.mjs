@@ -10,21 +10,5 @@ export default defineConfig({
   server: {
     host: true,
     port: 4321
-  },
-  vite: {
-    server: {
-      watch: {
-        ignored: [
-          '**/node_modules/**',
-          '**/.git/**',
-          '**/.opencode/**',
-          '**/.wrangler/**',
-          '**/.astro/**',
-          '**/dist/**',
-          '**/.idea/**',
-          '**/downloads/**'
-        ]
-      }
-    }
   }
 });

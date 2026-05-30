@@ -16,6 +16,12 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+.idea/
+*.iml
+
+# Tools
+.opencode/
+downloads/
 
 # Env
 .env
