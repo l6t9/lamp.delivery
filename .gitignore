@@ -1,5 +1,8 @@
 node_modules
 
+# Build output
+dist/
+
 # Output
 .astro
 .output
