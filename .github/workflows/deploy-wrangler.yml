@@ -1,0 +1,42 @@
+name: Deploy to Cloudflare Workers (Wrangler)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Inject Cloudflare Account ID
+        if: secrets.CF_ACCOUNT_ID
+        run: |
+          sed -i "s/CF_ACCOUNT_ID_PLACEHOLDER/${{ secrets.CF_ACCOUNT_ID }}/g" wrangler.toml
+
+      - name: Publish with Wrangler
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          npx wrangler@3 publish
