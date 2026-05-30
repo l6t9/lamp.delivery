@@ -7,6 +7,8 @@ export type TrackInfo =
         albumName: string;
         cover: string;
         link?: string;
+        isNowPlaying?: boolean;
+        playedAt?: string;
     }
     | false
     | null;
@@ -192,19 +194,21 @@ export async function getNowPlaying(): Promise<TrackInfo> {
 
         const lastFmTrack = lastfmData.recenttracks?.track?.[0];
 
-        if (!lastFmTrack || lastFmTrack['@attr']?.nowplaying !== 'true') {
+        if (!lastFmTrack) {
             cachedTrack = false;
             lastFetchTime = now;
             return false;
         }
 
         const coverArt = lastFmTrack.image?.at(-1)?.['#text'] || placeholder.src;
-        const partialTrack: TrackInfo = {
+        const partialTrackBase = {
             songName: lastFmTrack.name,
             artistName: lastFmTrack.artist['#text'],
             albumName: lastFmTrack.album['#text'] === lastFmTrack.name ? '' : lastFmTrack.album['#text'],
             cover: coverArt?.includes('2a96cbd8b46e442fc41c2b86b821562f') ? placeholder.src : coverArt
         };
+
+        const isNowPlaying = lastFmTrack['@attr']?.nowplaying === 'true';
 
         const performSearch = async (searchTerm: string) => {
             const encodedTerm = encodeURIComponent(normalize(searchTerm));
@@ -218,17 +222,17 @@ export async function getNowPlaying(): Promise<TrackInfo> {
             const deezerCandidates = mapDeezerToItunes((deezerRes as DeezerResponse).data || []);
 
             const hasAlbum = !!lastFmTrack.album['#text'];
-            const itunesMatch = selectBestMatch(itunesCandidates, partialTrack, hasAlbum);
-            const deezerMatch = selectBestMatch(deezerCandidates, partialTrack, hasAlbum);
+            const itunesMatch = selectBestMatch(itunesCandidates, partialTrackBase as any, hasAlbum);
+            const deezerMatch = selectBestMatch(deezerCandidates, partialTrackBase as any, hasAlbum);
 
             return { itunesMatch, deezerMatch };
         };
 
-        const initialQuery = `${partialTrack.artistName} ${partialTrack.songName.replace(/\(feat\..+?\)$/, '')}`;
+        const initialQuery = `${partialTrackBase.artistName} ${partialTrackBase.songName.replace(/\(feat\..+?\)$/, '')}`;
         let matches = await performSearch(initialQuery);
 
         if (!matches.itunesMatch && !matches.deezerMatch) {
-            const [extractedName, possiblyArtist] = extractName(partialTrack.songName);
+            const [extractedName, possiblyArtist] = extractName(partialTrackBase.songName);
 
             if (extractedName) {
                 const extractedQuery = possiblyArtist ? `${possiblyArtist} ${extractedName}` : extractedName;
@@ -239,9 +243,10 @@ export async function getNowPlaying(): Promise<TrackInfo> {
         const track = matches.deezerMatch || matches.itunesMatch;
 
         if (!track) {
-            cachedTrack = { ...partialTrack, link: undefined };
+            const fallback: TrackInfo = { ...partialTrackBase, link: undefined, isNowPlaying };
+            cachedTrack = fallback;
             lastFetchTime = now;
-            return cachedTrack;
+            return fallback;
         }
 
         const albumName = track.collectionName.replace(/ - (?:Single|EP)$/, '');
@@ -250,13 +255,19 @@ export async function getNowPlaying(): Promise<TrackInfo> {
             artistName: track.artistName,
             albumName: albumName === track.trackName ? '' : albumName,
             cover:
-                partialTrack.cover &&
-                    partialTrack.cover !== placeholder.src &&
-                    !partialTrack.cover.includes('2a96cbd8b46e442fc41c2b86b821562f')
-                    ? partialTrack.cover
+                partialTrackBase.cover &&
+                    partialTrackBase.cover !== placeholder.src &&
+                    !partialTrackBase.cover.includes('2a96cbd8b46e442fc41c2b86b821562f')
+                    ? partialTrackBase.cover
                     : track.artworkUrl100,
-            link: track.trackViewUrl
+            link: track.trackViewUrl,
+            isNowPlaying
         };
+
+        // include played time if available
+        if (lastFmTrack.date?.uts) {
+            finalTrack.playedAt = new Date(parseInt(lastFmTrack.date.uts, 10) * 1000).toISOString();
+        }
 
         cachedTrack = finalTrack;
         lastFetchTime = now;

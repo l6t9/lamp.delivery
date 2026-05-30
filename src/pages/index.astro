@@ -137,6 +137,35 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
               </a>
             </div>
           </div>
+
+          <div class="card">
+            <span class="card-icon">
+              <span class="material-symbols-outlined">group</span>
+            </span>
+            <h2 class="card-title">friends</h2>
+            <div class="link-list">
+              <a class="link-row" href="https://nyx.meowery.eu/" target="_blank" rel="noreferrer">
+                <span class="link-icon link-icon--sm">
+                  <img src="https://github.com/nyxiereal.png" alt="" style="width:24px;height:24px;border-radius:50%" />
+                </span>
+                <div>
+                  <b>nyx</b>
+                  <span class="muted-2">nyx.meowery.eu</span>
+                </div>
+                <span class="material-symbols-outlined link-arrow">chevron_forward</span>
+              </a>
+              <a class="link-row" href="https://elissa.moe/" target="_blank" rel="noreferrer">
+                <span class="link-icon link-icon--sm">
+                  <img src="https://github.com/blahai.png" alt="" style="width:24px;height:24px;border-radius:50%" />
+                </span>
+                <div>
+                  <b>elissa</b>
+                  <span class="muted-2">elissa.moe</span>
+                </div>
+                <span class="material-symbols-outlined link-arrow">chevron_forward</span>
+              </a>
+            </div>
+          </div>
         </div>
 
         <div class="col-right">
@@ -170,24 +199,57 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
             <a class="card-footer-link" href="/projects">all projects <span class="material-symbols-outlined" style="font-size:16px">chevron_forward</span></a>
           </div>
 
-          {nowPlaying && typeof nowPlaying === 'object' ? (
-            <div class="card">
-              <span class="card-icon card-icon--alt">
-                <span class="material-symbols-outlined">graphic_eq</span>
-              </span>
-              <h2 class="card-title">what i'm listening to</h2>
-              <div class="now-playing">
-                <img src={nowPlaying.cover} alt="" class="np-cover" />
-                <div class="np-info">
-                  <b>{nowPlaying.songName}</b>
-                  <span class="muted">{nowPlaying.artistName}</span>
-                  {nowPlaying.link ? (
-                    <a class="m3e-btn m3e-btn--tonal m3e-btn--sm" href={nowPlaying.link} target="_blank" style="width:fit-content;margin-top:4px">open track</a>
-                  ) : null}
+          <div class="card now-playing-card">
+            <span class="card-icon card-icon--alt">
+              <span class="material-symbols-outlined">graphic_eq</span>
+            </span>
+            <h2 class="card-title">what i'm listening to</h2>
+            <div class="now-playing">
+              {nowPlaying === null ? (
+                <div class="np-info np-empty">
+                  <b>Last.fm not configured</b>
+                  <span class="muted-2">set LASTFM_API_KEY & LASTFM_USERNAME</span>
                 </div>
-              </div>
+              ) : nowPlaying === false ? (
+                <div class="np-info np-empty">
+                  <b>no recent tracks</b>
+                  <span class="muted-2">no scrobbles found</span>
+                </div>
+              ) : (
+                <>
+                  {nowPlaying.isNowPlaying === false ? (
+                    <div class="np-banner">
+                      <img src={nowPlaying.cover} alt="cover" />
+                      <a class="lastfm-icon" href={`https://last.fm/user/${import.meta.env.LASTFM_USERNAME || 'LampDelivery'}`} target="_blank" rel="noreferrer" aria-label="Last.fm">
+                        <svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M14.131 22.948l-1.172-3.193c0 0-1.912 2.131-4.771 2.131-2.537 0-4.333-2.203-4.333-5.729 0-4.511 2.276-6.125 4.515-6.125 3.224 0 4.245 2.089 5.125 4.772l1.161 3.667c1.161 3.561 3.365 6.421 9.713 6.421 4.548 0 7.631-1.391 7.631-5.068 0-2.968-1.697-4.511-4.844-5.244l-2.344-0.511c-1.624-0.371-2.104-1.032-2.104-2.131 0-1.249.985-1.984 2.604-1.984 1.767 0 2.704 0.661 2.865 2.24l3.661-0.444c-0.297-3.301-2.584-4.656-6.323-4.656-3.308 0-6.532 1.251-6.532 5.245 0 2.5 1.204 4.077 4.245 4.807l2.484 0.589c1.865.443 2.484 1.224 2.484 2.287 0 1.359-1.323 1.921-3.828 1.921-3.703 0-5.244-1.943-6.124-4.625l-1.204-3.667c-1.541-4.765-4.005-6.531-8.891-6.531-5.287-0.016-8.151 3.385-8.151 9.192 0 5.573 2.864 8.595 8.005 8.595 4.14 0 6.125-1.943 6.125-1.943z"/></svg>
+                      </a>
+                      <div class="np-banner-overlay">
+                        <div class="np-title">{nowPlaying.songName}</div>
+                        <div class="np-artist">{nowPlaying.artistName}</div>
+                        {nowPlaying.albumName ? <div class="muted-2">{nowPlaying.albumName}</div> : null}
+                        <div class="np-actions">
+                          {null}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                      <div style="display:flex;gap:14px;align-items:center">
+                      <div class="np-cover-wrap">
+                        <img src={nowPlaying.cover} alt="cover" class="np-cover" />
+                      </div>
+                      <div class="np-info">
+                        <div class="np-title">{nowPlaying.songName}</div>
+                        <div class="np-artist">{nowPlaying.artistName}</div>
+                        <div class="np-actions">
+                            {null}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-          ) : null}
+          </div>
 
           {posts.length > 0 ? (
             <div class="card">
@@ -601,6 +663,115 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
   .np-info span {
     font-size: 0.85rem;
   }
+
+  /* Bignut-inspired now-playing styling */
+  .now-playing-card {
+    padding-bottom: 12px;
+  }
+
+  .np-cover-wrap {
+    width: 76px;
+    height: 76px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
+
+  .np-banner {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 160px;
+  }
+
+  .np-banner img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .np-banner-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.32) 35%, rgba(0,0,0,0.6) 100%);
+    padding: 16px 18px;
+  }
+
+  .np-banner .np-title { color: #fff; font-weight:700; font-size:1.05rem; }
+  .np-banner .np-artist { color: rgba(255,255,255,0.95); font-size:0.95rem }
+
+  .now-playing .np-cover {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    object-fit: cover;
+    border: none;
+  }
+
+  .np-title {
+    font-weight: 600;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .np-artist {
+    font-size: 0.85rem;
+    color: var(--md-sys-color-on-surface-variant);
+    margin-top: 4px;
+  }
+
+  .np-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+  }
+
+  .lastfm-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(250,0,24,0.08), rgba(250,0,24,0.04));
+    color: var(--md-sys-color-on-surface);
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+
+  .lastfm-icon {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.08);
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+    right: 16px;
+    top: 16px;
+  }
+
+  .np-banner .lastfm-icon {
+    right: 12px;
+    top: 12px;
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+  }
+
+  .np-empty b { font-weight: 600; }
 
   /* ═══ FOOTER ═══ */
   .footer-wrap {
