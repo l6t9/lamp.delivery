@@ -1,8 +1,6 @@
 name = "lamp-delivery"
 main = "dist/_worker.js/index.js"
-site = { directory = "dist" }
 compatibility_date = "2026-05-30"
-type = "javascript"
 # Replace CF_ACCOUNT_ID_PLACEHOLDER with your Cloudflare Account ID in CI or locally
 account_id = "CF_ACCOUNT_ID_PLACEHOLDER"
 routes = [
