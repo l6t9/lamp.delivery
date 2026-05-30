@@ -1,5 +1,5 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
-import { i as imageConfig } from '../chunks/_astro_assets_BMHlg-Jy.mjs';
+import { i as imageConfig } from '../chunks/_astro_assets_DQ25qkgY.mjs';
 import { b as isRemotePath } from '../chunks/path_y9gdWwIq.mjs';
 import { i as isRemoteAllowed } from '../chunks/remote_CVXTZJrr.mjs';
 export { renderers } from '../renderers.mjs';

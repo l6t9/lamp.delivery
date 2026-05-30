@@ -3,5 +3,13 @@
   "include": [
     "/*"
   ],
-  "exclude": []
+  "exclude": [
+    "/_astro/*",
+    "/robots.txt",
+    "/test.txt",
+    "/.well-known/*",
+    "/images/*",
+    "/articleAssets/*",
+    "/blog/example"
+  ]
 }
