@@ -177,8 +177,8 @@ const mapDeezerToItunes = (tracks: DeezerResponse['data']): ItunesResponse[] =>
     }));
 
 export async function getNowPlaying(): Promise<TrackInfo> {
-    const apiKey = import.meta.env.LASTFM_API_KEY || process.env.LASTFM_API_KEY;
-    const username = import.meta.env.LASTFM_USERNAME || process.env.LASTFM_USERNAME;
+    const apiKey = import.meta.env.LASTFM_API_KEY;
+    const username = import.meta.env.LASTFM_USERNAME;
 
     if (!apiKey || !username) {
         return null;

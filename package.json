@@ -4,12 +4,12 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "check": "astro check",
-    "lint": "astro check",
+    "dev": "pnpm exec astro dev",
+    "start": "pnpm exec astro dev",
+    "build": "pnpm exec astro check && pnpm exec astro build",
+    "preview": "pnpm exec astro preview",
+    "check": "pnpm exec astro check",
+    "lint": "pnpm exec astro check",
     "deploy": "pnpm build && wrangler pages deploy dist"
   },
   "devDependencies": {
