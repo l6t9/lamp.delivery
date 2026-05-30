@@ -32,3 +32,4 @@ downloads/
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+/unused_images_backup/
