@@ -5,8 +5,8 @@ type = "javascript"
 # Replace CF_ACCOUNT_ID_PLACEHOLDER with your Cloudflare Account ID in CI or locally
 account_id = "CF_ACCOUNT_ID_PLACEHOLDER"
 routes = [
-  { pattern = "lamp.delivery", zone_name = "lamp.delivery" },
-  { pattern = "www.lamp.delivery", zone_name = "lamp.delivery" }
+  { pattern = "lamp.delivery/*", zone_name = "lamp.delivery" },
+  { pattern = "www.lamp.delivery/*", zone_name = "lamp.delivery" }
 ]
 
 [vars]
