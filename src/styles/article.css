@@ -1,0 +1,72 @@
+article {
+    line-height: 1.7;
+    color: var(--md-sys-color-on-surface);
+}
+
+article :is(h1, h2, h3, h4) {
+    margin-top: 1.5em;
+    margin-bottom: 0.6em;
+    line-height: 1.15;
+}
+
+article h1 {
+    margin-top: 0;
+    font-size: clamp(2rem, 4vw, 3.3rem);
+}
+
+article p,
+article ul,
+article ol,
+article pre,
+article blockquote {
+    margin: 1em 0;
+}
+
+article a {
+    color: var(--md-sys-color-primary);
+    text-decoration: none;
+}
+
+article a:hover {
+    text-decoration: underline;
+}
+
+article code {
+    padding: 0.12rem 0.35rem;
+    border-radius: 8px;
+    background: var(--md-sys-color-surface-container-high);
+    font-size: 0.96em;
+}
+
+article pre {
+    overflow-x: auto;
+    padding: 1rem;
+    border-radius: 20px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    background: var(--md-sys-color-surface-container);
+}
+
+article pre code {
+    padding: 0;
+    background: transparent;
+}
+
+article img {
+    border-radius: 18px;
+    border: 1px solid var(--md-sys-color-outline-variant);
+}
+
+article blockquote {
+    margin-left: 0;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--md-sys-color-secondary);
+    background: var(--md-sys-color-surface-container-high);
+    border-radius: 0 16px 16px 0;
+}
+
+article hr {
+    border: 0;
+    height: 1px;
+    margin: 1.8rem 0;
+    background: var(--md-sys-color-outline-variant);
+}

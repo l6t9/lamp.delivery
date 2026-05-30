@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="projects | lamp.delivery" description="Selected projects from LampDelivery." pathname="/projects">
+  <main class="page">
+    <div class="card">
+      <span class="card-icon card-icon--alt">
+        <span class="material-symbols-outlined">package_2</span>
+      </span>
+      <h2 class="card-title">projects</h2>
+      <p class="muted intro">a small set of things I've worked on that are worth showing.</p>
+
+      <div class="inner-grid">
+        <a class="inner-card" href="https://metrolist.cc" target="_blank" rel="noreferrer">
+          <img src="/images/metrolist-banner.png" alt="" class="inner-card-img" />
+          <div class="inner-card-body">
+            <b>Metrolist</b>
+            <span class="muted-2">YouTube Music client for Android</span>
+          </div>
+        </a>
+        <a class="inner-card" href="https://github.com/Aliucord/LumiBot" target="_blank" rel="noreferrer">
+          <img src="/images/lumibot-preview.jpg" alt="" class="inner-card-img" />
+          <div class="inner-card-body">
+            <b>LumiBot</b>
+            <span class="muted-2">Utility bot for Aliucord's Discord server</span>
+          </div>
+        </a>
+      </div>
+
+      <a class="card-footer-link" href="/">back home <span class="material-symbols-outlined" style="font-size:16px">chevron_forward</span></a>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import '@m3e/web/icon';
+</script>
+
+<style>
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--home-gap, 24px);
+  }
+
+  .intro {
+    max-width: 56ch;
+  }
+
+  .inner-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .inner-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    background: var(--md-sys-color-surface-container-low);
+    border-radius: 16px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: background 0.2s ease;
+  }
+
+  .inner-card:hover {
+    background: var(--md-sys-color-surface-container-high);
+  }
+
+  .inner-card-img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .inner-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 14px 14px;
+  }
+
+  .inner-card-body > b {
+    font-family: 'Google Sans Flex', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  .inner-card-body > span {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 720px) {
+    .inner-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

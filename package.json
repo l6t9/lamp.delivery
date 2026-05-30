@@ -4,45 +4,20 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "prepare": "svelte-kit sync || echo ''",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "eslint ."
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lint": "astro check"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.2.5",
-    "@eslint/js": "^9.18.0",
-    "@iconify-json/catppuccin": "^1.2.17",
-    "@iconify-json/simple-icons": "^1.2.65",
-    "@sveltejs/adapter-auto": "^6.0.0",
-    "@sveltejs/kit": "^2.22.0",
-    "@sveltejs/vite-plugin-svelte": "^6.0.0",
-    "@tailwindcss/postcss": "^4.1.18",
-    "@vercel/node": "^5.6.9",
-    "autoprefixer": "^10.4.23",
-    "eslint": "^9.18.0",
-    "eslint-plugin-svelte": "^3.0.0",
-    "globals": "^16.0.0",
-    "mdsvex": "^0.12.3",
-    "postcss": "^8.5.6",
-    "shiki": "^3.9.2",
-    "svelte": "^5.0.0",
-    "svelte-check": "^4.0.0",
-    "tailwindcss": "^4.1.18",
-    "typescript": "^5.0.0",
-    "typescript-eslint": "^8.20.0",
-    "unplugin-icons": "^22.4.2",
-    "vite": "^7.0.4"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/vercel": "^7.0.0",
+    "astro": "^4.16.19",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@sveltejs/adapter-vercel": "^6.3.0"
+    "@m3e/web": "^2.5.6"
   }
 }

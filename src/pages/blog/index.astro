@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => data.published)).sort(
+  (first, second) => second.data.date.getTime() - first.data.date.getTime()
+);
+---
+
+<BaseLayout title="blog | lamp.delivery" description="Posts and notes from LampDelivery." pathname="/blog">
+  <main class="page">
+    <div class="card">
+      <span class="card-icon card-icon--alt">
+        <span class="material-symbols-outlined">article</span>
+      </span>
+      <h2 class="card-title">blog</h2>
+      <p class="muted intro">short posts, notes, and anything else that feels worth keeping around.</p>
+
+      <div class="link-list">
+        {posts.map((post) => (
+          <a class="link-row" href={`/blog/${post.slug}`}>
+            <div>
+              <b>{post.data.title}</b>
+              <span class="muted-2">{post.data.description}</span>
+            </div>
+            <span class="muted-2 link-date">{post.data.date.toLocaleDateString('en-GB')}</span>
+          </a>
+        ))}
+
+        {posts.length === 0 ? <p class="muted-2" style="padding:8px 12px">nothing published yet.</p> : null}
+      </div>
+
+      <a class="card-footer-link" href="/">back home <span class="material-symbols-outlined" style="font-size:16px">chevron_forward</span></a>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import '@m3e/web/icon';
+</script>
+
+<style>
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--home-gap, 24px);
+  }
+
+  .intro {
+    max-width: 56ch;
+  }
+
+  .link-date {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .link-date {
+      white-space: normal;
+    }
+  }
+</style>

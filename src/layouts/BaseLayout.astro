@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+import favicon from '../lib/assets/favicon.png';
+
+type Props = {
+  title?: string;
+  description?: string;
+  type?: string;
+  pathname?: string;
+};
+
+const {
+  title = 'lamp',
+  description = 'just making stuff',
+  type = 'website',
+  pathname = '/'
+} = Astro.props satisfies Props;
+
+const navItems = [
+  { href: '/', label: 'home' },
+  { href: '/blog', label: 'blog' },
+  { href: '/projects', label: 'projects' },
+  { href: '/other-stuff', label: 'other stuff' }
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={favicon.src} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta name="theme-color" content="#1c1b1f" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..200&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght,wdth@8..144,100..1000,25..151&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <m3e-theme color="#d0bcff" scheme="dark">
+      <slot />
+    </m3e-theme>
+
+    <script>
+      import '@m3e/web/theme';
+    </script>
+  </body>
+</html>

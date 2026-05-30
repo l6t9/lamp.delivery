@@ -1,14 +1,25 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
-  "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "moduleResolution": "bundler"
-  }
+    "extends": "astro/tsconfigs/strict",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true
+    },
+    "include": [
+        ".astro/types.d.ts",
+        "src/pages/**/*",
+        "src/layouts/**/*",
+        "src/styles/**/*",
+        "src/content/**/*",
+        "src/lib/nowPlaying.ts",
+        "src/env.d.ts",
+        "astro.config.mjs"
+    ],
+    "exclude": [
+        "dist",
+        "src/routes/**",
+        "src/app.html",
+        "src/app.d.ts"
+    ]
 }
