@@ -5,7 +5,7 @@ export default defineConfig({
   site: 'https://lamp.delivery',
   output: 'server',
   adapter: cloudflare({
-    // keep default configuration; adjust imageService if needed
+    mode: 'directory'
   }),
   server: {
     host: true,
