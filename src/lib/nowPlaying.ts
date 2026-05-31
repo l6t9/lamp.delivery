@@ -5,6 +5,7 @@ export type TrackInfo =
         songName: string;
         artistName: string;
         albumName: string;
+        userAvatar?: string;
         cover: string;
         link?: string;
         isNowPlaying?: boolean;
@@ -260,6 +261,22 @@ export async function getNowPlaying(): Promise<TrackInfo> {
             return { itunesMatch, deezerMatch };
         };
 
+        // try to fetch user avatar (best-effort)
+        let userAvatar: string | undefined = undefined;
+        try {
+            const userInfoRes = await fetch(
+                `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${username}&api_key=${apiKey}&format=json`
+            ).then((r) => r.json()).catch(() => null);
+
+            const images = userInfoRes?.user?.image || [];
+            for (let i = images.length - 1; i >= 0; i--) {
+                const img = images[i]['#text'];
+                if (img) { userAvatar = img; break; }
+            }
+        } catch (e) {
+            // ignore
+        }
+
         const initialQuery = `${partialTrackBase.artistName} ${partialTrackBase.songName.replace(/\(feat\..+?\)$/, '')}`;
         let matches = await performSearch(initialQuery);
 
@@ -276,6 +293,7 @@ export async function getNowPlaying(): Promise<TrackInfo> {
 
         if (!track) {
             const fallback: TrackInfo = { ...partialTrackBase, link: undefined, isNowPlaying, from: fromTs, to: endTime, duration: durationMs };
+            if (userAvatar) (fallback as any).userAvatar = userAvatar;
             cachedTrack = fallback;
             lastFetchTime = now;
             return fallback;
@@ -295,6 +313,8 @@ export async function getNowPlaying(): Promise<TrackInfo> {
             link: track.trackViewUrl,
             isNowPlaying
         };
+
+        if (userAvatar) finalTrack.userAvatar = userAvatar;
 
         // include time info if available
         finalTrack.from = fromTs;

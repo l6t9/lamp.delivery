@@ -15,7 +15,7 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 });
 ---
 
-<BaseLayout title="lamp.delivery" description="hai" pathname="/">
+<BaseLayout title="lamp.delivery" description="one lamp coming right up" pathname="/">
   <main class="home">
     <section class="banner">
       <div class="banner-bg">
@@ -169,6 +169,17 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
                 </div>
                 <span class="material-symbols-outlined link-arrow">chevron_forward</span>
               </a>
+              <a class="link-row" href="https://omegasunkey.pages.dev/" target="_blank" rel="noreferrer">
+                <span id="friend-omegasunkey" class="link-icon link-icon--sm" data-tooltip="omeguh">
+                  <img src="https://omegasunkey.pages.dev/avatar.webp" alt="" class="friend-avatar" />
+                </span>
+                <m3e-tooltip for="friend-omegasunkey" position="above">omeguh</m3e-tooltip>
+                <div>
+                  <b>omegasunkey</b>
+                  <span class="muted-2">omegasunkey.pages.dev</span>
+                </div>
+                <span class="material-symbols-outlined link-arrow">chevron_forward</span>
+              </a>
             </div>
           </div>
         </div>
@@ -210,7 +221,7 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
               <m3e-shape name="soft-burst" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-secondary-container);--m3e-shape-size:40px;display:block"></m3e-shape>
               <span class="card-icon-inner"><span class="material-symbols-outlined">graphic_eq</span></span>
             </span>
-            <h2 class="card-title">what i'm listening to</h2>
+            <h2 class="card-title">what i{nowPlaying && typeof nowPlaying === 'object' && !nowPlaying.isNowPlaying ? ' listened to' : "'m listening to"}</h2>
             <div class="now-playing">
               {nowPlaying === null ? (
                 <div class="np-info np-empty">
@@ -231,9 +242,18 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
                       <svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M14.131 22.948l-1.172-3.193c0 0-1.912 2.131-4.771 2.131-2.537 0-4.333-2.203-4.333-5.729 0-4.511 2.276-6.125 4.515-6.125 3.224 0 4.245 2.089 5.125 4.772l1.161 3.667c1.161 3.561 3.365 6.421 9.713 6.421 4.548 0 7.631-1.391 7.631-5.068 0-2.968-1.697-4.511-4.844-5.244l-2.344-0.511c-1.624-0.371-2.104-1.032-2.104-2.131 0-1.249.985-1.984 2.604-1.984 1.767 0 2.704 0.661 2.865 2.24l3.661-0.444c-0.297-3.301-2.584-4.656-6.323-4.656-3.308 0-6.532 1.251-6.532 5.245 0 2.5 1.204 4.077 4.245 4.807l2.484 0.589c1.865 0.443 2.484 1.224 2.484 2.287 0 1.359-1.323 1.921-3.828 1.921-3.703 0-5.244-1.943-6.124-4.625l-1.204-3.667c-1.541-4.765-4.005-6.531-8.891-6.531-5.287-.016-8.151 3.385-8.151 9.192 0 5.573 2.864 8.595 8.005 8.595 4.14 0 6.125-1.943 6.125-1.943z"/></svg>
                     </a>
                     <m3e-tooltip for="lastfm-badge">powered by Last.fm</m3e-tooltip>
+                    {/* top-left: user pfp + name + time */}
+                    <a id="lastfm-user" class="np-user-top-left" href={`https://last.fm/user/${import.meta.env.LASTFM_USERNAME || 'Lmpamapa'}`} target="_blank" rel="noreferrer" aria-label={`Last.fm user ${import.meta.env.LASTFM_USERNAME || 'Lmpamapa'}`} data-tooltip={import.meta.env.LASTFM_USERNAME || 'Lmpamapa'}>
+                      <img class="np-user-pfp" src={nowPlaying?.userAvatar ?? 'https://lastfm.freetls.fastly.net/i/u/avatar170s/7c5e1dd9c4c40b2fe18332311caea308.png'} alt="avatar" />
+                      <span class="np-user-name">{import.meta.env.LASTFM_USERNAME || 'Lmpamapa'}{nowPlaying && nowPlaying.from && !nowPlaying.isNowPlaying ? ` • ${Math.round((Date.now() - nowPlaying.from) / 3600000)}h ago` : nowPlaying && nowPlaying.isNowPlaying ? ' • now' : ''}</span>
+                    </a>
+
                     {nowPlaying.isNowPlaying ? (
                       <span class="playing-indicator top-left" aria-hidden="true"><span></span><span></span><span></span></span>
+                    ) : nowPlaying.from ? (
+                      <span class="time-ago top-left">{Math.round((Date.now() - nowPlaying.from) / 3600000)}h ago</span>
                     ) : null}
+                    <m3e-tooltip for="lastfm-user">{`Last.fm: ${import.meta.env.LASTFM_USERNAME || 'Lmpamapa'}`}</m3e-tooltip>
                     <div class="np-banner-overlay">
                       <a class="np-artist np-artist-link" href={nowPlaying.link ? nowPlaying.link : `https://music.youtube.com/search?q=${encodeURIComponent(nowPlaying.artistName + ' ' + nowPlaying.songName)}`} target="_blank" rel="noreferrer">{nowPlaying.artistName}</a>
                       <a class="np-title-link" href={nowPlaying.link ? nowPlaying.link : `https://music.youtube.com/search?q=${encodeURIComponent(nowPlaying.artistName + ' ' + nowPlaying.songName)}`} target="_blank" rel="noreferrer">
@@ -268,6 +288,22 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
               <a class="card-footer-link" href="/blog">all posts <span class="material-symbols-outlined" style="font-size:16px">chevron_forward</span></a>
             </div>
           ) : null}
+
+          <div class="card">
+            <span class="card-icon card-icon--alt">
+              <m3e-shape name="pixel-circle" class="card-shape" style="--m3e-shape-container-color:var(--md-sys-color-secondary-container);--m3e-shape-size:40px;display:block"></m3e-shape>
+              <span class="card-icon-inner"><span class="material-symbols-outlined">grid_view</span></span>
+            </span>
+            <h2 class="card-title">88x31</h2>
+            <div class="badge-grid">
+              <a class="badge-link" href="/images/88x31.svg" target="_blank" rel="noreferrer">
+                <img src="/images/88x31.svg" alt="lamp.delivery" class="badge-img" />
+              </a>
+              <a class="badge-link" href="https://elissa.moe" target="_blank" rel="noreferrer">
+                <img src="https://elissa.moe/88x31.png" alt="elissa.moe" class="badge-img" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -769,6 +805,49 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
     margin-top: 4px;
   }
 
+  /* Last.fm user badge (top-left of banner) */
+  .np-user-top-left {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 6;
+    color: #fff;
+    text-decoration: none;
+    pointer-events: auto;
+  }
+
+  /* when inside banner, shift user badge right so playing indicator can occupy top-left */
+  .np-banner .np-user-top-left { left: 44px; z-index: 18 }
+
+  /* force avatar sizing specifically for the top-left badge to override .np-banner img rules */
+  #lastfm-user .np-user-pfp,
+  .np-user-top-left .np-user-pfp {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    display: inline-block !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    background: rgba(255,255,255,0.06) !important;
+  }
+
+  .np-user-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.95);
+    transition: color 0.15s ease, text-decoration 0.15s ease;
+    text-decoration: none;
+  }
+
+  .np-user-top-left:hover .np-user-name {
+    text-decoration: underline;
+  }
+
   .np-actions {
     display: flex;
     gap: 8px;
@@ -881,6 +960,20 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
     width: 40px;
     height: 20px;
     z-index: 20;
+  }
+
+  .np-banner .time-ago.top-left {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 20;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--md-sys-color-primary);
+    background: color-mix(in srgb, var(--md-sys-color-primary-container) 85%, transparent);
+    padding: 2px 8px;
+    border-radius: 8px;
+    line-height: 1.4;
   }
 
   /* Make artist above, title prominent at bottom-left */
@@ -1021,6 +1114,33 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 
   .footer-links a:hover {
     color: var(--md-sys-color-primary);
+  }
+
+  /* ═══ BADGES ═══ */
+  .badge-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .badge-link {
+    display: inline-block;
+    line-height: 0;
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), filter 0.2s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .badge-link:hover {
+    transform: scale(1.06);
+    filter: brightness(1.08);
+    transform-origin: center;
+  }
+
+  .badge-img {
+    display: block;
+    width: 88px;
+    height: 31px;
+    border-radius: 4px;
   }
 
   /* ═══ RESPONSIVE ═══ */
