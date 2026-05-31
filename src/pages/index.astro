@@ -296,9 +296,10 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
             </span>
             <h2 class="card-title">88x31</h2>
             <div class="badge-grid">
-              <a class="badge-link" href="/images/88x31.svg" target="_blank" rel="noreferrer">
-                <img src="/images/88x31.svg" alt="lamp.delivery" class="badge-img" />
+              <a class="badge-link" href="/images/88x31.png" target="_blank" rel="noreferrer">
+                <img src="/images/88x31.png" alt="lamp.delivery" class="badge-img" />
               </a>
+              <!-- night badge removed -->
               <a class="badge-link" href="https://elissa.moe" target="_blank" rel="noreferrer">
                 <img src="https://elissa.moe/88x31.png" alt="elissa.moe" class="badge-img" />
               </a>
@@ -1118,9 +1119,10 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 
   /* ═══ BADGES ═══ */
   .badge-grid {
+    --badge-scale: 1.5;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 12px;
   }
 
   .badge-link {
@@ -1138,9 +1140,14 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
 
   .badge-img {
     display: block;
-    width: 88px;
-    height: 31px;
-    border-radius: 4px;
+    width: calc(88px * var(--badge-scale));
+    height: calc(31px * var(--badge-scale));
+    border-radius: calc(4px * var(--badge-scale));
+    image-rendering: pixelated;
+  }
+
+  @media (max-width: 640px) {
+    .badge-grid { --badge-scale: 1; gap: 8px; }
   }
 
   /* ═══ RESPONSIVE ═══ */
