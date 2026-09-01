@@ -335,3 +335,74 @@ export async function getNowPlaying(): Promise<TrackInfo> {
         return null;
     }
 }
+
+export type TopTrack = {
+    name: string;
+    artist: string;
+    playcount: string;
+    cover: string;
+    link: string;
+};
+
+async function fetchBetterCover(songName: string, artistName: string): Promise<string | null> {
+    try {
+        const encodedTerm = encodeURIComponent(normalize(`${artistName} ${songName}`));
+        const itunesRes = await fetch(`https://itunes.apple.com/search?entity=song&term=${encodedTerm}&limit=1`).then(r => r.json()).catch(() => ({}));
+        if (itunesRes.results?.[0]?.artworkUrl100) {
+            return itunesRes.results[0].artworkUrl100.replace('100x100bb', '300x300bb');
+        }
+
+        const deezerRes = await fetch(`https://api.deezer.com/search?q=${encodedTerm}&limit=1`).then(r => r.json()).catch(() => ({}));
+        if (deezerRes.data?.[0]?.album?.cover_big) {
+            return deezerRes.data[0].album.cover_big;
+        }
+    } catch (e) {
+        // ignore
+    }
+    return null;
+}
+
+export async function getTopTracks(): Promise<TopTrack[]> {
+    const apiKey = import.meta.env.LASTFM_API_KEY;
+    const username = import.meta.env.LASTFM_USERNAME;
+
+    if (!apiKey || !username) {
+        return [];
+    }
+
+    try {
+        const response = await fetch(
+            `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${username}&api_key=${apiKey}&period=1month&limit=5&format=json`
+        );
+        const data = await response.json();
+        const tracks = data.toptracks?.track || [];
+
+        const results = await Promise.all(tracks.map(async (track: any) => {
+            const name = track.name;
+            const artist = track.artist.name;
+            const lastfmCover = track.image?.at(-1)?.['#text'] || '';
+
+            // If Last.fm has a generic star or no image, try to find a better one
+            let cover = (lastfmCover === '' || lastfmCover.includes('2a96cbd8b46e442fc41c2b86b821562f'))
+                ? null
+                : lastfmCover;
+
+            if (!cover) {
+                cover = await fetchBetterCover(name, artist);
+            }
+
+            return {
+                name,
+                artist,
+                playcount: track.playcount,
+                cover: cover || placeholder.src,
+                link: track.url
+            };
+        }));
+
+        return results;
+    } catch (error) {
+        console.error('Error fetching top tracks:', error);
+        return [];
+    }
+}
