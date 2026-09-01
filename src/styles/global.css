@@ -225,14 +225,29 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .card-footer-link {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+    border-radius: 20px;
     font-size: 0.9rem;
-    color: var(--md-sys-color-primary);
+    font-weight: 500;
     text-decoration: none;
-    margin-top: 4px;
+    margin-top: 12px;
     width: fit-content;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.card-footer-link:hover {
+    background: var(--md-sys-color-surface-container-high);
+    transform: translateY(-1px);
+}
+
+.card-footer-link:active {
+    transform: translateY(0);
 }
 
 /* ── Link List ── */

@@ -5,6 +5,8 @@
   ],
   "exclude": [
     "/_astro/*",
+    "/PRIVACY_POLICY.md",
+    "/TERMS_OF_SERVICE.md",
     "/robots.txt",
     "/test.txt",
     "/.well-known/*",

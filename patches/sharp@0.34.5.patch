@@ -1,0 +1,20 @@
+diff --git a/install/check.js b/install/check.js
+index 1cfb7d32ecf03b4e3761f69e943db1a638006518..dcbbff6c9345887a27e6724659d9db223126705c 100644
+--- a/install/check.js
++++ b/install/check.js
+@@ -1,14 +1 @@
+-/*!
+-  Copyright 2013 Lovell Fuller and others.
+-  SPDX-License-Identifier: Apache-2.0
+-*/
+-
+-try {
+-  const { useGlobalLibvips } = require('../lib/libvips');
+-  if (useGlobalLibvips() || process.env.npm_config_build_from_source) {
+-    process.exit(1);
+-  }
+-} catch (err) {
+-  const summary = err.message.split(/\n/).slice(0, 1);
+-  console.log(`sharp: skipping install check: ${summary}`);
+-}
++process.exit(0);

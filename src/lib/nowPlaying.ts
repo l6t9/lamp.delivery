@@ -204,6 +204,7 @@ export async function getNowPlaying(): Promise<TrackInfo> {
             return false;
         }
 
+        const lastFmLink = lastFmTrack.url;
         const coverArt = lastFmTrack.image?.at(-1)?.['#text'] || placeholder.src;
         const partialTrackBase = {
             songName: lastFmTrack.name,
@@ -292,7 +293,7 @@ export async function getNowPlaying(): Promise<TrackInfo> {
         const track = matches.deezerMatch || matches.itunesMatch;
 
         if (!track) {
-            const fallback: TrackInfo = { ...partialTrackBase, link: undefined, isNowPlaying, from: fromTs, to: endTime, duration: durationMs };
+            const fallback: TrackInfo = { ...partialTrackBase, link: lastFmLink, isNowPlaying, from: fromTs, to: endTime, duration: durationMs };
             if (userAvatar) (fallback as any).userAvatar = userAvatar;
             cachedTrack = fallback;
             lastFetchTime = now;
@@ -310,7 +311,7 @@ export async function getNowPlaying(): Promise<TrackInfo> {
                     !partialTrackBase.cover.includes('2a96cbd8b46e442fc41c2b86b821562f')
                     ? partialTrackBase.cover
                     : track.artworkUrl100,
-            link: track.trackViewUrl,
+            link: lastFmLink,
             isNowPlaying
         };
 
