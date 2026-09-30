@@ -295,6 +295,7 @@ export async function getNowPlaying(): Promise<TrackInfo> {
         if (!track) {
             const fallback: TrackInfo = { ...partialTrackBase, link: lastFmLink, isNowPlaying, from: fromTs, to: endTime, duration: durationMs };
             if (userAvatar) (fallback as any).userAvatar = userAvatar;
+            fallback.cover = typeof fallback.cover === 'object' ? (fallback.cover as any).src : fallback.cover;
             cachedTrack = fallback;
             lastFetchTime = now;
             return fallback;
@@ -307,13 +308,16 @@ export async function getNowPlaying(): Promise<TrackInfo> {
             albumName: albumName === track.trackName ? '' : albumName,
             cover:
                 partialTrackBase.cover &&
-                    partialTrackBase.cover !== placeholder.src &&
+                    partialTrackBase.cover !== (placeholder as any).src &&
+                    partialTrackBase.cover !== placeholder &&
                     !partialTrackBase.cover.includes('2a96cbd8b46e442fc41c2b86b821562f')
                     ? partialTrackBase.cover
                     : track.artworkUrl100,
             link: lastFmLink,
             isNowPlaying
         };
+
+        finalTrack.cover = typeof finalTrack.cover === 'object' ? (finalTrack.cover as any).src : finalTrack.cover;
 
         if (userAvatar) finalTrack.userAvatar = userAvatar;
 
@@ -396,7 +400,7 @@ export async function getTopTracks(): Promise<TopTrack[]> {
                 name,
                 artist,
                 playcount: track.playcount,
-                cover: cover || placeholder.src,
+                cover: cover || (placeholder as any).src || placeholder,
                 link: track.url
             };
         }));

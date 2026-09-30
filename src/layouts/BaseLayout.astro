@@ -13,15 +13,7 @@ const {
   title = 'lamp',
   description = 'just making stuff',
   type = 'website',
-  pathname = '/'
 } = Astro.props satisfies Props;
-
-const navItems = [
-  { href: '/', label: 'home' },
-  { href: '/blog', label: 'blog' },
-  { href: '/projects', label: 'projects' },
-  { href: '/other-stuff', label: 'other stuff' }
-];
 ---
 
 <!doctype html>
@@ -38,14 +30,62 @@ const navItems = [
     <meta name="theme-color" content="#1c1b1f" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..200&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght,wdth@8..144,100..1000,25..151&display=swap" rel="stylesheet" />
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          return 'light';
+        }
+        return 'dark';
+      })();
+
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      } else {
+        document.documentElement.classList.remove('light-mode');
+      }
+      window.localStorage.setItem('theme', theme);
+    </script>
   </head>
   <body>
-    <m3e-theme color="#d0bcff" scheme="dark">
+    <m3e-theme color="#d0bcff" scheme="dark" id="main-theme">
       <slot />
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle light/dark mode">
+        <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+      </button>
     </m3e-theme>
 
     <script>
       import '@m3e/web/theme';
+
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const m3eTheme = document.getElementById('main-theme');
+
+      const updateThemeUI = (theme: string) => {
+        if (theme === 'light') {
+          document.documentElement.classList.add('light-mode');
+          if (themeIcon) themeIcon.textContent = 'light_mode';
+          if (m3eTheme) m3eTheme.setAttribute('scheme', 'light');
+        } else {
+          document.documentElement.classList.remove('light-mode');
+          if (themeIcon) themeIcon.textContent = 'dark_mode';
+          if (m3eTheme) m3eTheme.setAttribute('scheme', 'dark');
+        }
+      };
+
+      // Set initial UI state
+      const currentTheme = localStorage.getItem('theme') || 'dark';
+      updateThemeUI(currentTheme);
+
+      themeToggle?.addEventListener('click', () => {
+        const isLight = document.documentElement.classList.contains('light-mode');
+        const newTheme = isLight ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        updateThemeUI(newTheme);
+      });
     </script>
   </body>
 </html>

@@ -1,0 +1,715 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lampcord · Native Discord, without the bloat"
+  description="A lightweight, native Discord client for Android and Desktop built with Compose Multiplatform."
+  pathname="/cord"
+>
+  <div class="metrosite-page">
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container navbar__inner">
+        <a href="/cord" class="navbar__brand">
+          <span>Lampcord</span>
+        </a>
+
+        <nav class="navbar__links">
+          <a href="#showcase">Showcase</a>
+          <a href="#features">Features</a>
+          <a href="#faq">FAQ</a>
+          <a href="https://github.com/l6t9/Lampcord#readme" target="_blank" rel="noreferrer">Documentation</a>
+          <a href="#download" class="btn btn-filled btn-sm">
+            <span class="material-symbols-outlined" style="font-size:16px">download</span>
+            Download
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero__layout">
+            <div class="hero__copy">
+              <h1>Native Discord, <span>without the bloat.</span></h1>
+
+              <p class="hero__lede">
+                Lightweight Discord client built with Kotlin Multiplatform.
+              </p>
+
+              <div class="hero__actions">
+                <a href="#download" class="btn btn-filled">
+                  <span class="material-symbols-outlined">download</span>
+                  Get Lampcord
+                </a>
+                <a href="https://github.com/l6t9/Lampcord" target="_blank" rel="noreferrer" class="btn btn-outlined">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.73.083-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.776.417-1.306.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12 24 5.37 18.63 0 12 0z"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Showcase Section -->
+      <section id="showcase" class="showcase">
+        <div class="container">
+          <div class="showcase__heading">
+            <h2>Showcase</h2>
+          </div>
+
+          <div class="showcase__mosaic">
+            <!-- Desktop Container -->
+            <figcaption class="preview-tile">
+              <div class="preview-tile__header">
+                <div class="preview-tile__label">
+                  <span class="material-symbols-outlined">desktop_windows</span>
+                  <strong>Desktop</strong>
+                </div>
+                <span class="preview-tile__detail">Linux & Windows</span>
+              </div>
+              <div class="preview-tile__screen">
+                <img src="/images/lampcord.png?v=3" alt="Lampcord Desktop Preview" class="screen-img" />
+              </div>
+
+              <div class="preview-tile__label" style="margin-top: 8px;">
+                <span class="material-symbols-outlined">settings</span>
+                <strong>Desktop Settings</strong>
+              </div>
+              <div class="preview-tile__screen">
+                <img src="/images/lampcord-s.png?v=3" alt="Lampcord Desktop Settings Preview" class="screen-img" />
+              </div>
+
+              <div class="preview-tile__label" style="margin-top: 8px;">
+                <span class="material-symbols-outlined">account_circle</span>
+                <strong>Desktop Profile</strong>
+              </div>
+              <div class="preview-tile__screen">
+                <img src="/images/lampcord-p.png?v=3" alt="Lampcord Desktop Profile Preview" class="screen-img" />
+              </div>
+            </figcaption>
+
+            <!-- Mobile Container -->
+            <figcaption class="preview-tile">
+              <div class="preview-tile__header">
+                <div class="preview-tile__label">
+                  <span class="material-symbols-outlined">smartphone</span>
+                  <strong>Mobile</strong>
+                </div>
+                <span class="preview-tile__detail">Android</span>
+              </div>
+              <div class="preview-tile__screen">
+                <img src="/images/lampcord-1.png?v=3" alt="Lampcord Mobile Preview" class="screen-img" />
+              </div>
+
+              <div class="preview-tile__label" style="margin-top: 8px;">
+                <span class="material-symbols-outlined">settings</span>
+                <strong>Mobile Settings</strong>
+              </div>
+              <div class="preview-tile__screen">
+                <img src="/images/lampcord-s1.png?v=3" alt="Lampcord Mobile Settings Preview" class="screen-img" />
+              </div>
+
+              <div class="preview-tile__label" style="margin-top: 8px;">
+                <span class="material-symbols-outlined">account_circle</span>
+                <strong>Mobile Profile</strong>
+              </div>
+              <div class="preview-tile__screen">
+                <img src="/images/lampcord-p1.png?v=3" alt="Lampcord Mobile Profile Preview" class="screen-img" />
+              </div>
+            </figcaption>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section id="features" class="features">
+        <div class="container">
+          <div class="section-header-wrap">
+            <h2>Features</h2>
+          </div>
+
+          <div class="features__grid">
+            <div class="features__card">
+              <div class="features__top">
+                <span class="material-symbols-outlined">bolt</span>
+                <h3>No Electron or WebViews</h3>
+              </div>
+              <p>Native rendering on every platform, full Wayland support</p>
+            </div>
+
+            <div class="features__card">
+              <div class="features__top">
+                <span class="material-symbols-outlined">palette</span>
+                <h3>Material 3 Expressive</h3>
+              </div>
+              <p>M3E UI, Dynamic color, and system dark/light theme integration.</p>
+            </div>
+
+            <div class="features__card">
+              <div class="features__top">
+                <span class="material-symbols-outlined">graphic_eq</span>
+                <h3>Voice Chat</h3>
+              </div>
+              <p>End-to-end encrypted voice protocol with in-call controls and voice channels.</p>
+            </div>
+
+            <div class="features__card">
+              <div class="features__top">
+                <span class="material-symbols-outlined">tune</span>
+                <h3>Customization</h3>
+              </div>
+              <p>Aliucord theme support, Custom font selection, UserBG/PFP, and Free Nitro emojis.</p>
+            </div>
+
+            <div class="features__card">
+              <div class="features__top">
+                <span class="material-symbols-outlined">chat</span>
+                <h3>Messaging</h3>
+              </div>
+              <p>Taptap, text-replace, message logger, account switcher and more</p>
+            </div>
+
+            <div class="features__card">
+              <div class="features__top">
+                <span class="material-symbols-outlined">code</span>
+                <h3>Open Source</h3>
+              </div>
+              <p>100% open source under GPL-3.0 with zero telemetry or data harvesting.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section id="faq" class="faq">
+        <div class="container">
+          <div class="section-header-wrap">
+            <h2>FAQ</h2>
+          </div>
+
+          <div class="faq__list">
+            <details class="faq__card">
+              <summary class="faq__question">
+                <span>Is the app safe to use?</span>
+                <span class="material-symbols-outlined faq__arrow">expand_more</span>
+              </summary>
+              <div class="faq__answer">
+                <p>As all third-party clients and client mods do, using Lampcord is a violation of Discord ToS. With that being said, Lampcord does a best effort to mimick the official client, and there were no confirmed bans given for using unofficial clients.</p>
+              </div>
+            </details>
+
+            <details class="faq__card">
+              <summary class="faq__question">
+                <span>Which platforms are supported?</span>
+                <span class="material-symbols-outlined faq__arrow">expand_more</span>
+              </summary>
+              <div class="faq__answer">
+                <p>Linux, Windows, MacOS and Android will all be supported on release. iOS users can use RN mods or paicord :D</p>
+              </div>
+            </details>
+
+            <details class="faq__card">
+              <summary class="faq__question">
+                <span>Will this have plugins?</span>
+                <span class="material-symbols-outlined faq__arrow">expand_more</span>
+              </summary>
+              <div class="faq__answer">
+                <p>There is no need for plugins. This is a client, meaning I can code things in directly without the need of plugins. If a feature is to be implemented, it will be a setting, not a plugin.</p>
+              </div>
+            </details>
+
+            <details class="faq__card">
+              <summary class="faq__question">
+                <span>How can I support the project?</span>
+                <span class="material-symbols-outlined faq__arrow">expand_more</span>
+              </summary>
+              <div class="faq__answer">
+                <p>You can <a href="https://github.com/sponsors/l6t9" target="_blank" rel="noreferrer" class="faq__link">sponsor me on GitHub</a>. This will give you early access to test the alpha builds.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Downloads Section -->
+      <section id="download" class="download">
+        <div class="container">
+          <div class="download__panel">
+            <div class="download__copy">
+              <h2>Downloads</h2>
+              <p>Pre-built releases for Android and Desktop.</p>
+            </div>
+
+            <div class="download__actions">
+              <a href="https://github.com/l6t9/Lampcord/releases/latest" target="_blank" rel="noreferrer" class="btn btn-filled">
+                <span class="material-symbols-outlined">download</span>
+                GitHub Releases
+              </a>
+              <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/l6t9/Lampcord/" target="_blank" rel="noreferrer" class="btn btn-outlined">
+                <span class="material-symbols-outlined">install_mobile</span>
+                Obtainium
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="footer__brand">
+          <span>Lampcord</span>
+        </div>
+
+        <div class="footer__links">
+          <a href="https://github.com/l6t9/Lampcord" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://lamp.delivery">lamp.delivery</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</BaseLayout>
+
+
+
+<style>
+  .metrosite-page {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--md-sys-color-background);
+    color: var(--md-sys-color-on-background);
+  }
+
+  .container {
+    width: min(100% - 40px, 1100px);
+    margin-inline: auto;
+  }
+
+  /* ═══ BUTTONS ═══ */
+  .btn {
+    border-radius: var(--m3e-radius-full);
+    min-height: 42px;
+    color: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 0;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    display: inline-flex;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-filled {
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+  }
+
+  .btn-filled:hover {
+    filter: brightness(1.08);
+  }
+
+  .btn-outlined {
+    background: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-primary);
+  }
+
+  .btn-outlined:hover {
+    background: var(--md-sys-color-surface-container-highest);
+  }
+
+  .btn-sm {
+    min-height: 36px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+  }
+
+  /* ═══ NAVBAR (Lighter & Compact) ═══ */
+  .navbar {
+    z-index: 100;
+    background: var(--md-sys-color-surface-container-low);
+    position: sticky;
+    top: 0;
+  }
+
+  .navbar__inner {
+    align-items: center;
+    gap: 20px;
+    min-height: 56px;
+    display: flex;
+  }
+
+  .navbar__brand {
+    color: var(--md-sys-color-on-surface);
+    align-items: center;
+    gap: 10px;
+    margin-right: auto;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+  }
+
+  .navbar__links {
+    align-items: center;
+    gap: 6px;
+    display: flex;
+  }
+
+  .navbar__links a:not(.btn) {
+    border-radius: var(--m3e-radius-full);
+    color: var(--md-sys-color-on-surface-variant);
+    padding: 6px 14px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .navbar__links a:not(.btn):hover {
+    background: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface);
+  }
+
+  /* ═══ HERO (Streamlined) ═══ */
+  .hero {
+    background: var(--md-sys-color-surface);
+    padding: 24px 0 32px;
+  }
+
+  .hero__layout {
+    background: var(--md-sys-color-surface-container-low);
+    border-radius: 24px;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero h1 {
+    letter-spacing: -.03em;
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 3.8vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .hero h1 span {
+    color: var(--md-sys-color-primary);
+  }
+
+  .hero__lede {
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0 0 20px;
+    max-width: 580px;
+  }
+
+  .hero__actions {
+    flex-wrap: wrap;
+    gap: 10px;
+    display: flex;
+  }
+
+  /* ═══ SHOWCASE ═══ */
+  .showcase {
+    padding: 32px 0 48px;
+  }
+
+  .showcase__heading {
+    margin-bottom: 20px;
+  }
+
+  .showcase__heading h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+
+  .showcase__mosaic {
+    grid-template-columns: minmax(0, 3.13fr) minmax(0, 1fr);
+    gap: 16px;
+    display: grid;
+    align-items: start;
+  }
+
+  .preview-tile {
+    background: var(--md-sys-color-surface-container-low);
+    border-radius: 20px;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    display: flex;
+    margin: 0;
+  }
+
+  .preview-tile__header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .preview-tile__label {
+    color: var(--md-sys-color-primary);
+    align-items: center;
+    gap: 8px;
+    display: flex;
+  }
+
+  .preview-tile__label strong {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .preview-tile__detail {
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 0.82rem;
+  }
+
+  .preview-tile__screen {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  .screen-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ═══ FEATURES ═══ */
+  .features {
+    padding: 32px 0 48px;
+    background: var(--md-sys-color-surface-container-lowest);
+  }
+
+  .section-header-wrap h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 20px;
+  }
+
+  .features__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    display: grid;
+  }
+
+  .features__card {
+    background: var(--md-sys-color-surface-container);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .features__top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--md-sys-color-primary);
+  }
+
+  .features__top .material-symbols-outlined {
+    font-size: 22px;
+  }
+
+  .features__card h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .features__card p {
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 0.88rem;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* ═══ FAQ (Expandable Cards) ═══ */
+  .faq {
+    padding: 32px 0 48px;
+    background: var(--md-sys-color-surface);
+  }
+
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .faq__card {
+    background: var(--md-sys-color-surface-container);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: background 0.15s ease;
+  }
+
+  .faq__card[open] {
+    background: var(--md-sys-color-surface-container-high);
+  }
+
+  .faq__question {
+    padding: 16px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--md-sys-color-on-surface);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__arrow {
+    color: var(--md-sys-color-on-surface-variant);
+    transition: transform 0.2s ease;
+  }
+
+  .faq__card[open] .faq__arrow {
+    transform: rotate(180deg);
+  }
+
+  .faq__answer {
+    padding: 0 20px 16px;
+  }
+
+  .faq__answer p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .faq__link {
+    color: var(--md-sys-color-primary);
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  /* ═══ DOWNLOAD ═══ */
+  .download {
+    padding: 32px 0 48px;
+  }
+
+  .download__panel {
+    background: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    border-radius: 24px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 32px;
+    display: flex;
+  }
+
+  .download h2 {
+    margin: 0 0 4px;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .download__copy p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.95rem;
+  }
+
+  .download__actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  /* ═══ FOOTER ═══ */
+  .footer {
+    background: var(--md-sys-color-surface-container-low);
+    padding: 20px 0;
+  }
+
+  .footer__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer__brand {
+    color: var(--md-sys-color-on-surface);
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+  }
+
+  .footer__links {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer__links a {
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .footer__links a:hover {
+    color: var(--md-sys-color-primary);
+  }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 840px) {
+    .hero__layout {
+      grid-template-columns: 1fr;
+    }
+
+    .showcase__mosaic {
+      grid-template-columns: 1fr;
+    }
+
+    .features__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .download__panel {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .features__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .navbar__links {
+      display: none;
+    }
+  }
+</style>
