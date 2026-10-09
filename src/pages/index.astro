@@ -168,7 +168,7 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
                 </span>
                 <div>
                   <b>Lampcord</b>
-                  <span class="muted-2">Lightweight native Discord client for Android & Desktop</span>
+                  <span class="muted-2">Lightweight native Discord client for Mobile & Desktop</span>
                 </div>
                 <span class="material-symbols-outlined link-arrow">chevron_forward</span>
               </a>
@@ -311,10 +311,15 @@ const localHour = new Date().toLocaleTimeString('en-GB', {
             <m3e-tooltip for="ficon-lastfm" position="above">Last.fm</m3e-tooltip>
           </div>
           <div class="footer-meta">
-            <a href="mailto:hi@lamp.delivery" aria-label="Email" class="ficon ficon--sm">
+            <a id="ficon-email" href="mailto:hi@lamp.delivery" aria-label="Email" class="ficon ficon--sm">
               <span class="material-symbols-outlined" style="font-size:20px">mail</span>
             </a>
+            <m3e-tooltip for="ficon-email" position="above">Email</m3e-tooltip>
             <span>lamp.delivery</span>
+            <button id="theme-toggle" class="ficon ficon--sm theme-toggle-btn" aria-label="Toggle light/dark mode">
+              <span class="material-symbols-outlined" id="theme-icon" style="font-size:20px">dark_mode</span>
+            </button>
+            <m3e-tooltip for="theme-toggle" position="above">Toggle theme</m3e-tooltip>
           </div>
         </footer>
       </div>

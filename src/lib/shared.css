@@ -1,14 +1,14 @@
 @import url("https://cdn.jsdelivr.net/npm/@catppuccin/palette/css/catppuccin.css");
 
 :root {
-  --primary-tint: rgba(103, 80, 164, 0.1); /* M3 Purple tint */
-  --bg-color: #1c1b1f;
-  --text-color: #e6e1e5;
-  --subtext-color: #938f99;
-  --container-bg: rgba(103, 80, 164, 0.05);
-  --container-border: rgba(103, 80, 164, 0.2);
-  --pill-bg: rgba(103, 80, 164, 0.1);
-  --pill-bg-hover: rgba(103, 80, 164, 0.15);
+  --primary-tint: rgba(255, 186, 56, 0.1); /* M3 Yellow-Orange tint */
+  --bg-color: #16130e;
+  --text-color: #eae1d9;
+  --subtext-color: #9b8f80;
+  --container-bg: rgba(255, 186, 56, 0.05);
+  --container-border: rgba(255, 186, 56, 0.2);
+  --pill-bg: rgba(255, 186, 56, 0.1);
+  --pill-bg-hover: rgba(255, 186, 56, 0.15);
 }
 
 @font-face {

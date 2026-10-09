@@ -27,7 +27,7 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
-    <meta name="theme-color" content="#1c1b1f" />
+    <meta name="theme-color" content="#16130e" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..200&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght,wdth@8..144,100..1000,25..151&display=swap" rel="stylesheet" />
     <script is:inline>
@@ -50,41 +50,40 @@ const {
     </script>
   </head>
   <body>
-    <m3e-theme color="#d0bcff" scheme="dark" id="main-theme">
+    <m3e-theme color="#FFB300" scheme="dark" id="main-theme">
       <slot />
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle light/dark mode">
-        <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
-      </button>
     </m3e-theme>
 
     <script>
       import '@m3e/web/theme';
 
-      const themeToggle = document.getElementById('theme-toggle');
-      const themeIcon = document.getElementById('theme-icon');
-      const m3eTheme = document.getElementById('main-theme');
-
       const updateThemeUI = (theme: string) => {
-        if (theme === 'light') {
+        const isLight = theme === 'light';
+        const m3eTheme = document.getElementById('main-theme');
+        if (isLight) {
           document.documentElement.classList.add('light-mode');
-          if (themeIcon) themeIcon.textContent = 'light_mode';
           if (m3eTheme) m3eTheme.setAttribute('scheme', 'light');
         } else {
           document.documentElement.classList.remove('light-mode');
-          if (themeIcon) themeIcon.textContent = 'dark_mode';
           if (m3eTheme) m3eTheme.setAttribute('scheme', 'dark');
         }
+
+        document.querySelectorAll('#theme-icon, .theme-icon').forEach((icon) => {
+          icon.textContent = isLight ? 'light_mode' : 'dark_mode';
+        });
       };
 
       // Set initial UI state
       const currentTheme = localStorage.getItem('theme') || 'dark';
       updateThemeUI(currentTheme);
 
-      themeToggle?.addEventListener('click', () => {
-        const isLight = document.documentElement.classList.contains('light-mode');
-        const newTheme = isLight ? 'dark' : 'light';
-        localStorage.setItem('theme', newTheme);
-        updateThemeUI(newTheme);
+      document.querySelectorAll('#theme-toggle, .theme-toggle-btn').forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+          const isLight = document.documentElement.classList.contains('light-mode');
+          const newTheme = isLight ? 'dark' : 'light';
+          localStorage.setItem('theme', newTheme);
+          updateThemeUI(newTheme);
+        });
       });
     </script>
   </body>

@@ -4,26 +4,40 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="Lampcord · Native Discord, without the bloat"
-  description="A lightweight, native Discord client for Android and Desktop built with Compose Multiplatform."
+  description="A lightweight, native Discord client for Mobile and Desktop built with Compose Multiplatform."
   pathname="/cord"
 >
   <div class="metrosite-page">
     <!-- Navbar -->
     <header class="navbar">
       <div class="container navbar__inner">
-        <a href="/cord" class="navbar__brand">
-          <span>Lampcord</span>
-        </a>
-
-        <nav class="navbar__links">
-          <a href="#showcase">Showcase</a>
-          <a href="#features">Features</a>
-          <a href="#faq">FAQ</a>
-          <a href="https://github.com/l6t9/Lampcord#readme" target="_blank" rel="noreferrer">Documentation</a>
-          <a href="#download" class="btn btn-filled btn-sm">
-            <span class="material-symbols-outlined" style="font-size:16px">download</span>
-            Download
+        <div class="navbar__header">
+          <a href="/cord" class="navbar__brand">
+            <span>Lampcord</span>
           </a>
+
+          <button
+            id="menu-toggle"
+            class="navbar__toggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="navbar-menu"
+          >
+            <span class="material-symbols-outlined navbar__toggle-icon">menu</span>
+          </button>
+        </div>
+
+        <nav id="navbar-menu" class="navbar__links">
+          <div class="navbar__links-inner">
+            <a href="#showcase">Showcase</a>
+            <a href="#features">Features</a>
+            <a href="#faq">FAQ</a>
+            <a href="https://github.com/l6t9/Lampcord#readme" target="_blank" rel="noreferrer">Documentation</a>
+            <a href="#download" class="btn btn-filled btn-sm">
+              <span class="material-symbols-outlined" style="font-size:16px">download</span>
+              Download
+            </a>
+          </div>
         </nav>
       </div>
     </header>
@@ -58,8 +72,25 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <!-- Showcase Section -->
       <section id="showcase" class="showcase">
         <div class="container">
-          <div class="showcase__heading">
-            <h2>Showcase</h2>
+          <div class="showcase__header">
+            <div class="showcase__heading">
+              <h2>Showcase</h2>
+            </div>
+
+            <div class="showcase__tabs" role="tablist" aria-label="Showcase screens">
+              <button class="showcase__tab active" data-tab="chat" role="tab" aria-selected="true">
+                <span class="material-symbols-outlined">chat</span>
+                <span>Chat</span>
+              </button>
+              <button class="showcase__tab" data-tab="settings" role="tab" aria-selected="false">
+                <span class="material-symbols-outlined">settings</span>
+                <span>Settings</span>
+              </button>
+              <button class="showcase__tab" data-tab="profile" role="tab" aria-selected="false">
+                <span class="material-symbols-outlined">account_circle</span>
+                <span>Profile</span>
+              </button>
+            </div>
           </div>
 
           <div class="showcase__mosaic">
@@ -70,26 +101,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                   <span class="material-symbols-outlined">desktop_windows</span>
                   <strong>Desktop</strong>
                 </div>
-                <span class="preview-tile__detail">Linux & Windows</span>
-              </div>
-              <div class="preview-tile__screen">
-                <img src="/images/lampcord.png?v=3" alt="Lampcord Desktop Preview" class="screen-img" />
+                <span class="preview-tile__detail">Linux, Windows & macOS</span>
               </div>
 
-              <div class="preview-tile__label" style="margin-top: 8px;">
-                <span class="material-symbols-outlined">settings</span>
-                <strong>Desktop Settings</strong>
-              </div>
-              <div class="preview-tile__screen">
-                <img src="/images/lampcord-s.png?v=3" alt="Lampcord Desktop Settings Preview" class="screen-img" />
+              <!-- Chat Screen -->
+              <div class="preview-tile__screen-wrap active" data-tab-content="chat">
+                <div class="preview-tile__screen">
+                  <img src="/images/lampcord.png?v=3" alt="Lampcord Desktop Preview" class="screen-img" />
+                </div>
               </div>
 
-              <div class="preview-tile__label" style="margin-top: 8px;">
-                <span class="material-symbols-outlined">account_circle</span>
-                <strong>Desktop Profile</strong>
+              <!-- Settings Screen -->
+              <div class="preview-tile__screen-wrap" data-tab-content="settings">
+                <div class="preview-tile__screen">
+                  <img src="/images/lampcord-s.png?v=3" alt="Lampcord Desktop Settings Preview" class="screen-img" />
+                </div>
               </div>
-              <div class="preview-tile__screen">
-                <img src="/images/lampcord-p.png?v=3" alt="Lampcord Desktop Profile Preview" class="screen-img" />
+
+              <!-- Profile Screen -->
+              <div class="preview-tile__screen-wrap" data-tab-content="profile">
+                <div class="preview-tile__screen">
+                  <img src="/images/lampcord-p.png?v=3" alt="Lampcord Desktop Profile Preview" class="screen-img" />
+                </div>
               </div>
             </figcaption>
 
@@ -100,26 +133,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                   <span class="material-symbols-outlined">smartphone</span>
                   <strong>Mobile</strong>
                 </div>
-                <span class="preview-tile__detail">Android</span>
-              </div>
-              <div class="preview-tile__screen">
-                <img src="/images/lampcord-1.png?v=3" alt="Lampcord Mobile Preview" class="screen-img" />
+                <span class="preview-tile__detail">Android & iOS</span>
               </div>
 
-              <div class="preview-tile__label" style="margin-top: 8px;">
-                <span class="material-symbols-outlined">settings</span>
-                <strong>Mobile Settings</strong>
-              </div>
-              <div class="preview-tile__screen">
-                <img src="/images/lampcord-s1.png?v=3" alt="Lampcord Mobile Settings Preview" class="screen-img" />
+              <!-- Chat Screen -->
+              <div class="preview-tile__screen-wrap active" data-tab-content="chat">
+                <div class="preview-tile__screen">
+                  <img src="/images/lampcord-1.png?v=3" alt="Lampcord Mobile Preview" class="screen-img" />
+                </div>
               </div>
 
-              <div class="preview-tile__label" style="margin-top: 8px;">
-                <span class="material-symbols-outlined">account_circle</span>
-                <strong>Mobile Profile</strong>
+              <!-- Settings Screen -->
+              <div class="preview-tile__screen-wrap" data-tab-content="settings">
+                <div class="preview-tile__screen">
+                  <img src="/images/lampcord-s1.png?v=3" alt="Lampcord Mobile Settings Preview" class="screen-img" />
+                </div>
               </div>
-              <div class="preview-tile__screen">
-                <img src="/images/lampcord-p1.png?v=3" alt="Lampcord Mobile Profile Preview" class="screen-img" />
+
+              <!-- Profile Screen -->
+              <div class="preview-tile__screen-wrap" data-tab-content="profile">
+                <div class="preview-tile__screen">
+                  <img src="/images/lampcord-p1.png?v=3" alt="Lampcord Mobile Profile Preview" class="screen-img" />
+                </div>
               </div>
             </figcaption>
           </div>
@@ -209,7 +244,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 <span class="material-symbols-outlined faq__arrow">expand_more</span>
               </summary>
               <div class="faq__answer">
-                <p>Linux, Windows, MacOS and Android will all be supported on release. iOS users can use RN mods or paicord :D</p>
+                <p>Linux, Windows, macOS, Android, and iOS are all supported!</p>
               </div>
             </details>
 
@@ -242,7 +277,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <div class="download__panel">
             <div class="download__copy">
               <h2>Downloads</h2>
-              <p>Pre-built releases for Android and Desktop.</p>
+              <p>Pre-built releases for Android, iOS, and Desktop.</p>
             </div>
 
             <div class="download__actions">
@@ -270,11 +305,211 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <div class="footer__links">
           <a href="https://github.com/l6t9/Lampcord" target="_blank" rel="noreferrer">GitHub</a>
           <a href="https://lamp.delivery">lamp.delivery</a>
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle light/dark mode" title="Toggle theme">
+            <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+          </button>
         </div>
       </div>
     </footer>
   </div>
+
+  <!-- Image Preview Lightbox Modal -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox__backdrop"></div>
+    <div class="lightbox__content">
+      <button id="lightbox-close" class="lightbox__btn lightbox__btn--close" aria-label="Close preview">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <button id="lightbox-prev" class="lightbox__btn lightbox__btn--prev" aria-label="Previous image">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <div class="lightbox__stage">
+        <img id="lightbox-img" src="" alt="Enlarged preview" />
+        <div id="lightbox-caption" class="lightbox__caption"></div>
+      </div>
+      <button id="lightbox-next" class="lightbox__btn lightbox__btn--next" aria-label="Next image">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+    </div>
+  </div>
 </BaseLayout>
+
+<script>
+  function initShowcaseTabs() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.showcase__tab');
+    const contents = document.querySelectorAll<HTMLElement>('[data-tab-content]');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const targetTab = tab.getAttribute('data-tab');
+        if (!targetTab) return;
+
+        tabs.forEach((t) => {
+          const isActive = t === tab;
+          t.classList.toggle('active', isActive);
+          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        contents.forEach((content) => {
+          const contentTab = content.getAttribute('data-tab-content');
+          content.classList.toggle('active', contentTab === targetTab);
+        });
+      });
+    });
+  }
+
+  function initLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+    const backdrop = document.querySelector('.lightbox__backdrop');
+
+    if (!lightbox || !lightboxImg || !lightboxCaption) return;
+
+    let currentImgs: HTMLImageElement[] = [];
+    let currentIndex = 0;
+
+    function updateLightbox() {
+      const img = currentImgs[currentIndex];
+      if (!img) return;
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightboxCaption.textContent = `${img.alt} (${currentIndex + 1}/${currentImgs.length})`;
+    }
+
+    function openLightbox(index: number, imgs: HTMLImageElement[]) {
+      currentImgs = imgs;
+      currentIndex = index;
+      updateLightbox();
+      lightbox.classList.add('active');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function showNext() {
+      if (currentImgs.length === 0) return;
+      currentIndex = (currentIndex + 1) % currentImgs.length;
+      updateLightbox();
+    }
+
+    function showPrev() {
+      if (currentImgs.length === 0) return;
+      currentIndex = (currentIndex - 1 + currentImgs.length) % currentImgs.length;
+      updateLightbox();
+    }
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const screen = target.closest('.preview-tile__screen');
+      if (screen) {
+        const img = screen.querySelector<HTMLImageElement>('.screen-img');
+        if (img) {
+          const activeImgs = Array.from(
+            document.querySelectorAll<HTMLImageElement>('.preview-tile__screen-wrap.active .screen-img')
+          );
+          const activeIdx = activeImgs.indexOf(img);
+          if (activeIdx !== -1) {
+            openLightbox(activeIdx, activeImgs);
+          } else {
+            const allImgs = Array.from(document.querySelectorAll<HTMLImageElement>('.screen-img'));
+            openLightbox(allImgs.indexOf(img), allImgs);
+          }
+        }
+      }
+    });
+
+    closeBtn?.addEventListener('click', closeLightbox);
+    lightboxImg.addEventListener('click', closeLightbox);
+    backdrop?.addEventListener('click', closeLightbox);
+    nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+    prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+
+    lightbox.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.lightbox__btn--prev') || target.closest('.lightbox__btn--next')) {
+        return;
+      }
+      closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') showNext();
+      if (e.key === 'ArrowLeft') showPrev();
+    });
+  }
+
+  function initMobileMenu() {
+    const toggleBtn = document.getElementById('menu-toggle') as HTMLButtonElement | null;
+    const navMenu = document.getElementById('navbar-menu') as HTMLElement | null;
+    const navbar = document.querySelector('.navbar') as HTMLElement | null;
+    const toggleIcon = toggleBtn?.querySelector('.navbar__toggle-icon');
+
+    if (!toggleBtn || !navMenu) return;
+
+    function toggleMenu(open?: boolean) {
+      const isExpanded = navMenu.classList.contains('open');
+      const shouldOpen = open ?? !isExpanded;
+
+      navMenu.classList.toggle('open', shouldOpen);
+      navbar?.classList.toggle('menu-open', shouldOpen);
+      toggleBtn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+
+      if (toggleIcon) {
+        toggleIcon.textContent = shouldOpen ? 'close' : 'menu';
+      }
+    }
+
+    toggleBtn.addEventListener('click', () => toggleMenu());
+
+    navMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 560) {
+          toggleMenu(false);
+        }
+      });
+    });
+  }
+
+  function initScrollHeader() {
+    const navbar = document.querySelector('.navbar') as HTMLElement | null;
+    if (!navbar) return;
+
+    function handleScroll() {
+      if (window.scrollY > 10) {
+        navbar?.classList.add('scrolled');
+      } else {
+        navbar?.classList.remove('scrolled');
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+  }
+
+  function init() {
+    initShowcaseTabs();
+    initLightbox();
+    initMobileMenu();
+    initScrollHeader();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>
 
 
 
@@ -284,6 +519,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     min-height: 100vh;
     background: var(--md-sys-color-background);
     color: var(--md-sys-color-on-background);
+    font-family: 'Google Sans Flex', system-ui, -apple-system, sans-serif;
+    position: relative;
+    overflow-x: clip;
+  }
+
+  .metrosite-page button,
+  .metrosite-page input,
+  .metrosite-page select,
+  .metrosite-page textarea {
+    font-family: inherit;
   }
 
   .container {
@@ -309,6 +554,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     text-decoration: none;
     display: inline-flex;
     transition: background 0.15s ease, transform 0.15s ease;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .btn:hover {
@@ -339,12 +586,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     font-size: 0.85rem;
   }
 
-  /* ═══ NAVBAR (Lighter & Compact) ═══ */
+  /* ═══ NAVBAR (Transparent at top, frosted glass on scroll) ═══ */
   .navbar {
     z-index: 100;
-    background: var(--md-sys-color-surface-container-low);
+    background: transparent;
     position: sticky;
     top: 0;
+    border-bottom: 1px solid transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: background 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease, border-bottom-color 0.3s ease;
+  }
+
+  .navbar.scrolled,
+  .navbar.menu-open {
+    background: color-mix(in srgb, var(--md-sys-color-surface-container-low) 88%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 20%, transparent);
   }
 
   .navbar__inner {
@@ -352,23 +611,71 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     gap: 20px;
     min-height: 56px;
     display: flex;
+    justify-content: space-between;
+    transition: padding 0.3s ease;
+  }
+
+  .navbar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    margin-right: auto;
   }
 
   .navbar__brand {
     color: var(--md-sys-color-on-surface);
     align-items: center;
     gap: 10px;
-    margin-right: auto;
     font-size: 1.1rem;
     font-weight: 700;
     text-decoration: none;
     display: inline-flex;
+    line-height: 1.2;
+    height: 40px;
+  }
+
+  .navbar__toggle {
+    display: none;
+    background: transparent;
+    color: var(--md-sys-color-on-surface);
+    border: 0;
+    padding: 8px;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    line-height: 1;
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .navbar__toggle:hover {
+    background: var(--md-sys-color-surface-container-high);
+  }
+
+  .navbar__toggle-icon {
+    font-size: 24px;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .navbar__toggle[aria-expanded="true"] .navbar__toggle-icon {
+    transform: rotate(90deg);
   }
 
   .navbar__links {
     align-items: center;
+    display: flex;
+  }
+
+  .navbar__links-inner {
+    align-items: center;
     gap: 6px;
     display: flex;
+    width: 100%;
   }
 
   .navbar__links a:not(.btn) {
@@ -431,14 +738,56 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     padding: 32px 0 48px;
   }
 
-  .showcase__heading {
+  .showcase__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
     margin-bottom: 20px;
   }
 
   .showcase__heading h2 {
     font-size: 1.6rem;
     font-weight: 700;
-    margin: 0 0 4px;
+    margin: 0;
+  }
+
+  .showcase__tabs {
+    display: inline-flex;
+    background: var(--md-sys-color-surface-container-high);
+    border-radius: var(--m3e-radius-full);
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .showcase__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border: 0;
+    border-radius: var(--m3e-radius-full);
+    background: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+
+  .showcase__tab:hover {
+    color: var(--md-sys-color-on-surface);
+    background: var(--md-sys-color-surface-container-highest);
+  }
+
+  .showcase__tab.active {
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+  }
+
+  .showcase__tab .material-symbols-outlined {
+    font-size: 18px;
   }
 
   .showcase__mosaic {
@@ -481,11 +830,38 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     font-size: 0.82rem;
   }
 
+  .preview-tile__screen-wrap {
+    display: none;
+  }
+
+  .preview-tile__screen-wrap.active {
+    display: block;
+    animation: previewFadeIn 0.25s ease forwards;
+  }
+
+  @keyframes previewFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .preview-tile__screen {
     width: 100%;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    cursor: zoom-in;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .preview-tile__screen:hover {
+    transform: scale(1.015);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
   }
 
   .screen-img {
@@ -496,8 +872,42 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   /* ═══ FEATURES ═══ */
   .features {
-    padding: 32px 0 48px;
+    padding: 48px 0;
     background: var(--md-sys-color-surface-container-lowest);
+    position: relative;
+  }
+
+  .features::before,
+  .features::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 48px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .features::before {
+    top: -24px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--md-sys-color-surface-container-lowest) 100%
+    );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .features::after {
+    bottom: -24px;
+    background: linear-gradient(
+      to top,
+      transparent 0%,
+      var(--md-sys-color-surface-container-lowest) 100%
+    );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .section-header-wrap h2 {
@@ -548,8 +958,27 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   /* ═══ FAQ (Expandable Cards) ═══ */
   .faq {
-    padding: 32px 0 48px;
+    padding: 48px 0;
     background: var(--md-sys-color-surface);
+    position: relative;
+  }
+
+  .faq::before {
+    content: '';
+    position: absolute;
+    top: -24px;
+    left: 0;
+    right: 0;
+    height: 48px;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--md-sys-color-surface) 100%
+    );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .faq__list {
@@ -563,7 +992,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     background: var(--md-sys-color-surface-container);
     border-radius: 16px;
     overflow: hidden;
-    transition: background 0.15s ease;
+    transition: background 0.25s ease, box-shadow 0.25s ease;
   }
 
   .faq__card[open] {
@@ -589,7 +1018,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .faq__arrow {
     color: var(--md-sys-color-on-surface-variant);
-    transition: transform 0.2s ease;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .faq__card[open] .faq__arrow {
@@ -598,6 +1027,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .faq__answer {
     padding: 0 20px 16px;
+    overflow: hidden;
+  }
+
+  .faq__card[open] .faq__answer {
+    animation: faqSlideDown 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes faqSlideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-12px);
+      max-height: 0;
+      padding-bottom: 0;
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      max-height: 300px;
+      padding-bottom: 16px;
+    }
   }
 
   .faq__answer p {
@@ -643,13 +1092,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .download__actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
+    max-width: 100%;
   }
 
   /* ═══ FOOTER ═══ */
   .footer {
     background: var(--md-sys-color-surface-container-low);
-    padding: 20px 0;
+    padding: 24px 0;
   }
 
   .footer__inner {
@@ -670,6 +1121,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .footer__links {
     display: flex;
+    align-items: center;
     gap: 16px;
   }
 
@@ -681,6 +1133,30 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .footer__links a:hover {
     color: var(--md-sys-color-primary);
+  }
+
+  .theme-toggle-btn {
+    background: var(--md-sys-color-surface-container-high);
+    color: var(--md-sys-color-on-surface);
+    border: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+
+  .theme-toggle-btn:hover {
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    transform: scale(1.05);
+  }
+
+  .theme-toggle-btn .material-symbols-outlined {
+    font-size: 20px;
   }
 
   /* ═══ RESPONSIVE ═══ */
@@ -701,15 +1177,241 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       flex-direction: column;
       align-items: flex-start;
     }
+
+    .download__actions {
+      width: 100%;
+    }
   }
 
   @media (max-width: 560px) {
+    .showcase__tabs {
+      width: 100%;
+      overflow-x: auto;
+      justify-content: flex-start;
+    }
+
+    .showcase__tab {
+      flex: 1;
+      justify-content: center;
+      padding: 8px 12px;
+      white-space: nowrap;
+    }
+
     .features__grid {
       grid-template-columns: 1fr;
     }
 
+    .download__panel {
+      padding: 20px 20px;
+    }
+
+    .download__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .download__actions .btn {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .hero__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .hero__actions .btn {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .navbar__inner {
+      flex-direction: column;
+      align-items: stretch;
+      min-height: 56px;
+      padding: 0;
+      gap: 0;
+    }
+
+    .navbar__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 56px;
+      min-height: 56px;
+      margin-right: 0;
+    }
+
+    .navbar__brand {
+      margin-right: 0;
+      height: 40px;
+    }
+
+    .navbar__toggle {
+      display: inline-flex;
+      height: 40px;
+      width: 40px;
+    }
+
     .navbar__links {
       display: none;
+      width: 100%;
     }
+
+    .navbar__links.open {
+      display: block;
+      animation: navMenuFadeIn 0.25s ease forwards;
+    }
+
+    .navbar__links-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 8px;
+      padding-bottom: 12px;
+    }
+
+    .navbar__links a:not(.btn) {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+    }
+
+    .navbar__links .btn {
+      width: 100%;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+
+    @keyframes navMenuFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  /* ═══ LIGHTBOX MODAL ═══ */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .lightbox.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: zoom-out;
+  }
+
+  .lightbox__content {
+    position: relative;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .lightbox__stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 90vw;
+    max-height: 90vh;
+    gap: 12px;
+  }
+
+  .lightbox__stage img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    cursor: zoom-out;
+  }
+
+  .lightbox__caption {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .lightbox__btn {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1002;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+
+  .lightbox__btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.08);
+  }
+
+  .lightbox__btn--close {
+    top: 20px;
+    right: 20px;
+  }
+
+  .lightbox__btn--prev {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lightbox__btn--prev:hover {
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .lightbox__btn--next {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lightbox__btn--next:hover {
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  @media (max-width: 600px) {
+    .lightbox__btn--prev { left: 10px; width: 40px; height: 40px; }
+    .lightbox__btn--next { right: 10px; width: 40px; height: 40px; }
+    .lightbox__btn--close { top: 10px; right: 10px; width: 40px; height: 40px; }
   }
 </style>
